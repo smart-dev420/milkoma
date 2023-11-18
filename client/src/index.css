@@ -1,0 +1,340 @@
+/* body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+} */
+
+@font-face {
+  font-family: 'CustomFont';
+  src: url('/public/assets/fonts/mplus-1c-regular.ttf') format('truetype');
+  /* Add additional font properties if needed */
+}
+
+html{
+  /* font-size: clamp(6px, 0.75758vw, 10px); */
+  font-family: 'CustomFont', sans-serif;
+}
+body {
+  font-family: 'CustomFont', sans-serif;
+  background-color: #FCFCFC;
+  overflow-x: hidden;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.Carousel__RailWrapper-sc-hyhecw-1 {
+  margin: 0 0px !important;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.rdrDays {
+  width: 100%;
+}
+
+.rdrMonth {
+  min-width: 100%;
+}
+
+.rdrMonthAndYearWrapper {
+  padding: 0 30px;
+}
+
+.rdrDays {
+  min-height: 600px;
+  /* min-height: fit-content !important; */
+}
+
+.rdrWeekDays {
+  margin-bottom: 30px;
+}
+
+.rdrDayToday .rdrDayNumber span:after {
+  content: none !important;
+  padding: 0 !important;
+  width: auto;
+  height: fit-content;
+}
+
+.rdrDayNumber {
+  min-height: fit-content !important;
+  min-height: 100% !important;
+}
+
+.rdrDay {
+  min-height: 100px;
+}
+
+.tooltip-modal {
+  position: absolute;
+  top: 50%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+}
+
+.tooltip-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+}
+.input-style {
+  /* Customize the appearance of the input */
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 4px;
+  font-size: 14px;
+  /* Add any additional styles you want */
+}
+
+.custom-calendar .rdrDay{
+  min-height: 50px;
+}
+.custom-calendar .rdrDays{
+  min-height: 30px;
+}
+
+.googleButton{
+  width: 300px ;
+  height:50px ;
+  font-size: 14pt !important;
+}
+
+.border-style{
+  border: 1px solid #00000000;
+  border-radius: 0 0 25px 25px;
+}
+
+fieldset{
+  border: none !important;
+}
+
+.MuiFormLabel-root{
+  margin-top: -5px !important;
+  height: 20px !important;
+}
+
+span{
+  padding-top: 5px !important;
+}
+
+.card-aspect{
+  aspect-ratio: 637 / 899;
+}
+
+.card-content{
+  background-color: #ffffff;
+  margin-left: 15px;
+  margin-right: 15px;
+  /* margin-top: calc(100% - 15px); */
+  margin-bottom: 15px;
+  border-radius: 15px;
+}
+
+.card-padding{
+  padding-top: 257px;
+}
+
+.btn-color{
+  background-color: #EE7D90;
+  box-shadow: 1px 1px 3px 2px #EE7D90;
+  color: white;
+  font-weight: 500;
+}
+
+.btn-color:hover{
+  background-color: #E28E9C;
+}
+
+.image-hover{
+  background-color: #ffffff;
+}
+
+.image-hover:hover{
+  opacity: 0.6;
+}
+
+.image-hover-reverse{
+  opacity:0.6;
+  cursor:pointer;
+}
+
+.image-hover-reverse:hover{
+  opacity:1;
+}
+
+.image-rotate{
+  transform: rotate(-11deg);
+}
+
+.image-rotate:hover{
+  transform: rotate(0deg);
+}
+
+.pink-color{
+  color:#B56262;
+}
+
+.border-grey{
+  border: 1px solid #707070;
+}
+
+.slider-content{
+  background-color: #ffffff;
+  box-shadow: 0px 0px 10px 1px #98938E;
+  border-radius: 20px 0 0 20px;
+}
+
+.text-hover{
+  color: #B9324D;
+}
+
+.text-hover:hover{
+  color: #E28E9C;
+}
+
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper{
+  max-width: 850px !important;
+}
+
+.aspect-logo{
+  aspect-ratio: 280 / 77;
+}
+
+.card-hover{
+  border-radius: 30px;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px 5px #E5BAA7;
+}
+
+.card-hover:hover{
+  background-color: #e5baa73a;
+}
+
+.btn-hover{
+  font-size: 26px;
+  background-color: #001219;
+  width: 284px;
+  border-radius: 43px;
+  color: #fff;
+  border: 1px solid #000;
+}
+
+.btn-hover:hover{
+  background-color: #fff;
+  counter-reset: #ee7d902c;
+  color: #000;
+}
+
+.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.Mui-checked{
+  color: #FE6D74 !important;
+}
+
+.checkbox .MuiSvgIcon-root {
+  color: #292d3248; 
+}
+
+.checkbox:hover .MuiSvgIcon-root {
+  color: #FE6D74; 
+}
+
+.checkbox input:checked + .MuiSvgIcon-root {
+  color: #FE6D74;
+}
+
+.item-shadow{
+  box-shadow: 2px 2px 10px 2px #00000021;
+}
+
+.list-style{
+  box-shadow: 0px 0px 3px 3px #e5baa77e;
+  background-color: #fff;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.list-style:hover{
+  background-color: #FCF7F7;
+}
+
+.log-shadow{
+  box-shadow: 0px 0px 5px 1px #00000028;
+}
+
+.title-hover{
+  cursor: pointer;
+}
+
+.title-hover:hover{
+  text-decoration: underline;
+}
+
+.custom-indicator {
+  background-color: #D7D9DA;
+  border-radius: 10px;
+  cursor: pointer;
+  height: 12px;
+  margin: 15px 0;
+  width: 12px;
+  margin-left: 90%;
+  transform: translateY(-20px);
+}
+
+.custom-indicator.selected {
+  background-color: #E38A86;
+  height: 50px;
+}
+
+.custom-indicator1 {
+  background-color: #D7D9DA;
+  border-radius: 10px;
+  cursor: pointer;
+  height: 12px;
+  margin: 15px 0;
+  width: 12px;
+  margin-left: 600px;
+  transform: translateY(-0px);
+  bottom: 30px !important;
+}
+
+@media (min-width: 960px) {
+  .carousel .control-dots {
+    bottom: 30px !important;
+  }
+}
+
+.custom-indicator1.selected {
+  background-color: #E38A86;
+  height: 50px;
+}
+
+.select-card{
+  cursor: pointer;
+  box-shadow: 1px 1px 10px 2px rgba(0,0,0,0.2);
+}
+
+.select-card:hover{
+  opacity: 0.7;
+}
+

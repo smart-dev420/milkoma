@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26">
+  <g id="Group_47" data-name="Group 47" transform="translate(-795 -216)">
+    <g id="Group_42" data-name="Group 42" transform="translate(636 309.053)">
+      <circle id="Ellipse_3" data-name="Ellipse 3" cx="13" cy="13" r="13" transform="translate(159 -93.053)" fill="#ebe4dc"/>
+    </g>
+    <g id="Icon_ionic-md-help-circle-outline" data-name="Icon ionic-md-help-circle-outline" transform="translate(796.965 217.965)">
+      <path id="Path_186" data-name="Path 186" d="M11.035,4.922a6.111,6.111,0,1,1-4.323,1.79,6.088,6.088,0,0,1,4.323-1.79m0-1.547a7.66,7.66,0,1,0,7.66,7.66,7.659,7.659,0,0,0-7.66-7.66Z" transform="translate(0 0)"/>
+      <g id="Group_45" data-name="Group 45" transform="translate(7.825 6.212)">
+        <path id="Path_187" data-name="Path 187" d="M16.523,23.836h1.621v1.621H16.523Z" transform="translate(-14.123 -15.81)"/>
+        <path id="Path_188" data-name="Path 188" d="M16.163,16.427H14.558c0-2.585,2.408-2.4,2.408-4.005a1.612,1.612,0,0,0-1.605-1.609,1.628,1.628,0,0,0-1.605,1.6H12.15a3.21,3.21,0,0,1,6.421,0C18.571,14.424,16.163,14.652,16.163,16.427Z" transform="translate(-12.15 -9.211)"/>
+      </g>
+    </g>
+  </g>
+</svg>

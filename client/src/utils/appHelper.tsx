@@ -1,0 +1,81 @@
+import { HOST_URL } from '../components/Constants';
+import axios from 'axios';
+  
+export const getCurrentDateString = () => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const day = String(currentDate.getDate()).padStart(2, '0');
+  const date = `${year}年-${month}月-${day}日`;
+  return date;
+}
+
+export const getCurrentDateTimeString = () => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const day = String(currentDate.getDate()).padStart(2, '0');
+  const hour = String(currentDate.getHours()).padStart(2, '0');
+  const min = String(currentDate.getMinutes()).padStart(2, '0');
+  const time = `${year}年-${month}月-${day}日 ${hour}:${min}`;
+  return time;
+}
+
+export const getDateTimeString = (str:string) => {
+  const strDate = str.split(' ');
+  const date = getDateString(strDate[0]);
+  const time = strDate[1].split(':');
+  const hour = time[0];
+  const min = time[1];
+  const dateTime = `${date} ${hour}:${min}`;
+  return dateTime;
+}
+
+export const getDateString = (str:string) => {
+  const strDate = str.split('-');
+  const year = strDate[0];
+  const month = strDate[1];
+  const day = strDate[2];
+  const date = `${year}年-${month}月-${day}日`;
+  return date;
+}
+
+export const reqPost = async (url:any, payload:any) => {
+  const token = localStorage.getItem('token')
+  const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Authorization": "Bearer " + token
+  };
+
+  const query = `${HOST_URL}/${url}`
+  const res = await axios.post(query, payload, {headers})
+  if(res.status !== 200){
+    return null
+  }
+  return res.data.result
+}
+
+export const NumberFormatExample = (str:number) => {
+  
+  let formattedNumber = "";
+
+  if (str >= 1000000) {
+    formattedNumber = (str / 1000000).toFixed(1) + "M";
+  } else if (str >= 1000) {
+    formattedNumber = (str / 1000).toFixed(1) + "k";
+  } else {
+    formattedNumber = str.toString();
+  }
+  return formattedNumber;
+}
+
+export const showSentence = (str:string) => {
+  const sentence = str.split('@@@');
+  const element = sentence.map((item, index) => (
+      <p>
+        {item}
+      </p>
+  ));
+  return element;
+}

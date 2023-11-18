@@ -1,0 +1,98 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
+    "@mui/icons-material": "^5.14.15",
+    "@mui/lab": "^5.0.0-alpha.150",
+    "@mui/material": "^5.14.15",
+    "@reduxjs/toolkit": "^1.9.7",
+    "@stripe/react-stripe-js": "^2.3.1",
+    "@stripe/stripe-js": "^2.1.10",
+    "@tanstack/react-query": "^5.8.1",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.59",
+    "@types/react": "^18.2.31",
+    "@types/react-dom": "^18.2.14",
+    "axios": "^1.5.1",
+    "better-react-carousel": "^1.1.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "date-fns": "^2.30.0",
+    "dotenv": "^16.3.1",
+    "formik": "^2.4.5",
+    "googleapis": "^128.0.0",
+    "jwt-decode": "^3.1.2",
+    "mobiscroll": "^3.0.0-beta6",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
+    "mui": "^0.0.1",
+    "multer": "^1.4.5-lts.1",
+    "notistack": "^3.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.47.0",
+    "react-icons": "^4.11.0",
+    "react-modal": "^3.16.1",
+    "react-redux": "^8.1.3",
+    "react-responsive-carousel": "^3.2.23",
+    "react-router-dom": "^6.17.0",
+    "react-router-hash-link": "^2.4.3",
+    "react-scripts": "5.0.1",
+    "react-slick": "^0.29.0",
+    "react-spring": "^9.7.3",
+    "react-spring-3d-carousel": "^1.3.4",
+    "react-toastify": "^9.1.3",
+    "slick-carousel": "^1.8.1",
+    "state-pool": "^0.10.0",
+    "sweetalert2": "^11.7.32",
+    "typescript": "^4.9.5",
+    "uuid": "^9.0.1",
+    "web-vitals": "^2.1.4",
+    "yup": "^1.3.2"
+  },
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/google-libphonenumber": "^7.4.29",
+    "@types/react-date-range": "^1.4.7",
+    "@types/react-datepicker": "^4.19.1",
+    "@types/react-modal": "^3.16.2",
+    "@types/react-router-hash-link": "^2.4.8",
+    "@types/react-slick": "^0.23.11",
+    "@types/slick-carousel": "^1.6.39",
+    "@types/uuid": "^9.0.6",
+    "autoprefixer": "^10.4.16",
+    "gh-pages": "^6.0.0",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.5"
+  }
+}
