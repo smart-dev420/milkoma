@@ -140,17 +140,16 @@ export const CardManage = () => {
                     image={staticFiles.images.addCard}
                     sx={{width:'419px', height:'241px', marginX:'auto', marginTop:'35px'}}
                 />
-                <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{marginTop:'35px',}}>
+                <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{marginTop:'35px', marginBottom:'14px'}}>
                     <Typography sx={{color:'#454545', fontSize:'20px', fontWeight:fontBold}}>カード番号</Typography>
                     <Typography sx={{color:'#FF4A55', fontSize:'14px', fontWeight:fontBold, display:cardNumberValidation?'none':''}}>カード番号が正しく入力されていません</Typography>
                 </Box>  
-                <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{paddingX:'15px', border:'2px solid #EC605B', borderRadius:'14px'}}>
+                <Box display='flex' flexDirection='column' justifyContent='space-between' sx={{paddingX:'15px', border:'2px solid #EC605B', borderRadius:'14px'}}>
                     <TextField
                           id = "cardNumber"
                           name='cardNumber'
                           type={"text"}
                           placeholder="カード番号を入力"
-                        //   variant="standard" 
                           value={values.cardNumber}
                           className="bg-[#FCF9F8] rounded-lg w-[90%]"
                           error={
@@ -177,6 +176,9 @@ export const CardManage = () => {
                               ),
                           }}
                           />
+                    <Box display='flex' flexDirection='row'>
+                        <Typography sx={{fontSize:'16px', color:'#858997'}}>利用できるブランド : </Typography>
+                    </Box>
                 </Box>
             </DialogContent>
             <Box display='flex' flexDirection='row' alignItems='center' justifyContent='center'>
