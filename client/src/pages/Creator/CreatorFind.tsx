@@ -212,7 +212,7 @@ export const CreatorFind = () => {
     const [ selectId, setSelectId ] = useState<string>("");
     const [ page, setPage ] = useState(5);
     
-    const existingArrayString = localStorage.getItem('searchValue');
+    const existingArrayString = sessionStorage.getItem('searchValue');
     const existingArray = existingArrayString ? JSON.parse(existingArrayString) : [];
     const [ searchValue, setSearchValue ] = useState(existingArray);
     const match_1024 = useMediaQuery('(min-width:1024px)');
@@ -254,7 +254,7 @@ export const CreatorFind = () => {
           existingArray.push(newValue);
           setSearchValue(existingArray);
           const updatedArrayString = JSON.stringify(existingArray);
-          localStorage.setItem('searchValue', updatedArrayString);
+          sessionStorage.setItem('searchValue', updatedArrayString);
         }
       };
     

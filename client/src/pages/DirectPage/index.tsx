@@ -12,6 +12,10 @@ import Typography from '@mui/material/Typography';
 import { useDispatch, useSelector } from "react-redux";
 import { setStep, setCategory, setQuestion, setInit } from "../../slices/direct"
 import { useNavigate } from "react-router-dom";
+import { API } from "../../axios";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { headers } from "../../utils/appHelper";
 
 const cardData: CardElement[] = [
     {
@@ -92,6 +96,7 @@ export const DirectPage = () => {
     const selectColor:string = "#E38A86";
     const unselectColor:string = "#D9D9D9";
     const dispatch = useDispatch();
+    
     return (
         <>
         <div className="h-[200px]"></div>
@@ -508,9 +513,37 @@ const Step3 : React.FC<{}> = () => {
 const Step4 : React.FC<{}> = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const data = useSelector((state:any) => state.direct);
+    const onSubmit = async () => {
+        
+        console.log("data", data);
+        const formData = {
+            category: data.title,
+            description: data.description,
+            step1: data.question1,
+            step2: data.question2,
+            step3: btn_group2[data.question3].name,
+            status: 0,
+        };
+        const query = `${API}/api/insertContract`;
+        try {
+            const res = await axios.post(query, formData, {headers});
+            if(res.status === 200){
+                console.log('return' , res.data)
+                toast.success(res.data.msg);
+                navigate('/'); 
+                dispatch(setInit()); 
+              }else{
+                console.log(res)
+                // context.alertError(res.data.err)
+            }
+        } catch (error:any) {
+            const result = error.response.data.msg;
+            toast.error(result);
+        }
+    }
     const handleHome = () => {
-        navigate('/'); 
-        dispatch(setInit()); 
+
     }
     return(
         <>
@@ -547,7 +580,7 @@ const Step4 : React.FC<{}> = () => {
                 <img src={staticFiles.images.finish} className="w-[592px]" />
             </div>
         </div>
-        <button onClick={handleHome} className="mb-[45px] btn-color w-[324px] py-2 px-5 rounded-[30px] text-[23px] ml-[10%]">完了</button>
+        <button onClick={onSubmit} className="mb-[45px] btn-color w-[324px] py-2 px-5 rounded-[30px] text-[23px] ml-[10%]">完了</button>
         </div>
         </>
     )

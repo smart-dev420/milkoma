@@ -77,8 +77,8 @@ export const Top = () => {
     const navigate = useNavigate();
     const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const handleSignOut = () => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("user");
       navigate("/login");
     }
     const [searchTerm, setSearchTerm] = useState<string>("");

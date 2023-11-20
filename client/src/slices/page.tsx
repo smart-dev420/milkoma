@@ -14,11 +14,12 @@ const pageSlice = createSlice({
     reducers: {
         setPage: (state, action) => {
             state.index = action.payload.page;
-        }
+        },
+        setInitPage: () => initialState,
     },
 });
 
 export const { 
-    setPage, 
+    setPage, setInitPage
 } = pageSlice.actions;
 export default pageSlice.reducer;

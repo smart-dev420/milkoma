@@ -11,6 +11,13 @@ dotenv.config({ path: "./.env" });
 const admins = process.env.ADMINS || ""
 const adminArray = admins.split(',')
 
+export function getEmailFromToken(token: string) {
+  const decoded = decode(token);
+  const email = get(decoded, "user");
+  if (!decoded || !email) { return false;}
+  return email;
+}
+
 export async function resetPwd(input: any) {
   const salt = await bcrypt.genSalt(authConfig.salt);
   const password = await bcrypt.hashSync(input.password, salt);
@@ -22,10 +29,10 @@ export async function resetPwd(input: any) {
       console.log("res - ", input)
       return await AccountModel.updateOne({email}, {password});
     } else {
-      throw Error("Token expired");
+      throw Error("トークンの有効期限が切れました"); // Token expired
     }
   } else {
-    throw Error("Account not found");
+    throw Error("アカウントが見つかりません"); // Account not found
   }
 }
 
@@ -40,23 +47,24 @@ export async function createAccount(input: any) {
     const email = input.email;
     const result = await AccountModel.find({ email : email });
     if (result.length !== 0) {
-      throw Error("Email already exists!");
+      throw Error("メールアドレスはすでに存在します!"); // Email address already exists
     }
     let admin = false;
     if(authConfig.admins.includes(email)) {
       admin = true
     }
-    let role = true;
+    let role = 'client';
     if(input.role == 1){
-      role = false;
+      role = 'creator';
     }
     const doc: Account = new AccountModel({
       email: email,
       password: hash,
-      emailverify: false,
       username: input.username,
       admin : admin,
-      active: role,
+      role: role,
+      follower: [],
+      heart: [],
       company: input.company,
       liveAccount: input.live??"",
       youtubeAccount: input.youtube??"",
@@ -127,7 +135,7 @@ export async function validatePassword(email: string, password: string) {
 export async function validateActive(email:string){
   try {
     const akun = await AccountModel.findOne({ email });
-    return akun?.active;
+    return akun?.role;
   } catch (err: any) {
     throw err;
   }
@@ -158,8 +166,6 @@ export async function saveProfile(input : any) {
       id, 
       username, 
       secretcode, 
-      fname, 
-      email, 
       following, 
       followers, 
       region,
@@ -221,31 +227,6 @@ export async function addClient(input: any) {
   }
 }
 
-export async function strikeAdvisorService(input:any) {
-  try {
-    logger.info("strikeAdvisorService")
-    const {_id, strikes} = input
-    const query = {_id}
-    const update = {strikes}
-    return await AccountModel.updateOne(query, update)
-  } catch (error: any) {
-    logger.error("strikeAdvisorService Failed")
-    throw error
-  }
-}
-
-export async function deleteAdvisorService(input:any) {
-  try {
-    logger.info("deleteAdvisorService")
-    const {_id} = input
-    const query = {_id}
-    return await AccountModel.deleteOne(query)
-  } catch (error: any) {
-    logger.error("deleteAdvisorService Failed")
-    throw error
-  }
-}
-
 export async function readProfile(input : any) {
   try {
     logger.info("Read Profile");
@@ -254,53 +235,6 @@ export async function readProfile(input : any) {
     return await AccountModel.find(query);
   } catch (error: any) {
     logger.error("Read Profile Failed");
-    throw error;
-  }
-}
-
-export async function refCodeVerifyService(input : any) {
-  try {
-    logger.info("refCodeVerifyService");
-    const {_id, refCode} = input
-    const query = {_id}
-    const update = {
-      secretcode : refCode,
-      secretverifyrequest : true,
-      secretverify : false
-    }
-    return await AccountModel.updateOne(query, update);
-  } catch (error: any) {
-    logger.error("refCodeVerifyService Failed");
-    throw error;
-  }
-}
-
-export async function procVerifyRequestedAdvisorsService(input : any) {
-  try {
-    logger.info("procVerifyRequestedAdvisorsService");
-    const {_id, allowed} = input
-    const query = {_id}
-    const advisor = await AccountModel.find(query);
-    if(advisor.length !== 1){
-      throw Error("Invalid ID")
-    }
-    let update : any = {
-      secretverify : true,
-      secretverifyrequest : false,
-    }
-    console.log(typeof(allowed))
-    if(allowed === 'false'){
-      update = {
-        secretverify : false,
-        secretverifyrequest : false,
-        secretcode : "",
-      }
-    }
-    console.log(update)
-    await AccountModel.updateOne(query, update);
-    return true
-  } catch (error: any) {
-    logger.error("procVerifyRequestedAdvisorsService Failed");
     throw error;
   }
 }
@@ -324,5 +258,37 @@ export async function optValidate(input:any) {
     }
   } else {
     throw Error("トークンが見つかりません"); // Token not found
+  }
+}
+
+export async function follow(input: any) {
+    const email = getEmailFromToken(input.token);
+    const follow = input.followingUser;
+    const result = await AccountModel.findOne({email});
+    const followArray = result?.follower || [];
+    if (!followArray.includes(follow)) {
+      followArray.push(follow);
+      await AccountModel.updateOne({ email }, { follower: followArray });
+      return true;
+    }
+    else {
+      logger.error("Already follow this user");
+      throw Error("すでにこのユーザーをフォローしています"); // Already follow this user
+    }
+}
+
+export async function heart(input: any){
+  const email = getEmailFromToken(input.token);
+  const heart = input.heartUser
+  const result = await AccountModel.findOne({email});
+  const heartArray = result?.heart || [];
+  if (!heartArray.includes(heart)) {
+    heartArray.push(heart);
+    await AccountModel.updateOne({ email }, { heart: heartArray });
+    return true;
+  }
+  else {
+    logger.error("Already like this user");
+    throw Error("このユーザーはすでに「いいね」をしています!"); // Already like this user
   }
 }

@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import authServices from "../services/auth-services";
 import { setMessage } from "./message";
 
-//const user = JSON.parse(localStorage.getItem("user"));
+//const user = JSON.parse(sessionStorage.getItem("user"));
 
 export const login = createAsyncThunk(
     "auth/login", async ({ email, password }:any, thunkAPI) => {

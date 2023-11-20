@@ -16,6 +16,7 @@ export const IntroCard: React.FC<{
     space: number;
   }> = ({ elements, space }) => {
     const match_768 = useMediaQuery('(min-width:768px)');
+    const navigate = useNavigate();
     return(
       <div className={`${match_768 ? "flex-row" : "flex-col"} flex mx-10 justify-evenly items-center `}>
         <Grid container spacing={space} className='justify-center'>
@@ -25,7 +26,7 @@ export const IntroCard: React.FC<{
                 <div className="card-content p-5">
                 <label className="font-m1c text-xl font-medium " style={{fontWeight:fontBold, textAlign:'center'}}>{el.name}</label>
                 <p className="mt-1 text-ms">{el.description}</p>
-                <button className="w-full h-[41px] mt-4 rounded-[27px] btn-color" style={{fontWeight:fontBold}}>{el.buttonName}</button>
+                <button onClick={() => {navigate('/direct_request')}} className="w-full h-[41px] mt-4 rounded-[27px] btn-color" style={{fontWeight:fontBold}}>{el.buttonName}</button>
                 </div>
               </div>
             </Grid>

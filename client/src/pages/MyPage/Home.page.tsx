@@ -59,7 +59,7 @@ export const HomePage = () => {
                     初めてのあなたに
                 </Typography>
                 <SpaceY />
-                <Box display="flex" flexDirection="row">
+                <Box display="flex" flexDirection="row" sx={{columnGap:'34px'}}>
                     <CardMedia
                         component="img"
                         alt="Image1"
@@ -71,7 +71,7 @@ export const HomePage = () => {
                         component="img"
                         alt="Image2"
                         height="280"
-                        sx={{marginX:'30px', borderRadius:'20px'}}
+                        sx={{borderRadius:'20px'}}
                         className="select-card"
                         image={staticFiles.images.card2} />
                     <CardMedia

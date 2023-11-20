@@ -110,6 +110,11 @@ export const staticFiles = {
     productFile: `${ASSET_IMAGES}/Product_File.png`,
     contract: `${ASSET_IMAGES}/Contract.png`,
     addCard: `${ASSET_IMAGES}/Add_Card.png`,
+    cardLogo1: `${ASSET_IMAGES}/Card_Logo1.png`,
+    cardLogo2: `${ASSET_IMAGES}/Card_Logo2.png`,
+    cardLogo3: `${ASSET_IMAGES}/Card_Logo3.png`,
+    cardLogo4: `${ASSET_IMAGES}/Card_Logo4.png`,
+    cardLogo5: `${ASSET_IMAGES}/Card_Logo5.png`,
   },
 };
 

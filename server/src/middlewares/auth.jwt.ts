@@ -11,7 +11,7 @@ export const verifyToken: RequestHandler = (req, res, next) => {
   const { authorization } = req.body.token || req.query.token || req.headers;
   if (!authorization) {
     return res.status(StatusCodes.FORBIDDEN).json({
-      msg: "No token provided",
+      msg: "トークンが提供されていません", // No token provided
     });
   }
   const token = authorization.split(' ')[1]
@@ -22,7 +22,7 @@ export const verifyToken: RequestHandler = (req, res, next) => {
       (err: any, decoded: any) => {
         if (err) {
           return res.status(StatusCodes.UNAUTHORIZED).json({
-            msg: "Invalid authorization",
+            msg: "無効な認証", //Invalid authorization
           });
         }
         res.locals.decoded = decoded;
@@ -43,7 +43,7 @@ export const verifyAdmin: RequestHandler = (req, res, next) => {
   console.log()
   if (!authorization) {
     return res.status(StatusCodes.FORBIDDEN).json({
-      msg: "No token provided",
+      msg: "トークンが提供されていません",  //No token provided
     });
   }
   const token = authorization.split(' ')[1] 
@@ -54,12 +54,12 @@ export const verifyAdmin: RequestHandler = (req, res, next) => {
       (err: any, decoded: any) => {
         if (err) {
           return res.status(StatusCodes.UNAUTHORIZED).json({
-            msg: "Invalid authorization",
+            msg: "無効な認証", //Invalid authorization
           });
         }
         if(!authConfig.admins.includes(decoded.user)){
           return res.status(StatusCodes.UNAUTHORIZED).json({
-            msg: "Invalid authorization",
+            msg: "無効な認証", //Invalid authorization
           });
         }
         res.locals.decoded = decoded;

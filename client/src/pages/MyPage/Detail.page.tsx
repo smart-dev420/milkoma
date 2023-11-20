@@ -459,8 +459,8 @@ export const DetailPage = () => {
 
         {/** File Upload and Download  */}
                 <Typography sx={{color:'#511523', fontSize:'25px', marginTop:'60px', fontWeight:fontBold}}>ファイル・検修管理</Typography>
-                <Box display='flex' flexDirection='row' sx={{marginTop:'33px'}}>
-                    <Box display='flex' flexDirection='column' flex={6} sx={{marginRight:'50px',}}>
+                <Box display='flex' flexDirection='row' sx={{marginTop:'33px', columnGap:'50px'}}>
+                    <Box display='flex' flexDirection='column' flex={6} >
                         <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{ minHeight:'27px'}}>
                             <Typography sx={{fontSize:'20px', color:'#B9324D', whiteSpace:'nowrap', fontWeight:fontBold}}>あなたから</Typography>
                             <Button sx={{
@@ -473,12 +473,12 @@ export const DetailPage = () => {
                                 }}>アップロードする
                             </Button>
                         </Box>
-                        <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' sx={{border:'2px dashed #AA3D4F', borderRadius:'15px', width:'100%', marginTop:'16px', paddingY:'22px', paddingX:'27px'}}>
+                        <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' sx={{border:'2px dashed #AA3D4F', borderRadius:'15px', width:'100%', marginTop:'16px', paddingY:'22px', paddingX:'27px', rowGap:'10px'}}>
                             {data.userDownload.length === 0?
                                 (<Typography sx={{fontSize:'16px', color:'#001219', textAlign:'center', whiteSpace:'nowrap',paddingY:'126px'}}>まだファイル共有はされていません</Typography>)
                                 :(
                                     data.userDownload.map((item, index) => (
-                                        <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', marginY:'5px', border:'1px solid #AA3D4F', borderRadius:'10px', paddingY:'12px', paddingX:'7px'}}>
+                                        <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', border:'1px solid #AA3D4F', borderRadius:'10px', paddingY:'12px', paddingX:'7px'}}>
                                             <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center' 
                                                 sx={{ backgroundColor:'#F0F0F0', borderRadius:'50%', width:'46px', height:'46px'}}>
                                                 <CardMedia
@@ -518,12 +518,12 @@ export const DetailPage = () => {
                         <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{ minHeight:'35px'}}>
                             <Typography sx={{fontSize:'20px', color:'#B9324D', fontWeight:fontBold}}>ミルコマから</Typography>
                         </Box>
-                        <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' sx={{border:'2px dashed #AA3D4F', borderRadius:'15px', width:'100%', marginTop:'16px', paddingY:'22px', paddingX:'27px'}}>
+                        <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' sx={{border:'2px dashed #AA3D4F', borderRadius:'15px', width:'100%', marginTop:'16px', paddingY:'22px', paddingX:'27px', rowGap:'10px'}}>
                         {data.productDownload.length === 0?
                                 (<Typography sx={{fontSize:'16px', color:'#001219', textAlign:'center', whiteSpace:'nowrap',paddingY:'126px'}}>まだファイル共有はされていません</Typography>)
                                 :(
                                     data.productDownload.map((item, index) => (
-                                        <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', marginY:'5px', border:'1px solid #EE7D90', borderRadius:'10px', paddingY:'12px', paddingX:'7px'}}>
+                                        <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', border:'1px solid #EE7D90', borderRadius:'10px', paddingY:'12px', paddingX:'7px'}}>
                                             <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center' 
                                                 sx={{ backgroundColor:'#F0F0F0', borderRadius:'50%', width:'46px', height:'46px'}}>
                                                 <CardMedia

@@ -46,15 +46,16 @@ export const Login = () => {
       try {
           const res = await axios.post(query, formData);
           if(res.status === 200){
+              console.log('return' , res.data)
               const token = res.data.token;
               const email = res.data.email;
               const verify = res.data.emailverify;
               toast.success("成功!");
               const id = res.data._id;
-              localStorage.setItem('token', token);
+              sessionStorage.setItem('token', token);
               const user = JSON.stringify({ email, id })
               dispatch(signin({email, id}))
-              localStorage.setItem('user', user);
+              sessionStorage.setItem('user', user);
               navigate('/');
             }else{
               console.log(res)

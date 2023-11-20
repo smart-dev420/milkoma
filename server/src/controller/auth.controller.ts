@@ -10,9 +10,9 @@ import {
   readProfile,
   updateField,
   resetPwd,
-  // emailVerifyfunc,
-  strikeAdvisorService,
-  optValidate
+  optValidate,
+  follow,
+  heart
 } from "../services/account.service";
 import { omit } from "lodash";
 import logger from "../utils/logger";
@@ -25,7 +25,9 @@ const fs = require('fs');
 const crypto = require('crypto');
 const rootPath = path.dirname(require.main?.path);
 const avatarPath = path.join(rootPath, 'uploads/avatars');
-const resumePath = path.join(rootPath, 'uploads/resumes');
+const providePath = path.join(rootPath, 'uploads/provides');
+const productPath = path.join(rootPath, 'uploads/products');
+const receiptPath = path.join(rootPath, 'uploads/receipts');
 const otpGenerator = require('otp-generator')
 
 const APP_URL = process.env.FRONT_URL;
@@ -61,17 +63,17 @@ const login: RequestHandler = async (req, res) => {
         .status(StatusCodes.UNAUTHORIZED)
         .json({ msg: "パスワードが無効です!" }); // Password invalid
     }
-    const isActive = await validateActive(akun.email);
-    if(!isActive){
-      logger.error('Inactive!')
-      return res
-        .status(StatusCodes.UNAUTHORIZED)
-        .json({ msg: "アクティブが無効です!" }); // Active invalid
-    }
+    // const isActive = await validateActive(akun.email);
+    // if(!isActive){
+    //   logger.error('Inactive!')
+    //   return res
+    //     .status(StatusCodes.UNAUTHORIZED)
+    //     .json({ msg: "アクティブが無効です!" }); // Active invalid
+    // }
     const token = await createAccessToken(req.body.email);
     return res
       .status(StatusCodes.OK)
-      .send({ ...omit(akun, "password"), token: token, emailverify:akun.emailverify });
+      .send({ ...omit(akun, "password"), token: token, });
   } catch (err: any) {
     return res
       .status(StatusCodes.BAD_REQUEST)
@@ -208,12 +210,12 @@ const uploadProfile: RequestHandler = async (req, res) => {
     if(files.resume){
       const resumeFile:FileInterface = files.resume;
       resumename = uuidv4()
-      resumeFile.mv(`${resumePath}/${resumename}.pdf`, function (err:any) {
-        if (err) {
-            console.log(err)
-            return res.status(500).send({ result: "Error occured to upload resume" });
-        }
-      });  
+      // resumeFile.mv(`${resumePath}/${resumename}.pdf`, function (err:any) {
+      //   if (err) {
+      //       console.log(err)
+      //       return res.status(500).send({ result: "Error occured to upload resume" });
+      //   }
+      // });  
     }
   }
   saveProfile({id, username, secretcode, fname, lname, email, noPublic, bio, following, followers, region, resumename})
@@ -249,18 +251,6 @@ const getUserInfo: RequestHandler = async (req, res) => {
   }
 }
 
-export const strikeAdvisor: RequestHandler = async (req, res) => {
-  try {
-    const {_id, strikes} = req.body
-    await strikeAdvisorService({_id, strikes})
-    return res.status(StatusCodes.OK).send({result:"success"})
-  } catch (err: any) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ msg: "strikeAdvisor", err: err.message })
-  }
-}
-
 export const getAvatar: RequestHandler = async (req, res) => {
   const id = req.params.id;
   const file = id + ".png";
@@ -291,6 +281,45 @@ const optValidation:RequestHandler = async (req, res) => {
   }
 }
 
+const validateToken = (req:any, res:any) => {
+  const { authorization } = req.body.token || req.query.token || req.headers;
+  if (!authorization) {
+    return res.status(StatusCodes.FORBIDDEN).json({
+      msg: "トークンが提供されていません", // No token provided
+    });
+  }
+  const token = authorization.split(' ')[1];
+  return token;
+}
+
+const followUser:RequestHandler = async (req, res) => {
+  const followingUser = req.body.email;
+  const token = validateToken(req, res);
+  try{
+    await follow({token, followingUser});
+    return res.status(StatusCodes.OK).send({msg : "フォローされました!"}); // Follow successful!
+  } catch (err:any){
+    logger.error(err);
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send({ msg: err.message });
+  }
+}
+
+const heartUser:RequestHandler = async (req, res) => {
+  const heartUser = req.body.email;
+  const token = validateToken(req, res);
+  try{
+    await heart({token, heartUser});
+    return res.status(StatusCodes.OK).send({msg : "みたいな!"}); // Follow successful!
+  } catch (err:any){
+    logger.error(err);
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send({ msg: err.message });
+  }
+}
+
 const auth = { 
   register, 
   login, 
@@ -299,8 +328,9 @@ const auth = {
   forgotPassword, 
   resetPassword, 
   getUserInfo,
-  strikeAdvisor,
   getAvatar,
-  optValidation
+  optValidation,
+  followUser,
+  heartUser
 };
 export default auth;

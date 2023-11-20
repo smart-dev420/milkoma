@@ -13,7 +13,6 @@ import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 
 const queryClient = new QueryClient();
-export const authState = createState(localStorage.getItem("AUTH_TOKEN"));
 function App() {
   return (
     <QueryClientProvider client={queryClient}>

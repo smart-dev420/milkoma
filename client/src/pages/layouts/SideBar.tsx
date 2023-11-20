@@ -1,9 +1,10 @@
 import { Button } from "@mui/material"
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setPage } from "../../slices/page";
+import { setPage, setInitPage } from "../../slices/page";
 import { useNavigate } from "react-router-dom";
 import { btnBackground, fontBold } from "../../components/Constants";
+import { signout } from "../../slices/auth";
 
 export const SideBar = () => {
     const pageIndex = useSelector((state:any) => state.pages.index);
@@ -21,17 +22,25 @@ export const SideBar = () => {
         setClicked(pageIndex);
     },[pageIndex]);
     
+    const handleLogout = () => {
+        setClicked(7); 
+        dispatch(setInitPage());
+        dispatch(signout());
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
+        navigate('/login');
+    }
 
     return(
         <div className="flex flex-col pl-[2vw] w-[300px]" style={{zIndex:10, position:'fixed', top:220}}>
             <label className="text-[#554744] text-[30px]" style={{fontWeight:fontBold}}>マイページ</label>
-            <label className="text-[19px] text-[#554744]" style={{letterSpacing:'-2px'}}>{listItmes[clicked-1].name}</label>
+            <label className="text-[19px] text-[#554744]" style={{letterSpacing:'-2px'}}>{clicked != 7? (listItmes[clicked-1].name):''}</label>
                 {listItmes.map(item => (
                     <Button
                         onMouseEnter={()=>{setIsHovered(item.id)}}
                         onMouseLeave={handleMouseLeave}
                         onClick={() => {setClicked(item.id); dispatch(setPage({page:item.id})); navigate(item.url)}}
-                        style={{justifyContent:'flex-start', marginTop:"50px", paddingLeft:"20px"}}
+                        style={{justifyContent:'flex-start', marginTop:"40px", paddingLeft:"20px"}}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox={item.viewBox}>
                             <path d={item.draw} transform={item.transform}
@@ -40,6 +49,15 @@ export const SideBar = () => {
                         <label className="text-[20px] pl-[18.6px] cursor-pointer" style={{ fontWeight:fontBold, color: clicked === item.id ? selectColor : (isHovered === item.id ? hoverColor : unSelectColor) }}>{item.name}</label>
                     </Button>
                 ))}
+                <Button
+                    onMouseEnter={()=>{setIsHovered(7)}}
+                    onMouseLeave={handleMouseLeave}
+                    onClick={handleLogout}
+                    style={{justifyContent:'flex-start', marginTop:"40px", paddingLeft:"20px"}}
+                    >
+                    <svg width="20" height="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path fill = {clicked === 7 ? selectColor : (isHovered === 7 ? hoverColor : unSelectColor)} d="m497 273-168 168c-15 15-41 4.5-41-17v-96h-136c-13.3 0-24-10.7-24-24v-96c0-13.3 10.7-24 24-24h136v-96c0-21.4 25.9-32 41-17l168 168c9.3 9.4 9.3 24.6 0 34zm-305 163v-40c0-6.6-5.4-12-12-12h-84c-17.7 0-32-14.3-32-32v-192c0-17.7 14.3-32 32-32h84c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-84c-53 0-96 43-96 96v192c0 53 43 96 96 96h84c6.6 0 12-5.4 12-12z"/></svg>
+                    <label className="text-[20px] pl-[18.6px] cursor-pointer" style={{ fontWeight:fontBold, color: clicked === 7 ? selectColor : (isHovered === 7 ? hoverColor : unSelectColor) }}>ログアウト</label>
+                </Button>
         </div>
     )
 }

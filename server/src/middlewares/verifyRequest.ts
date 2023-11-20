@@ -10,7 +10,7 @@ export const verifyBodyRequest: RequestHandler = (req, res, next) => {
     logger.error("Request have no body!");
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ msg: "No body provided!" });
+      .json({ msg: "ボディは用意されていません！" }); //No body provided!
   } else {
     next();
   }
@@ -22,13 +22,13 @@ export const existIDRequest: RequestHandler = (req, res, next) => {
     logger.error("existIDRequest : Request has no address!");
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ msg: "No ID!" });
+      .json({ msg: "身分証明書なし!" }); // No ID
   } else {
     if(id?.length != 24){
-      logger.error("Invalid ID!");
+      logger.error("Invalid ID!"); //
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ msg: "ID validation failed" });
+        .json({ msg: "IDの検証に失敗しました" }); // ID validation failed
     }else{
       next();
     }

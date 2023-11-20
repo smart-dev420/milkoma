@@ -5,9 +5,9 @@ import axios from 'axios'
 import { API } from '../axios'
 
 const AuthContainer = () => {
-  const token = localStorage.getItem('token')
+  const token = sessionStorage.getItem('token')
   const dispatch = useDispatch()
-  const user_data = localStorage?.getItem('user');
+  const user_data = sessionStorage?.getItem('user');
   const user = user_data ? JSON.parse(user_data) : null;
   if(user !== null){
     console.log("user - ", user)
@@ -24,14 +24,14 @@ const AuthContainer = () => {
       ))
     })
     .catch(err => {
-      localStorage.removeItem('token')
-      localStorage.removeItem('user')
+      sessionStorage.removeItem('token')
+      sessionStorage.removeItem('user')
       window.location.pathname = '/login'
     })
   }else{
     if(token){
-      localStorage.removeItem('token')
-      localStorage.removeItem('user')
+      sessionStorage.removeItem('token')
+      sessionStorage.removeItem('user')
       window.location.pathname = '/login'
     }
   }
