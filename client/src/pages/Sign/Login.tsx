@@ -158,14 +158,14 @@ export const Login = () => {
                         
                     <Container maxWidth="sm" className="mt-[20px]">
                     <Stack direction="row" spacing={2} className = "justify-center items-center">
-                        <Typography color="textSecondary" sx={{marginTop:'10px', fontSize:16}}>会員ではありませんか？</Typography>
-                        <Button variant="text" onClick={() => {navigate('/signup')}}>今すぐ登録してください</Button>
+                        <Typography color="textSecondary" sx={{marginTop:'10px', fontSize:16}}>まだ会員ではないお客様</Typography>
+                        <Button variant="text" onClick={() => {navigate('/signup')}}>新規会員登録はこちら</Button>
                     </Stack>
                     </Container>
                     <Container maxWidth="sm" className="mt-[5px]">
                     <Stack direction="row" spacing={2} className = "justify-center items-center">
-                        <Typography color="textSecondary" sx={{marginTop:'10px', fontSize:16}}>パスワードを忘れましたか?</Typography>
-                        <Button variant="text" onClick={() => {navigate('/forgot')}}>忘れたパスワード</Button>
+                        <Typography color="textSecondary" sx={{marginTop:'10px', fontSize:16}}>パスワードを忘れたお客様</Typography>
+                        <Button variant="text" onClick={() => {navigate('/forgot')}}>パスワードの再設定はこちら</Button>
                     </Stack>
                     </Container>
             </div>
