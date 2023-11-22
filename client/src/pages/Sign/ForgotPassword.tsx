@@ -34,7 +34,7 @@ export const ForgotPassword = () => {
         try {
             const res = await axios.post(query, formData);
             if(res.status === 200){
-                toast.success("Sent!");
+                toast.success("送信済み!");
                 // navigate(`/otp/${data.email}`);
                 dispatch(setUserEmail({email:data.email}));
                 navigate('/otp');

@@ -34,9 +34,26 @@ const APP_URL = process.env.FRONT_URL;
 const COMPANY_NAME = process.env.COMPANY_NAME;
 const userEmail = process.env.SERVER_EMAIL;
 const userPswd = process.env.SERVER_PASSWORD;
+const mailgunUserEmail = process.env.MAILGUN_USEREMAIL;
+const mailgunUserPswd = process.env.MAILGUN_USER_PASSWORD;
 //* Basic Authentication with JWT
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
+  port: 587,
+  auth: {
+    user: userEmail,
+    pass: userPswd
+  }
+});
+
+/** Mailgun server */
+const formData = require('form-data');
+const Mailgun = require('mailgun.js');
+const mailgun = new Mailgun(formData);
+const mg = mailgun.client({username: 'Neopen', key: process.env.MAILGUN_API_KEY});
+
+const mailgun_transporter = nodemailer.createTransport({
+  host: 'smtp.mailgun.org',
   port: 587,
   auth: {
     user: userEmail,
@@ -145,6 +162,17 @@ const forgotPassword: RequestHandler = async (req, res) => {
       subject: "パスワードを再設定する", // Reset Password
       html: emailBody
     };
+
+    mg.messages.create(process.env.MAILGUN_DOMAIN, {
+      from: process.env.MAILGUN_SERVER_EMAIL,
+      to: ["openwindower@gmail.com"],
+      subject: "Hello",
+      text: "Testing some Mailgun awesomeness!",
+      html: "<h1>Testing some Mailgun awesomeness!</h1>"
+    })
+    .then((msg:any) => {console.log(msg);res.status(200).send({msg:'メールが正常に送信されました'});}) // logs response data
+    .catch((err:any) => console.log(err));
+
     // Send the email
     transporter.sendMail(mailOptions, (error:any, info:any) => {
       if (error) {

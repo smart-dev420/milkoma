@@ -1,3 +1,4 @@
+import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import express from "express";
 import cors from "cors";
 import config from "./config/config";
@@ -61,3 +62,33 @@ console.log(`server started ${config.server.port}`)
 });
 
 export default http;
+
+// export const lambdaHandler = async (
+//   event: APIGatewayProxyEvent,
+//   context: Context
+// ): Promise<APIGatewayProxyResult> => {
+//   try {
+//     // Process the event data from API Gateway
+//     const { httpMethod, path, body, queryStringParameters } = event;
+
+//     // Your logic to handle the API Gateway event
+//     // Example: Determine the route based on the path and HTTP method
+
+//     // Construct a response for API Gateway
+//     const response: APIGatewayProxyResult = {
+//       statusCode: 200,
+//       body: JSON.stringify({ message: 'Success' }),
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     };
+
+//     return response;
+//   } catch (error) {
+//     // Handle errors and return an appropriate response
+//     return {
+//       statusCode: 500,
+//       body: JSON.stringify({ message: 'Internal Server Error' }),
+//     };
+//   }
+// };
