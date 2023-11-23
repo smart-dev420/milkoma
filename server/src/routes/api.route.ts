@@ -30,6 +30,7 @@ apiRoute.post("/heart",                verifyToken,     auth.heartUser);
 
 /******* Contract */
 apiRoute.post("/insertContract", verifyToken, contract.insertContract);
+apiRoute.post("/getCreatorInfo", verifyToken, contract.getCreatorInfo);
 
 // apiRoute.post("/test", stripe.test);
 

@@ -32,12 +32,12 @@ export const FindCreator = () => {
                                 </div>
                                 <span className="text-[#511523] text-[30px]" style={{fontWeight:fontBold}}>にいる</span><span className="text-[30px] text-[#B9324D]" style={{fontWeight:fontBold}}>インフルエンサー</span>
                             </div>
-                            <p className="text-[#001219] text-[16px] bg-[#fff] mt-[45px] w-[96%]" style={{whiteSpace:'nowrap', fontWeight:fontBold}}>ミルコマでは様々なSNSのインフルエンサーが在籍！</p>
-                            <div className="flex flex-row text-[#fff] text-[15px] text-center mt-[25px]">
-                                <span className="bg-[#FC6761] rounded-[20px] w-[100px]" style={{boxShadow:"0px 2px 3px 1px #FCBEBB", fontWeight:fontBold}}>17ライバー</span>
-                                <span className="bg-[#7ABDC4] rounded-[20px] w-[100px] mx-2" style={{boxShadow:"0px 2px 3px 1px #DAD8D3", fontWeight:fontBold}}>TikToker</span>
-                                <span className="bg-[#F4827F] rounded-[20px] w-[100px] mx-2" style={{boxShadow:"0px 2px 3px 1px #F7C9C2", fontWeight:fontBold}}>Youtuber</span>
-                                <span className="bg-[#FD8E5C] rounded-[20px] w-[100px] " style={{boxShadow:"0px 2px 3px 1px #FABDA7", fontWeight:fontBold}}>Youtuber</span>
+                            <p className="text-[#001219] text-[16px] bg-[#fff] mt-[45px]" style={{whiteSpace:'nowrap', width:'fit-content', fontWeight:fontBold}}>ミルコマでは様々なSNSのインフルエンサーが在籍！</p>
+                            <div className="flex flex-row text-[#fff] text-[15px] text-center mt-[25px]" style={{columnGap:'25px'}}>
+                                <span className="bg-[#FC6761] rounded-[20px] px-[20px]" style={{boxShadow:"0px 2px 3px 1px #FCBEBB", fontWeight:fontBold}}>17ライバー</span>
+                                <span className="bg-[#7ABDC4] rounded-[20px] px-[20px]" style={{boxShadow:"0px 2px 3px 1px #DAD8D3", fontWeight:fontBold}}>TikToker</span>
+                                <span className="bg-[#F4827F] rounded-[20px] px-[20px]" style={{boxShadow:"0px 2px 3px 1px #F7C9C2", fontWeight:fontBold}}>Youtuber</span>
+                                <span className="bg-[#FD8E5C] rounded-[20px] px-[20px]" style={{boxShadow:"0px 2px 3px 1px #FABDA7", fontWeight:fontBold}}>Youtuber</span>
                             </div>
                             <div className="flex flex-col w-[500px] bg-[#E38A86] rounded-[50px] mt-[45px] h-[65px]" style={{boxShadow:"5px 5px 3px 0px #fff"}}>
                                 <div className="flex flex-row mt-2 items-center justify-center">
@@ -314,12 +314,12 @@ const SlickCarousel = () => {
     };
 
   return (
-    <div className="mx-[2vw] my-[10px]">
+    <div className="mx-[2vw] my-[10px]" style={{whiteSpace:'nowrap'}}>
       <Slider {...settings}>
         {carouselData.map(item =>(
           <div className="flex ml-[-10px] ">
           <div className="flex flex-row rounded-[20px] mx-[50px] my-[30px] image-hover-reverse " style={{boxShadow:'0px 0px 20px 5px #E5BAA7'}}>
-            <img src={item.imgPath} className="w-[30%]" style={{borderRadius: '20px 0 0 20px',}}/>
+            <img src={item.imgPath} className="w-[40%]" style={{borderRadius: '20px 0 0 20px', objectFit:'cover', aspectRatio:'1.0'}}/>
             <div className="flex flex-col justify-center px-[20px] py-[10px]">
               <label className="bg-[#F59ABF] text-[15px] text-[#fff] rounded-[26px] py-[5px] w-[96px] text-center my-[9px]" style={{fontWeight:fontBold}}>コスメ</label>
               <label className ="mb-[12px] text-[25px] text-[#511523]" style={{fontWeight:fontBold}}>{item.title}</label>

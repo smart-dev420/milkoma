@@ -239,6 +239,18 @@ export async function readProfile(input : any) {
   }
 }
 
+export async function readCreatorInfo(input : any) {
+  try {
+    logger.info("Read CreatorInfo");
+    const { role } = input;
+    const query = {role}
+    return await AccountModel.find(query);
+  } catch (error: any) {
+    logger.error("Read Info Failed");
+    throw error;
+  }
+}
+
 export async function optValidate(input:any) {
   const email = input.email;
   const otp = input.otp;

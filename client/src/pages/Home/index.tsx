@@ -37,6 +37,7 @@ const cardData: CardElement[] = [
   
 export const Home = () =>{
   const match_768 = useMediaQuery('(min-width:768px)');
+  const [ selectImage, SetSelectImage ] = useState(0);
     return(
         <div className="px-[2vw]">
         <div className={`${match_768 ? "h-[200px]" : "mt-[-50px]"}`}></div>
@@ -49,8 +50,8 @@ export const Home = () =>{
         <p className="text-2xl mt-[100px] my-5" style={{fontWeight:fontBold}}>宣伝したいものから探す</p>
         <IntroCard elements={cardData} space={3} />
         <p className="text-2xl mt-[100px] pb-5" style={{fontWeight:fontBold}}>最近公開された広告・動画</p>
-        <label className="ml-[8vw] px-3 py-2 bg-btnBrown text-white rounded-[20px]" style={{fontWeight:fontBold}}>縦動画</label>
-        <label className="px-3 py-2 mx-3 bg-white text-btnBrown rounded-[20px]" style={{fontWeight:fontBold}}>横動画</label>
+        <label className="ml-[8vw] px-3 py-2 text-white rounded-[20px] cursor-pointer" style={{fontWeight:fontBold, backgroundColor:'#511523'}}>縦動画</label>
+        <label className="px-3 py-2 mx-3 text-btnBrown rounded-[20px] cursor-pointer" style={{fontWeight:fontBold, backgroundColor:'#FFF'}}>横動画</label>
         <div className='my-5 flex w-full'>
         <HomeGrid/>        
         </div>
@@ -70,7 +71,7 @@ export const Home = () =>{
           </div>
         </div>
         
-        <div className={`${match_768 ? "h-[333px]" : "h-[150px]" } w-full justify-center items-center flex text-3xl mt-20 border-grey`} style={{fontWeight:fontBold}}>
+        <div className={`${match_768 ? "h-[333px]" : "h-[150px]" } w-full justify-center items-center flex text-3xl mt-20 border-grey mb-[10px]`} style={{fontWeight:fontBold}}>
         ここに紹介をかく
         </div>
         </div>

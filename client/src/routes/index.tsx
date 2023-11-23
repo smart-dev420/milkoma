@@ -84,12 +84,12 @@ export const router = createHashRouter([
           errorElement: <NotFound />,
         },
         {
-          path: "creator/detail",
+          path: "creator/detail/:userId",
           element: <CreatorDetail/>,
           errorElement: <NotFound />,
         },
         {
-          path: "creator/step",
+          path: "creator/step/:userId",
           element: <CreatorStep/>,
           errorElement: <NotFound />,
         },

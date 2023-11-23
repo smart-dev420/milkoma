@@ -109,6 +109,11 @@ export const Top = () => {
       setAnchorEl(null);
     };
 
+    const [ isHovered, setIsHovered ] = useState<number>(-1);
+    const handleMouseLeave = () => {
+        setIsHovered(-1);
+    };
+
     return (
       <> 
       <div className="w-full h-[170px] bg-gradient-to-b from-[#FFFFFF] via-[#ffffffe1] to-[#FFFFFF00]" style={{position:'fixed', zIndex:8, top:0}}></div>
@@ -147,29 +152,47 @@ export const Top = () => {
                   }}
                 />
             </div>
-              <label className={`${match_1024 ? "" : "hidden"}`}>
-              <Badge color="error" variant="dot" invisible={invisible} className="mt-2 pl-6" >
-                <NotificationsNoneIcon color="action" />
-              </Badge>
-              </label>
-              <button 
-                className={`${match_1500 ? "text-md min-w-[120px]" : match_1024 ? "text-ms min-w-[60px]" : "hidden"} font-m1c pl-4 mt-3 hover:text-lightBrown/[1]`}
+              <label className={`${match_1024 ? "" : "hidden"} flex flex-row cursor-pointer`} 
                 onClick={handleClick}
-                aria-controls={open ? 'account-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                style={{whiteSpace:'nowrap', fontWeight:fontBold}}
+                onMouseEnter={()=>setIsHovered(1)}
+                onMouseLeave={handleMouseLeave}
                 >
-                  お知らせ
-              </button>
-              <img src={staticFiles.icons.ic_user_unfill} className={`${match_1500 ? "pl-10" : match_1024 ? "pl-4" : "hidden" } pr-3 mt-2`}/>
-              <button 
-                className={`${match_1500 ? "text-md min-w-[120px]" : match_1024 ? "text-ms min-w-[60px]" : "hidden"} font-m1c mt-3 hover:text-lightBrown/[1] `} 
-                style={{whiteSpace:'nowrap', fontWeight:fontBold}}
+              <Badge color="error" variant="dot" invisible={invisible} className="mt-2 pl-6" >
+                <NotificationsNoneIcon sx={{
+                        color: isHovered == 1?'#F6CAA1':'#000'
+                    }} />
+              </Badge>
+                <button 
+                  className={`${match_1500 ? "text-md min-w-[120px]" : match_1024 ? "text-ms min-w-[60px]" : "hidden"} font-m1c pl-4 mt-3`}
+                  aria-controls={open ? 'account-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  style={{whiteSpace:'nowrap', fontWeight:fontBold, color:isHovered == 1?'#F6CAA1':'#000'}}
+                  >
+                    お知らせ
+                </button>
+              </label>
+              {/* <img src={staticFiles.icons.ic_user_unfill} className={`${match_1500 ? "pl-10" : match_1024 ? "pl-4" : "hidden" } pr-3 mt-2`}/> */}
+              <label className="flex flex-row " style={{alignItems:'center', marginLeft:'50px'}}
+                onMouseEnter={()=>setIsHovered(2)}
+                onMouseLeave={handleMouseLeave}
                 onClick={()=>{loginStatus?(navigate('/mypage')):(navigate('/login'))}}
-              >{loginStatus?"マイページ":"ログイン"}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="17.693" height="20.22" viewBox="0 0 17.693 20.22" style={{marginTop:'10px'}}>
+                  <path id="Path_176" data-name="Path 176" d="M80.165,6.321a6.319,6.319,0,1,0-10.426,4.8A8.838,8.838,0,0,0,65,18.959a1.264,1.264,0,1,0,2.528,0,6.319,6.319,0,0,1,12.638,0,1.264,1.264,0,1,0,2.528,0,9.045,9.045,0,0,0-1.617-5.1,8.568,8.568,0,0,0-3.123-2.736A6.3,6.3,0,0,0,80.165,6.321Zm-6.319,3.791a3.791,3.791,0,1,1,3.791-3.791,3.791,3.791,0,0,1-3.791,3.791" transform="translate(-65 -0.002)" 
+                  fill={isHovered == 2?'#F6CAA1':'#001219'} fill-rule="evenodd"/>
+                </svg>
+                <button 
+                  className={`${match_1500 ? "text-md min-w-[120px]" : match_1024 ? "text-ms min-w-[60px]" : "hidden"} font-m1c mt-3 `} 
+                  style={{whiteSpace:'nowrap', fontWeight:fontBold, color:isHovered == 2?'#F6CAA1':'#000'}}
+                >{loginStatus?"マイページ":"ログイン"}
+                </button>
+              </label>
+              <button
+                onClick={()=>{navigate('/direct_request')}}  
+                className={`${match_1500 ? "ml-[10%] text-sm min-w-[170px]" : match_1024 ? "ml-1 text-ms min-w-[170px]" : "hidden"} font-m1c hover:bg-brown/[1] bg-pink h-[48px] rounded-[50px] text-white`} style={{whiteSpace:'nowrap', fontWeight:fontBold}}>
+                直接依頼をする
               </button>
-              <button className={`${match_1500 ? "ml-[10%] text-sm min-w-[170px]" : match_1024 ? "ml-1 text-ms min-w-[170px]" : "hidden"} font-m1c hover:bg-brown/[1] bg-pink h-[48px] rounded-[50px] text-white`} style={{whiteSpace:'nowrap', fontWeight:fontBold}}>直接依頼をする</button>
               
           </div>
           <div className={`${match_1024 ? "" : "hidden"}`}>

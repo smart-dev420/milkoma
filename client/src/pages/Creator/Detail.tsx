@@ -1,18 +1,21 @@
-import { Grid } from "@mui/material"
+import { Box, Grid } from "@mui/material"
 import { fontBold, staticFiles } from "../../components/Constants"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const CreatorDetail = () => {
     const navigate = useNavigate();
+    const { userId } = useParams();
     return(
         <div className="w-full mb-[115px]">
             <div className="h-[210px]"></div>
             <div className="px-[2vw]">
                 <div className="flex flex-col mx-[125px]">
-                <div className="flex flex-row">
-                    <div className="flex flex-row bg-gradient-to-br from-[#FDF6E0] to-[#F8D8C2] w-[917px] rounded-[20px]" style={{boxShadow:"0px 0px 35px 5px #FCEFD9"}}>
-                        <img src={staticFiles.images.blog} className="w-[611px] rounded-[20px]" />
-                        <div className="flex flex-col items-center w-full text-[19px] text-[#511523]">
+                <div className="flex flex-row" style={{columnGap:'75px'}}>
+                
+                {/** SNS Data */}
+                    <Box flex={2} className="flex flex-row bg-gradient-to-br from-[#FDF6E0] to-[#F8D8C2] w-[60%] rounded-[20px]" style={{boxShadow:"0px 0px 35px 5px #FCEFD9", position:'relative'}}>
+                        <img src={staticFiles.images.blog} className="w-[70%] rounded-[20px]" />
+                        <div className="flex flex-col items-center w-[30%] text-[19px] text-[#511523]">
                             <label className="mt-[24px] mb-[30px]" style={{fontWeight:fontBold}}>動画・画像</label>
                             <GridItems sp={2} lg={6} path={staticFiles.images.blog1} sm="w-[102px] my-[5px]" />
                             <label className="mt-[179px] mb-[30px]" style={{fontWeight:fontBold}}>ジャンル</label>
@@ -28,8 +31,8 @@ export const CreatorDetail = () => {
                                 <img src={staticFiles.images.instagram} className="w-[50px] h-[50px] mx-[4px] rounded-[8px] log-shadow"/>
                             </div>
                         </div>
-                    </div>
-                    <div className="flex flex-col ml-[75px] mt-[120px] ">
+                    </Box>
+                    <Box flex={1} className="flex flex-col mt-[120px] w-[40%]">
                         <label className="w-[356px] py-[10px] bg-gradient-to-br from-[#F4B7A5] to-[#F7CF91] text-center text-[#fff] rounded-[20px]" style={{boxShadow:"0px 0px 20px 2px #F7CD93", fontWeight:fontBold}}>
                             17.Live受け取ったギフト No.1
                         </label>
@@ -70,13 +73,14 @@ export const CreatorDetail = () => {
                         <div className="flex flex-row justify-center items-center mt-[79px]">
                             <button
                                 className="font-m1c hover:bg-[#E28E9C]/[1] bg-[#EE7D90] text-[19px] h-[41px] rounded-[50px] text-white px-[30px] "
-                                onClick={() => navigate('/creator/step')}
+                                onClick={() => navigate(`/creator/step/${userId}`)}
                                 style={{boxShadow:"0px 0px 3px 2px #EE7D90", fontWeight:fontBold, whiteSpace:'nowrap'}}
-                                >この人に依頼したい
+                                >
+                                    この人に依頼したい
                             </button>
                         </div>
                         
-                    </div>
+                    </Box>
                 </div>
                 <p className="mt-[90px] mb-[52px] text-[#001219] text-[30px]" style={{fontWeight:fontBold}}>ミルコマで出した広告動画</p>
                 </div>

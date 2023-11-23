@@ -64,10 +64,10 @@ const chkList3 = [
     {name: "ジャケット写真" },
     {name: "複数商品の宣伝" },
     {name: "動画撮影" },
-    {name: "ジャケット写真" },
-    {name: "複数商品の宣伝" },
-    {name: "動画撮影" },
-    {name: "ジャケット写真" },
+    // {name: "ジャケット写真" },
+    // {name: "複数商品の宣伝" },
+    // {name: "動画撮影" },
+    // {name: "ジャケット写真" },
 ]
 
 const btn_group:{id: number; name: string;}[] = [
@@ -94,7 +94,7 @@ const btn_group:{id: number; name: string;}[] = [
 ];
 
 interface listProps {
-    id: number,
+    userId: number,
     avatar: string,
     title: string,
     heart: number,
@@ -106,7 +106,7 @@ interface listProps {
 
 const fakeData:listProps[] = [
     {
-        id: 0,
+        userId: 0,
         avatar: staticFiles.images.model,
         title: "なまえ なまえ なまえ",
         heart: 39000000,
@@ -116,7 +116,7 @@ const fakeData:listProps[] = [
         recommand: true,
     },
     {
-        id: 1,
+        userId: 1,
         avatar: staticFiles.images.model,
         title: "なまえ なまえ なまえ",
         heart: 39000000,
@@ -126,7 +126,7 @@ const fakeData:listProps[] = [
         recommand: false,
     },
     {
-        id: 2,
+        userId: 2,
         avatar: staticFiles.images.model,
         title: "なまえ なまえ なまえ",
         heart: 39000000,
@@ -136,7 +136,7 @@ const fakeData:listProps[] = [
         recommand: false,
     },
     {
-        id: 3,
+        userId: 3,
         avatar: staticFiles.images.model,
         title: "なまえ なまえ なまえ",
         heart: 39000000,
@@ -146,7 +146,7 @@ const fakeData:listProps[] = [
         recommand: false,
     },
     {
-        id: 4,
+        userId: 4,
         avatar: staticFiles.images.model,
         title: "なまえ なまえ なまえ",
         heart: 39000000,
@@ -156,7 +156,7 @@ const fakeData:listProps[] = [
         recommand: false,
     },
     {
-        id: 5,
+        userId: 5,
         avatar: staticFiles.images.model,
         title: "なまえ なまえ なまえ",
         heart: 39000000,
@@ -166,7 +166,7 @@ const fakeData:listProps[] = [
         recommand: false,
     },
     {
-        id: 6,
+        userId: 6,
         avatar: staticFiles.images.model,
         title: "なまえ なまえ なまえ",
         heart: 39000000,
@@ -176,7 +176,7 @@ const fakeData:listProps[] = [
         recommand: false,
     },
     {
-        id: 7,
+        userId: 7,
         avatar: staticFiles.images.model,
         title: "なまえ なまえ なまえ",
         heart: 39000000,
@@ -186,7 +186,7 @@ const fakeData:listProps[] = [
         recommand: false,
     },
     {
-        id: 8,
+        userId: 8,
         avatar: staticFiles.images.model,
         title: "なまえ なまえ なまえ",
         heart: 39000000,
@@ -196,7 +196,7 @@ const fakeData:listProps[] = [
         recommand: false,
     },
     {
-        id: 9,
+        userId: 9,
         avatar: staticFiles.images.model,
         title: "なまえ なまえ なまえ",
         heart: 39000000,
@@ -258,6 +258,10 @@ export const CreatorFind = () => {
         }
       };
     
+    const handleSearch = () => {
+
+    }
+    
     return(
         <>
         <div className="bg-gradient-to-br from-[#FAEAD1] to-[#F5D0E9] w-full h-[480px]" style={{position:'absolute', top:-120, left:0, filter:'blur(10px)', zIndex:-10}}></div>
@@ -267,6 +271,8 @@ export const CreatorFind = () => {
                 <p className="text-[30px] text-[#001219] mt-[20px]" style={{letterSpacing:'-4px', fontWeight:fontBold}}>クリエイターを探す</p>
                 <p className="text-[19px] text-[#511523]" style={{letterSpacing:'-1px', fontWeight:fontBold}}>登録中のインフルエンサー</p>
                 <div className="flex flex-col mt-[95px] items-center">
+                    
+                {/** Recent Search Keyword */}
                     <div className="flex flex-row justify-center">
                         <span className="text-[25px] text-[#511523] w-[200px]" style={{letterSpacing:'-2px', fontWeight:fontBold}}>キーワード検索</span>
                         <div className="flex flex-col w-[925px]">
@@ -298,6 +304,8 @@ export const CreatorFind = () => {
                         </div>
                     </div>
                     <div className="flex flex-col justify-center rounded-[25px] w-[1268px] bg-[#fff] px-[55px] py-[35px] mt-[25px]" style={{border:"1px solid #F2F2F2", boxShadow:"1px 1px 4px 5px #d78e891a"}}>
+                        
+                {/** SNS Search Part */}
                         <div className="flex flex-row items-center ">
                             <span className="text-[20px] text-[#554744] w-[270px]  items-center" style={{fontWeight:fontBold}}>活動しているSNS</span>
                             <div className="flex flex-wrap">
@@ -317,6 +325,8 @@ export const CreatorFind = () => {
                             }        
                             </div>                        
                         </div>
+
+                {/** Category Search Part */}
                         <div className="flex flex-row mt-[40px] ">
                             <span className="text-[#554744] text-[20px] w-[270px] flex-shrink-0" style={{fontWeight:fontBold}}>ジャンル</span>
                             <div className="flex flex-wrap">
@@ -334,6 +344,7 @@ export const CreatorFind = () => {
                             }  
                             </div>
                         </div>
+                {/** To do Search Part */}
                         <div className="mt-[41px] flex flex-row">
                         <span className="text-[#554744] text-[20px] w-[270px] flex-shrink-0" style={{fontWeight:fontBold}}>できること・特殊な依頼</span>
                             <div className="flex flex-wrap">
@@ -355,12 +366,15 @@ export const CreatorFind = () => {
                         <div className="flex justify-center items-center mt-[31px] mb-[34px]">
                             <button
                             className="font-m1c hover:bg-[#E28E9C]/[1] bg-[#EE7D90] text-[19px] h-[41px] rounded-[50px] text-white w-[176px] "
-                            onClick={() => navigate('')}
+                            onClick={handleSearch}
                             style={{boxShadow:"0px 0px 3px 2px #EE7D90", fontWeight:fontBold}}
-                            >絞り込む
+                            >
+                                絞り込む
                             </button>
                         </div>
                     </div>
+
+                {/** Sort Buttons */}    
                     <div className="flex w-full px-[75px] mt-[40px] items-center">
                             <label className="text-[25px] text-[#511523] w-[35%]" style={{fontWeight:fontBold}}>登録インフルエンサー</label>
                             <label className="text-[18px] text-[#511523] px-[10px]" style={{whiteSpace:"nowrap", fontWeight:fontBold}}>並び替え</label>
@@ -424,13 +438,13 @@ const ItemComponent:React.FC<{element:listProps, recommend:boolean}> = ({element
     return(
         <div className="w-[1572px] h-[221px] px-[45px] pt-[25px] pb-[29px] my-[33px] list-style flex flex-row" >
             <div className="flex flex-col items-center">
-            <img className="w-[167px] h-[167px] rounded-[30px]" src={element.avatar} onClick={() => {navigate('/creator/detail')}}/>
+            <img className="w-[167px] h-[167px] rounded-[30px]" src={element.avatar} onClick={() => navigate(`/creator/detail/${element.userId}`)}/>
             <div className="rounded-[30px] bg-[#F4B7A5] text-center text-[#fff] w-[80%] h-[37px] flex justify-center items-center" style={style}>
                 <span style={{fontWeight:fontBold}}>おすすめ</span>
             </div>
             </div>
             <div className="flex flex-col pl-[30px] pt-[8px]">
-                <label className="text-[27px] text-[#511523] title-hover" onClick={() => {navigate('/creator/detail')}} style={{fontWeight:fontBold}}>{element.title}</label>
+                <label className="text-[27px] text-[#511523] title-hover" onClick={() => navigate(`/creator/detail/${element.userId}`)} style={{fontWeight:fontBold}}>{element.title}</label>
                 <div className="flex flex-row text-[18px] text-[#838688]">
                     <img src={staticFiles.icons.ic_heart_gray} className="w-[16px] mr-[5px]"/><span>いいね数 {element.heart}</span>
                 </div>
@@ -454,7 +468,7 @@ const ItemComponent:React.FC<{element:listProps, recommend:boolean}> = ({element
                 </div>
             </div>
             <div className="flex items-center justify-center">
-                <label className="text-[#554744] text-[15px] mt-[45px] title-hover" style={{whiteSpace:'nowrap'}} onClick={() => {navigate('/creator/detail')}}>+5枚のメディア</label>
+                <label className="text-[#554744] text-[15px] mt-[45px] title-hover" style={{whiteSpace:'nowrap'}} onClick={() => navigate(`/creator/detail/${element.userId}`)}>+5枚のメディア</label>
             </div>
             <div className="flex flex-col ml-[59px] mr-[15px]">
                 <label className="text-[#511523] text-[19px]" style={{fontWeight:fontBold}}>広告・動画</label>
@@ -464,7 +478,7 @@ const ItemComponent:React.FC<{element:listProps, recommend:boolean}> = ({element
                 </div>
             </div>
             <div className="flex items-center justify-center">
-                <label className="text-[#554744] text-[15px] mt-[45px] title-hover" style={{whiteSpace:'nowrap'}} onClick={() => {navigate('/creator/detail')}}>+5個の広告</label>
+                <label className="text-[#554744] text-[15px] mt-[45px] title-hover" style={{whiteSpace:'nowrap'}} onClick={() => navigate(`/creator/detail/${element.userId}`)}>+5個の広告</label>
             </div>
         </div>
     )

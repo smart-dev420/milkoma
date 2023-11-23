@@ -3,9 +3,10 @@ import { StatusCodes } from "http-status-codes";
 import { omit } from "lodash";
 import logger from "../utils/logger";
 const { v4: uuidv4 } = require('uuid');
-import { getEmailFromToken } from "../services/account.service";
+import { getEmailFromToken, readCreatorInfo, readProfile } from "../services/account.service";
 import Contract from "../interfaces/contract.interface";
 import ContractModel from "../models/contract.model";
+import AccountModel from "../models/account.model";
 
 const validateToken = (req:any, res:any) => {
     const { authorization } = req.body.token || req.query.token || req.headers;
@@ -58,7 +59,19 @@ export async function insertData(input: any) {
     }
   }
 
+const getCreatorInfo: RequestHandler = async (req, res) => {
+  try {
+    logger.info("Getting contract creator info");
+    const info = await readCreatorInfo({role : 'creator'});
+    return res.status(StatusCodes.OK).send(info);
+  } catch (error: any) {
+    logger.error("Getting contract creator info Failed");
+    throw error;
+  }
+}
+
 const contract = { 
-    insertContract
+    insertContract,
+    getCreatorInfo
   };
   export default contract;

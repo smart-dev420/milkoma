@@ -10,7 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import { useDispatch, useSelector } from "react-redux";
 import { setStep, setCategory, setQuestion, setInit } from "../../slices/creator"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const cardData: CardElement[] = [
     {
@@ -91,6 +91,8 @@ export const CreatorStep = () => {
     const selectColor:string = "#E38A86";
     const unselectColor:string = "#D9D9D9";
     const dispatch = useDispatch();
+    const {userId} = useParams();
+    console.log("userId", userId);
     return (
         <>
         <div className="bg-gradient-to-br from-[#FAEAD1] to-[#F5D0E9] w-full h-[480px]" style={{position:'absolute', top:-120, left:0, filter:'blur(10px)', zIndex:-10}}></div>

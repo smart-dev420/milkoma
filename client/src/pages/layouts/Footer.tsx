@@ -53,7 +53,7 @@ export const Footer = () => {
                       </Fragment>
                     ))}
                 </div>
-                <div className="justify-end items-center">
+                <div className="flex justify-end items-center">
                     <img className="mr-5" src={staticFiles.images.footer} width={33} height={30}/>
                 </div>
             </div>
