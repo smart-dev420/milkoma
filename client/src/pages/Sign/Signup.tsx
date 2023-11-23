@@ -281,7 +281,7 @@ export const SignUp = () => {
                          onBlur={handleBlur}
                          sx={{marginBottom:'5px'}}>
                             <FormControlLabel value='client' control={<Radio value={0} onChange={handleCheckedChange} checked={checked1}/>} label="クライアント" />
-                            <FormControlLabel value='creator' control={<Radio value={1} onChange={handleCheckedChange} checked={checked2} />} label="クリエイター" />
+                            <FormControlLabel value='creator' control={<Radio value={1} onChange={handleCheckedChange} checked={checked2} />} label="リクエスター" />
                         </RadioGroup>
 
                         {checked == 1 ? 
@@ -377,7 +377,7 @@ export const SignUp = () => {
                             </>: null}
 
                     <Button type = "submit" variant="contained" endIcon={<SendIcon sx={{marginBottom:'5px'}} />} sx={{height:50, fontSize:20, width:'80%'}}>
-                        レジスター
+                        登録する
                     </Button>    
                         </Form>
                       )}
@@ -386,8 +386,8 @@ export const SignUp = () => {
                     
                     <Container maxWidth="sm" className="mt-[10px]">
                     <Stack direction="row" spacing={2} className = "justify-center items-center">
-                        <Typography color="textSecondary" sx={{marginTop:'10px', fontSize:16}}>すでに登録？</Typography>
-                        <Button variant="text" onClick={() => {navigate('/login')}}>ここでログイン</Button>
+                        <Typography color="textSecondary" sx={{marginTop:'10px', fontSize:16}}>既にご登録済みのお客様？</Typography>
+                        <Button variant="text" onClick={() => {navigate('/login')}}>ログインはこちら</Button>
                     </Stack>
                     </Container>
             </div>

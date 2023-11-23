@@ -37,7 +37,9 @@ const cardData: CardElement[] = [
   
 export const Home = () =>{
   const match_768 = useMediaQuery('(min-width:768px)');
-  const [ selectImage, SetSelectImage ] = useState(0);
+  const [ selectShowDirection, SetSelectShowDirection ] = useState(0); // 0:virtical, 1:horizontal
+  const selectColor = '#511523';
+  const unSelectColor = '#FFFFFF';
     return(
         <div className="px-[2vw]">
         <div className={`${match_768 ? "h-[200px]" : "mt-[-50px]"}`}></div>
@@ -50,15 +52,22 @@ export const Home = () =>{
         <p className="text-2xl mt-[100px] my-5" style={{fontWeight:fontBold}}>宣伝したいものから探す</p>
         <IntroCard elements={cardData} space={3} />
         <p className="text-2xl mt-[100px] pb-5" style={{fontWeight:fontBold}}>最近公開された広告・動画</p>
-        <label className="ml-[8vw] px-3 py-2 text-white rounded-[20px] cursor-pointer" style={{fontWeight:fontBold, backgroundColor:'#511523'}}>縦動画</label>
-        <label className="px-3 py-2 mx-3 text-btnBrown rounded-[20px] cursor-pointer" style={{fontWeight:fontBold, backgroundColor:'#FFF'}}>横動画</label>
+        <label className="ml-[8vw] px-3 py-2 rounded-[20px] cursor-pointer" 
+          style={{fontWeight:fontBold, backgroundColor:selectShowDirection == 0 ? selectColor:unSelectColor, color:selectShowDirection == 0? unSelectColor:selectColor}}
+          onClick={() => {SetSelectShowDirection(0)}}
+          >
+            縦動画</label>
+        <label className="px-3 py-2 mx-3 rounded-[20px] cursor-pointer" 
+          style={{fontWeight:fontBold, backgroundColor:selectShowDirection == 1? selectColor:unSelectColor, color:selectShowDirection == 1? unSelectColor:selectColor}}
+          onClick={() => {SetSelectShowDirection(1)}}>
+            横動画</label>
         <div className='my-5 flex w-full'>
-        <HomeGrid/>        
+        <HomeGrid state = {selectShowDirection}/>        
         </div>
         <p className="text-2xl mt-[100px] my-5" style={{fontWeight:fontBold}}>ミルコマとは？</p>
         <img src={staticFiles.images.ellipse_three} style={{position:"absolute", zIndex:-1, top:"2800px", right:0}} width={700} />
-        <div className={`${match_768 ? "flex-row" : "flex-col"} flex `}>
-          <div className="flex flex-col justify-center items-center flex-1" style={{fontWeight:fontBold}}>
+        <div className={`${match_768 ? "flex-row" : "flex-col"} flex items-center justify-center`} style={{columnGap:'146px'}}>
+          <div className="flex flex-col justify-center items-center " style={{fontWeight:fontBold}}>
             <span className="py-8 pink-color text-f26" >選ばれてNo.1！</span>
             <p className="py-1 text-f26">インフルエンサーと企業をつないで</p>
             <p className="pb-10 text-f26">売り上げを伸ばす</p>
@@ -66,13 +75,13 @@ export const Home = () =>{
             <p style={{fontSize:'23px', color:'#001219', marginTop:'31px', fontWeight:fontBold}}>クラウドソーシングサービス「ミルコマ」</p>
           </div>
 
-          <div className="flex-1">
+          <div className="">
             <img src={staticFiles.images.homeImage} width={890} className={`${match_768 ? "" : "mt-8"} rounded-[35px] image-rotate cursor-pointer`} />
           </div>
         </div>
         
-        <div className={`${match_768 ? "h-[333px]" : "h-[150px]" } w-full justify-center items-center flex text-3xl mt-20 border-grey mb-[10px]`} style={{fontWeight:fontBold}}>
-        ここに紹介をかく
+        <div className={`${match_768 ? "h-[333px]" : "h-[150px]" } justify-center items-center flex text-3xl mt-[87px] border-grey mb-[245px] mx-[165px]`} style={{fontWeight:fontBold}}>
+          ここに紹介をかく
         </div>
         </div>
     )
