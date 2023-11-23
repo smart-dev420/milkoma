@@ -386,7 +386,7 @@ export const SignUp = () => {
                     
                     <Container maxWidth="sm" className="mt-[10px]">
                     <Stack direction="row" spacing={2} className = "justify-center items-center">
-                        <Typography color="textSecondary" sx={{marginTop:'10px', fontSize:16}}>既にご登録済みのお客様？</Typography>
+                        <Typography color="textSecondary" sx={{marginTop:'10px', fontSize:16}}>既にご登録済みのお客様</Typography>
                         <Button variant="text" onClick={() => {navigate('/login')}}>ログインはこちら</Button>
                     </Stack>
                     </Container>
