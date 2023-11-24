@@ -19,7 +19,8 @@ import logger from "../utils/logger";
 import { verifyToken } from '../middlewares/auth.jwt';
 const { v4: uuidv4 } = require('uuid');
 
-const nodemailer = require('nodemailer');
+import nodemailer from 'nodemailer';
+// const nodemailer = require('nodemailer');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
@@ -29,6 +30,10 @@ const providePath = path.join(rootPath, 'uploads/provides');
 const productPath = path.join(rootPath, 'uploads/products');
 const receiptPath = path.join(rootPath, 'uploads/receipts');
 const otpGenerator = require('otp-generator')
+import AWS from 'aws-sdk';
+// AWS.config.update({ region: 'ap-northeast-1' }); 
+// const ses = new AWS.SES({ apiVersion: '2010-12-01' });
+
 
 const APP_URL = process.env.FRONT_URL;
 const COMPANY_NAME = process.env.COMPANY_NAME;
@@ -37,14 +42,14 @@ const userPswd = process.env.SERVER_PASSWORD;
 const mailgunUserEmail = process.env.MAILGUN_USEREMAIL;
 const mailgunUserPswd = process.env.MAILGUN_USER_PASSWORD;
 //* Basic Authentication with JWT
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  auth: {
-    user: userEmail,
-    pass: userPswd
-  }
-});
+// const transporter = nodemailer.createTransport({
+//   host: 'smtp.gmail.com',
+//   port: 587,
+//   auth: {
+//     user: userEmail,
+//     pass: userPswd
+//   }
+// });
 
 /** Mailgun server */
 const formData = require('form-data');
@@ -60,6 +65,43 @@ const mailgun_transporter = nodemailer.createTransport({
     pass: userPswd
   }
 });
+
+/** AWS SES Setting */
+const SES_CONFIG = {
+  accessKeyId: 'AKIA4O2PXKWP46567YHC',
+  secretAccessKey: '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',
+  region: 'ap-northeast-1',
+};
+
+const AWS_SES = new AWS.SES(SES_CONFIG);
+const sesSender = process.env.SES_SENDER_EMAIL;
+let sendEmail = (recipientEmail:string, name:string, option:string) => {
+  let params = {
+    Source: 'openwindower@gmail.com',
+    Destination: {
+      ToAddresses: [
+        recipientEmail
+      ],
+    },
+    ReplyToAddresses: [],
+    Message: {
+      Body: {
+        Html: {
+          Charset: 'UTF-8',
+          Data: option,
+        },
+      },
+      Subject: {
+        Charset: 'UTF-8',
+        Data: name,
+      }
+    },
+  };
+  return AWS_SES.sendEmail(params).promise();
+};
+
+
+
 
 const login: RequestHandler = async (req, res) => {
   logger.info('Login')
@@ -147,7 +189,7 @@ const forgotPassword: RequestHandler = async (req, res) => {
     <p>リクエストしていない場合は、このメッセージを無視してください。</p>
     <p>それ以外の場合は、以下の番号を使用してパスワードをリセットできます。</p>
     <p style='margin: 40px 0;'>'${otpNumber}'</p>
-    <p style='line-height: 0%;'>Thanks,</p>
+    <p style='line-height: 0%;'>Thanks</p>
     <p>'${COMPANY_NAME}'</p>
     <br><br><br>
     <div style="border-bottom: 1px solid #D4DAE0; width: 100%"></div>
@@ -163,26 +205,43 @@ const forgotPassword: RequestHandler = async (req, res) => {
       html: emailBody
     };
 
-    mg.messages.create(process.env.MAILGUN_DOMAIN, {
-      from: process.env.MAILGUN_SERVER_EMAIL,
-      to: ["openwindower@gmail.com"],
-      subject: "Hello",
-      text: "Testing some Mailgun awesomeness!",
-      html: "<h1>Testing some Mailgun awesomeness!</h1>"
-    })
-    .then((msg:any) => {console.log(msg);res.status(200).send({msg:'メールが正常に送信されました'});}) // logs response data
-    .catch((err:any) => console.log(err));
+    // mg.messages.create(process.env.MAILGUN_DOMAIN, {
+    //   from: process.env.MAILGUN_SERVER_EMAIL,
+    //   to: ["openwindower@gmail.com"],
+    //   subject: "Hello",
+    //   text: "Testing some Mailgun awesomeness!",
+    //   html: "<h1>Testing some Mailgun awesomeness!</h1>"
+    // })
+    // .then((msg:any) => {console.log(msg);res.status(200).send({msg:'メールが正常に送信されました'});}) // logs response data
+    // .catch((err:any) => console.log(err));
 
     // Send the email
-    transporter.sendMail(mailOptions, (error:any, info:any) => {
-      if (error) {
-        console.error(error);
-        res.status(500).send('メール送信エラー'); // Error sending email
-      } else {
-        console.log('Email sent: ' + info.response);
-        res.status(200).send({msg:'メールが正常に送信されました'}); // Email sent successfully
-      }
-    });  
+    // transporter.sendMail(mailOptions, (error:any, info:any) => {
+    //   if (error) {
+    //     console.error(error);
+    //     res.status(500).send('メール送信エラー'); // Error sending email
+    //   } else {
+    //     console.log('Email sent: ' + info.response);
+    //     res.status(200).send({msg:'メールが正常に送信されました'}); // Email sent successfully
+    //   }
+    // });  
+    
+    // try {
+    //   const data = await ses.sendEmail(params).promise();
+    //   console.log('Email sent:', data.MessageId);
+    // } catch (err) {
+    //   console.error('Error sending email:', err);
+    // }
+
+    sendEmail(email, "パスワードを再設定する", emailBody).
+    then((data:any) => {
+      res.status(200).send({msg:'メールが正常に送信されました'}); // Email sent successfully
+    }).
+    catch((err:any) => {
+      console.log(err);
+      res.status(500).send('メール送信エラー'); // Error sending email
+    });
+
   }
 }
 
