@@ -86,7 +86,7 @@ export const Top = () => {
       setSearchTerm(event.target.value);
     };
     const [invisible, setInvisible] = useState(false);
-    const match_1024 = useMediaQuery('(min-width:1024px)');
+    const match_1024 = useMediaQuery('(min-width:1025px)');
     const match_1200 = useMediaQuery('(min-width:1200px)');
     const match_1500 = useMediaQuery('(min-width:1500px)');
     const sxStyles = {
@@ -178,7 +178,7 @@ export const Top = () => {
                 onMouseLeave={handleMouseLeave}
                 onClick={()=>{loginStatus?(navigate('/mypage')):(navigate('/login'))}}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="17.693" height="20.22" viewBox="0 0 17.693 20.22" style={{marginTop:'10px'}}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="17.693" height="20.22" viewBox="0 0 17.693 20.22" style={{marginTop:'10px', display:match_1024?'':'none'}}>
                   <path id="Path_176" data-name="Path 176" d="M80.165,6.321a6.319,6.319,0,1,0-10.426,4.8A8.838,8.838,0,0,0,65,18.959a1.264,1.264,0,1,0,2.528,0,6.319,6.319,0,0,1,12.638,0,1.264,1.264,0,1,0,2.528,0,9.045,9.045,0,0,0-1.617-5.1,8.568,8.568,0,0,0-3.123-2.736A6.3,6.3,0,0,0,80.165,6.321Zm-6.319,3.791a3.791,3.791,0,1,1,3.791-3.791,3.791,3.791,0,0,1-3.791,3.791" transform="translate(-65 -0.002)" 
                   fill={isHovered == 2?'#F6CAA1':'#001219'} fill-rule="evenodd"/>
                 </svg>

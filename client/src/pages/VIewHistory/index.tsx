@@ -35,7 +35,7 @@ export const ViewHistory = () => {
     const existingArrayString = sessionStorage.getItem('searchValue');
     const existingArray = existingArrayString ? JSON.parse(existingArrayString) : [];
     const [ searchValue, setSearchValue ] = useState(existingArray);
-    const match_1024 = useMediaQuery('(min-width:1024px)');
+    const match_1024 = useMediaQuery('(min-width:1025px)');
     const sxStyles = {
         minWidth: match_1024 ? "725px" : "200px",
         border: "none",

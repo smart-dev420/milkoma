@@ -1,7 +1,7 @@
 import { Card, useMediaQuery } from "@mui/material"
 import React, { useEffect, useState } from "react"
 import { CardElement, IntroCard } from "../../components/Card";
-import { fontBold, staticFiles } from "../../components/Constants";
+import { fontBold, fontSize18, fontSize20, fontSize26, fontSize30, staticFiles } from "../../components/Constants";
 import { HomeGrid } from "../../components/Grid";
 import { stat } from "fs";
 import { HomeSlider } from "../../components/Slider";
@@ -37,21 +37,23 @@ const cardData: CardElement[] = [
   
 export const Home = () =>{
   const match_768 = useMediaQuery('(min-width:768px)');
+  const match_1024 = useMediaQuery('(min-width:1025px)');
   const [ selectShowDirection, SetSelectShowDirection ] = useState(0); // 0:virtical, 1:horizontal
   const selectColor = '#511523';
   const unSelectColor = '#FFFFFF';
+
+  
     return(
         <div className="px-[2vw]">
-        <div className={`${match_768 ? "h-[200px]" : "mt-[-50px]"}`}></div>
+        <div className={`${match_1024 ? "h-[200px]" : (match_768 ? 'h-[10px]' : "mt-[-50px]")}`}></div>
         <HomeSlider />
         <img src={staticFiles.images.ellipse_right} style={{position:"absolute", zIndex:-1, top:"200px", right:0}} width={550} />
-        <div className="mt-[100px]"></div>
-        <p className="text-2xl mt-[100px] my-5" style={{fontWeight:fontBold}}>おすすめインフルエンサー</p>
+        <p className="mt-[100px] my-5" style={{fontWeight:fontBold, fontSize:match_1024?fontSize30:fontSize20}}>おすすめインフルエンサー</p>
         <VerticalSlide />
         <img src={staticFiles.images.ellipse_two} style={{position:"absolute", zIndex:-1, top:"1450px", left:0}} width={650} />
-        <p className="text-2xl mt-[100px] my-5" style={{fontWeight:fontBold}}>宣伝したいものから探す</p>
+        <p className="mt-[100px] my-5" style={{fontWeight:fontBold, fontSize:match_1024?fontSize30:fontSize20}}>宣伝したいものから探す</p>
         <IntroCard elements={cardData} space={3} />
-        <p className="text-2xl mt-[100px] pb-5" style={{fontWeight:fontBold}}>最近公開された広告・動画</p>
+        <p className="mt-[100px] pb-5" style={{fontWeight:fontBold, fontSize:match_1024?fontSize30:fontSize20}}>最近公開された広告・動画</p>
         <label className="ml-[8vw] px-3 py-2 rounded-[20px] cursor-pointer" 
           style={{fontWeight:fontBold, backgroundColor:selectShowDirection == 0 ? selectColor:unSelectColor, color:selectShowDirection == 0? unSelectColor:selectColor}}
           onClick={() => {SetSelectShowDirection(0)}}
@@ -64,23 +66,23 @@ export const Home = () =>{
         <div className='my-5 flex w-full'>
         <HomeGrid state = {selectShowDirection}/>        
         </div>
-        <p className="text-2xl mt-[100px] my-5" style={{fontWeight:fontBold}}>ミルコマとは？</p>
+        <p className="mt-[100px] my-5" style={{fontWeight:fontBold, fontSize:match_1024?fontSize30:fontSize20}}>ミルコマとは？</p>
         <img src={staticFiles.images.ellipse_three} style={{position:"absolute", zIndex:-1, top:"2800px", right:0}} width={700} />
-        <div className={`${match_768 ? "flex-row" : "flex-col"} flex items-center justify-center`} style={{columnGap:'146px'}}>
+        <div className={`${match_1024 ? "flex-row mx-[20px]" : "flex-col"} flex items-center justify-center`} style={{columnGap:'146px'}}>
           <div className="flex flex-col justify-center items-center " style={{fontWeight:fontBold}}>
-            <span className="py-8 pink-color text-f26" >選ばれてNo.1！</span>
-            <p className="py-1 text-f26">インフルエンサーと企業をつないで</p>
-            <p className="pb-10 text-f26">売り上げを伸ばす</p>
+            <span className="py-8 pink-color" style={{fontSize:match_768?fontSize26:fontSize18}}>選ばれてNo.1！</span>
+            <p className="py-1 " style={{fontSize:match_768?fontSize26:fontSize18}}>インフルエンサーと企業をつないで</p>
+            <p className="pb-10 " style={{fontSize:match_768?fontSize26:fontSize18}}>売り上げを伸ばす</p>
             <img className="" width={460} src={staticFiles.images.logo} />
-            <p style={{fontSize:'23px', color:'#001219', marginTop:'31px', fontWeight:fontBold}}>クラウドソーシングサービス「ミルコマ」</p>
+            <p style={{fontSize:match_768?'23px':fontSize18, color:'#001219', marginTop:'31px', fontWeight:fontBold}}>クラウドソーシングサービス「ミルコマ」</p>
           </div>
 
-          <div className="">
-            <img src={staticFiles.images.homeImage} width={890} className={`${match_768 ? "" : "mt-8"} rounded-[35px] image-rotate cursor-pointer`} />
+          <div style={{marginTop:match_1024?'':'20px'}}>
+            <img src={staticFiles.images.homeImage} width={890} className={`${match_1024 ? "" : "mt-8"} rounded-[35px] image-rotate cursor-pointer`} />
           </div>
         </div>
         
-        <div className={`${match_768 ? "h-[333px]" : "h-[150px]" } justify-center items-center flex text-3xl mt-[87px] border-grey mb-[245px] mx-[165px]`} style={{fontWeight:fontBold}}>
+        <div className={`${match_1024 ? "h-[333px]" : "h-[150px]" } justify-center items-center flex text-3xl mt-[87px] border-grey mx-[165px]`} style={{fontWeight:fontBold, marginBottom:match_1024?'245px':'50px'}}>
           ここに紹介をかく
         </div>
         </div>
@@ -135,12 +137,14 @@ const VerticalSlide = () => {
       heart: '3.9M',
     },
   ];
+  const match_768 = useMediaQuery('(min-width:768px)');
+  const match_1024 = useMediaQuery('(min-width:1025px)');
   return(
     <>
-    <div className="flex flex-row justify-center items-center ">
-      <div className = "w-[60%] slider-content flex-row rounded-[20px] h-[590px]">
-        <img src={staticFiles.images.blog} className = "w-[348px] rounded-[20px] my-[40px] " style={{position:'absolute', marginLeft:"-100px", boxShadow:'0px 0px 15px 3px #E5BAA7'}}/>
-        <div className="mt-[120px] ml-[355px] ">
+    <div className="flex justify-center items-center " style={{flexDirection:match_1024?'row':'column'}}>
+      <div className = "home-slider-content rounded-[20px] min-h-[590px] px-[20px] py-[20px]" style={{width:match_1024?"60%":"80%"}}>
+        <img src={staticFiles.images.blog} className = "w-[348px] rounded-[20px]" style={{position:match_1024?'absolute':'relative', margin:match_1024?'30px 0px 40px -150px':'auto', boxShadow:'0px 0px 15px 3px #E5BAA7'}}/>
+        <div style={{marginLeft:match_1024?'35%':'0px', marginTop:match_1024?'120px ':'50px'}}>
           <Carousel 
             autoPlay={true}
             showArrows={false}

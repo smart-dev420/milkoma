@@ -46,6 +46,7 @@ const pageLayoutFooter: FooterElement[] = [
 export const Footer = () => {
     const navigate = useNavigate();
     const match_1500 = useMediaQuery('(min-width:1200px)');
+    const match_1024 = useMediaQuery('(min-width:1025px)');
     return(
         <div className="w-full mb-[47px] px-[155px]">
             <div className="flex flex-row">
@@ -53,14 +54,14 @@ export const Footer = () => {
                     {pageLayoutFooter.map((data)=>(
                       <Fragment key={data.name}>
                         <button onClick={() => navigate(data.path)} 
-                          style={{fontWeight:fontBold, marginRight:data.mRight, whiteSpace:'nowrap', letterSpacing:'-2px'}}
+                          style={{fontWeight:fontBold, marginRight:data.mRight, whiteSpace:'nowrap', letterSpacing:match_1024?'-2px':'0px'}}
                           className={`${match_1500 ? "text-[19px]" : "text-[14px] min-w-[60px]"} font-m1c px-6 mt-3 hover:text-lightBrown/[1]`}>
                             {data.name}
                         </button>
                       </Fragment>
                     ))}
                 </div>
-                <div className="flex items-center justify-end w-[10%] mr-[20px]">
+                <div className="flex items-end justify-end w-[10%] mr-[20px]">
                     <img className="mr-5" src={staticFiles.images.footer} width={33} height={30}/>
                 </div>
             </div>

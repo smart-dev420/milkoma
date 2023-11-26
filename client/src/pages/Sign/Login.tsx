@@ -68,7 +68,7 @@ export const Login = () => {
   };
 
      return(
-        <div className="px-[2vw] py-[2vh] flex flex-row justify-center items-center h-screen" style={{whiteSpace:'nowrap'}}>
+        <div className="px-[20%] py-[20%] flex flex-row justify-center items-center h-screen" style={{whiteSpace:'nowrap'}}>
             <div className="bg-gradient-to-br from-[#FAEAD1] to-[#F5D0E9] w-full h-full p-[50px]" style={{position:'absolute', top:0, left:0, filter:'blur(10px)', zIndex:-10}}></div>
             <div className="flex flex-col justify-center items-center p-[50px] rounded-[20px] min-w-[500px] bg-[#c9c9c9ad]" style={{border:'2px solid #ffffff4d'}}>
                 <img src={staticFiles.icons.ic_logo} className="w-[250px]" />
