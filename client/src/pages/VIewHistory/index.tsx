@@ -86,9 +86,9 @@ export const ViewHistory = () => {
                     <p className="text-[30px] text-[#001219] mt-[20px]" style={{letterSpacing:'-2px'}}>閲覧履歴</p>
                     <p className="text-[19px] text-[#511523]" style={{letterSpacing:'-1px'}}>閲覧したことのあるインフルエンサー</p>
                     <div className="flex flex-col mt-[85px] items-center">
-                        <div className="flex flex-row justify-center">
-                            <span className="text-[25px] text-[#511523] w-[200px]" style={{letterSpacing:'-2px'}}>キーワード検索</span>
-                            <div className="flex flex-col w-[925px]">
+                        <div className="flex flex-row justify-center" style={{columnGap:'63px'}}>
+                            <span className="text-[25px] text-[#511523] " style={{letterSpacing:'-2px'}}>キーワード検索</span>
+                            <div className="flex flex-col w-[48%]">
                                 <TextField
                                     id="search"
                                     type="search"
@@ -106,8 +106,8 @@ export const ViewHistory = () => {
                                 }}
                                 onKeyDown={handleKeyDown}
                                 />
-                                <div className="flex flex-row px-[20px] pt-[20px]">
-                                    <span className="mr-[5px] text-[16px] text-[#554744]" style={{whiteSpace:'nowrap'}}>最近の検索</span>
+                                <div className="flex flex-wrap px-[20px] pt-[20px]" style={{columnGap:'5px', rowGap:'10px'}}>
+                                    <span className="text-[16px] text-[#554744]" style={{whiteSpace:'nowrap'}}>最近の検索</span>
                                     {
                                         searchValue.map((item:any, index:number) => (
                                             <button className="border rounded-[20px] mx-[5px] px-[15px] text-[14px] text-[#554744]" key={index}>{item}</button>
@@ -116,34 +116,37 @@ export const ViewHistory = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex w-full px-[75px] mt-[40px] items-center mt-[80px] mb-[60px]">
-                            <label className="text-[25px] text-[#511523] w-[35%]">登録インフルエンサー</label>
-                            <label className="text-[18px] text-[#511523] px-[10px]" style={{whiteSpace:"nowrap"}}>並び替え</label>
-                            {btn_group.map((item) => (
-                        item.id < 4 ? (
-                        <Button 
-                            variant="outlined"
-                            size="medium"
-                            style={{
-                                backgroundColor: select1 === item.id? '#CE6F82' : isHovered1 === item.id? '#FCF4EC' : 'white',
-                                color: select1 === item.id ? 'white' : '#B9324D',
-                                borderColor: '#CE6F82',
-                                borderRadius: '25px',
-                                marginRight: '20px',
-                                width: '207px',
-                                fontSize: '18px',
-                                height: '44px',
-                                whiteSpace:'nowrap'
-                            }}
-                            onClick={() => {
-                                setSelect1(item.id);
-                            }}
-                            onMouseEnter={()=>{setIsHovered1(item.id)}}
-                            onMouseLeave={handleMouseLeave1}
-                            >
-                            {item.name}
-                         </Button>) : (<></>)
-                    ))}                            
+                        <div className="flex w-full px-[75px] items-center mt-[80px] mb-[60px]" style={{flexDirection:match_1024?'row':'column'}}>
+                            <label className="text-[25px] text-[#511523] w-[35%]" style={{width:match_1024?'35%':'100%'}}>登録インフルエンサー</label>
+                            <div className="flex flex-row items-center">
+                                <label className="text-[18px] text-[#511523] px-[10px]" style={{whiteSpace:"nowrap"}}>並び替え</label>
+                                <div className="flex flex-wrap" style={{columnGap:'20px', rowGap:'10px'}}>
+                                    {btn_group.map((item) => (
+                                        item.id < 4 ? (
+                                        <Button 
+                                            variant="outlined"
+                                            size="medium"
+                                            style={{
+                                                backgroundColor: select1 === item.id? '#CE6F82' : isHovered1 === item.id? '#FCF4EC' : 'white',
+                                                color: select1 === item.id ? 'white' : '#B9324D',
+                                                borderColor: '#CE6F82',
+                                                borderRadius: '25px',
+                                                width: '207px',
+                                                fontSize: '18px',
+                                                height: '44px',
+                                                whiteSpace:'nowrap'
+                                            }}
+                                            onClick={() => {
+                                                setSelect1(item.id);
+                                            }}
+                                            onMouseEnter={()=>{setIsHovered1(item.id)}}
+                                            onMouseLeave={handleMouseLeave1}
+                                            >
+                                            {item.name}
+                                        </Button>) : (<></>)
+                                    ))}       
+                                </div>      
+                            </div>               
                     </div>
                         <GridComponent count={page}/>
                         <div className="my-[59px]">

@@ -294,8 +294,8 @@ export const CreatorFind = () => {
                         }}
                         onKeyDown={handleKeyDown}
                         />
-                        <div className="flex flex-row px-[20px] pt-[20px]">
-                            <span className="mr-[5px] text-[16px] text-[#554744]" style={{whiteSpace:'nowrap'}}>最近の検索</span>
+                        <div className="flex flex-wrap px-[20px] pt-[20px]" style={{columnGap:'5px', rowGap:'10px'}}>
+                            <span className="text-[16px] text-[#554744]" style={{whiteSpace:'nowrap'}}>最近の検索</span>
                             {
                                 searchValue.map((item:any, index:number) => (
                                     <button className="border rounded-[20px] mx-[5px] px-[15px] text-[14px] text-[#554744]" key={index}>{item}</button>

@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { API } from "../../axios";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { headers } from "../../utils/appHelper";
+import { headers, showSentence } from "../../utils/appHelper";
 
 const cardData: CardElement[] = [
     {
@@ -96,7 +96,9 @@ export const DirectPage = () => {
     const selectColor:string = "#E38A86";
     const unselectColor:string = "#D9D9D9";
     const dispatch = useDispatch();
-    
+    const match_768 = useMediaQuery('(min-width:768px)');
+    const match_1024 = useMediaQuery('(min-width:1025px)');
+    const navTitle = ["ジャンルを選ぶ", "詳細を入力", "完了"];
     return (
         <>
         <div className="h-[200px]"></div>
@@ -104,23 +106,56 @@ export const DirectPage = () => {
             <p className="text-2xl font-m1c my-[22px]" style={{fontWeight:fontBold}}>丸投げ依頼を行う</p>
             <p className="text-[#554744] text-sm">ミルコマに丸投げ依頼・見積もりを行います。</p>
             <p className="text-[#554744] text-sm">必要な内容を入力してください</p>
-            <div className="flex flex-row w-[60%] my-[20px] ">
-            <img className="w-[20%] h-[80px]" src={staticFiles.images.tab_active_default} style={{position:"absolute", zIndex:-1}}/>
-            <img className="w-[20%] h-[80px] ml-[18.5%]" src={ selectTab > 0 ? staticFiles.images.tab_active : staticFiles.images.tab_inactive} style={{position:"absolute", zIndex:-2}}/>
-            <img className="w-[20%] h-[80px] ml-[37%]" src={ selectTab > 1? staticFiles.images.tab_active : staticFiles.images.tab_inactive} style={{position:"absolute", zIndex:-3}}/>
-                <div className="flex-1 text-center py-[29px]" >
-                    <span className="py-1 px-5 bg-[#fff] rounded-[25px] font-medium" style={{color: selectColor, fontWeight:fontBold}}>STEP1</span>
-                    <span className="px-3 text-[#fff] text-md" style={{fontWeight:fontBold}}>ジャンルを選ぶ</span>
+            {match_1024?(
+                <div className="flex w-[60%] my-[20px] " style={{flexDirection:'row'}}>
+                    <img className="h-[80px]" src={staticFiles.images.tab_active_default} style={{position:"absolute", zIndex:-1, width:'20%'}}/>
+                    <img className="h-[80px]" src={ selectTab > 0 ? staticFiles.images.tab_active : staticFiles.images.tab_inactive} 
+                        style={{position:"absolute", zIndex:-2, marginLeft:'18.5%', marginTop:'', width:'20%'}}/>
+                    <img className="h-[80px]" src={ selectTab > 1? staticFiles.images.tab_active : staticFiles.images.tab_inactive} 
+                        style={{position:"absolute", zIndex:-3, marginLeft:'37%', width:'20%'}}/>
+                    <div className="flex-1 text-center py-[29px]">
+                        <span className="py-1 px-5 bg-[#fff] rounded-[25px] font-medium" style={{color: selectColor, fontWeight:fontBold}}>STEP1</span>
+                        <span className="px-3 text-[#fff] text-md" style={{fontWeight:fontBold}}>{navTitle[0]}</span>
+                    </div>
+                    <div className="flex-1 text-center py-[29px]" >
+                        <span className="py-1 px-5 bg-[#fff] rounded-[25px] font-medium" style={selectTab > 0 ? {color: selectColor, fontWeight:fontBold}: {color: unselectColor, fontWeight:fontBold}}>STEP2</span>
+                        <span className="px-3 text-[#fff] text-md" style={{fontWeight:fontBold}}>{navTitle[1]}</span>
+                    </div>
+                    <div className="flex-1 text-center py-[29px]" >
+                        <span className="py-1 px-5 bg-[#fff] rounded-[25px] font-medium text-[15px]" style={selectTab > 1 ? {color: selectColor, fontWeight:fontBold}: {color: unselectColor, fontWeight:fontBold} }>STEP3</span>
+                        <span className="px-3 text-[#fff] text-md" style={{fontWeight:fontBold}}>{navTitle[2]}</span>
+                    </div>
                 </div>
-                <div className="flex-1 text-center py-[29px]">
-                    <span className="py-1 px-5 bg-[#fff] rounded-[25px] font-medium" style={selectTab > 0 ? {color: selectColor, fontWeight:fontBold}: {color: unselectColor, fontWeight:fontBold}}>STEP2</span>
-                    <span className="px-3 text-[#fff] text-md" style={{fontWeight:fontBold}}>詳細を入力</span>
+                // <div className="flex w-[60%] my-[20px] " style={{flexDirection:match_1024?'row':'column'}}>
+                //     <img className="h-[80px]" src={staticFiles.images.tab_active_default} style={{position:"absolute", zIndex:-1, width:match_1024?'20%':'60%'}}/>
+                //     <img className="h-[80px]" src={ selectTab > 0 ? staticFiles.images.tab_active : staticFiles.images.tab_inactive} 
+                //         style={{position:"absolute", zIndex:-2, marginLeft:match_1024?'18.5%':'', marginTop:match_1024?'':'100px', width:match_1024?'20%':'60%'}}/>
+                //     <img className="h-[80px]" src={ selectTab > 1? staticFiles.images.tab_active : staticFiles.images.tab_inactive} 
+                //         style={{position:"absolute", zIndex:-3, marginLeft:match_1024?'37%':'', marginTop:match_1024?'':'200px', width:match_1024?'20%':'60%'}}/>
+                //     <div className="flex-1 text-center py-[29px]">
+                //         <span className="py-1 px-5 bg-[#fff] rounded-[25px] font-medium" style={{color: selectColor, fontWeight:fontBold}}>STEP1</span>
+                //         <span className="px-3 text-[#fff] text-md" style={{fontWeight:fontBold}}>{navTitle[0]}</span>
+                //     </div>
+                //     <div className="flex-1 text-center py-[29px]" style={{marginTop:match_1024?'':'15px'}}>
+                //         <span className="py-1 px-5 bg-[#fff] rounded-[25px] font-medium" style={selectTab > 0 ? {color: selectColor, fontWeight:fontBold}: {color: unselectColor, fontWeight:fontBold}}>STEP2</span>
+                //         <span className="px-3 text-[#fff] text-md" style={{fontWeight:fontBold}}>{navTitle[1]}</span>
+                //     </div>
+                //     <div className="flex-1 text-center py-[29px]" style={{marginTop:match_1024?'':'15px'}}>
+                //         <span className="py-1 px-5 bg-[#fff] rounded-[25px] font-medium text-[15px]" style={selectTab > 1 ? {color: selectColor, fontWeight:fontBold}: {color: unselectColor, fontWeight:fontBold} }>STEP3</span>
+                //         <span className="px-3 text-[#fff] text-md" style={{fontWeight:fontBold}}>{navTitle[2]}</span>
+                //     </div>
+                // </div>
+            ):(
+                <div className="flex w-[60%] my-[20px] " style={{flexDirection:match_1024?'row':'column'}}>
+                    <img className="h-[80px]" src={ staticFiles.images.tab_active } 
+                        style={{position:"absolute", zIndex:-3, width:match_1024?'20%':'60%'}}/>
+                    <div className="flex-1 text-center py-[29px]" >
+                        <span className="py-1 px-5 bg-[#fff] rounded-[25px] font-medium" style={{color: selectColor, fontWeight:fontBold}}>STEP{selectTab>2?'3':selectTab+1}</span>
+                        <span className="px-3 text-[#fff] text-md" style={{fontWeight:fontBold}}>{selectTab>2?navTitle[selectTab-1]:navTitle[selectTab]}</span>
+                    </div>
                 </div>
-                <div className="flex-1 text-center py-[29px]">
-                    <span className="py-1 px-5 bg-[#fff] rounded-[25px] font-medium text-[15px]" style={selectTab > 1 ? {color: selectColor, fontWeight:fontBold}: {color: unselectColor, fontWeight:fontBold} }>STEP3</span>
-                    <span className="px-3 text-[#fff] text-md" style={{fontWeight:fontBold}}>完了</span>
-                </div>
-            </div>
+            )}
+            
             <div className="flex flex-col w-[83%] rounded-[25px] bg-[#FFFFFF] pt-[70px] my-[30px]" style={{boxShadow: "0px 0px 15px 1px #EE7D90"}}>
                 {selectTab === 0 ? <Step1 elements={cardData} space={4} /> : selectTab === 1? <Step2 /> : selectTab === 2 ? <Step3 /> : <Step4 />}
             </div>
@@ -178,6 +213,8 @@ const Step1: React.FC<{
 
 
 const Step2 : React.FC<{}> = () => {
+    const match_768 = useMediaQuery('(min-width:768px)');
+    const match_1024 = useMediaQuery('(min-width:1025px)');
     const [ question1, setQuestion1 ] = useState<string>(useSelector((state:any) => state.direct.question1));
     const [ question2, setQuestion2 ] = useState<string>(useSelector((state:any) => state.direct.question2));
     const [ question3, setQuestion3 ] = useState<number>(useSelector((state:any) => state.direct.question3));
@@ -206,6 +243,9 @@ const Step2 : React.FC<{}> = () => {
         setIsHovered2(-1);
     };
 
+    const help1 = '宣伝やレビューなどをしてもらいたい@@@内容を入力してください。@@@(URLがある場合はURLもご記入ください';
+    const help2 = 'インフルエンサーが撮影した動画はどのよ@@@うに使いたいですか？@@@目的に応じてミルコマがサポートします。';
+    const help3 = '納期を選択できます。@@@内容によってご希望に添えない場合があり@@@ますのでご了承ください。';
     
     useEffect(()=>{
 
@@ -213,8 +253,8 @@ const Step2 : React.FC<{}> = () => {
     return (
         <>
         <img className="w-[250px]" src={staticFiles.images.ellipse_step} style={{position:"absolute", marginTop:"-70px", borderLeft:"25px",}} />
-        <div className="flex flex-row" style={{zIndex:2}}>
-            <div className="flex flex-row mb-[25px] ml-[75px] w-[65%]">
+        <div className="flex ml-[75px] mb-[25px]" style={{zIndex:2, flexDirection:match_1024?'row':'column'}}>
+            <div className="flex flex-row  " style={{width:match_1024?'65%':'100%'}}>
                 <div className="h-[63px] w-[14px] rounded-[50px] bg-[#F6D7CF]"></div>
                 <div className="flex flex-col justify-center mt-[2px] px-[15px]">
                     <p className="text-[15px]">STEP2</p>
@@ -222,13 +262,13 @@ const Step2 : React.FC<{}> = () => {
                 </div>
             </div>
             <div className="flex flex-col px-5 text-[26px] pt-[8px]">
-            <p className="py-5">選択中のジャンル: <span style={{fontWeight:fontBold}}>商品紹介</span></p>
+                <p className="py-5">選択中のジャンル: <span style={{fontWeight:fontBold}}>商品紹介</span></p>
             </div>
         </div>
         <p className="mb-[40px] ml-[75px] text-[20px] text-[#554744] z-[2]">質問に答えて、詳細を入力してください</p>
         <p className="flex items-center text-[24px] mb-[25px] ml-[75px] text-[#B9324D]">Q1: どのような商品ですか？？ <span className="bg-[#F9E5D1] text-[13px] ml-[60px] px-5 rounded-[20px]">入力</span></p>
-        <div className="flex flex-row mb-[50px]">
-            <div className="flex w-[60%] ml-[75px]">
+        <div className="flex mb-[50px] ml-[75px]" style={{flexDirection:match_1024?'row':'column'}}>
+            <div className="flex " style={{width:match_1024?'60%':'90%'}}>
             <TextareaAutosize
                 minRows={3} // Specify the number of rows to display
                 aria-label="Textarea" // Provide an accessible label
@@ -241,19 +281,17 @@ const Step2 : React.FC<{}> = () => {
                 onChange={(e)=>{setQuestion1(e.target.value)}}
                 />
             </div>
-            <div className="flex flex-col pl-12 text-[18px]">
+            <div className="flex flex-col text-[18px]" style={{marginTop:match_1024?'':'20px', marginLeft:match_1024?'90px':''}}>
                 <div className="flex flex-row mb-[15px]">
                     <img className="w-[30px]" src = {staticFiles.icons.ic_step_help} />
                     <span className="text-[#B9324D] px-[15px]">ヘルプ</span>
                 </div>
-                <p>宣伝やレビューなどをしてもらいたい</p>
-                <p>内容を入力してください。</p>
-                <p>(URLがある場合はURLもご記入ください)</p>
+                    {showSentence(help1)}
             </div>
         </div>
-        <p className="flex items-center text-[24px] mb-[25px] ml-[75px] text-[#B9324D]">Q2: 動画はどのように使いたいですか？？<span className="bg-[#F9E5D1] text-[13px] ml-[80px] px-5 rounded-[20px]">選択</span></p>
-        <div className="flex flex-row mb-[50px]">
-            <div className="flex flex-col w-[60%] ml-[75px]">
+        <p className="flex items-center text-[24px] mb-[25px] ml-[75px] text-[#B9324D]">Q2: 動画はどのように使いたいですか？？<span className="bg-[#F9E5D1] text-[13px] ml-[5%] px-5 rounded-[20px]">選択</span></p>
+        <div className="flex flex-row mb-[50px] ml-[75px]" style={{flexDirection:match_1024?'row':'column'}}>
+            <div className="flex flex-col" style={{width:match_1024?'60%':'90%'}}>
                 <div className="flex flex-row mb-[15px]">
                     {btn_group1.map((item) => (
                         item.id < 4 ? (
@@ -289,19 +327,17 @@ const Step2 : React.FC<{}> = () => {
                     onChange={(e)=>{setQuestion2(e.target.value)}}
                 />
             </div>
-            <div className="flex flex-col pl-12 text-[18px]">
+            <div className="flex flex-col text-[18px]" style={{marginTop:match_1024?'':'20px', marginLeft:match_1024?'90px':''}}>
                 <div className="flex flex-row mb-[15px]">
                     <img className="w-[30px]" src = {staticFiles.icons.ic_step_help} />
                     <span className="text-[#B9324D] px-[15px]">ヘルプ</span>
                 </div>
-                <p>インフルエンサーが撮影した動画はどのよ</p>
-                <p>うに使いたいですか？</p>
-                <p>目的に応じてミルコマがサポートします。</p>
+                     {showSentence(help2)}
             </div>
         </div>
         <p className="flex items-center text-[24px] mb-[62px] ml-[75px] text-[#B9324D]">Q3: 納期はいつ頃が希望ですか？<span className="bg-[#F9E5D1] text-[13px] ml-[80px] px-5 rounded-[20px]">選択</span></p>
-        <div className="flex flex-row mb-[70px]">
-            <div className="flex flex-col w-[60%] ml-[75px]">
+        <div className="flex mb-[70px] ml-[75px]" style={{flexDirection:match_1024?'row':'column'}}>
+            <div className="flex flex-col w-[60%] " style={{width:match_1024?'60%':'80%'}}>
                 <div className="flex flex-row mb-[15px]">
                     {btn_group2.map((item) => (
                         item.id < 4 ? (
@@ -327,14 +363,12 @@ const Step2 : React.FC<{}> = () => {
                     ))}
                 </div>
             </div>
-            <div className="flex flex-col pl-12 text-[18px] mt-[-30px]">
+            <div className="flex flex-col text-[18px]" style={{marginTop:match_1024?'-30px':'20px', marginLeft:match_1024?'90px':''}}>
                 <div className="flex flex-row mb-[15px]">
                     <img className="w-[30px]" src = {staticFiles.icons.ic_step_help} />
                     <span className="text-[#B9324D] px-[15px]">ヘルプ</span>
                 </div>
-                <p>納期を選択できます。</p>
-                <p>内容によってご希望に添えない場合があり</p>
-                <p>ますのでご了承ください。</p>
+                    {showSentence(help3)}
             </div>
         </div>
         <div className="flex flex-row ml-[75px] items-center mb-[66px]">
@@ -342,7 +376,9 @@ const Step2 : React.FC<{}> = () => {
                 <img className="w-[20px] cursor-pointer" src={staticFiles.icons.ic_back} />
                 <span className="cursor-pointer text-[16px] text-hover ml-[10px]" style={{fontWeight:fontBold}}>ジャンル選択へ戻る</span>
             </div>
-            <button onClick={handleNext} className="btn-color w-[324px] py-2 px-5 justify-center items-center flex rounded-[30px]"><img className="w-[82px]" src={staticFiles.icons.ic_back_btn} /></button>
+            <button onClick={handleNext} className="btn-color w-[324px] py-2 px-5 justify-center items-center flex rounded-[30px]" style={{width:match_1024?'324px':'200px'}}>
+                <img className="w-[82px]" src={staticFiles.icons.ic_back_btn} />
+            </button>
         </div>
         </>
     )
@@ -376,7 +412,7 @@ const Step3 : React.FC<{}> = () => {
     const handlePrev = () => {
         dispatch(setStep({step:1}));
     }
-
+    const match_1024 = useMediaQuery('(min-width:1025px)');
     return(
         <>
         <img className="w-[250px]" src={staticFiles.images.ellipse_step} style={{position:"absolute", marginTop:"-70px", borderLeft:"25px",}} />
@@ -395,20 +431,20 @@ const Step3 : React.FC<{}> = () => {
                 <p className="text-[24px] text-[#B9324D] w-[30%]">依頼したいジャンル</p>
                 <p className="text-[24px] text-[#B9324D] ">Q1.どのような商品か？</p>
             </div>
-            <div className="flex flex-row">
-                <div className="w-[30%]">
+            <div className="flex" style={{flexDirection:match_1024?'row':'column'}}>
+                <div className="flex" style={{flexDirection:match_1024?'column':'row', width:match_1024?'30%':'100%'}}>
                     <img className="w-[318px] rounded-[20px]" src={category.category} />
-                    <div className="flex flex-col mx-5" style={{width:'65%'}}>
-                        <p className="text-[20px] text-[#511523] mt-[24px]" style={{fontWeight:fontBold}}>{category.title}</p>
-                        <p className="text-[14px] text-[#554744] mt-[6px]">{category.description}</p>
+                    <div className="flex flex-col mx-5 mt-[24px] mb-[80px]">
+                        <p className="text-[20px] text-[#511523] " style={{fontWeight:fontBold}}>{category.title}</p>
+                        <p className="text-[14px] text-[#554744] mt-[6px]" style={{width:match_1024?'65%':'100%'}}>{category.description}</p>
                     </div>
                 </div>
-                <div className="flex flex-col w-[60%]">
+                <div className="flex flex-col" style={{width:match_1024?'60%':'87%'}}>
                     <TextareaAutosize
                         minRows={5} // Specify the number of rows to display
                         aria-label="Textarea" // Provide an accessible label
                         className="w-full text-[20px] rounded-[15px] p-5 mb-[45px]"
-                        style={{border:"1px solid #EBEBEB"}}
+                        style={{border:"1px solid #EBEBEB", marginTop:match_1024?'':'20px',}}
                         value={question1}
                         readOnly = {true}
                     />
@@ -433,12 +469,12 @@ const Step3 : React.FC<{}> = () => {
                 </div>
             </div>
         </div>
-        <div className="flex flex-row ml-[75px] items-center mt-[80px] mb-[66px]">
+        <div className="flex flex-row ml-[75px] items-center mt-[80px] mb-[66px]" style={{marginTop:match_1024?'':'30px'}}>
             <div className="flex flex-row w-[50%]" onClick={handlePrev}>
             <img className="w-[20px] cursor-pointer" src={staticFiles.icons.ic_back} />
             <span className="cursor-pointer text-[16px] text-hover ml-[10px]" style={{fontWeight:fontBold}}>内容編集に戻る</span>
             </div>
-            <button className="btn-color w-[324px] py-2 px-5 justify-center items-center flex rounded-[30px] text-[23px] text-[#fff]" style={{fontWeight:fontBold}} onClick={handleClickOpen}>完了</button>
+            <button className="btn-color w-[324px] py-2 px-5 justify-center items-center flex rounded-[30px] text-[23px] text-[#fff]" style={{fontWeight:fontBold, width:match_1024?'324px':'200px'}} onClick={handleClickOpen}>完了</button>
         </div>
         <Dialog
             onClose={handleClose}
@@ -467,7 +503,7 @@ const Step3 : React.FC<{}> = () => {
                 </svg>
             {/* <CloseIcon sx={{ color: isHovered ? '#B9324D' : '#A5A5A5', fontSize: '30px'}}/> */}
             </IconButton>
-            <DialogContent sx={{padding: '50px', marginTop:'-25px', width:'802px'}}>
+            <DialogContent sx={{padding: '50px', marginTop:match_1024?'-25px':'', width:'802px'}}>
                 <img className="w-[347px]" src = {staticFiles.images.modalBackground} style={{position:'absolute', right:0, top:200}} />
             <Typography gutterBottom className="" sx={{fontSize: "18px", marginBottom: "20px"}} >
                 お申し込みにあたって、あらかじめ以下の内容をご確認ください
@@ -545,6 +581,7 @@ const Step4 : React.FC<{}> = () => {
     const handleHome = () => {
 
     }
+    const match_1024 = useMediaQuery('(min-width:1025px)');
     return(
         <>
         <img className="w-[250px]" src={staticFiles.images.ellipse_step} style={{position:"absolute", marginTop:"-70px", borderLeft:"25px",}} />
@@ -559,8 +596,8 @@ const Step4 : React.FC<{}> = () => {
             </div>
         </div>
         <p className="text-[#554744] text-[20px]">ミルコマディレクターが最適なインフルエンサーとお見積もりを行います。</p>
-        <div className="flex flex-row mt-[75px] ml-[40px]">
-            <div className="flex flex-col" style={{fontWeight: '400'}}>
+        <div className="flex flex-row mt-[75px]" style={{marginLeft:match_1024?'40px':''}}>
+            <div className="flex flex-col" style={{fontWeight: '400', width:'90%'}}>
                 <p className="text-[20px] text-[#B9324D] mb-[26px]">①.メールとマイページにお知らせします</p>
                 <p className="my-1 text-[#554744] text-[16px]">今後の流れは<span className="text-[#B9324D] underline" style={{fontWeight:fontBold}}>マイページ</span>で状況を確認できます。</p>
                 <p className="text-[#554744] text-[16px]">また、お知らせはマイページとメールにて行います。</p>
@@ -576,11 +613,14 @@ const Step4 : React.FC<{}> = () => {
                 <p className="text-[#554744] text-[16px]">あらかじめご了承ください</p>
 
             </div>
-            <div className="flex justify-center items-center px-[80px]">
-                <img src={staticFiles.images.finish} className="w-[592px]" />
-            </div>
+            {match_1024?(
+                <div className="flex justify-center items-center px-[80px]">
+                    <img src={staticFiles.images.finish} className="w-[592px]" />
+                </div>):(
+                <img src={staticFiles.images.finish} style={{position:'absolute', right:0, width:'400px', opacity:'0.5', marginRight:'15%'}} />
+            )}
         </div>
-        <button onClick={onSubmit} className="mb-[45px] btn-color w-[324px] py-2 px-5 rounded-[30px] text-[23px] ml-[10%]">完了</button>
+        <button onClick={onSubmit} className="mb-[45px] btn-color py-2 px-5 rounded-[30px] text-[23px]" style={{fontWeight:fontBold, width:match_1024?'324px':'200px', marginLeft:match_1024?'10%':'27%', marginTop:match_1024?'30px':'20px'}}>完了</button>
         </div>
         </>
     )

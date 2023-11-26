@@ -17,6 +17,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import SearchIcon from "@mui/icons-material/Search";
+import { ItemElement } from '../pages/layouts/Top';
 
 const menuItems: NavBarElement[] = [
   {
@@ -63,9 +64,14 @@ export const MainMenu = () => {
   const [invisible, setInvisible] = React.useState(false);
   const [ anchorEl, setAnchorEl ] = React.useState<null | HTMLElement>(null);
   const [ detail, setDetail ] = React.useState<boolean>(false);
+  const [ selectId, setSelectId ] = React.useState<string>("");
+  const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
     setDetail(false);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
   const [searchTerm, setSearchTerm] = React.useState<string>("");
 
@@ -113,7 +119,7 @@ export const MainMenu = () => {
           <TextField
             id="search"
             type="search"
-            label="キーワードで探す"
+            placeholder="キーワードで探す"
             value={searchTerm}
             onChange={handleChange}
             sx={sxStyles}
@@ -142,12 +148,12 @@ export const MainMenu = () => {
               お知らせ
           </button>
         </ListItem>
-        <ListItem>
+        <ListItem onClick={() => {navigate('/mypage');}}>
           <img src={staticFiles.icons.ic_user_unfill} className="pr-6 mt-2" />
           <button className="text-ms min-w-[60px] font-m1c mt-3 hover:text-lightBrown/[1]">マイページ</button>
         </ListItem>
         <ListItem>
-          <button className=" px-[20px] text-ms font-m1c hover:bg-brown/[1] bg-pink h-[48px] rounded-[50px] text-white">直接依頼をする</button>
+          <button onClick={() => {navigate('/direct_request');toggleDrawer(false);}} className=" px-[20px] text-ms font-m1c hover:bg-brown/[1] bg-pink h-[48px] rounded-[50px] text-white">直接依頼をする</button>
         </ListItem>
       </List>
       <Divider />
@@ -158,15 +164,17 @@ export const MainMenu = () => {
               <ListItemIcon>
                 <img src = {item.imgPath} />
               </ListItemIcon>
-              <ListItemText primary={item.name} onClick={() => navigate(item.path)}/>
+              <ListItemText primary={item.name} onClick={() => {navigate(item.path);toggleDrawer(false);}}/>
             </ListItemButton>
           </ListItem>
         ))}
       </List>
     </Box>
   );
+
+  
   return (
-    <React.Fragment>
+    <>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
           <IconButton
             onClick={toggleDrawer(true)}
@@ -181,39 +189,7 @@ export const MainMenu = () => {
             </Avatar>
           </IconButton>
       </Box>
-      {/* <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={open}
-        onClose={handleClose}
-        onClick={handleClose}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      >
-        <MenuItem onClick={handleClose}>
-        <Badge color="error" variant="dot" invisible={invisible} className="">
-                <NotificationsNoneIcon color="action" />
-              </Badge>
-              <button 
-                onClick={() => {}}
-                className="px-2">
-                  お知らせ
-              </button>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-        <img src={staticFiles.icons.ic_user_unfill} />
-              <button className="text-md min-w-[120px] font-m1c mt-3 hover:text-lightBrown/[1]">マイページ</button>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-        <button className="ml-[10%] text-sm min-w-[170px] font-m1c hover:bg-brown/[1] bg-pink h-[48px] rounded-[50px] text-white">直接依頼をする</button>
-        </MenuItem>
-        <Divider />
-        {menuItems.map((item)=>(
-            <MenuItem onClick={()=>{navigate(item.path)}}>
-            <img src={item.imgPath} /><span className='px-2'>{item.name}</span>
-            </MenuItem>        
-        ))}
-      </Menu> */}
+      
    <Drawer
         anchor="left"
         open={state.left}
@@ -221,6 +197,72 @@ export const MainMenu = () => {
       >
         {list()}
       </Drawer>
-    </React.Fragment>
-  );
+      <React.Fragment>
+        <Menu
+          anchorEl={anchorEl}
+          id="account-menu"
+          open={open}
+          onClose={handleClose}
+          transformOrigin={{ horizontal: 'center', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+          className="px-[100px]"
+        >
+            <div className='flex flex-row px-5 py-5'>
+              <div className="flex-2 w-[600px]">
+              <img className="" src={staticFiles.icons.ic_notification_color} />
+              </div>
+              <button className="flex-1"><img src={staticFiles.icons.ic_noti_close}
+                onClick={handleClose} /></button>
+            </div>
+            {detail?(
+              <React.Fragment>
+                <div className="px-10 py-5">
+                新しいお知らせはありません {selectId}
+                </div>  
+              </React.Fragment>
+            ):(
+              fakeData.map((item:ItemElement) => (
+                <>
+                <div className="flex flex-row p-5">
+                    <div className="flex flex-col w-[85%]">
+                      <p>{item.name}</p>
+                      <p>{item.date}</p>
+                    </div>
+                  <button key={item.id} onClick={()=>{setDetail(true); setSelectId(item.id)}} className="hover:bg-btHover/[1] bg-btColor w-[157px] h-[39x] rounded-[50px] text-white">詳しく見る</button>
+                </div>
+                <Divider />
+                </>
+              ))
+            )}
+        </Menu>
+      </React.Fragment>
+    </>)
 }
+
+const fakeData: ItemElement[] = [
+  {
+    id: "1",
+    name: "お知らせ1",
+    date: "2022年11月11日11:11"
+  },
+  {
+    id: "2",
+    name: "お知らせ1",
+    date: "2022年11月11日11:11"
+  },
+  {
+    id: "3",
+    name: "お知らせ1",
+    date: "2022年11月11日11:11"
+  },
+  {
+    id: "4",
+    name: "お知らせ1",
+    date: "2022年11月11日11:11"
+  },
+  {
+    id: "5",
+    name: "お知らせ1",
+    date: "2022年11月11日11:11"
+  },
+]

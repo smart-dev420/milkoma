@@ -133,17 +133,18 @@ export const CreatorStep = () => {
     );
 }
 
+const creatorData = {
+    avatar: staticFiles.images.avatar,
+    email: '@hikarusannnouragawa',
+    description: 'ひかる社長の密着日記',
+    follower: 12345678,
+    heart: 3900000,
+}
+
 const IntroComponent = () => {
     const selectTab = useSelector((state:any) => state.creator.step);
     const match_768 = useMediaQuery('(min-width:768px)');
     const match_1024 = useMediaQuery('(min-width:1025px)');
-    const creatorData = {
-        avatar: staticFiles.images.avatar,
-        email: '@hikarusannnouragawa',
-        description: 'ひかる社長の密着日記',
-        follower: 12345678,
-        heart: 3900000,
-    }
     return(
         <>
         
@@ -258,7 +259,8 @@ const Step2 : React.FC<{}> = () => {
         setIsHovered2(-1);
     };
     const help1 = '宣伝やレビューなどをしてもらいたい@@@内容を入力してください。@@@(URLがある場合はURLもご記入ください';
-    const help2 = 'URLをご記入したい場合は、URLを入力してください';
+    const help2 = 'インフルエンサーが撮影した動画はどのよ@@@うに使いたいですか？@@@目的に応じてミルコマがサポートします。';
+    const help3 = '納期を選択できます。@@@内容によってご希望に添えない場合があり@@@ますのでご了承ください。';
     
     useEffect(()=>{
 
@@ -345,9 +347,7 @@ const Step2 : React.FC<{}> = () => {
                     <img className="w-[30px]" src = {staticFiles.icons.ic_step_help} />
                     <span className="text-[#B9324D] px-[15px]">ヘルプ</span>
                 </div>
-                <p>インフルエンサーが撮影した動画はどのよ</p>
-                <p>うに使いたいですか？</p>
-                <p>目的に応じてミルコマがサポートします。</p>
+                {showSentence(help2)}
             </div>
         </div>
         <p className="flex items-center text-[24px] mb-[63px] ml-[75px] text-[#B9324D]">Q3: 納期はいつ頃が希望ですか？<span className="bg-[#F9E5D1] text-[13px] ml-[80px] px-5 rounded-[20px]">選択</span></p>
@@ -383,9 +383,7 @@ const Step2 : React.FC<{}> = () => {
                     <img className="w-[30px]" src = {staticFiles.icons.ic_step_help} />
                     <span className="text-[#B9324D] px-[15px]">ヘルプ</span>
                 </div>
-                <p>納期を選択できます。</p>
-                <p>内容によってご希望に添えない場合があり</p>
-                <p>ますのでご了承ください。</p>
+                {showSentence(help3)}
             </div>
         </div>
         <div className="flex flex-row ml-[75px] items-center">
@@ -430,7 +428,7 @@ const Step3 : React.FC<{}> = () => {
     const handlePrev = () => {
         dispatch(setStep({step:1}));
     }
-
+    const match_1024 = useMediaQuery('(min-width:1025px)');
     return(
         <>
         <img className="w-[250px]" src={staticFiles.images.ellipse_step} style={{position:"absolute", marginTop:"-70px", borderLeft:"25px",}} />
@@ -450,17 +448,23 @@ const Step3 : React.FC<{}> = () => {
                 <div className="flex flex-row">
                     <label className="text-[24px] text-[#B9324D] mb-[23px]" >依頼したいインフルエンサー</label>
                 </div>
-                <div className="flex flex-row items-end" style={{whiteSpace:'nowrap'}}>
-                    <img src={staticFiles.images.avatar} className="w-[71px] h-[71px]" />
-                    <div className="flex flex-col justify-center ml-[22px]">
-                        <label className="text-[#838688] text-[16px]">@hikarusannnouragawa</label>
-                        <label className="text-[#511523] text-[29px]" style={{fontWeight:fontBold}}>ひかる社長の密着日記 </label>
+                <div className="flex " style={{whiteSpace:'nowrap', flexDirection:match_1024?'row':'column', columnGap:'280px'}}>
+                    <div className="flex flex-row">
+                        <img src={creatorData.avatar} className="w-[71px] h-[71px]" />
+                        <div className="flex flex-col justify-center ml-[22px]">
+                            <label className="text-[#838688] text-[16px]">{creatorData.email}</label>
+                            <label className="text-[#511523] text-[29px]" style={{fontWeight:fontBold}}>{creatorData.description}</label>
+                        </div>
                     </div>
-                    <div className="flex flex-row mb-[10px]">
-                        <img src={staticFiles.icons.ic_user_plus_brown} className="w-[28px] h-[25px] ml-[126px]"/>
-                        <label className="text-[#511523] text-[20px] mx-[10px]" style={{letterSpacing:'-3px'}}>総フォロワー数 12,345,678人</label>
-                        <img src={staticFiles.icons.ic_heart} className="w-[25px] h-[25px] ml-[84px]" />
-                        <label className="text-[#511523] text-[20px] ml-[5px]">総いいね数 3.9M</label>
+                    <div className="flex mt-[10px]" style={{flexDirection:match_1024?'row':'column', columnGap:'84px', alignItems:match_1024?'center':'', rowGap:'10px'}}>
+                        <div className="flex flex-row">
+                            <img src={staticFiles.icons.ic_user_plus_brown} className="w-[28px] h-[25px] "/>
+                            <label className="text-[#511523] text-[20px] mx-[10px]" style={{letterSpacing:'-3px'}}>総フォロワー数 {creatorData.follower.toLocaleString()}人</label>
+                        </div>
+                        <div className="flex flex-row">
+                            <img src={staticFiles.icons.ic_heart} className="w-[25px] h-[25px]" />
+                            <label className="text-[#511523] text-[20px] ml-[5px]">総いいね数 {NumberFormatExample(creatorData.heart)}M</label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -471,20 +475,20 @@ const Step3 : React.FC<{}> = () => {
                 <p className="text-[24px] text-[#B9324D] w-[30%]">依頼したいジャンル</p>
                 <p className="text-[24px] text-[#B9324D] ">Q1.どのような商品か？</p>
             </div>
-            <div className="flex flex-row">
-                <div className="w-[30%]">
+            <div className="flex" style={{flexDirection:match_1024?'row':'column'}}>
+                <div className="flex" style={{flexDirection:match_1024?'column':'row', width:match_1024?'30%':'100%'}}>
                     <img className="w-[318px] rounded-[20px]" src={category.category} />
                     <div className="flex flex-col mx-5 mt-[24px] mb-[80px]">
                         <p className="text-[20px] text-[#511523] " style={{fontWeight:fontBold}}>{category.title}</p>
-                        <p className="text-[14px] text-[#554744] w-[65%] mt-[6px]">{category.description}</p>
+                        <p className="text-[14px] text-[#554744] w-[65%] mt-[6px]" style={{width:match_1024?'65%':'100%'}}>{category.description}</p>
                     </div>
                 </div>
-                <div className="flex flex-col w-[60%]">
+                <div className="flex flex-col" style={{width:match_1024?'60%':'87%'}}>
                     <TextareaAutosize
                         minRows={5} // Specify the number of rows to display
                         aria-label="Textarea" // Provide an accessible label
                         className="w-full text-[20px] rounded-[15px] p-5 mb-[45px]"
-                        style={{border:"1px solid #EBEBEB"}}
+                        style={{border:"1px solid #EBEBEB", marginTop:match_1024?'':'20px',}}
                         value={question1}
                         readOnly = {true}
                     />
@@ -509,12 +513,12 @@ const Step3 : React.FC<{}> = () => {
                 </div>
             </div>
         </div>
-        <div className="flex flex-row ml-[75px] items-center ">
+        <div className="flex flex-row ml-[75px] items-center" style={{marginTop:match_1024?'':'30px'}}>
             <div className="flex flex-row w-[50%]" onClick={handlePrev}>
             <img className="w-[20px] cursor-pointer" src={staticFiles.icons.ic_back} />
             <span className="cursor-pointer text-[16px] text-hover ml-[10px]" style={{fontWeight:fontBold}}>内容編集に戻る</span>
             </div>
-            <button className="btn-color w-[324px] py-2 px-5 justify-center items-center flex rounded-[30px] text-[23px] text-[#fff]" style={{fontWeight:fontBold}} onClick={handleClickOpen}>完了</button>
+            <button className="btn-color py-2 px-5 justify-center items-center flex rounded-[30px] text-[23px] text-[#fff]" style={{fontWeight:fontBold, width:match_1024?'324px':'200px'}} onClick={handleClickOpen}>完了</button>
         </div>
         <Dialog
             onClose={handleClose}
@@ -543,7 +547,7 @@ const Step3 : React.FC<{}> = () => {
                 </svg>
             {/* <CloseIcon sx={{ color: isHovered ? '#B9324D' : '#A5A5A5', fontSize: '30px'}}/> */}
             </IconButton>
-            <DialogContent sx={{padding: '50px', marginTop:'-25px', width:'802px'}}>
+            <DialogContent sx={{padding: '50px', marginTop:match_1024?'-25px':'', width:'802px',}}>
                 <img className="w-[347px]" src = {staticFiles.images.modalBackground} style={{position:'absolute', right:0, top:200}} />
             <Typography gutterBottom className="" sx={{fontSize: "18px", marginBottom: "20px"}} >
                 お申し込みにあたって、あらかじめ以下の内容をご確認ください
@@ -589,8 +593,8 @@ const Step4 : React.FC<{}> = () => {
     const handleHome = () => {
         navigate('/'); 
         dispatch(setInit()); 
-        
     }
+    const match_1024 = useMediaQuery('(min-width:1025px)');
     return(
         <>
         <img className="w-[250px]" src={staticFiles.images.ellipse_step} style={{position:"absolute", marginTop:"-70px", borderLeft:"25px",}} />
@@ -605,8 +609,8 @@ const Step4 : React.FC<{}> = () => {
             </div>
         </div>
         <p className="text-[#554744] text-[20px]">ミルコマディレクターが最適なインフルエンサーとお見積もりを行います。</p>
-        <div className="flex flex-row mt-[75px] ml-[40px]">
-            <div className="flex flex-col" style={{fontWeight: '400'}}>
+        <div className="flex flex-row mt-[75px]" style={{marginLeft:match_1024?'40px':''}}>
+            <div className="flex flex-col" style={{fontWeight: '400', zIndex:'1'}}>
                 <p className="text-[20px] text-[#B9324D] mb-[26px]" style={{fontWeight:fontBold}}>①.メールとマイページにお知らせします</p>
                 <p className="my-1 text-[#554744] text-[16px]">今後の流れは<span className="text-[#B9324D] underline" >マイページ</span>で状況を確認できます。</p>
                 <p className="text-[#554744] text-[16px]">また、お知らせはマイページとメールにて行います。</p>
@@ -622,11 +626,15 @@ const Step4 : React.FC<{}> = () => {
                 <p className="text-[#554744] text-[16px]">あらかじめご了承ください</p>
 
             </div>
-            <div className="flex justify-center items-center px-[80px]">
-                <img src={staticFiles.images.finish} className="w-[592px]" />
-            </div>
+            {match_1024?(
+                <div className="flex justify-center items-center px-[80px]">
+                    <img src={staticFiles.images.finish} className="w-[592px]" />
+                </div>):(
+                <img src={staticFiles.images.finish} style={{position:'absolute', right:0, width:'400px', opacity:'0.5', marginRight:'15%'}} />
+            )}
+            
         </div>
-        <button onClick={handleHome} className="btn-color w-[324px] py-2 px-5 rounded-[30px] text-[23px] ml-[10%]" style={{fontWeight:fontBold}}>マイページへ</button>
+            <button onClick={handleHome} className="btn-color py-2 px-5 rounded-[30px] text-[23px]" style={{fontWeight:fontBold, width:match_1024?'324px':'200px', marginLeft:match_1024?'10%':'27%', marginTop:match_1024?'':'20px'}}>マイページへ</button>
         </div>
         </>
     )
