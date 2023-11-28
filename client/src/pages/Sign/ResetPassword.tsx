@@ -50,10 +50,16 @@ export const ResetPassword = () => {
     const formData = new FormData();
     formData.append('password', data.password);
     const query = `${API}/auth/reset-password/${email}`;
+    const verified = sessionStorage.getItem('opt');
+    if(verified !== 'ok'){
+        toast.error("エラー");
+        return;
+    }
     try {
         const res = await axios.post(query, formData);
         if(res.status === 200){
-            toast.success("Password change successful!");
+            toast.success("パスワードの変更が成功しました!");
+            sessionStorage.removeItem('opt');
             navigate(`/login`);
           }else{
             console.log(res.status);

@@ -34,7 +34,8 @@ export const OtpSent = () => {
         try {
             const res = await axios.post(query, formData);
             if(res.status === 200){
-                toast.success("Verified!");
+                toast.success("検証された!"); // Verified
+                sessionStorage.setItem('opt', 'ok');
                 navigate(`/resetpswd`);
               }else{
                 console.log(res.status);

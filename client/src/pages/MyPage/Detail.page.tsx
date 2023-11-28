@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, CardMedia, Container, Dialog, DialogContent, DialogTitle, IconButton, Stack, Typography } from "@mui/material"
+import { Box, Button, CardMedia, Container, Dialog, DialogContent, DialogTitle, IconButton, Stack, TextField, Typography } from "@mui/material"
 import { fontBold, staticFiles } from "../../components/Constants"
 import { styled } from '@mui/material/styles';
 import Slider, { SliderThumb, SliderValueLabelProps } from '@mui/material/Slider';
@@ -9,6 +9,8 @@ import { NumberFormatExample, showSentence } from "../../utils/appHelper";
 import CloseIcon from '@mui/icons-material/Close';
 import { btnBackground, btnBackgroundHover } from "../../components/Constants";
 import { useNavigate } from "react-router-dom";
+import { FileUploader } from "react-drag-drop-files";
+import { toast } from "react-toastify";
 
 const box_shadow ='0 0 4px 5px rgba(255,255,255,0.5)';
 
@@ -199,6 +201,41 @@ export const DetailPage = () => {
     const handleChatting = () => {
         navigate('/mypage/chatting');
     }
+
+    /** File Upload */
+    const fileTypes = ["jpg", "png", "gif", "pdf", "doc", "docx", "avi", "mp4", "mp3", "txt", "rtf"];
+    const [file, setFile] = useState(null);
+    const handleChange = (file:any) => {
+        // const extension = file.name.split('.');
+        // if(!fileTypes.includes(extension[extension.length - 1].toLowerCase())){
+        //     toast.error("ファイル形式エラー");
+        //     return;
+        // }
+        setFile(file);
+        setUploadFileName(file.name);
+        console.log('file - ', file);
+    };
+    const [ uploadOpen, setUploadOpen ] = useState<boolean>(false);
+    const [ uploadFileName, setUploadFileName ] = useState<string>('');
+    const [ fileName, setFileName ] = useState<string>('');
+    const handleUpload = () => {
+        setUploadOpen(true);
+    }
+    const handleUploadClose = () => {
+        setUploadOpen(false);
+        setIsHovered(false);
+    }
+
+    const handleFileUpload = async () => {
+        // const formData = new FormData();
+        // formData.append('file', file);
+        const userData = sessionStorage.getItem('user');
+        const formData = {
+            userEmail: userData?JSON.parse(userData).email:'',
+        };
+        console.log('formData - ', formData);
+    }
+
     return (
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'68px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
             <Stack direction="column" sx={{paddingX:'18px', width:'100%'}}>
@@ -470,7 +507,9 @@ export const DetailPage = () => {
                                 "&:hover": {
                                     backgroundColor: btnBackgroundHover
                                 },
-                                }}>アップロードする
+                                }}
+                                onClick={handleUpload}
+                                >アップロードする
                             </Button>
                         </Box>
                         <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' sx={{border:'2px dashed #AA3D4F', borderRadius:'15px', width:'100%', marginTop:'16px', paddingY:'22px', paddingX:'27px', rowGap:'10px'}}>
@@ -637,13 +676,125 @@ export const DetailPage = () => {
                     "&:hover": {
                         backgroundColor: btnBackgroundHover
                     },
-                    }}>
+                    }}
+                    onClick={handleClose}
+                    >
                     <Typography sx={{color:'#ffffff', fontSize:'18px' }}>      
                         完了
                     </Typography>
                 </Button>
             </Box>    
         </Dialog>
+
+        {/** File Upload Dialog */}
+        <Dialog
+            onClose={handleUploadClose}
+            aria-labelledby="customized-dialog-title"
+            open={uploadOpen}
+            >
+            <DialogTitle sx={{ m: 0, paddingTop: '50px', paddingLeft:'50px', fontSize: '25px', color:'#454545', fontWeight:fontBold }} id="customized-dialog-title">
+                ファイルアップロード
+            </DialogTitle>
+            <IconButton
+                aria-label="close"
+                onClick={handleUploadClose}
+                sx={{
+                    position: 'absolute',
+                    right: 30,
+                    top: 55,
+                    color: (theme) => theme.palette.grey[500],
+                    width: '35px',
+                    height: '35px',
+                }}
+                onMouseEnter={handleHoverEnter}
+                onMouseLeave={handleHoverLeave}
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                    <path id="Vector" d="M13.038,9l4.544-4.545a1.432,1.432,0,0,0,0-2.02L15.56.416a1.434,1.434,0,0,0-2.019,0L9,4.96,4.453.416a1.434,1.434,0,0,0-2.019,0L.417,2.435a1.432,1.432,0,0,0,0,2.02L4.96,9,.417,13.546a1.432,1.432,0,0,0,0,2.019l2.019,2.018a1.431,1.431,0,0,0,2.019,0L9,13.04l4.544,4.543a1.435,1.435,0,0,0,2.022,0l2.019-2.018a1.432,1.432,0,0,0,0-2.019Z" 
+                    fill={`${isHovered?'#B9324D':'#a5a5a5'}`}/>
+                </svg>
+
+                {/* <CloseIcon sx={{ color: isHovered ? '#B9324D' : '#A5A5A5', fontSize: '30px', fontWeight:'1000'}}/> */}
+            </IconButton>
+            <DialogContent sx={{padding: '50px', marginTop:'-50px', width:'802px'}}>
+                <Typography gutterBottom sx={{fontSize: "18px", color:'#454545'}} >
+                    送信画像の設定をして「完了」ボタンを押してください。
+                </Typography>
+                <Typography sx={{marginTop:'30px', color:'#454545', fontSize:'20px', fontWeight:fontBold}}>ファイル選択</Typography>
+                <FileUploader handleChange={handleChange} name="file" types={fileTypes} hoverTitle=' '>
+                    <Box
+                        display='flex' flexDirection='column'
+                        sx={{
+                            paddingX:'200px',
+                            paddingY:'60px',
+                            border:'1px dashed #DF8391',
+                            borderRadius:'8px',
+                            marginTop:'20px',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            fontSize:'12px',
+                            fontWeight:fontBold,
+                            backgroundColor:'#FFFEFC',
+                        }}
+                    >
+                        <CardMedia
+                            component='img'
+                            image={staticFiles.images.folder}
+                            className="image-hover"
+                            sx={{width:'54px', height:'44px', cursor:'pointer'}}
+                        />
+                        <Typography>クリックまたは</Typography>
+                        <Typography>ドラックしてアップロード</Typography>
+                    </Box>
+                </FileUploader>
+               
+                <Typography sx={{marginTop:'30px', color:'#454545', fontSize:'20px', fontWeight:fontBold}}>アップロード状況</Typography>
+                    <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', marginY:'20px', border:'1px solid #AA3D4F', borderRadius:'10px', paddingY:'12px', paddingX:'7px'}}>
+                        <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center' 
+                            sx={{ backgroundColor:'#F0F0F0', borderRadius:'50%', width:'46px', height:'46px'}}>
+                            <CardMedia
+                                component='img'
+                                image={staticFiles.images.file}
+                                sx={{width:'19px', height:'24px'}}
+                            />
+                        </Box>
+                        <Box display='flex' flexDirection='column' flex={6} sx={{marginX:'7px'}}>
+                            <Typography sx={{color:'#424242', fontSize:'13px', fontWeight:fontBold}}>{fileName?fileName:uploadFileName}</Typography>
+                        </Box>
+                        <Typography sx={{fontSize:'11px'}}>アップロード中…</Typography>
+                    </Box>
+
+                <Typography sx={{marginTop:'27px', color:'#454545', fontSize:'20px', fontWeight:fontBold}}>ファイル名を設定(オプション)</Typography>
+                    <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', marginY:'20px', border:'1px solid #D6929D', borderRadius:'10px', paddingX:'7px'}}>
+                        <TextField
+                            placeholder="ファイル名"
+                            className="w-full text-[20px] rounded-[15px] "
+                            style={{}}
+                            value={fileName}
+                            onChange={(e)=>{setFileName(e.target.value)}}
+                        />
+                    </Box>
+                    <Typography sx={{fontSize:'16px', color:'#858997', }}>ファイル名を別に設定することができます。</Typography>
+            </DialogContent>
+            <Box display='flex' flexDirection='row' alignItems='center' justifyContent='center'>
+                <Button sx={{
+                    backgroundColor:btnBackground, 
+                    borderRadius:'14px', 
+                    width:'446px', color:'red',
+                    height:'60px',
+                    marginBottom:'50px',
+                    "&:hover": {
+                        backgroundColor: btnBackgroundHover
+                    },
+                    }}
+                    onClick={handleFileUpload}>
+                    <Typography sx={{color:'#ffffff', fontSize:'18px' }}>      
+                        完了
+                    </Typography>
+                </Button>
+            </Box>    
+        </Dialog>
+
             </Stack>
         </Container>
     )

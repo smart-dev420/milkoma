@@ -10,7 +10,7 @@ import { CreatorStep } from "../pages/Creator/Step";
 import { ViewHistory } from "../pages/VIewHistory";
 import { MypageLayout } from "../pages/MypageLayout";
 import { SignUp, Login, ForgotPassword, OtpSent, ResetPassword } from "../pages/Sign";
-import { HomePage, ProjectList, DetailPage, ContractPage, ContractManage, ChattingPage, CardManage } from "../pages/MyPage";
+import { HomePage, ProjectList, DetailPage, ContractPage, ContractManage, ChattingPage, CardManage, Profile } from "../pages/MyPage";
 
 export const router = createHashRouter([
     {
@@ -143,6 +143,11 @@ export const router = createHashRouter([
       {
         path: "card_manage",
         element: <CardManage />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
         errorElement: <NotFound />,
       },
     ]

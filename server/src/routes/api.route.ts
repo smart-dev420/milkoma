@@ -8,6 +8,7 @@ import {
 } from "../middlewares/auth.jwt"
 import auth from "../controller/auth.controller";
 import contract from "../controller/contract.controller";
+import provide from "../controller/upload.controller";
 
 const apiRoute = Router();
 
@@ -34,4 +35,7 @@ apiRoute.post("/getCreatorInfo", verifyToken, contract.getCreatorInfo);
 
 // apiRoute.post("/test", stripe.test);
 
+/******** Provide File */
+apiRoute.post("/upload_provide", verifyToken, provide.uploadFile);
+apiRoute.post("/uploadVerify", verifyToken, provide.uploadVerifyFile);
 export default apiRoute;
