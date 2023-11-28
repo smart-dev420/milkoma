@@ -66,27 +66,27 @@ export const ContractPage = () => {
                             height="25"
                             sx={{borderRadius:'20px', width:'25px', marginRight:'10px'}}
                             image={staticFiles.icons.ic_back_white} />
-                        <Typography sx={{color:'#ffffff', fontSize:'21px', fontWeight:fontBold }}>      
+                        <Typography sx={{color:'#ffffff', fontSize:'18px', fontWeight:fontBold }}>      
                             戻る
                         </Typography>
                     </Button>
 
-                <Typography flex={9} sx={{color:'#511523', fontSize:'25px', marginLeft:'23px', fontWeight:fontBold}}>契約書の確認・締結</Typography>
-                <Typography flex={2} sx={{color:'#554744', fontSize:'18px', marginLeft:'23px', fontWeight:fontBold}}>2023年1月10日依頼</Typography>
+                <Typography flex={9} sx={{color:'#511523', fontSize:'22px', marginLeft:'23px', fontWeight:fontBold}}>契約書の確認・締結</Typography>
+                <Typography flex={2} sx={{color:'#554744', fontSize:'16px', marginLeft:'23px', fontWeight:fontBold}}>2023年1月10日依頼</Typography>
                 </Box>
 
-                <Typography sx={{color:'#001219', fontSize:'14px', marginTop:'35px'}}>依頼を遂行するために、以下の契約に対して確認、締結を行ってください</Typography>
+                <Typography sx={{color:'#001219', fontSize:'12px', marginTop:'35px'}}>依頼を遂行するために、以下の契約に対して確認、締結を行ってください</Typography>
                  {/** Product Data and Status Data */}                
                  <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{border:'3px solid #DF8391', borderRadius:'30px', marginTop:'28px', width:'100%'}}>
                     <Box display='flex' flexDirection='column' sx={{padding:'33px'}}>
-                        <Typography sx={{color:'#85766D', fontSize:'14px', marginBottom:'7px', fontWeight:fontBold}}>案件名</Typography>
-                        <Typography sx={{color:'#B9324D', fontSize:'20px', marginBottom:'26px', fontWeight:fontBold}}>商品紹介の案件</Typography>
-                        <Typography sx={{color:'#85766D', fontSize:'12px', marginBottom:'9px', fontWeight:fontBold}}>依頼内容</Typography>
+                        <Typography sx={{color:'#85766D', fontSize:'12px', marginBottom:'7px', fontWeight:fontBold}}>案件名</Typography>
+                        <Typography sx={{color:'#B9324D', fontSize:'18px', marginBottom:'26px', fontWeight:fontBold}}>商品紹介の案件</Typography>
+                        <Typography sx={{color:'#85766D', fontSize:'10px', marginBottom:'9px', fontWeight:fontBold}}>依頼内容</Typography>
                         <Box display='flex' flexDirection='row'>
                             <Typography sx={{
                                 border:'1px solid #CE6F82', 
                                 color:'#B9324D', 
-                                fontSize:'12px', 
+                                fontSize:'10px', 
                                 paddingY:'7px', 
                                 paddingX:'20px',
                                 textAlign:'center',
@@ -98,7 +98,7 @@ export const ContractPage = () => {
                             <Typography sx={{
                                 border:'1px solid #CE6F82', 
                                 color:'#B9324D', 
-                                fontSize:'12px', 
+                                fontSize:'10px', 
                                 paddingY:'7px', 
                                 paddingX:'20px',
                                 textAlign:'center',
@@ -109,7 +109,7 @@ export const ContractPage = () => {
                                     希望納期:5ヶ月
                             </Typography>
                         </Box>
-                        <Typography sx={{color:'#001219', fontSize:'14px', marginTop:'14px'}}>
+                        <Typography sx={{color:'#001219', fontSize:'12px', marginTop:'14px'}}>
                             {showSentence(data.productIntro)}
                         </Typography>
                     </Box>
@@ -119,15 +119,15 @@ export const ContractPage = () => {
                             image={staticFiles.images.contract}  
                             sx={{width:'110px', height:'110px', marginBottom:'14px', display:data.contracted?'':'none'}}
                             />
-                        <Typography sx={{color:'#001219', fontSize:'14px', display:data.contracted?'':'none'}}>契約書は締結済みです</Typography>
+                        <Typography sx={{color:'#001219', fontSize:'12px', display:data.contracted?'':'none'}}>契約書は締結済みです</Typography>
                     </Box>
                 </Box>       
                 {/** Contract content */} 
                 <Box display='flex' flexDirection='column' sx={{width:'100%', padding:'75px', marginTop:'40px', backgroundColor:'#FFFFFF', borderRadius:'50px', boxShadow:'0px 0px 20px 0px #00000017', }}>
-                      <Typography sx={{fontSize:'24px', color:'#001219', fontWeight:'600'}}>第1条( 目 的 )</Typography>          
-                      <Typography sx={{fontSize:'24px', color:'#001219', marginTop:'27px'}}>本契約は甲乙相互間の信頼に基づく公正な取引関係を確立し、相互の利益と業務の発展をはかること を目的とする。</Typography>
-                      <Typography sx={{fontSize:'24px', color:'#001219', fontWeight:'600', marginTop:'30px'}}>第2条 ( 業務内容 )</Typography>
-                      <Typography sx={{fontSize:'24px', color:'#001219', marginTop:'27px', letterSpacing:'-1px'}}>
+                      <Typography sx={{fontSize:'22px', color:'#001219', fontWeight:'600'}}>第1条( 目 的 )</Typography>          
+                      <Typography sx={{fontSize:'22px', color:'#001219', marginTop:'27px'}}>本契約は甲乙相互間の信頼に基づく公正な取引関係を確立し、相互の利益と業務の発展をはかること を目的とする。</Typography>
+                      <Typography sx={{fontSize:'22px', color:'#001219', fontWeight:'600', marginTop:'30px'}}>第2条 ( 業務内容 )</Typography>
+                      <Typography sx={{fontSize:'22px', color:'#001219', marginTop:'27px', letterSpacing:'-1px'}}>
                         1 甲は、乙に対し、甲のコンサルティング業務に関し、下記業務(以下「本件業務」という)を委託し、<br />
                         乙はこれを受託する。<br />
                         (1)テーマ:Web サイト制作におけるプログラミングの基礎及び応用のノウハウを提供 Web サイト<br />
@@ -136,8 +136,8 @@ export const ContractPage = () => {
                         3 期間は 6 ヶ月間とし、甲の進捗次第で最大 6 ヶ月まで延⻑とする。 また延⻑に関して、乙の判断で実施の可否とする。<br />
                         4 乙は甲の要求する成果の保証をしないものとする。
                       </Typography>
-                      <Typography sx={{fontSize:'24px', color:'#001219', fontWeight:'600', marginTop:'128px'}}>第2条 ( 業務内容 )</Typography>
-                      <Typography sx={{fontSize:'24px', color:'#001219', marginTop:'27px', letterSpacing:'-1px'}}>
+                      <Typography sx={{fontSize:'22px', color:'#001219', fontWeight:'600', marginTop:'128px'}}>第2条 ( 業務内容 )</Typography>
+                      <Typography sx={{fontSize:'22px', color:'#001219', marginTop:'27px', letterSpacing:'-1px'}}>
                         1 甲は、乙に対し、甲のコンサルティング業務に関し、下記業務(以下「本件業務」という)を委託し、<br />
                         乙はこれを受託する。<br />
                         (1)テーマ:Web サイト制作におけるプログラミングの基礎及び応用のノウハウを提供 Web サイト<br />
@@ -146,8 +146,8 @@ export const ContractPage = () => {
                         3 期間は 6 ヶ月間とし、甲の進捗次第で最大 6 ヶ月まで延⻑とする。 また延⻑に関して、乙の判断で実施の可否とする。<br />
                         4 乙は甲の要求する成果の保証をしないものとする。
                       </Typography>
-                      <Typography sx={{fontSize:'24px', color:'#001219', fontWeight:'600', marginTop:'128px'}}>第2条 ( 業務内容 )</Typography>
-                      <Typography sx={{fontSize:'24px', color:'#001219', marginTop:'27px', letterSpacing:'-1px'}}>
+                      <Typography sx={{fontSize:'22px', color:'#001219', fontWeight:'600', marginTop:'128px'}}>第2条 ( 業務内容 )</Typography>
+                      <Typography sx={{fontSize:'22px', color:'#001219', marginTop:'27px', letterSpacing:'-1px'}}>
                         1 甲は、乙に対し、甲のコンサルティング業務に関し、下記業務(以下「本件業務」という)を委託し、<br />
                         乙はこれを受託する。<br />
                         (1)テーマ:Web サイト制作におけるプログラミングの基礎及び応用のノウハウを提供 Web サイト<br />
@@ -156,8 +156,8 @@ export const ContractPage = () => {
                         3 期間は 6 ヶ月間とし、甲の進捗次第で最大 6 ヶ月まで延⻑とする。 また延⻑に関して、乙の判断で実施の可否とする。<br />
                         4 乙は甲の要求する成果の保証をしないものとする。
                       </Typography>
-                      <Typography sx={{fontSize:'24px', color:'#001219', fontWeight:'600', marginTop:'128px'}}>第2条 ( 業務内容 )</Typography>
-                      <Typography sx={{fontSize:'24px', color:'#001219', marginTop:'27px', marginBottom:'187px', letterSpacing:'-1px'}}>
+                      <Typography sx={{fontSize:'22px', color:'#001219', fontWeight:'600', marginTop:'128px'}}>第2条 ( 業務内容 )</Typography>
+                      <Typography sx={{fontSize:'22px', color:'#001219', marginTop:'27px', marginBottom:'187px', letterSpacing:'-1px'}}>
                         1 甲は、乙に対し、甲のコンサルティング業務に関し、下記業務(以下「本件業務」という)を委託し、<br />
                         乙はこれを受託する。<br />
                         (1)テーマ:Web サイト制作におけるプログラミングの基礎及び応用のノウハウを提供 Web サイト<br />
@@ -168,7 +168,7 @@ export const ContractPage = () => {
                       </Typography>
                 </Box>
                 <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
-                    <label className="text-[#001219] text-[18px] items-center cursor-pointer" style={{marginTop:'75px', marginBottom:'46px', whiteSpace:"nowrap", display:data.contracted?'none':''}}>
+                    <label className="text-[#001219] text-[16px] items-center cursor-pointer" style={{marginTop:'75px', marginBottom:'46px', whiteSpace:"nowrap", display:data.contracted?'none':''}}>
                         <Checkbox
                             className="checkbox"
                             inputProps={{ 'aria-label': 'checkbox' }}
@@ -189,7 +189,7 @@ export const ContractPage = () => {
                         },
                         }}
                         onClick={handleSubmit}>
-                        <Typography sx={{color:'#ffffff', fontSize:'18px' }}>      
+                        <Typography sx={{color:'#ffffff', fontSize:'16px' }}>      
                             {data.contracted?'締結済み':'確認完了'}
                         </Typography>
                     </Button>  
@@ -200,7 +200,7 @@ export const ContractPage = () => {
             aria-labelledby="customized-dialog-title"
             open={open}
             >
-            <DialogTitle sx={{ m: 0, paddingTop: '50px', paddingLeft:'50px', fontSize: '25px', color:'#454545', fontWeight:fontBold }} id="customized-dialog-title">
+            <DialogTitle sx={{ m: 0, paddingTop: '50px', paddingLeft:'50px', fontSize: '22px', color:'#454545', fontWeight:fontBold }} id="customized-dialog-title">
                 契約の締結
             </DialogTitle>
             <IconButton
@@ -225,7 +225,7 @@ export const ContractPage = () => {
                 {/* <CloseIcon sx={{ color: isHovered ? '#B9324D' : '#A5A5A5', fontSize: '30px', fontWeight:'1000'}}/> */}
             </IconButton>
             <DialogContent sx={{padding: '50px', marginTop:'-50px', width:'802px'}}>
-                <Typography gutterBottom sx={{fontSize: "18px", color:'#454545'}} >
+                <Typography gutterBottom sx={{fontSize:'16px', color:'#454545'}} >
                     契約書を確認しましたか？締結を行います。<br />
                     ※契約書はいつでも確認できます。
                 </Typography>
@@ -244,7 +244,7 @@ export const ContractPage = () => {
                     }}
                     onClick={handleClose}
                     >
-                    <Typography sx={{color:'#DF8391', fontSize:'18px' }}>      
+                    <Typography sx={{color:'#DF8391', fontSize:'16px' }}>      
                         キャンセル
                     </Typography>
                 </Button>
@@ -259,7 +259,7 @@ export const ContractPage = () => {
                     },
                     }}
                     onClick={handleConfirm}>
-                    <Typography sx={{color:'#ffffff', fontSize:'18px' }}>      
+                    <Typography sx={{color:'#ffffff', fontSize:'16px' }}>      
                         確認
                     </Typography>
                 </Button>

@@ -1,5 +1,5 @@
 import { Button, Checkbox, Grid, InputAdornment, TextField, makeStyles, useMediaQuery } from "@mui/material"
-import { fontBold, staticFiles } from "../../components/Constants"
+import { fontBold, fontSize12, fontSize14, fontSize16, fontSize18, fontSize22, fontSize24, fontSize26, staticFiles } from "../../components/Constants"
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -269,13 +269,13 @@ export const CreatorFind = () => {
         <div className="w-full" style={{whiteSpace:'nowrap'}}>
             <div className="h-[220px]"></div>
             <div className="px-[2vw]">
-                <p className="text-[30px] text-[#001219] mt-[20px]" style={{letterSpacing:'-4px', fontWeight:fontBold}}>クリエイターを探す</p>
-                <p className="text-[19px] text-[#511523]" style={{letterSpacing:'-1px', fontWeight:fontBold}}>登録中のインフルエンサー</p>
+                <p className="text-[#001219] mt-[20px]" style={{letterSpacing:'-4px', fontWeight:fontBold, fontSize:fontSize26}}>クリエイターを探す</p>
+                <p className="text-[#511523]" style={{letterSpacing:'-1px', fontWeight:fontBold, fontSize:fontSize16}}>登録中のインフルエンサー</p>
                 <div className="flex flex-col mt-[95px] items-center">
                     
                 {/** Recent Search Keyword */}
                     <div className="flex justify-center" style={{flexDirection:match_1024?'row':'column', width:match_1024?'60%':'100%'}}>
-                        <span className="text-[25px] text-[#511523] w-[200px]" style={{letterSpacing:'-2px', fontWeight:fontBold}}>キーワード検索</span>
+                        <span className="text-[#511523] w-[200px]" style={{letterSpacing:'-2px', fontWeight:fontBold, fontSize:fontSize22}}>キーワード検索</span>
                         <div className="flex flex-col w-[100%]">
                         <TextField
                             id="search"
@@ -295,10 +295,10 @@ export const CreatorFind = () => {
                         onKeyDown={handleKeyDown}
                         />
                         <div className="flex flex-wrap px-[20px] pt-[20px]" style={{columnGap:'5px', rowGap:'10px'}}>
-                            <span className="text-[16px] text-[#554744]" style={{whiteSpace:'nowrap'}}>最近の検索</span>
+                            <span className="text-[#554744]" style={{whiteSpace:'nowrap', fontSize:fontSize14}}>最近の検索</span>
                             {
                                 searchValue.map((item:any, index:number) => (
-                                    <button className="border rounded-[20px] mx-[5px] px-[15px] text-[14px] text-[#554744]" key={index}>{item}</button>
+                                    <button style={{fontSize:fontSize12}} className="border rounded-[20px] mx-[5px] px-[15px] text-[#554744]" key={index}>{item}</button>
                                 ))
                             }
                         </div>
@@ -308,7 +308,7 @@ export const CreatorFind = () => {
                         
                 {/** SNS Search Part */}
                         <div className="flex"  style={{flexDirection:match_1024?'row':'column'}}>
-                            <span className="text-[20px] text-[#554744] w-[270px] items-center" style={{fontWeight:fontBold}}>活動しているSNS</span>
+                            <span className="text-[#554744] w-[270px] items-center" style={{fontWeight:fontBold, fontSize:fontSize18}}>活動しているSNS</span>
                             <div className="flex flex-wrap">
                             {
                                 chkList1.map((item, index) => (
@@ -320,7 +320,7 @@ export const CreatorFind = () => {
                                         style={{marginTop:'6px'}}
                                     />
                                     <img src={item.iconPath} className="w-[41px] h-[41px] mr-[10px]" />
-                                    <span className="text-[#001219] text-[18px] mr-[40px]">{item.name}</span>
+                                    <span className="text-[#001219] mr-[40px]" style={{fontSize:fontSize16}}>{item.name}</span>
                                 </label>
                                 ))
                             }        
@@ -329,11 +329,11 @@ export const CreatorFind = () => {
 
                 {/** Category Search Part */}
                         <div className="flex mt-[40px]" style={{flexDirection:match_1024?'row':'column'}}>
-                            <span className="text-[#554744] text-[20px] w-[270px] flex-shrink-0" style={{fontWeight:fontBold}}>ジャンル</span>
+                            <span className="text-[#554744] w-[270px] flex-shrink-0" style={{fontWeight:fontBold, fontSize:fontSize18}}>ジャンル</span>
                             <div className="flex flex-wrap">
                             {
                                 chkList2.map((item, index) => (
-                                    <label className="text-[#001219] text-[18px] mr-[30px] items-center cursor-pointer" style={{whiteSpace:"nowrap"}}>
+                                    <label className="text-[#001219] mr-[30px] items-center cursor-pointer" style={{whiteSpace:"nowrap", fontSize:fontSize16}}>
                                     <Checkbox
                                         className="checkbox"
                                         inputProps={{ 'aria-label': 'checkbox' }}
@@ -347,11 +347,11 @@ export const CreatorFind = () => {
                         </div>
                 {/** To do Search Part */}
                         <div className="mt-[41px] flex" style={{flexDirection:match_1024?'row':'column'}}>
-                        <span className="text-[#554744] text-[20px] w-[270px] flex-shrink-0" style={{fontWeight:fontBold}}>できること・特殊な依頼</span>
+                        <span className="text-[#554744] w-[270px] flex-shrink-0" style={{fontWeight:fontBold, fontSize:fontSize18}}>できること・特殊な依頼</span>
                             <div className="flex flex-wrap">
                             {
                                 chkList3.map((item, index) => (
-                                    <label className="text-[#001219] text-[18px] mr-[50px] items-center cursor-pointer" style={{whiteSpace:"nowrap"}}>
+                                    <label className="text-[#001219] mr-[50px] items-center cursor-pointer" style={{whiteSpace:"nowrap", fontSize:fontSize16}}>
                                     <Checkbox
                                         color="primary"
                                         className="checkbox "
@@ -366,9 +366,9 @@ export const CreatorFind = () => {
                         </div>
                         <div className="flex justify-center items-center mt-[31px] mb-[34px]">
                             <button
-                            className="font-m1c hover:bg-[#E28E9C]/[1] bg-[#EE7D90] text-[19px] h-[41px] rounded-[50px] text-white w-[176px] "
+                            className="font-m1c hover:bg-[#E28E9C]/[1] bg-[#EE7D90] h-[41px] rounded-[50px] text-white w-[176px] "
                             onClick={handleSearch}
-                            style={{boxShadow:"0px 0px 3px 2px #EE7D90", fontWeight:fontBold}}
+                            style={{boxShadow:"0px 0px 3px 2px #EE7D90", fontWeight:fontBold, fontSize:fontSize16}}
                             >
                                 絞り込む
                             </button>
@@ -377,9 +377,9 @@ export const CreatorFind = () => {
 
                 {/** Sort Buttons */}    
                     <div className="flex w-full px-[75px] mt-[40px] items-center" style={{columnGap:'25%', flexDirection:match_1024?'row':'column'}}>
-                        <label className="text-[25px] text-[#511523] " style={{fontWeight:fontBold}}>登録インフルエンサー</label>
+                        <label className="text-[#511523] " style={{fontWeight:fontBold, fontSize:fontSize22}}>登録インフルエンサー</label>
                         <div style={{display:'flex', flexDirection:'row', columnGap:'20px', alignItems:'center'}}>
-                            <label className="text-[18px] text-[#511523] px-[10px]" style={{whiteSpace:"nowrap", fontWeight:fontBold}}>並び替え</label>
+                            <label className="text-[#511523] px-[10px]" style={{whiteSpace:"nowrap", fontWeight:fontBold, fontSize:fontSize16}}>並び替え</label>
                             {btn_group.map((item) => (
                                 item.id < 4 ? (
                                 <Button 
@@ -392,7 +392,7 @@ export const CreatorFind = () => {
                                         borderRadius: '25px',
                                         paddingLeft: '30px',
                                         paddingRight: '30px',
-                                        fontSize: match_1024?'18px':'15px',
+                                        fontSize: match_1024?fontSize14:fontSize12,
                                         height: '44px',
                                         whiteSpace: 'nowrap',
                                     }}
@@ -454,14 +454,14 @@ const ItemComponent:React.FC<{element:listProps, recommend:boolean}> = ({element
                 </div>
                 </div>
                 <div className="flex flex-col pl-[30px] pt-[8px]">
-                    <label className="text-[27px] text-[#511523] title-hover" onClick={() => navigate(`/creator/detail/${element.userId}`)} style={{fontWeight:fontBold}}>{element.title}</label>
-                    <div className="flex flex-row text-[18px] text-[#838688]">
+                    <label className="text-[#511523] title-hover" onClick={() => navigate(`/creator/detail/${element.userId}`)} style={{fontWeight:fontBold, fontSize:fontSize24}}>{element.title}</label>
+                    <div className="flex flex-row text-[#838688]" style={{fontSize:fontSize16}}>
                         <img src={staticFiles.icons.ic_heart_gray} className="w-[16px] mr-[5px]"/><span>いいね数 {element.heart}</span>
                     </div>
-                    <div className="flex flex-row text-[18px] text-[#838688]">
+                    <div className="flex flex-row text-[#838688]" style={{fontSize:fontSize16}}>
                         <img src={staticFiles.icons.ic_user_plus} className="w-[20px] mr-[5px]"/><span>フォロワー数 {element.follow}人</span>
                     </div>
-                    <div className="flex flex-row text-[#fff] text-[15px] text-center mt-[23px]">
+                    <div className="flex flex-row text-[#fff] text-center mt-[23px]" style={{fontSize:fontSize14}}>
                         <span className="w-[96px] h-[31px] bg-[#F59ABF] rounded-[20px] mr-[15px]" style={{fontWeight:fontBold}}>コスメ</span>
                         <span className="w-[96px] h-[31px] bg-[#E38A86] rounded-[20px]" style={{fontWeight:fontBold}}>ブログ</span>
                         <img src={staticFiles.images.youtube} className="w-[30px] h-[30px] ml-[30px] mr-[4px] rounded-[8px] log-shadow"/>
@@ -474,26 +474,26 @@ const ItemComponent:React.FC<{element:listProps, recommend:boolean}> = ({element
             <div style={{display:'flex', flexDirection:'row', marginTop:match_1024?'0px':'20px', alignItems:match_1024?'center':'start'}}>
                 <div style={{display:'flex', flexDirection:match_1024?'row':'column'}}>
                     <div className="flex flex-col">
-                        <label className="text-[#511523] text-[19px]" style={{fontWeight:fontBold}}>動画・画像</label>
+                        <label className="text-[#511523]" style={{fontWeight:fontBold, fontSize:fontSize16}}>動画・画像</label>
                         <div className="flex flex-row mt-[11px]">
                             <img src={staticFiles.images.blog1} className="w-[131px] rounded-[20px] mr-[25px] image-hover"/>
                             <img src={staticFiles.images.blog1} className="w-[131px] rounded-[20px] image-hover"/>
                         </div>
                     </div>
                     <div className="flex items-center justify-center">
-                        <label className="text-[#554744] text-[15px] mt-[45px] title-hover" style={{whiteSpace:'nowrap'}} onClick={() => navigate(`/creator/detail/${element.userId}`)}>+5枚のメディア</label>
+                        <label className="text-[#554744] mt-[45px] title-hover" style={{whiteSpace:'nowrap', fontSize:fontSize14}} onClick={() => navigate(`/creator/detail/${element.userId}`)}>+5枚のメディア</label>
                     </div>
                 </div>
                 <div style={{display:'flex', flexDirection:match_1024?'row':'column'}}>
                     <div className="flex flex-col ml-[59px] mr-[15px]">
-                        <label className="text-[#511523] text-[19px]" style={{fontWeight:fontBold}}>広告・動画</label>
+                        <label className="text-[#511523]" style={{fontWeight:fontBold, fontSize:fontSize16}}>広告・動画</label>
                         <div className="flex flex-row mt-[11px]">
                             <img src={staticFiles.images.blog2} className="w-[93px] rounded-[20px] mr-[25px] image-hover"/>
                             <img src={staticFiles.images.blog2} className="w-[93px] rounded-[20px] image-hover"/>
                         </div>
                     </div>
                     <div className="flex items-center justify-center">
-                        <label className="text-[#554744] text-[15px] mt-[45px] title-hover" style={{whiteSpace:'nowrap'}} onClick={() => navigate(`/creator/detail/${element.userId}`)}>+5個の広告</label>
+                        <label className="text-[#554744] mt-[45px] title-hover" style={{whiteSpace:'nowrap', fontSize:fontSize14}} onClick={() => navigate(`/creator/detail/${element.userId}`)}>+5個の広告</label>
                     </div>
                 </div>
             </div>

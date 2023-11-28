@@ -139,7 +139,7 @@ export const CardManage = () => {
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'50px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
             <Stack direction="column" sx={{paddingX:'26px', width:'100%'}}>
                 <Box display='flex' flexDirection='row' justifyContent='space-between'>
-                <Typography sx={{color:'#511523', fontSize:'25px', fontWeight:fontBold}}>登録しているクレジットカード</Typography>
+                <Typography sx={{color:'#511523', fontSize:'22px', fontWeight:fontBold}}>登録しているクレジットカード</Typography>
                 <Button sx={{
                     backgroundColor:btnBackground, 
                     borderRadius:'36px', 
@@ -150,7 +150,7 @@ export const CardManage = () => {
                     },
                     }}
                     onClick={handleClickOpen}>
-                    <Typography sx={{color:'#ffffff', fontSize:'15px', fontWeight:fontBold }}>      
+                    <Typography sx={{color:'#ffffff', fontSize:'14px', fontWeight:fontBold }}>      
                         カードを追加
                     </Typography>
                 </Button>
@@ -160,7 +160,7 @@ export const CardManage = () => {
                     <BankCard type={0} firstNumber={2454} lastNumber={5473} />
                     <BankCard type={0} firstNumber={2454} lastNumber={5473} />
                 </Box>
-                <Typography sx={{fontSize:'25px', color:'#511523', fontWeight:fontBold, marginTop:'86px', marginBottom:'32px'}}>カード詳細</Typography>
+                <Typography sx={{fontSize:'22px', color:'#511523', fontWeight:fontBold, marginTop:'86px', marginBottom:'32px'}}>カード詳細</Typography>
 
             {/** Card Data */}    
                 <Box display='flex' flexDirection='row' sx={{columnGap:'35px'}}>
@@ -183,27 +183,27 @@ export const CardManage = () => {
                         sx={{ width: '69px', height: '40px', zIndex: 5 }}
                         />
                         <Box display="flex" flexDirection="row" sx={{ marginTop: '93px', color:'#FFFFFF' }}>
-                        <Typography sx={{ fontSize: '23px', fontWeight: fontBold, marginRight: '10px' }}>
+                        <Typography sx={{ fontSize: '22px', fontWeight: fontBold, marginRight: '10px' }}>
                             {cardData.cardNumber.substring(0,4)}
                         </Typography>
-                        <Typography sx={{ fontSize: '23px', fontWeight: fontBold, marginX: '10px' }}>
+                        <Typography sx={{ fontSize: '22px', fontWeight: fontBold, marginX: '10px' }}>
                             ****
                         </Typography>
-                        <Typography sx={{ fontSize: '23px', fontWeight: fontBold, marginX: '10px' }}>
+                        <Typography sx={{ fontSize: '22px', fontWeight: fontBold, marginX: '10px' }}>
                             ****
                         </Typography>
-                        <Typography sx={{ fontSize: '23px', fontWeight: fontBold, marginLeft: '10px' }}>
+                        <Typography sx={{ fontSize: '22px', fontWeight: fontBold, marginLeft: '10px' }}>
                             {cardData.cardNumber.substring(cardData.cardNumber.length - 4)}
                         </Typography>
                         </Box>
-                        <Typography sx={{fontSize:'15px', color:'#FFF', fontWeight:fontBold, marginTop:'2px'}}>カード名義 : {cardData.username}</Typography>
-                        <Typography sx={{ fontSize: '22px', color: '#FFFFFF', fontWeight: fontBold, marginTop: '6px' }}>
+                        <Typography sx={{fontSize:'14px', color:'#FFF', fontWeight:fontBold, marginTop:'2px'}}>カード名義 : {cardData.username}</Typography>
+                        <Typography sx={{ fontSize: '20px', color: '#FFFFFF', fontWeight: fontBold, marginTop: '6px' }}>
                         メインのカード
                         </Typography>
                     </Box>
                     <Box display='flex' flexDirection='column' justifyContent='center'>
-                        <Typography sx={{fontSize:'20px', color:'#511523', fontWeight:'800', marginBottom:'11px'}}>{cardData.type}</Typography>
-                        <Typography sx={{fontSize:'15px', color:'#511523', fontWeight:fontBold, marginBottom:'81px'}}>メインのカードとして設定中</Typography>
+                        <Typography sx={{fontSize:'18px', color:'#511523', fontWeight:'800', marginBottom:'11px'}}>{cardData.type}</Typography>
+                        <Typography sx={{fontSize:'14px', color:'#511523', fontWeight:fontBold, marginBottom:'81px'}}>メインのカードとして設定中</Typography>
                         <Box display='flex' flexDirection='row' sx={{columnGap:'30px'}}>
                             <Button
                                 sx={{
@@ -216,7 +216,7 @@ export const CardManage = () => {
                                     },
                                     }}
                                     onClick={handleOpenCard}>
-                                    <Typography sx={{color:'#ffffff', fontSize:'17px', fontWeight:fontBold }}>      
+                                    <Typography sx={{color:'#ffffff', fontSize:'15px', fontWeight:fontBold }}>      
                                         編集
                                     </Typography>
                             </Button>
@@ -231,7 +231,7 @@ export const CardManage = () => {
                                         backgroundColor: '#FCF4F4'
                                     },
                                     }}>
-                                    <Typography sx={{color:'#B9324D', fontSize:'17px', fontWeight:fontBold }}>      
+                                    <Typography sx={{color:'#B9324D', fontSize:'15px', fontWeight:fontBold }}>      
                                         カード削除
                                     </Typography>
                             </Button>
@@ -240,7 +240,7 @@ export const CardManage = () => {
                 </Box>
             
             {/** Download list */}
-                <Typography sx={{fontSize:'25px', color:'#511523', fontWeight:fontBold, marginTop:'130px', marginBottom:'32px'}}>お支払い履歴</Typography>
+                <Typography sx={{fontSize:'22px', color:'#511523', fontWeight:fontBold, marginTop:'130px', marginBottom:'32px'}}>お支払い履歴</Typography>
                 <Box display='flex' flexDirection='column' sx={{rowGap:'15px'}}>
                     {testDownload.map((item, index) => (
                         index < moreView?(<FileDownload data={item} />):null
@@ -266,7 +266,7 @@ export const CardManage = () => {
                         }}
                         >
                         <img src={staticFiles.images.more} width={10} className="py-[2px]"/>
-                        <p className="text-[10px] py-[2px] text-[#FFFFFF] font-bold" style={{fontWeight:fontBold}}>もっと見る</p>
+                        <p className="text-[9px] py-[2px] text-[#FFFFFF] font-bold" style={{fontWeight:fontBold}}>もっと見る</p>
                     </Box>
                 </Box>
         {/** Add Card Dialog*/}                                    
@@ -275,7 +275,7 @@ export const CardManage = () => {
             aria-labelledby="customized-dialog-title"
             open={open}
             >
-            <DialogTitle sx={{ m: 0, paddingTop: '50px', paddingLeft:'50px', fontSize: '25px', color:'#454545', fontWeight:fontBold }} id="customized-dialog-title">
+            <DialogTitle sx={{ m: 0, paddingTop: '50px', paddingLeft:'50px', fontSize: '22px', color:'#454545', fontWeight:fontBold }} id="customized-dialog-title">
                 クレジットカード追加
             </DialogTitle>
             <IconButton
@@ -318,7 +318,7 @@ export const CardManage = () => {
             {({values, touched, errors, handleBlur, handleChange, isSubmitting, setFieldValue }) => (
             <Form style={{textAlign: 'left'}} noValidate autoComplete='off' className='flex flex-col justify-center items-center w-full'>
             <DialogContent sx={{paddingX: '50px', paddingTop:'50px', marginTop:'-50px', width:'802px'}}>
-                <Typography gutterBottom sx={{fontSize: "18px", color:'#454545'}} >
+                <Typography gutterBottom sx={{fontSize: "16px", color:'#454545'}} >
                     クレジットカードを登録します。
                 </Typography>
                 <CardMedia 
@@ -327,8 +327,8 @@ export const CardManage = () => {
                     sx={{width:'419px', height:'241px', marginX:'auto', marginTop:'35px'}}
                 />
                 <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{marginTop:'35px', marginBottom:'14px'}}>
-                    <Typography sx={{color:'#454545', fontSize:'20px', fontWeight:fontBold}}>カード番号</Typography>
-                    <Typography sx={{color:'#FF4A55', fontSize:'14px', fontWeight:fontBold, display:validateCardNumber(values.cardNumber)?'none':''}}>カード番号が正しく入力されていません</Typography>
+                    <Typography sx={{color:'#454545', fontSize:'18px', fontWeight:fontBold}}>カード番号</Typography>
+                    <Typography sx={{color:'#FF4A55', fontSize:'12px', fontWeight:fontBold, display:validateCardNumber(values.cardNumber)?'none':''}}>カード番号が正しく入力されていません</Typography>
                 </Box>  
 
                 {/** Card Number */}
@@ -365,7 +365,7 @@ export const CardManage = () => {
                           />
                 </Box>
                 <Box display='flex' flexDirection='row' alignItems='center' sx={{marginTop:'16px', columnGap:'15px'}}>
-                    <Typography sx={{fontSize:'16px', color:'#858997', whiteSpace:'nowrap', width:'180px'}}>利用できるブランド : </Typography>
+                    <Typography sx={{fontSize:'14px', color:'#858997', whiteSpace:'nowrap', width:'180px'}}>利用できるブランド : </Typography>
                     <CardMedia component='img' image={staticFiles.images.cardLogo1} sx={{width:'53px',height:'16px'}}/>
                     <CardMedia component='img' image={staticFiles.images.cardLogo2} sx={{width:'26px',height:'16px'}}/>
                     <CardMedia component='img' image={staticFiles.images.cardLogo3} sx={{width:'22px',height:'16px'}}/>
@@ -375,7 +375,7 @@ export const CardManage = () => {
 
                 {/** User Name */}
                 <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{marginTop:'30px', marginBottom:'14px'}}>
-                    <Typography sx={{color:'#454545', fontSize:'20px', fontWeight:fontBold}}>カード名義</Typography>
+                    <Typography sx={{color:'#454545', fontSize:'18px', fontWeight:fontBold}}>カード名義</Typography>
                 </Box>  
                 <Box display='flex' flexDirection='column' justifyContent='space-between' 
                     sx={{paddingX:'15px', border:'2px solid #EC605B', borderRadius:'14px'}}>
@@ -400,7 +400,7 @@ export const CardManage = () => {
                 {/** Month  and Year*/}
                 <Box display='flex' flexDirection='row' sx={{columnGap:'16px', marginTop:'30px'}}>
                     <Box display='flex' flexDirection='column' sx={{width:'50%', }}>
-                          <Typography sx={{color:'#454545', fontSize:'20px', fontWeight:fontBold, marginBottom:'14px'}}>有効期限(月)</Typography>
+                          <Typography sx={{color:'#454545', fontSize:'18px', fontWeight:fontBold, marginBottom:'14px'}}>有効期限(月)</Typography>
                           <Box display='flex' flexDirection='column' justifyContent='space-between' sx={{paddingX:'15px', border:'2px solid #EC605B', borderRadius:'14px'}}> 
                           <TextField
                           id = "month"
@@ -425,7 +425,7 @@ export const CardManage = () => {
                     </Box>
 
                     <Box display='flex' flexDirection='column' sx={{width:'50%'}}>
-                          <Typography sx={{color:'#454545', fontSize:'20px', fontWeight:fontBold, marginBottom:'14px'}}>有効期限(月)</Typography>
+                          <Typography sx={{color:'#454545', fontSize:'18px', fontWeight:fontBold, marginBottom:'14px'}}>有効期限(月)</Typography>
                           <Box display='flex' flexDirection='column' justifyContent='space-between' sx={{paddingX:'15px', border:'2px solid #EC605B', borderRadius:'14px'}}>
                           <TextField
                           id = "year"
@@ -452,7 +452,7 @@ export const CardManage = () => {
 
                 {/** CVC */}
                 <Box display='flex' flexDirection='column' sx={{marginTop:'30px'}}>
-                    <Typography sx={{color:'#454545', fontSize:'20px', fontWeight:fontBold, marginBottom:'14px', }}>CVC(セキュリティコード)</Typography>
+                    <Typography sx={{color:'#454545', fontSize:'18px', fontWeight:fontBold, marginBottom:'14px', }}>CVC(セキュリティコード)</Typography>
                     <Box display='flex' flexDirection='column' justifyContent='space-between' sx={{paddingX:'15px', border:'2px solid #EC605B', borderRadius:'14px'}}> 
                           <TextField
                           id = "cvc"
@@ -484,9 +484,9 @@ export const CardManage = () => {
                         inputProps={{ 'aria-label': 'checkbox' }}
                         onChange={handleChecked}
                     />
-                    <span className="text-[#001219] text-[18px] mr-[40px]">メインのカードに設定する</span>
+                    <span className="text-[#001219] text-[16px] mr-[40px]">メインのカードに設定する</span>
                 </label>
-                <Typography sx={{fontSize:'16px', color:'#554744', marginTop:'52px'}}>カードを追加すると、<span style={{color:'#EE7D90'}}>プライバシーポリシー</span>や<span style={{color:'#EE7D90'}}>利用規約</span>に同意したこととします。</Typography>
+                <Typography sx={{fontSize:'14px', color:'#554744', marginTop:'52px'}}>カードを追加すると、<span style={{color:'#EE7D90'}}>プライバシーポリシー</span>や<span style={{color:'#EE7D90'}}>利用規約</span>に同意したこととします。</Typography>
 
             </DialogContent>
             <Box display='flex' flexDirection='row' alignItems='center' justifyContent='center' sx={{marginBottom:'50px',}}>
@@ -501,7 +501,7 @@ export const CardManage = () => {
                         backgroundColor: btnBackgroundHover
                     },
                     }}>
-                    <Typography sx={{color:'#ffffff', fontSize:'18px' }}>      
+                    <Typography sx={{color:'#ffffff', fontSize:'16px' }}>      
                         追加する
                     </Typography>
                 </Button>
@@ -516,7 +516,7 @@ export const CardManage = () => {
             aria-labelledby="customized-dialog-title"
             open={deleteDialog}
             >
-            <DialogTitle sx={{ m: 0, paddingTop: '57px', paddingLeft:'50px', fontSize: '25px', fontWeight:fontBold }} id="customized-dialog-title" className="text-[#511523]">
+            <DialogTitle sx={{ m: 0, paddingTop: '57px', paddingLeft:'50px', fontSize: '22px', fontWeight:fontBold }} id="customized-dialog-title" className="text-[#511523]">
                 クレジットカードの削除
             </DialogTitle>
             <IconButton
@@ -527,7 +527,7 @@ export const CardManage = () => {
                     right: 30,
                     top: 55,
                     color: (theme) => theme.palette.grey[500],
-                    fontSize: '32px'
+                    fontSize: '29px'
                 }}
                 onMouseEnter={handleHoverEnter}
                 onMouseLeave={handleHoverLeave}
@@ -539,7 +539,7 @@ export const CardManage = () => {
             {/* <CloseIcon sx={{ color: isHovered ? '#B9324D' : '#A5A5A5', fontSize: '30px'}}/> */}
             </IconButton>
             <DialogContent sx={{paddingX: '50px', paddingBottom:'63px', marginTop:'-25px', width:'802px'}}>
-            <Typography sx={{fontSize: "18px", marginBottom: "40px"}} >
+            <Typography sx={{fontSize: "16px", marginBottom: "40px"}} >
                 クレジットカードを削除します。よろしいですか？<br />
                 ※削除した場合は再登録が必要になります。
             </Typography>
@@ -560,7 +560,7 @@ export const CardManage = () => {
                     }}
                     onClick={handleCloseCard}
                     >
-                    <Typography sx={{color:'#DF8391', fontSize:'18px', fontWeight:fontBold }}>      
+                    <Typography sx={{color:'#DF8391', fontSize:'16px', fontWeight:fontBold }}>      
                         キャンセル
                     </Typography>
                 </Button>
@@ -577,7 +577,7 @@ export const CardManage = () => {
                         },
                         }}
                     >
-                    <Typography sx={{color:'#ffffff', fontSize:'18px', fontWeight:fontBold }}>      
+                    <Typography sx={{color:'#ffffff', fontSize:'16px', fontWeight:fontBold }}>      
                         確認
                     </Typography>
                 </Button>
@@ -613,20 +613,20 @@ const BankCard: React.FC<{ type: number; firstNumber: number; lastNumber: number
             sx={{ width: '48px', height: '28px', zIndex: 5 }}
             />
             <Box display="flex" flexDirection="row" sx={{ marginTop: '65px', color:type === 1? '#FFFFFF':'#E38A86' }}>
-            <Typography sx={{ fontSize: '17px', fontWeight: fontBold, marginRight: '10px' }}>
+            <Typography sx={{ fontSize: '14px', fontWeight: fontBold, marginRight: '10px' }}>
                 {firstNumber}
             </Typography>
-            <Typography sx={{ fontSize: '17px', fontWeight: fontBold, marginX: '10px' }}>
+            <Typography sx={{ fontSize: '14px', fontWeight: fontBold, marginX: '10px' }}>
                 ****
             </Typography>
-            <Typography sx={{ fontSize: '17px', fontWeight: fontBold, marginX: '10px' }}>
+            <Typography sx={{ fontSize: '14px', fontWeight: fontBold, marginX: '10px' }}>
                 ****
             </Typography>
-            <Typography sx={{ fontSize: '17px', fontWeight: fontBold, marginLeft: '10px' }}>
+            <Typography sx={{ fontSize: '14px', fontWeight: fontBold, marginLeft: '10px' }}>
                 {lastNumber}
             </Typography>
             </Box>
-            <Typography sx={{ fontSize: '21px', color: type === 1?'#FFFFFF':'#E38A86', fontWeight: fontBold, marginTop: '11px' }}>
+            <Typography sx={{ fontSize: '16px', color: type === 1?'#FFFFFF':'#E38A86', fontWeight: fontBold, marginTop: '11px' }}>
             {type === 1 ? 'メインのカード' : 'サブのカード'}
             </Typography>
         </Box>
@@ -643,10 +643,10 @@ type Download = {
 const FileDownload: React.FC<{ data:Download }> = ({ data }) => {
     return (
         <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{height:'79px', borderRadius:'10px', border:'1px solid #EE7D90', paddingX:'15px', paddingY:'24px', columnGap:'27px'}}>
-            <Typography display='flex' alignItems='center' justifyContent='center' sx={{width:'64px', height:'31px', borderRadius:'38px', backgroundColor:'#F9E5D1', color:'#B9324D', fontSize:'12px', textAlign:'center'}}>{data.type}</Typography>
+            <Typography display='flex' alignItems='center' justifyContent='center' sx={{width:'64px', height:'31px', borderRadius:'38px', backgroundColor:'#F9E5D1', color:'#B9324D', fontSize:'10px', textAlign:'center'}}>{data.type}</Typography>
             <Box display='flex' flexDirection='column' flex={8} sx={{rowGap:'3px'}}>
-                <Typography sx={{fontSize:'13px', color:'#424242', fontWeight:fontBold}}>{data.name}</Typography>
-                <Typography sx={{fontSize:'11px', color:'#B9324D', fontWeight:fontBold}}>{data.price}円</Typography>
+                <Typography sx={{fontSize:'12px', color:'#424242', fontWeight:fontBold}}>{data.name}</Typography>
+                <Typography sx={{fontSize:'10px', color:'#B9324D', fontWeight:fontBold}}>{data.price}円</Typography>
             </Box>
             <Button sx={{
                 backgroundColor:'#EE7D90', 
@@ -663,7 +663,7 @@ const FileDownload: React.FC<{ data:Download }> = ({ data }) => {
                     height="25"
                     sx={{borderRadius:'20px', width:'19px', marginRight:'10px'}}
                     image={staticFiles.images.download} />
-                <Typography sx={{color:'#ffffff', fontSize:'12px', fontWeight:fontBold }}>      
+                <Typography sx={{color:'#ffffff', fontSize:'10px', fontWeight:fontBold }}>      
                     請求書・領収書
                 </Typography>
             </Button>

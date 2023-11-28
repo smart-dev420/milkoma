@@ -51,7 +51,7 @@ export const ForgotPassword = () => {
             <div className="bg-gradient-to-br from-[#FAEAD1] to-[#F5D0E9] w-full h-screen p-[50px]" style={{position:'absolute', top:0, left:0, filter:'blur(10px)', zIndex:-10}}></div>
             <div className="flex flex-col justify-center items-center p-[50px] rounded-[20px] min-w-[500px] bg-[#c9c9c9ad]" style={{border:'2px solid #ffffff4d'}}>
                 <img src={staticFiles.icons.ic_logo} className="w-[250px]" />
-                <label className="text-[30px] text-[#000] py-[20px]" style={{fontWeight:800}}>メールを送信</label>
+                <label className="text-[28px] text-[#000] py-[20px]" style={{fontWeight:800}}>メールを送信</label>
                 <img src={staticFiles.images.profile} className="w-[120px] border-[4px] rounded-[1000px] mb-[30px]"/>
                 <Formik
                         validateOnChange={true}
@@ -95,7 +95,7 @@ export const ForgotPassword = () => {
                               </InputAdornment>
                               ),}}/>
                         
-                        <Button type="submit" variant="contained" endIcon={<SendIcon sx={{marginBottom:'7px'}} />} sx={{height:50, fontSize:20, width:'80%'}}>
+                        <Button type="submit" variant="contained" endIcon={<SendIcon sx={{marginBottom:'7px'}} />} sx={{height:50, fontSize:18, width:'80%'}}>
                             コードを送信する
                         </Button>
                         </Form>

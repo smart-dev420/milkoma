@@ -55,7 +55,7 @@ export const Footer = () => {
                       <Fragment key={data.name}>
                         <button onClick={() => navigate(data.path)} 
                           style={{fontWeight:fontBold, marginRight:data.mRight, whiteSpace:'nowrap', letterSpacing:match_1024?'-2px':'0px'}}
-                          className={`${match_1500 ? "text-[19px]" : "text-[14px] min-w-[60px]"} font-m1c px-6 mt-3 hover:text-lightBrown/[1]`}>
+                          className={`${match_1500 ? "text-[16px]" : "text-[12px] min-w-[60px]"} font-m1c px-6 mt-3 hover:text-lightBrown/[1]`}>
                             {data.name}
                         </button>
                       </Fragment>

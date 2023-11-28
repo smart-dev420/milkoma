@@ -35,16 +35,16 @@ export const ProjectList = () => {
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'75px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
             <Stack direction="column" sx={{paddingX:'7px', width:'100%'}}>
                 <Box display="flex" flexDirection='row' alignItems='center' sx={{padding:'30px', borderRadius:'30px', border:'3px solid #DF8391', marginBottom:'80px'}}>
-                    <Typography flex={5} sx={{fontSize:'25px', color:'#B9324D', whiteSpace:'nowrap', fontWeight:fontBold}}>制作依頼の状況</Typography>
+                    <Typography flex={5} sx={{fontSize:'22px', color:'#B9324D', whiteSpace:'nowrap', fontWeight:fontBold}}>制作依頼の状況</Typography>
                     {statusList.map((el, i) => (
                         <>
-                            <Typography flex={1} sx={{fontSize:'20px', color:'#511523', whiteSpace:'nowrap', fontWeight:fontBold}}>{el.name}</Typography>
-                            <Typography sx={{fontSize:'38px', color:'#511523', fontWeight:fontBold}}>{el.count}</Typography>
-                            <Typography sx={{fontSize:'26px', color:'#511523', marginRight:'47px', fontWeight:fontBold}}>件</Typography>
+                            <Typography flex={1} sx={{fontSize:'18px', color:'#511523', whiteSpace:'nowrap', fontWeight:fontBold}}>{el.name}</Typography>
+                            <Typography sx={{fontSize:'34px', color:'#511523', fontWeight:fontBold}}>{el.count}</Typography>
+                            <Typography sx={{fontSize:'24px', color:'#511523', marginRight:'47px', fontWeight:fontBold}}>件</Typography>
                         </>
                     ))}
                 </Box>
-                <Typography sx={{color:'#511523', fontSize:'25px', paddingX:'24px', fontWeight:fontBold}}>
+                <Typography sx={{color:'#511523', fontSize:'22px', paddingX:'24px', fontWeight:fontBold}}>
                     制作中の案件一覧
                 </Typography>
                 <CreateGrid count={moreView1}/>
@@ -67,10 +67,10 @@ export const ProjectList = () => {
                         }}
                         >
                         <img src={staticFiles.images.more} width={10} className="py-[2px]"/>
-                        <p className="text-[10px] py-[2px] text-[#FFFFFF] font-bold" style={{fontWeight:fontBold}}>もっと見る</p>
+                        <p className="text-[9px] py-[2px] text-[#FFFFFF] font-bold" style={{fontWeight:fontBold}}>もっと見る</p>
                     </Box>
                 </Box>
-                <Typography sx={{color:'#511523', fontSize:'25px', marginTop:'85px', paddingX:'24px', fontWeight:fontBold }}>      
+                <Typography sx={{color:'#511523', fontSize:'22px', marginTop:'85px', paddingX:'24px', fontWeight:fontBold }}>      
                     今依頼中の案件一覧      
                 </Typography> 
                 <CancelGrid count={moreView2}/>  
@@ -93,7 +93,7 @@ export const ProjectList = () => {
                         }}
                         >
                         <img src={staticFiles.images.more} width={10} className="py-[2px]"/>
-                        <p className="text-[10px] py-[2px] text-[#FFFFFF] font-bold" style={{fontWeight:fontBold}}>もっと見る</p>
+                        <p className="text-[9px] py-[2px] text-[#FFFFFF] font-bold" style={{fontWeight:fontBold}}>もっと見る</p>
                     </Box>
                 </Box>   
             </Stack>
@@ -124,10 +124,10 @@ const CreateGrid:React.FC<{count:number}> = ({count}) => {
                       },}}
                 onClick={() => {navigate('/mypage/detail')}}>
                 <Box display="flex" flexDirection="column">
-                <Typography sx={{color:'#554744', fontSize:'11px', marginBottom:'20px', paddingX:'30px', fontWeight:fontBold}}>2023年1月10日依頼</Typography>
-                <Typography sx={{textAlign:'center', color:'#001219', fontSize:'20px', marginBottom:'8px', paddingX:'30px', fontWeight:fontBold}}>商品紹介の案件</Typography>
-                <Typography sx={{color:'#85766D', fontSize:'12px', paddingX:'30px', fontWeight:fontBold}}>内容</Typography>
-                <Typography sx={{fontSize:'14px', paddingX:'30px', height:'60px', overflow:'hidden', textOverflow:'ellipsis'}}>
+                <Typography sx={{color:'#554744', fontSize:'10px', marginBottom:'20px', paddingX:'30px', fontWeight:fontBold}}>2023年1月10日依頼</Typography>
+                <Typography sx={{textAlign:'center', color:'#001219', fontSize:'18px', marginBottom:'8px', paddingX:'30px', fontWeight:fontBold}}>商品紹介の案件</Typography>
+                <Typography sx={{color:'#85766D', fontSize:'11px', paddingX:'30px', fontWeight:fontBold}}>内容</Typography>
+                <Typography sx={{fontSize:'12px', paddingX:'30px', height:'60px', overflow:'hidden', textOverflow:'ellipsis'}}>
                     自社の美容液の紹介をしたい。新商品です。発売予定は12月1日です。
                     商品のURLはhttps://mirucoma.co…
                 </Typography>
@@ -140,12 +140,12 @@ const CreateGrid:React.FC<{count:number}> = ({count}) => {
                     max={100}
                     sx={{color:el.sidebarColor, marginTop:'10px', width:'80%', marginLeft:'30px',}}
                 />
-                <Typography sx={{textAlign:'center', color:'#001219', fontSize:'11px', marginTop:'10px', paddingX:'30px', fontWeight:fontBold}}>{el.state}</Typography>
+                <Typography sx={{textAlign:'center', color:'#001219', fontSize:'10px', marginTop:'10px', paddingX:'30px', fontWeight:fontBold}}>{el.state}</Typography>
                 <Box sx={{height:'2px', backgroundColor:'#fff', width:'100%', marginTop:'13px'}}></Box>
                 </Box>
                 <Box display="flex" flexDirection="row" alignItems="center" justifyContent="flex-start" sx={{marginTop:'10px', paddingX:'30px', }}>
-                    <Typography sx={{fontSize:'11px', color:el.sidebarColor, paddingY:'7px', width:'56px', backgroundColor:'#fff', textAlign:'center', borderRadius:'60px', fontWeight:fontBold}}>状況</Typography>
-                    <Typography sx={{fontSize:'12px', marginLeft:'10px', color:el.textColor, fontWeight:fontBold}}>{el.title}</Typography>
+                    <Typography sx={{fontSize:'10px', color:el.sidebarColor, paddingY:'7px', width:'56px', backgroundColor:'#fff', textAlign:'center', borderRadius:'60px', fontWeight:fontBold}}>状況</Typography>
+                    <Typography sx={{fontSize:'11px', marginLeft:'10px', color:el.textColor, fontWeight:fontBold}}>{el.title}</Typography>
                 </Box>                
                </Box>
             </Grid>):null
@@ -173,18 +173,18 @@ const CancelGrid:React.FC<{count:number}> = ({count}) => {
                         backgroundColor: '#FFF5F5'
                       },}}>
                 <Box display="flex" flexDirection="column">
-                <Typography sx={{color:'#554744', fontSize:'11px', marginBottom:'20px', paddingX:'30px', fontWeight:fontBold}}>2023年1月10日依頼</Typography>
-                <Typography sx={{textAlign:'center', color:'#001219', fontSize:'20px', marginBottom:'8px', paddingX:'30px', fontWeight:fontBold}}>商品紹介の案件</Typography>
-                <Typography sx={{color:'#85766D', fontSize:'12px', paddingX:'30px', fontWeight:fontBold}}>内容</Typography>
-                <Typography sx={{fontSize:'14px', paddingX:'30px', height:'120px', overflow:'hidden', textOverflow:'ellipsis'}}>
+                <Typography sx={{color:'#554744', fontSize:'10px', marginBottom:'20px', paddingX:'30px', fontWeight:fontBold}}>2023年1月10日依頼</Typography>
+                <Typography sx={{textAlign:'center', color:'#001219', fontSize:'18px', marginBottom:'8px', paddingX:'30px', fontWeight:fontBold}}>商品紹介の案件</Typography>
+                <Typography sx={{color:'#85766D', fontSize:'11px', paddingX:'30px', fontWeight:fontBold}}>内容</Typography>
+                <Typography sx={{fontSize:'12px', paddingX:'30px', height:'120px', overflow:'hidden', textOverflow:'ellipsis'}}>
                 自社の美容液の紹介をしたい。新商品です。発売予定は12月1日です。
                 商品のURLはhttps://mirucoma.co.jpです。この商品は、顔に適した商品です、保湿に特化したものになります…
                 </Typography>
                 <Box sx={{height:'2px', backgroundColor:'#FBF4ED', width:'100%', marginTop:'13px'}}></Box>
                 </Box>
                 <Box display="flex" flexDirection="row" alignItems="center" justifyContent="flex-start" sx={{marginTop:'10px', paddingX:'30px'}}>
-                    <Typography sx={{fontSize:'11px', color:'#fff', paddingY:'7px', width:'56px', backgroundColor:btnBackgroundHover, textAlign:'center', borderRadius:'60px', fontWeight:fontBold}}>状況</Typography>
-                    <Typography sx={{fontSize:'12px', marginLeft:'10px', fontWeight:fontBold}}>内容を確認しています</Typography>
+                    <Typography sx={{fontSize:'10px', color:'#fff', paddingY:'7px', width:'56px', backgroundColor:btnBackgroundHover, textAlign:'center', borderRadius:'60px', fontWeight:fontBold}}>状況</Typography>
+                    <Typography sx={{fontSize:'11px', marginLeft:'10px', fontWeight:fontBold}}>内容を確認しています</Typography>
                 </Box>                
                </Box>
             </Grid>

@@ -35,26 +35,26 @@ export const ChattingPage = () => {
                             height="25"
                             sx={{borderRadius:'20px', width:'25px', marginRight:'10px'}}
                             image={staticFiles.icons.ic_back_white} />
-                        <Typography sx={{color:'#ffffff', fontSize:'21px', fontWeight:fontBold }}>      
+                        <Typography sx={{color:'#ffffff', fontSize:'18px', fontWeight:fontBold }}>      
                             戻る
                         </Typography>
                     </Button>
 
-                <Typography flex={9} sx={{color:'#511523', fontSize:'25px', marginLeft:'23px', fontWeight:fontBold}}>チャット</Typography>
-                <Typography flex={2} sx={{color:'#554744', fontSize:'18px', marginLeft:'23px', fontWeight:fontBold}}>2023年1月10日依頼</Typography>
+                <Typography flex={9} sx={{color:'#511523', fontSize:'22px', marginLeft:'23px', fontWeight:fontBold}}>チャット</Typography>
+                <Typography flex={2} sx={{color:'#554744', fontSize:'16px', marginLeft:'23px', fontWeight:fontBold}}>2023年1月10日依頼</Typography>
                 </Box>
 
                  {/** Product Data and Status Data */}                
                  <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{border:'3px solid #DF8391', borderRadius:'30px', marginTop:'28px', width:'100%'}}>
                     <Box display='flex' flexDirection='column' sx={{padding:'33px'}}>
-                        <Typography sx={{color:'#85766D', fontSize:'14px', marginBottom:'7px', fontWeight:fontBold}}>案件名</Typography>
-                        <Typography sx={{color:'#B9324D', fontSize:'20px', marginBottom:'26px', fontWeight:fontBold}}>商品紹介の案件</Typography>
-                        <Typography sx={{color:'#85766D', fontSize:'12px', marginBottom:'9px', fontWeight:fontBold}}>依頼内容</Typography>
+                        <Typography sx={{color:'#85766D', fontSize:'12px', marginBottom:'7px', fontWeight:fontBold}}>案件名</Typography>
+                        <Typography sx={{color:'#B9324D', fontSize:'18px', marginBottom:'26px', fontWeight:fontBold}}>商品紹介の案件</Typography>
+                        <Typography sx={{color:'#85766D', fontSize:'10px', marginBottom:'9px', fontWeight:fontBold}}>依頼内容</Typography>
                         <Box display='flex' flexDirection='row'>
                             <Typography sx={{
                                 border:'1px solid #CE6F82', 
                                 color:'#B9324D', 
-                                fontSize:'12px', 
+                                fontSize:'10px', 
                                 paddingY:'7px', 
                                 paddingX:'20px',
                                 textAlign:'center',
@@ -66,7 +66,7 @@ export const ChattingPage = () => {
                             <Typography sx={{
                                 border:'1px solid #CE6F82', 
                                 color:'#B9324D', 
-                                fontSize:'12px', 
+                                fontSize:'10px', 
                                 paddingY:'7px', 
                                 paddingX:'20px',
                                 textAlign:'center',
@@ -77,7 +77,7 @@ export const ChattingPage = () => {
                                     希望納期:5ヶ月
                             </Typography>
                         </Box>
-                        <Typography sx={{color:'#001219', fontSize:'14px', marginTop:'14px'}}>
+                        <Typography sx={{color:'#001219', fontSize:'12px', marginTop:'14px'}}>
                             {showSentence(data.productIntro)}
                         </Typography>
                     </Box>

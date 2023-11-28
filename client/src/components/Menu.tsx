@@ -9,7 +9,7 @@ import { Badge, Button, Drawer, InputAdornment, TextField, Typography } from '@m
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { NavBarElement } from './NavBar';
-import { fontBold, staticFiles } from './Constants';
+import { fontBold, fontSize12, staticFiles } from './Constants';
 import { useNavigate } from 'react-router-dom';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -113,7 +113,7 @@ export const MainMenu = () => {
         </ListItem>
         <ListItem>
           <label>NeoPen株式会社</label>
-          <label className="text-xs font-m1c ml-5 h-[17px] min-w-[75px] bg-[#F9E5D1] flex justify-center items-center text-center rounded-lg">リクエスター</label>
+          <label className="font-m1c ml-5 h-[17px] min-w-[75px] bg-[#F9E5D1] flex justify-center items-center text-center rounded-lg" style={{fontSize:'9px'}}>リクエスター</label>
         </ListItem>
         <ListItem>
           <TextField
@@ -138,11 +138,11 @@ export const MainMenu = () => {
             <NotificationsNoneIcon color="action" />
           </Badge>
           <button 
-            className="text-ms min-w-[60px] font-m1c pl-4 mt-3 hover:text-lightBrown/[1]"
+            className="min-w-[60px] font-m1c pl-4 mt-3 hover:text-lightBrown/[1]"
             onClick={handleClick}
             // aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
-            style={{fontWeight:fontBold}}
+            style={{fontWeight:fontBold, fontSize:fontSize12}}
             // aria-expanded={open ? 'true' : undefined}
             >
               お知らせ
@@ -150,10 +150,10 @@ export const MainMenu = () => {
         </ListItem>
         <ListItem onClick={() => {navigate('/mypage');}}>
           <img src={staticFiles.icons.ic_user_unfill} className="pr-6 mt-2" />
-          <button className="text-ms min-w-[60px] font-m1c mt-3 hover:text-lightBrown/[1]">マイページ</button>
+          <button className="min-w-[60px] font-m1c mt-3 hover:text-lightBrown/[1]" style={{fontSize:fontSize12}}>マイページ</button>
         </ListItem>
         <ListItem>
-          <button onClick={() => {navigate('/direct_request');toggleDrawer(false);}} className=" px-[20px] text-ms font-m1c hover:bg-brown/[1] bg-pink h-[48px] rounded-[50px] text-white">直接依頼をする</button>
+          <button style={{fontSize:fontSize12}} onClick={() => {navigate('/direct_request');toggleDrawer(false);}} className=" px-[20px] font-m1c hover:bg-brown/[1] bg-pink h-[48px] rounded-[50px] text-white">直接依頼をする</button>
         </ListItem>
       </List>
       <Divider />

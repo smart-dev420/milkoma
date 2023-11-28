@@ -45,7 +45,7 @@ const StatusSlider = styled(Slider)(({ theme }) => ({
     },
   },
   '& .MuiSlider-valueLabel': {
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: 'normal',
     top: -6,
     backgroundColor: 'unset',
@@ -256,25 +256,25 @@ export const DetailPage = () => {
                             height="25"
                             sx={{borderRadius:'20px', width:'25px', marginRight:'10px'}}
                             image={staticFiles.icons.ic_back_white} />
-                        <Typography sx={{color:'#ffffff', fontSize:'21px', fontWeight:fontBold}}>      
+                        <Typography sx={{color:'#ffffff', fontSize:'18px', fontWeight:fontBold}}>      
                             戻る
                         </Typography>
                     </Button>
 
-                <Typography flex={9} sx={{color:'#511523', fontSize:'25px', marginLeft:'23px', fontWeight:fontBold}}>案件詳細</Typography>
-                <Typography flex={2} sx={{color:'#554744', fontSize:'18px', marginLeft:'23px', fontWeight:fontBold}}>2023年1月10日依頼</Typography>
+                <Typography flex={9} sx={{color:'#511523', fontSize:'22px', marginLeft:'23px', fontWeight:fontBold}}>案件詳細</Typography>
+                <Typography flex={2} sx={{color:'#554744', fontSize:'16px', marginLeft:'23px', fontWeight:fontBold}}>2023年1月10日依頼</Typography>
                 </Box>
         {/** Product Data and Status Data */}                
                 <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{marginTop:'28px'}}>
                     <Box display='flex' flexDirection='column' sx={{border:'3px solid #DF8391', borderRadius:'30px', width:'471px', padding:'33px'}}>
-                        <Typography sx={{color:'#85766D', fontSize:'14px', marginBottom:'7px', fontWeight:fontBold}}>案件名</Typography>
-                        <Typography sx={{color:'#B9324D', fontSize:'20px', marginBottom:'26px', fontWeight:fontBold}}>商品紹介の案件</Typography>
-                        <Typography sx={{color:'#85766D', fontSize:'12px', marginBottom:'9px', fontWeight:fontBold}}>依頼内容</Typography>
+                        <Typography sx={{color:'#85766D', fontSize:'12px', marginBottom:'7px', fontWeight:fontBold}}>案件名</Typography>
+                        <Typography sx={{color:'#B9324D', fontSize:'18px', marginBottom:'26px', fontWeight:fontBold}}>商品紹介の案件</Typography>
+                        <Typography sx={{color:'#85766D', fontSize:'10px', marginBottom:'9px', fontWeight:fontBold}}>依頼内容</Typography>
                         <Box display='flex' flexDirection='row'>
                             <Typography sx={{
                                 border:'1px solid #CE6F82', 
                                 color:'#B9324D', 
-                                fontSize:'12px', 
+                                fontSize:'10px', 
                                 paddingY:'7px', 
                                 paddingX:'20px',
                                 textAlign:'center',
@@ -286,7 +286,7 @@ export const DetailPage = () => {
                             <Typography sx={{
                                 border:'1px solid #CE6F82', 
                                 color:'#B9324D', 
-                                fontSize:'12px', 
+                                fontSize:'10px', 
                                 paddingY:'7px', 
                                 paddingX:'20px',
                                 textAlign:'center',
@@ -297,13 +297,13 @@ export const DetailPage = () => {
                                     希望納期:5ヶ月
                             </Typography>
                         </Box>
-                        <Typography sx={{color:'#001219', fontSize:'14px', marginTop:'14px'}}>
+                        <Typography sx={{color:'#001219', fontSize:'12px', marginTop:'14px'}}>
                             {showSentence(data.productIntro)}
                         </Typography>
                     </Box>
                     <Box display='flex' flexDirection='column' sx={{ width:'64%'}}>
-                        <Typography sx={{marginTop:'15px', color:'#511523', fontSize:'20px', fontWeight:fontBold}}>現在状況</Typography>
-                        <Typography sx={{marginTop:'40px', color:'#B9324D', fontSize:'23px', fontWeight:fontBold}}>{statusValues[data.step-1].title}</Typography>
+                        <Typography sx={{marginTop:'15px', color:'#511523', fontSize:'18px', fontWeight:fontBold}}>現在状況</Typography>
+                        <Typography sx={{marginTop:'40px', color:'#B9324D', fontSize:'20px', fontWeight:fontBold}}>{statusValues[data.step-1].title}</Typography>
                         <StatusSlider
                             aria-label="slider"
                             defaultValue={25}
@@ -321,7 +321,7 @@ export const DetailPage = () => {
                             <Button sx={{
                                     backgroundColor:btnBackground, 
                                     width:'241px', borderRadius:'36px', 
-                                    color:'#ffffff', fontSize:'19px',
+                                    color:'#ffffff', fontSize:'17px',
                                     marginY:'7px',
                                     "&:hover": {
                                         backgroundColor: '#D48996'
@@ -336,7 +336,7 @@ export const DetailPage = () => {
 
         {/** Creator Data */}                            
                 <Box display='flex' flexDirection='column' sx={{marginTop:'60px', display:data.contractCheck?'':'none'}}>
-                    <Typography sx={{color:'#511523', fontSize:'25px', fontWeight:fontBold}}>参加するインフルエンサー</Typography>
+                    <Typography sx={{color:'#511523', fontSize:'22px', fontWeight:fontBold}}>参加するインフルエンサー</Typography>
                     <Box display='flex' flexDirection='row' alignItems='center' sx={{marginTop:'30px'}}>
                         <CardMedia 
                             component="img"
@@ -345,8 +345,8 @@ export const DetailPage = () => {
                             image={creatorData.avatar}
                         />
                         <Box display='flex' flexDirection='column' flex={3}>
-                            <Typography sx={{color:'#838688', fontSize:'16px'}}>{creatorData.email}</Typography>
-                            <Typography sx={{color:'#001219', fontSize:'29px', letterSpacing:'-3px', whiteSpace:'nowrap', fontWeight:fontBold}}>{creatorData.describe}</Typography>
+                            <Typography sx={{color:'#838688', fontSize:'14px'}}>{creatorData.email}</Typography>
+                            <Typography sx={{color:'#001219', fontSize:'26px', letterSpacing:'-3px', whiteSpace:'nowrap', fontWeight:fontBold}}>{creatorData.describe}</Typography>
                         </Box>
                         <Box display='flex' flexDirection='row' flex={3} alignItems='center' sx={{ marginTop:'15px'}}>
                             <CardMedia 
@@ -355,7 +355,7 @@ export const DetailPage = () => {
                                 sx={{width:'28px', marginRight:'9px', aspectRatio:'1.217'}}
                                 image={staticFiles.images.userPlusBrown}
                             />
-                            <Typography sx={{color:'#511523', fontSize:'20px'}}>総フォロワー数 {creatorData.follow.toLocaleString()}人</Typography>
+                            <Typography sx={{color:'#511523', fontSize:'18px'}}>総フォロワー数 {creatorData.follow.toLocaleString()}人</Typography>
                         </Box>
                         <Box display='flex' flexDirection='row' flex={3} alignItems='center' sx={{ marginTop:'15px'}}>
                             <CardMedia 
@@ -364,12 +364,12 @@ export const DetailPage = () => {
                                 sx={{width:'21px', marginRight:'9px'}}
                                 image={staticFiles.icons.ic_heart}
                             />
-                            <Typography sx={{color:'#511523', fontSize:'20px'}}>総いいね数 {NumberFormatExample(creatorData.heart)}</Typography>
+                            <Typography sx={{color:'#511523', fontSize:'18px'}}>総いいね数 {NumberFormatExample(creatorData.heart)}</Typography>
                         </Box>
                         <Button sx={{
                                     backgroundColor:btnBackground, 
                                     width:'241px', borderRadius:'36px', 
-                                    color:'#ffffff', fontSize:'19px', fontWeight: fontBold, 
+                                    color:'#ffffff', fontSize:'16px', fontWeight: fontBold, 
                                     marginY:'7px',
                                     "&:hover": {
                                         backgroundColor: '#D48996'
@@ -381,7 +381,7 @@ export const DetailPage = () => {
                 </Box>
 
         {/** Contract */}                            
-                <Typography sx={{fontSize:'25px', color:'#511523', marginTop:'60px', marginBottom:'32px', fontWeight:fontBold}}>金額・契約書管理</Typography>
+                <Typography sx={{fontSize:'22px', color:'#511523', marginTop:'60px', marginBottom:'32px', fontWeight:fontBold}}>金額・契約書管理</Typography>
                 <Box display='flex' flexDirection='row' justifyContent='space-between'>
                     <Box display='flex' flexDirection='column' sx={{
                         backgroundColor:data.contracted?'#FFFFFF':'#F9E6CE',
@@ -391,9 +391,9 @@ export const DetailPage = () => {
                         paddingX:'32px',
                         boxShadow:'0 0 20px 0px #0000001f'
                         }}>
-                        <Typography sx={{fontSize:'20px', color:'#001219', marginBottom:'16px', fontWeight:fontBold}}>契約書</Typography>
-                        <Typography sx={{fontSize:'14px', color:'#001219', marginBottom:'9px', fontWeight:fontBold}}>依頼を行う前に必ずお読みいただき、契約書を締結してください</Typography>
-                        <Typography sx={{fontSize:'12px', color:'#E4443B', marginBottom:'11px', fontWeight:fontBold}}>
+                        <Typography sx={{fontSize:'18px', color:'#001219', marginBottom:'16px', fontWeight:fontBold}}>契約書</Typography>
+                        <Typography sx={{fontSize:'12px', color:'#001219', marginBottom:'9px', fontWeight:fontBold}}>依頼を行う前に必ずお読みいただき、契約書を締結してください</Typography>
+                        <Typography sx={{fontSize:'10px', color:'#E4443B', marginBottom:'11px', fontWeight:fontBold}}>
                             {data.contractCheck?'依頼内容を確認中です。':data.contracted?'締結済みです':'締結を行わないと制作が進行しません'}
                         </Typography>
                         <Box display='flex' flexDirection='column' alignItems='center'>
@@ -401,7 +401,7 @@ export const DetailPage = () => {
                             sx={{
                                 backgroundColor:data.contractCheck?'#B9B2B1':data.contracted?'#E38A86':'#EE7A4B', 
                                 width:'183px', borderRadius:'36px', fontWeight:fontBold,
-                                color:'#ffffff', fontSize:'12px',
+                                color:'#ffffff', fontSize:'10px',
                                 "&:hover": {
                                     backgroundColor: data.contractCheck?'#B9B2B1':data.contracted?btnBackgroundHover:'#D58463'
                                 },
@@ -413,30 +413,30 @@ export const DetailPage = () => {
                         </Box>
                     </Box>
                     <Box display='flex' flexDirection='column' sx={{border:'3px solid #AB3D4F', borderRadius:'30px', paddingX:'33px', paddingY:'37px', width:'64%'}}>
-                        <Typography sx={{fontSize:'20px', color:'#B9324D', marginBottom:'30px', fontWeight:fontBold}}>金額・お支払い</Typography>
+                        <Typography sx={{fontSize:'18px', color:'#B9324D', marginBottom:'30px', fontWeight:fontBold}}>金額・お支払い</Typography>
                         <Box display='flex' flexDirection='row' alignItems='center'>
                             <Box display='flex' flexDirection='column' flex={8} >
                                 <Box display='flex' flexDirection='row' sx={{marginBottom:'16px'}}>
-                                    <Typography flex={9} sx={{color:'#001219', fontSize:'16px', fontWeight:fontBold}}>金額(内訳)</Typography>
-                                    <Typography flex={3} sx={{color:'#001219', fontSize:'16px', fontWeight:fontBold}}>合計金額(税込)</Typography>
+                                    <Typography flex={9} sx={{color:'#001219', fontSize:'14px', fontWeight:fontBold}}>金額(内訳)</Typography>
+                                    <Typography flex={3} sx={{color:'#001219', fontSize:'14px', fontWeight:fontBold}}>合計金額(税込)</Typography>
                                 </Box>
                                 <Box display='flex' flexDirection='row' alignItems='center'>
                                     <Box display='flex' flexDirection='column' flex={3}>
-                                        <Typography sx={{fontSize:'12px', color:'#85766D', fontWeight:fontBold}}>インフルエンサー費用</Typography>
-                                        <Typography sx={{fontSize:'21px', color:'#001219', lineHeight:'100%', marginTop:'3px', fontWeight:fontBold}}>{data.bill?data.defaultPrice:data.influencePrice.toLocaleString()+'円'}</Typography>
+                                        <Typography sx={{fontSize:'10px', color:'#85766D', fontWeight:fontBold}}>インフルエンサー費用</Typography>
+                                        <Typography sx={{fontSize:'18px', color:'#001219', lineHeight:'100%', marginTop:'3px', fontWeight:fontBold}}>{data.bill?data.defaultPrice:data.influencePrice.toLocaleString()+'円'}</Typography>
                                     </Box>
                                     <Box display='flex' flexDirection='column' flex={1}>
-                                        <Typography sx={{fontSize:'21px', color:'#001219', fontWeight:fontBold}}>+</Typography>
+                                        <Typography sx={{fontSize:'18px', color:'#001219', fontWeight:fontBold}}>+</Typography>
                                     </Box>
                                     <Box display='flex' flexDirection='column' flex={3}>
-                                        <Typography sx={{fontSize:'12px', color:'#85766D', fontWeight:fontBold}}>ディレクター費用</Typography>
-                                        <Typography sx={{fontSize:'21px', color:'#001219', lineHeight:'100%', marginTop:'3px', fontWeight:fontBold}}>{data.bill?data.defaultPrice:data.creatorPrice.toLocaleString()+'円'}</Typography>
+                                        <Typography sx={{fontSize:'10px', color:'#85766D', fontWeight:fontBold}}>ディレクター費用</Typography>
+                                        <Typography sx={{fontSize:'18px', color:'#001219', lineHeight:'100%', marginTop:'3px', fontWeight:fontBold}}>{data.bill?data.defaultPrice:data.creatorPrice.toLocaleString()+'円'}</Typography>
                                     </Box>
                                     <Box display='flex' flexDirection='column' flex={1}>
-                                        <Typography sx={{fontSize:'21px', color:'#001219', fontWeight:fontBold}}>=</Typography>
+                                        <Typography sx={{fontSize:'18px', color:'#001219', fontWeight:fontBold}}>=</Typography>
                                     </Box>
                                     <Box display='flex' flexDirection='column' alignItems='' flex={3} sx={{marginTop:'auto'}}>
-                                        <Typography sx={{fontSize:'27px', color:'#B9324D', lineHeight:'100%', marginTop:'5px', fontWeight:fontBold}}>{data.bill?data.calulatorPrice:totalPrice.toLocaleString()+'円'}</Typography>
+                                        <Typography sx={{fontSize:'24px', color:'#B9324D', lineHeight:'100%', marginTop:'5px', fontWeight:fontBold}}>{data.bill?data.calulatorPrice:totalPrice.toLocaleString()+'円'}</Typography>
                                     </Box>
                                 </Box>
 
@@ -445,7 +445,7 @@ export const DetailPage = () => {
                                 <Button sx={{
                                     backgroundColor: data.bill?'#B9B2B1':data.paid?'#ffffff':btnBackground, 
                                     width:'241px', borderRadius:'36px', 
-                                    color: data.bill?'#FFFFFF':data.paid?btnBackground:'#ffffff', fontSize:'19px',
+                                    color: data.bill?'#FFFFFF':data.paid?btnBackground:'#ffffff', fontSize:'16px',
                                     marginY:'7px', fontWeight:fontBold,
                                     border:data.bill?'':data.paid?'2px solid #DF8391':'',
                                     "&:hover": {
@@ -457,7 +457,7 @@ export const DetailPage = () => {
                                     >
                                         {data.bill?'CALCULATING':data.paid?'領収書発行':'お支払い'}
                                 </Button>
-                                <Typography sx={{fontSize:'12px', color:'#001219'}}>{data.bill?'料金確定までお待ちください':data.paid?'お支払い済みです':'支払い期限:2023年12月1日10:00'}</Typography>
+                                <Typography sx={{fontSize:'10px', color:'#001219'}}>{data.bill?'料金確定までお待ちください':data.paid?'お支払い済みです':'支払い期限:2023年12月1日10:00'}</Typography>
                             </Box>
                         </Box>
                     </Box>
@@ -465,8 +465,8 @@ export const DetailPage = () => {
 
         {/** Live Chatting */}
                 <Box display='flex' flexDirection='row' sx={{marginTop:'60px'}} alignItems='center'>
-                    <Typography flex={1} sx={{fontSize:'25px', color:'#511523', letterSpacing:'-7px', fontWeight:fontBold}}>チャット</Typography>
-                    <Typography flex={10} sx={{fontSize:'14px', color:'#B9324D', marginLeft:'50px'}}>ディレクターからお知らせがあります</Typography>
+                    <Typography flex={1} sx={{fontSize:'22px', color:'#511523', letterSpacing:'-7px', fontWeight:fontBold}}>チャット</Typography>
+                    <Typography flex={10} sx={{fontSize:'12px', color:'#B9324D', marginLeft:'50px'}}>ディレクターからお知らせがあります</Typography>
                 </Box>
                 <Box display='flex' justifyContent='space-between' flexDirection='row' sx={{marginTop:'33px'}}>
                     <CardMedia
@@ -476,14 +476,14 @@ export const DetailPage = () => {
                         image={staticFiles.images.userProfile}
                         />
                         
-                    <Box display='flex' flexDirection='column' sx={{color:'#454545', fontSize:'19px', paddingX:'27px', paddingY:'20px', backgroundColor:'#FDECEE', borderRadius:'14px 14px 14px 0px', marginRight:'70px'}}>
+                    <Box display='flex' flexDirection='column' sx={{color:'#454545', fontSize:'16px', paddingX:'27px', paddingY:'20px', backgroundColor:'#FDECEE', borderRadius:'14px 14px 14px 0px', marginRight:'70px'}}>
                         {data.isMessage?showSentence(data.sampleMessage):data.noMessage}
                     </Box>
                     <Box display='flex' flexDirection='column' justifyContent='center' alignItems='end' sx={{}}>
                         <Button sx={{
                             backgroundColor:btnBackground, 
                             width:'241px', borderRadius:'36px', 
-                            color:'#ffffff', fontSize:'19px', fontWeight:fontBold,
+                            color:'#ffffff', fontSize:'16px', fontWeight:fontBold,
                             "&:hover": {
                                 backgroundColor: '#D48996'
                             },
@@ -495,15 +495,15 @@ export const DetailPage = () => {
                 </Box>
 
         {/** File Upload and Download  */}
-                <Typography sx={{color:'#511523', fontSize:'25px', marginTop:'60px', fontWeight:fontBold}}>ファイル・検修管理</Typography>
+                <Typography sx={{color:'#511523', fontSize:'22px', marginTop:'60px', fontWeight:fontBold}}>ファイル・検修管理</Typography>
                 <Box display='flex' flexDirection='row' sx={{marginTop:'33px', columnGap:'50px'}}>
                     <Box display='flex' flexDirection='column' flex={6} >
                         <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{ minHeight:'27px'}}>
-                            <Typography sx={{fontSize:'20px', color:'#B9324D', whiteSpace:'nowrap', fontWeight:fontBold}}>あなたから</Typography>
+                            <Typography sx={{fontSize:'18px', color:'#B9324D', whiteSpace:'nowrap', fontWeight:fontBold}}>あなたから</Typography>
                             <Button sx={{
                                 backgroundColor:btnBackground, 
                                 paddingX:'32px', borderRadius:'36px', 
-                                color:'#ffffff', fontSize:'13px', fontWeight:fontBold,
+                                color:'#ffffff', fontSize:'11px', fontWeight:fontBold,
                                 "&:hover": {
                                     backgroundColor: btnBackgroundHover
                                 },
@@ -514,7 +514,7 @@ export const DetailPage = () => {
                         </Box>
                         <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' sx={{border:'2px dashed #AA3D4F', borderRadius:'15px', width:'100%', marginTop:'16px', paddingY:'22px', paddingX:'27px', rowGap:'10px'}}>
                             {data.userDownload.length === 0?
-                                (<Typography sx={{fontSize:'16px', color:'#001219', textAlign:'center', whiteSpace:'nowrap',paddingY:'126px'}}>まだファイル共有はされていません</Typography>)
+                                (<Typography sx={{fontSize:'14px', color:'#001219', textAlign:'center', whiteSpace:'nowrap',paddingY:'126px'}}>まだファイル共有はされていません</Typography>)
                                 :(
                                     data.userDownload.map((item, index) => (
                                         <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', border:'1px solid #AA3D4F', borderRadius:'10px', paddingY:'12px', paddingX:'7px'}}>
@@ -527,8 +527,8 @@ export const DetailPage = () => {
                                                 />
                                             </Box>
                                             <Box display='flex' flexDirection='column' flex={6} sx={{marginX:'7px'}}>
-                                                <Typography sx={{color:'#424242', fontSize:'13px', fontWeight:fontBold}}>{item.name}</Typography>
-                                                <Typography sx={{color:'#424242', fontSize:'11px'}}>{item.capacity}</Typography>
+                                                <Typography sx={{color:'#424242', fontSize:'11px', fontWeight:fontBold}}>{item.name}</Typography>
+                                                <Typography sx={{color:'#424242', fontSize:'10px'}}>{item.capacity}</Typography>
                                             </Box>
                                             <Button sx={{
                                                 backgroundColor:'#AA3D4F', 
@@ -544,7 +544,7 @@ export const DetailPage = () => {
                                                     height="25"
                                                     sx={{borderRadius:'20px', width:'19px', marginRight:'10px'}}
                                                     image={staticFiles.images.download} />
-                                                <Typography sx={{color:'#ffffff', fontSize:'12px', fontWeight:fontBold }}>      
+                                                <Typography sx={{color:'#ffffff', fontSize:'9px', fontWeight:fontBold }}>      
                                                     ダウンロード
                                                 </Typography>
                                             </Button>
@@ -555,11 +555,11 @@ export const DetailPage = () => {
                     </Box>
                     <Box display='flex' flexDirection='column' flex={6} >
                         <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{ minHeight:'35px'}}>
-                            <Typography sx={{fontSize:'20px', color:'#B9324D', fontWeight:fontBold}}>ミルコマから</Typography>
+                            <Typography sx={{fontSize:'16px', color:'#B9324D', fontWeight:fontBold}}>ミルコマから</Typography>
                         </Box>
                         <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' sx={{border:'2px dashed #AA3D4F', borderRadius:'15px', width:'100%', marginTop:'16px', paddingY:'22px', paddingX:'27px', rowGap:'10px'}}>
                         {data.productDownload.length === 0?
-                                (<Typography sx={{fontSize:'16px', color:'#001219', textAlign:'center', whiteSpace:'nowrap',paddingY:'126px'}}>まだファイル共有はされていません</Typography>)
+                                (<Typography sx={{fontSize:'14px', color:'#001219', textAlign:'center', whiteSpace:'nowrap',paddingY:'126px'}}>まだファイル共有はされていません</Typography>)
                                 :(
                                     data.productDownload.map((item, index) => (
                                         <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', border:'1px solid #EE7D90', borderRadius:'10px', paddingY:'12px', paddingX:'7px'}}>
@@ -572,8 +572,8 @@ export const DetailPage = () => {
                                                 />
                                             </Box>
                                             <Box display='flex' flexDirection='column' flex={6} sx={{marginX:'7px'}}>
-                                                <Typography sx={{color:'#424242', fontSize:'13px', fontWeight:fontBold}}>{item.name}</Typography>
-                                                <Typography sx={{color:'#424242', fontSize:'11px'}}>{item.capacity}</Typography>
+                                                <Typography sx={{color:'#424242', fontSize:'11px', fontWeight:fontBold}}>{item.name}</Typography>
+                                                <Typography sx={{color:'#424242', fontSize:'10px'}}>{item.capacity}</Typography>
                                             </Box>
                                             <Button sx={{
                                                 backgroundColor:btnBackground, 
@@ -589,7 +589,7 @@ export const DetailPage = () => {
                                                     height="25"
                                                     sx={{borderRadius:'20px', width:'19px', marginRight:'10px'}}
                                                     image={staticFiles.images.download} />
-                                                <Typography sx={{color:'#ffffff', fontSize:'12px', fontWeight:fontBold }}>      
+                                                <Typography sx={{color:'#ffffff', fontSize:'10px', fontWeight:fontBold }}>      
                                                     ダウンロード
                                                 </Typography>
                                             </Button>
@@ -605,7 +605,7 @@ export const DetailPage = () => {
             aria-labelledby="customized-dialog-title"
             open={open}
             >
-            <DialogTitle sx={{ m: 0, paddingTop: '50px', paddingLeft:'50px', fontSize: '25px', color:'#454545', fontWeight:fontBold }} id="customized-dialog-title">
+            <DialogTitle sx={{ m: 0, paddingTop: '50px', paddingLeft:'50px', fontSize: '22px', color:'#454545', fontWeight:fontBold }} id="customized-dialog-title">
                 領収書発行
             </DialogTitle>
             <IconButton
@@ -630,10 +630,10 @@ export const DetailPage = () => {
                 {/* <CloseIcon sx={{ color: isHovered ? '#B9324D' : '#A5A5A5', fontSize: '30px', fontWeight:'1000'}}/> */}
             </IconButton>
             <DialogContent sx={{padding: '50px', marginTop:'-50px', width:'802px'}}>
-                <Typography gutterBottom sx={{fontSize: "18px", color:'#454545'}} >
+                <Typography gutterBottom sx={{fontSize:'16px', color:'#454545'}} >
                     領収書は以下からダウンロードできます。
                 </Typography>
-                <Typography sx={{marginTop:'61px', marginLeft:'30px', color:'#454545', fontSize:'20px', fontWeight:fontBold}}>ファイルダウンロード</Typography>
+                <Typography sx={{marginTop:'61px', marginLeft:'30px', color:'#454545', fontSize:'18px', fontWeight:fontBold}}>ファイルダウンロード</Typography>
                     <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'90%', marginY:'20px', border:'1px solid #EE7D90', borderRadius:'10px', paddingY:'12px', paddingX:'7px', marginLeft:'30px'}}>
                         <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center' 
                             sx={{ backgroundColor:'#F0F0F0', borderRadius:'50%', width:'46px', height:'46px'}}>
@@ -644,7 +644,7 @@ export const DetailPage = () => {
                             />
                         </Box>
                         <Box display='flex' flexDirection='column' flex={6} sx={{marginX:'7px'}}>
-                            <Typography sx={{color:'#424242', fontSize:'13px', fontWeight:fontBold}}>領収書</Typography>
+                            <Typography sx={{color:'#424242', fontSize:'12px', fontWeight:fontBold}}>領収書</Typography>
                         </Box>
                         <Button sx={{
                             backgroundColor:btnBackground, 
@@ -660,7 +660,7 @@ export const DetailPage = () => {
                                 height="25"
                                 sx={{borderRadius:'20px', width:'19px', marginRight:'10px'}}
                                 image={staticFiles.images.download} />
-                            <Typography sx={{color:'#ffffff', fontSize:'12px', fontWeight:fontBold }}>      
+                            <Typography sx={{color:'#ffffff', fontSize:'10px', fontWeight:fontBold }}>      
                                 ダウンロード
                             </Typography>
                         </Button>
@@ -679,7 +679,7 @@ export const DetailPage = () => {
                     }}
                     onClick={handleClose}
                     >
-                    <Typography sx={{color:'#ffffff', fontSize:'18px' }}>      
+                    <Typography sx={{color:'#ffffff', fontSize:'16px' }}>      
                         完了
                     </Typography>
                 </Button>
@@ -692,7 +692,7 @@ export const DetailPage = () => {
             aria-labelledby="customized-dialog-title"
             open={uploadOpen}
             >
-            <DialogTitle sx={{ m: 0, paddingTop: '50px', paddingLeft:'50px', fontSize: '25px', color:'#454545', fontWeight:fontBold }} id="customized-dialog-title">
+            <DialogTitle sx={{ m: 0, paddingTop: '50px', paddingLeft:'50px', fontSize: '22px', color:'#454545', fontWeight:fontBold }} id="customized-dialog-title">
                 ファイルアップロード
             </DialogTitle>
             <IconButton
@@ -717,10 +717,10 @@ export const DetailPage = () => {
                 {/* <CloseIcon sx={{ color: isHovered ? '#B9324D' : '#A5A5A5', fontSize: '30px', fontWeight:'1000'}}/> */}
             </IconButton>
             <DialogContent sx={{padding: '50px', marginTop:'-50px', width:'802px'}}>
-                <Typography gutterBottom sx={{fontSize: "18px", color:'#454545'}} >
+                <Typography gutterBottom sx={{fontSize:'16px', color:'#454545'}} >
                     送信画像の設定をして「完了」ボタンを押してください。
                 </Typography>
-                <Typography sx={{marginTop:'30px', color:'#454545', fontSize:'20px', fontWeight:fontBold}}>ファイル選択</Typography>
+                <Typography sx={{marginTop:'30px', color:'#454545', fontSize:'18px', fontWeight:fontBold}}>ファイル選択</Typography>
                 <FileUploader handleChange={handleChange} name="file" types={fileTypes} hoverTitle=' '>
                     <Box
                         display='flex' flexDirection='column'
@@ -732,7 +732,7 @@ export const DetailPage = () => {
                             marginTop:'20px',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            fontSize:'12px',
+                            fontSize:'10px',
                             fontWeight:fontBold,
                             backgroundColor:'#FFFEFC',
                         }}
@@ -748,7 +748,7 @@ export const DetailPage = () => {
                     </Box>
                 </FileUploader>
                
-                <Typography sx={{marginTop:'30px', color:'#454545', fontSize:'20px', fontWeight:fontBold}}>アップロード状況</Typography>
+                <Typography sx={{marginTop:'30px', color:'#454545', fontSize:'18px', fontWeight:fontBold}}>アップロード状況</Typography>
                     <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', marginY:'20px', border:'1px solid #AA3D4F', borderRadius:'10px', paddingY:'12px', paddingX:'7px'}}>
                         <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center' 
                             sx={{ backgroundColor:'#F0F0F0', borderRadius:'50%', width:'46px', height:'46px'}}>
@@ -759,12 +759,12 @@ export const DetailPage = () => {
                             />
                         </Box>
                         <Box display='flex' flexDirection='column' flex={6} sx={{marginX:'7px'}}>
-                            <Typography sx={{color:'#424242', fontSize:'13px', fontWeight:fontBold}}>{fileName?fileName:uploadFileName}</Typography>
+                            <Typography sx={{color:'#424242', fontSize:'11px', fontWeight:fontBold}}>{fileName?fileName:uploadFileName}</Typography>
                         </Box>
-                        <Typography sx={{fontSize:'11px'}}>アップロード中…</Typography>
+                        <Typography sx={{fontSize:'10px'}}>アップロード中…</Typography>
                     </Box>
 
-                <Typography sx={{marginTop:'27px', color:'#454545', fontSize:'20px', fontWeight:fontBold}}>ファイル名を設定(オプション)</Typography>
+                <Typography sx={{marginTop:'27px', color:'#454545', fontSize:'18px', fontWeight:fontBold}}>ファイル名を設定(オプション)</Typography>
                     <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', marginY:'20px', border:'1px solid #D6929D', borderRadius:'10px', paddingX:'7px'}}>
                         <TextField
                             placeholder="ファイル名"
@@ -774,7 +774,7 @@ export const DetailPage = () => {
                             onChange={(e)=>{setFileName(e.target.value)}}
                         />
                     </Box>
-                    <Typography sx={{fontSize:'16px', color:'#858997', }}>ファイル名を別に設定することができます。</Typography>
+                    <Typography sx={{fontSize:'14px', color:'#858997', }}>ファイル名を別に設定することができます。</Typography>
             </DialogContent>
             <Box display='flex' flexDirection='row' alignItems='center' justifyContent='center'>
                 <Button sx={{
@@ -788,7 +788,7 @@ export const DetailPage = () => {
                     },
                     }}
                     onClick={handleFileUpload}>
-                    <Typography sx={{color:'#ffffff', fontSize:'18px' }}>      
+                    <Typography sx={{color:'#ffffff', fontSize:'16px' }}>      
                         完了
                     </Typography>
                 </Button>

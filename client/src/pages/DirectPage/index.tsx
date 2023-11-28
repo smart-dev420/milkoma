@@ -122,7 +122,7 @@ export const DirectPage = () => {
                         <span className="px-3 text-[#fff] text-md" style={{fontWeight:fontBold}}>{navTitle[1]}</span>
                     </div>
                     <div className="flex-1 text-center py-[29px]" >
-                        <span className="py-1 px-5 bg-[#fff] rounded-[25px] font-medium text-[15px]" style={selectTab > 1 ? {color: selectColor, fontWeight:fontBold}: {color: unselectColor, fontWeight:fontBold} }>STEP3</span>
+                        <span className="py-1 px-5 bg-[#fff] rounded-[25px] font-medium text-[12px]" style={selectTab > 1 ? {color: selectColor, fontWeight:fontBold}: {color: unselectColor, fontWeight:fontBold} }>STEP3</span>
                         <span className="px-3 text-[#fff] text-md" style={{fontWeight:fontBold}}>{navTitle[2]}</span>
                     </div>
                 </div>
@@ -141,7 +141,7 @@ export const DirectPage = () => {
                 //         <span className="px-3 text-[#fff] text-md" style={{fontWeight:fontBold}}>{navTitle[1]}</span>
                 //     </div>
                 //     <div className="flex-1 text-center py-[29px]" style={{marginTop:match_1024?'':'15px'}}>
-                //         <span className="py-1 px-5 bg-[#fff] rounded-[25px] font-medium text-[15px]" style={selectTab > 1 ? {color: selectColor, fontWeight:fontBold}: {color: unselectColor, fontWeight:fontBold} }>STEP3</span>
+                //         <span className="py-1 px-5 bg-[#fff] rounded-[25px] font-medium text-[12px]" style={selectTab > 1 ? {color: selectColor, fontWeight:fontBold}: {color: unselectColor, fontWeight:fontBold} }>STEP3</span>
                 //         <span className="px-3 text-[#fff] text-md" style={{fontWeight:fontBold}}>{navTitle[2]}</span>
                 //     </div>
                 // </div>
@@ -181,7 +181,7 @@ const Step1: React.FC<{
             <div className="flex flex-row mb-[55px] ml-[75px]">
                 <div className="h-[63px] w-[14px] rounded-[50px] bg-[#F6D7CF]"></div>
                 <div className="flex flex-col justify-center mt-[2px] px-[15px]">
-                    <p className="text-[15px]">STEP1</p>
+                    <p className="text-[12px]">STEP1</p>
                     <p className="text-2xl" style={{fontWeight:fontBold}}>依頼したいジャンルを選んで下さい</p>
                 </div>
             </div>
@@ -257,16 +257,16 @@ const Step2 : React.FC<{}> = () => {
             <div className="flex flex-row  " style={{width:match_1024?'65%':'100%'}}>
                 <div className="h-[63px] w-[14px] rounded-[50px] bg-[#F6D7CF]"></div>
                 <div className="flex flex-col justify-center mt-[2px] px-[15px]">
-                    <p className="text-[15px]">STEP2</p>
+                    <p className="text-[12px]">STEP2</p>
                     <p className="text-2xl" style={{fontWeight:fontBold}}>詳細を入力して下さい(Q&A)</p>
                 </div>
             </div>
-            <div className="flex flex-col px-5 text-[26px] pt-[8px]">
+            <div className="flex flex-col px-5 text-[24px] pt-[8px]">
                 <p className="py-5">選択中のジャンル: <span style={{fontWeight:fontBold}}>商品紹介</span></p>
             </div>
         </div>
-        <p className="mb-[40px] ml-[75px] text-[20px] text-[#554744] z-[2]">質問に答えて、詳細を入力してください</p>
-        <p className="flex items-center text-[24px] mb-[25px] ml-[75px] text-[#B9324D]">Q1: どのような商品ですか？？ <span className="bg-[#F9E5D1] text-[13px] ml-[60px] px-5 rounded-[20px]">入力</span></p>
+        <p className="mb-[40px] ml-[75px] text-[18px] text-[#554744] z-[2]">質問に答えて、詳細を入力してください</p>
+        <p className="flex items-center text-[22px] mb-[25px] ml-[75px] text-[#B9324D]">Q1: どのような商品ですか？？ <span className="bg-[#F9E5D1] text-[12px] ml-[60px] px-5 rounded-[20px]">入力</span></p>
         <div className="flex mb-[50px] ml-[75px]" style={{flexDirection:match_1024?'row':'column'}}>
             <div className="flex " style={{width:match_1024?'60%':'90%'}}>
             <TextareaAutosize
@@ -275,13 +275,13 @@ const Step2 : React.FC<{}> = () => {
                 placeholder=" 例：
                 自社の美容液の紹介をしたい。新商品です。発売予定は12月1日です。
                 商品のURLはhttps://mirucoma.co.jpです。"
-                className="w-full text-[20px] rounded-[15px] p-5"
+                className="w-full text-[18px] rounded-[15px] p-5"
                 style={{border:"1px solid #EBEBEB"}}
                 value={question1}
                 onChange={(e)=>{setQuestion1(e.target.value)}}
                 />
             </div>
-            <div className="flex flex-col text-[18px]" style={{marginTop:match_1024?'':'20px', marginLeft:match_1024?'90px':''}}>
+            <div className="flex flex-col text-[16px]" style={{marginTop:match_1024?'':'20px', marginLeft:match_1024?'90px':''}}>
                 <div className="flex flex-row mb-[15px]">
                     <img className="w-[30px]" src = {staticFiles.icons.ic_step_help} />
                     <span className="text-[#B9324D] px-[15px]">ヘルプ</span>
@@ -289,7 +289,7 @@ const Step2 : React.FC<{}> = () => {
                     {showSentence(help1)}
             </div>
         </div>
-        <p className="flex items-center text-[24px] mb-[25px] ml-[75px] text-[#B9324D]">Q2: 動画はどのように使いたいですか？？<span className="bg-[#F9E5D1] text-[13px] ml-[5%] px-5 rounded-[20px]">選択</span></p>
+        <p className="flex items-center text-[22px] mb-[25px] ml-[75px] text-[#B9324D]">Q2: 動画はどのように使いたいですか？？<span className="bg-[#F9E5D1] text-[12px] ml-[5%] px-5 rounded-[20px]">選択</span></p>
         <div className="flex flex-row mb-[50px] ml-[75px]" style={{flexDirection:match_1024?'row':'column'}}>
             <div className="flex flex-col" style={{width:match_1024?'60%':'90%'}}>
                 <div className="flex flex-row mb-[15px]">
@@ -321,13 +321,13 @@ const Step2 : React.FC<{}> = () => {
                 </div>
                 <TextField
                     placeholder="例 : 自社のHPに使いたい"
-                    className="w-full text-[20px] rounded-[15px] h-[56px]"
+                    className="w-full text-[18px] rounded-[15px] h-[56px]"
                     style={{border:"1px solid #EBEBEB"}}
                     value={question2}
                     onChange={(e)=>{setQuestion2(e.target.value)}}
                 />
             </div>
-            <div className="flex flex-col text-[18px]" style={{marginTop:match_1024?'':'20px', marginLeft:match_1024?'90px':''}}>
+            <div className="flex flex-col text-[16px]" style={{marginTop:match_1024?'':'20px', marginLeft:match_1024?'90px':''}}>
                 <div className="flex flex-row mb-[15px]">
                     <img className="w-[30px]" src = {staticFiles.icons.ic_step_help} />
                     <span className="text-[#B9324D] px-[15px]">ヘルプ</span>
@@ -335,7 +335,7 @@ const Step2 : React.FC<{}> = () => {
                      {showSentence(help2)}
             </div>
         </div>
-        <p className="flex items-center text-[24px] mb-[62px] ml-[75px] text-[#B9324D]">Q3: 納期はいつ頃が希望ですか？<span className="bg-[#F9E5D1] text-[13px] ml-[80px] px-5 rounded-[20px]">選択</span></p>
+        <p className="flex items-center text-[22px] mb-[62px] ml-[75px] text-[#B9324D]">Q3: 納期はいつ頃が希望ですか？<span className="bg-[#F9E5D1] text-[12px] ml-[80px] px-5 rounded-[20px]">選択</span></p>
         <div className="flex mb-[70px] ml-[75px]" style={{flexDirection:match_1024?'row':'column'}}>
             <div className="flex flex-col w-[60%] " style={{width:match_1024?'60%':'80%'}}>
                 <div className="flex flex-row mb-[15px]">
@@ -363,7 +363,7 @@ const Step2 : React.FC<{}> = () => {
                     ))}
                 </div>
             </div>
-            <div className="flex flex-col text-[18px]" style={{marginTop:match_1024?'-30px':'20px', marginLeft:match_1024?'90px':''}}>
+            <div className="flex flex-col text-[16px]" style={{marginTop:match_1024?'-30px':'20px', marginLeft:match_1024?'90px':''}}>
                 <div className="flex flex-row mb-[15px]">
                     <img className="w-[30px]" src = {staticFiles.icons.ic_step_help} />
                     <span className="text-[#B9324D] px-[15px]">ヘルプ</span>
@@ -374,7 +374,7 @@ const Step2 : React.FC<{}> = () => {
         <div className="flex flex-row ml-[75px] items-center mb-[66px]">
             <div className="flex flex-row w-[40%]" onClick={handlePrev}>
                 <img className="w-[20px] cursor-pointer" src={staticFiles.icons.ic_back} />
-                <span className="cursor-pointer text-[16px] text-hover ml-[10px]" style={{fontWeight:fontBold}}>ジャンル選択へ戻る</span>
+                <span className="cursor-pointer text-[14px] text-hover ml-[10px]" style={{fontWeight:fontBold}}>ジャンル選択へ戻る</span>
             </div>
             <button onClick={handleNext} className="btn-color w-[324px] py-2 px-5 justify-center items-center flex rounded-[30px]" style={{width:match_1024?'324px':'200px'}}>
                 <img className="w-[82px]" src={staticFiles.icons.ic_back_btn} />
@@ -420,47 +420,47 @@ const Step3 : React.FC<{}> = () => {
             <div className="flex flex-row mb-[25px] ml-[75px] w-[65%]">
                 <div className="h-[63px] w-[14px] rounded-[50px] bg-[#F6D7CF]"></div>
                 <div className="flex flex-col justify-center mt-[2px] px-[15px]">
-                    <p className="text-[15px]">STEP3</p>
+                    <p className="text-[12px]">STEP3</p>
                     <p className="text-2xl" style={{fontWeight:fontBold}}>確認・お申し込み</p>
                 </div>
             </div>
         </div>
-        <p className="text-[20px] text-[#554744] ml-[75px] mb-[45px]">入力内容を確認の上、「完了」ボタンをクリックしてください。</p>
+        <p className="text-[18px] text-[#554744] ml-[75px] mb-[45px]">入力内容を確認の上、「完了」ボタンをクリックしてください。</p>
         <div className="flex flex-col ml-[75px]">
             <div className="flex flex-row mb-[20px]">
-                <p className="text-[24px] text-[#B9324D] w-[30%]">依頼したいジャンル</p>
-                <p className="text-[24px] text-[#B9324D] ">Q1.どのような商品か？</p>
+                <p className="text-[22px] text-[#B9324D] w-[30%]">依頼したいジャンル</p>
+                <p className="text-[22px] text-[#B9324D] ">Q1.どのような商品か？</p>
             </div>
             <div className="flex" style={{flexDirection:match_1024?'row':'column'}}>
                 <div className="flex" style={{flexDirection:match_1024?'column':'row', width:match_1024?'30%':'100%'}}>
                     <img className="w-[318px] rounded-[20px]" src={category.category} />
                     <div className="flex flex-col mx-5 mt-[24px] mb-[80px]">
-                        <p className="text-[20px] text-[#511523] " style={{fontWeight:fontBold}}>{category.title}</p>
-                        <p className="text-[14px] text-[#554744] mt-[6px]" style={{width:match_1024?'65%':'100%'}}>{category.description}</p>
+                        <p className="text-[18px] text-[#511523] " style={{fontWeight:fontBold}}>{category.title}</p>
+                        <p className="text-[12px] text-[#554744] mt-[6px]" style={{width:match_1024?'65%':'100%'}}>{category.description}</p>
                     </div>
                 </div>
                 <div className="flex flex-col" style={{width:match_1024?'60%':'87%'}}>
                     <TextareaAutosize
                         minRows={5} // Specify the number of rows to display
                         aria-label="Textarea" // Provide an accessible label
-                        className="w-full text-[20px] rounded-[15px] p-5 mb-[45px]"
+                        className="w-full text-[18px] rounded-[15px] p-5 mb-[45px]"
                         style={{border:"1px solid #EBEBEB", marginTop:match_1024?'':'20px',}}
                         value={question1}
                         readOnly = {true}
                     />
-                    <p className="text-[24px] text-[#B9324D] mb-[20px]">Q2.動画をどのように追加いたいか？</p>
+                    <p className="text-[22px] text-[#B9324D] mb-[20px]">Q2.動画をどのように追加いたいか？</p>
                     <TextField 
                         value={question2}
-                        className="w-full text-[20px] rounded-[15px] h-[56px] "
+                        className="w-full text-[18px] rounded-[15px] h-[56px] "
                         style={{border:"1px solid #EBEBEB"}}
                         InputProps={{
                             readOnly: true,
                           }}
                     />
-                    <p className="text-[24px] text-[#B9324D] mt-[45px] mb-[20px]">Q3.納期はいつ頃が希望か？</p>
+                    <p className="text-[22px] text-[#B9324D] mt-[45px] mb-[20px]">Q3.納期はいつ頃が希望か？</p>
                     <TextField 
                         value={question3}
-                        className="w-full text-[20px] rounded-[15px] h-[56px]"
+                        className="w-full text-[18px] rounded-[15px] h-[56px]"
                         style={{border:"1px solid #EBEBEB"}}
                         InputProps={{
                             readOnly: true,
@@ -472,9 +472,9 @@ const Step3 : React.FC<{}> = () => {
         <div className="flex flex-row ml-[75px] items-center mt-[80px] mb-[66px]" style={{marginTop:match_1024?'':'30px'}}>
             <div className="flex flex-row w-[50%]" onClick={handlePrev}>
             <img className="w-[20px] cursor-pointer" src={staticFiles.icons.ic_back} />
-            <span className="cursor-pointer text-[16px] text-hover ml-[10px]" style={{fontWeight:fontBold}}>内容編集に戻る</span>
+            <span className="cursor-pointer text-[14px] text-hover ml-[10px]" style={{fontWeight:fontBold}}>内容編集に戻る</span>
             </div>
-            <button className="btn-color w-[324px] py-2 px-5 justify-center items-center flex rounded-[30px] text-[23px] text-[#fff]" style={{fontWeight:fontBold, width:match_1024?'324px':'200px'}} onClick={handleClickOpen}>完了</button>
+            <button className="btn-color w-[324px] py-2 px-5 justify-center items-center flex rounded-[30px] text-[20px] text-[#fff]" style={{fontWeight:fontBold, width:match_1024?'324px':'200px'}} onClick={handleClickOpen}>完了</button>
         </div>
         <Dialog
             onClose={handleClose}
@@ -538,7 +538,7 @@ const Step3 : React.FC<{}> = () => {
             </DialogContent>
             {/* <DialogActions> */}
             <div className="flex justify-center items-center">
-                <button onClick={handleNext} className="my-[40px] btn-color w-[324px] py-2 px-5 rounded-[30px] text-[23px]" style={{fontWeight:fontBold}}>依頼する</button>
+                <button onClick={handleNext} className="my-[40px] btn-color w-[324px] py-2 px-5 rounded-[30px] text-[20px]" style={{fontWeight:fontBold}}>依頼する</button>
             {/* </DialogActions> */}
             </div>
         </Dialog>
@@ -590,27 +590,27 @@ const Step4 : React.FC<{}> = () => {
             <div className="flex flex-row mb-[25px] w-[65%]">
                 <div className="h-[63px] w-[14px] rounded-[50px] bg-[#F6D7CF]"></div>
                 <div className="flex flex-col justify-center mt-[2px] px-[15px]">
-                    <p className="text-[15px]">STEP3</p>
+                    <p className="text-[12px]">STEP3</p>
                     <p className="text-2xl" style={{fontWeight:fontBold}}>お申し込みしました・これからの流れ</p>
                 </div>
             </div>
         </div>
-        <p className="text-[#554744] text-[20px]">ミルコマディレクターが最適なインフルエンサーとお見積もりを行います。</p>
+        <p className="text-[#554744] text-[18px]">ミルコマディレクターが最適なインフルエンサーとお見積もりを行います。</p>
         <div className="flex flex-row mt-[75px]" style={{marginLeft:match_1024?'40px':''}}>
             <div className="flex flex-col" style={{fontWeight: '400', width:'90%'}}>
-                <p className="text-[20px] text-[#B9324D] mb-[26px]">①.メールとマイページにお知らせします</p>
-                <p className="my-1 text-[#554744] text-[16px]">今後の流れは<span className="text-[#B9324D] underline" style={{fontWeight:fontBold}}>マイページ</span>で状況を確認できます。</p>
-                <p className="text-[#554744] text-[16px]">また、お知らせはマイページとメールにて行います。</p>
+                <p className="text-[18px] text-[#B9324D] mb-[26px]">①.メールとマイページにお知らせします</p>
+                <p className="my-1 text-[#554744] text-[14px]">今後の流れは<span className="text-[#B9324D] underline" style={{fontWeight:fontBold}}>マイページ</span>で状況を確認できます。</p>
+                <p className="text-[#554744] text-[14px]">また、お知らせはマイページとメールにて行います。</p>
 
-                <p className="text-[20px] text-[#B9324D] mb-[26px] mt-[30px]">②.ご不明点がある場合は<span className="underline">メッセージ</span>にてご質問いたします</p>
-                <p className="my-1 text-[#554744] text-[16px]">ご提案にあたり、お客様のご依頼で不明点がある場合はメッセージにて</p>
-                <p className="text-[#554744] text-[16px]">ご質問いたします。</p>
-                <p className="text-[#554744] text-[16px]">恐縮ではありますが、その際はマイページにてご回答ください、</p>
+                <p className="text-[18px] text-[#B9324D] mb-[26px] mt-[30px]">②.ご不明点がある場合は<span className="underline">メッセージ</span>にてご質問いたします</p>
+                <p className="my-1 text-[#554744] text-[14px]">ご提案にあたり、お客様のご依頼で不明点がある場合はメッセージにて</p>
+                <p className="text-[#554744] text-[14px]">ご質問いたします。</p>
+                <p className="text-[#554744] text-[14px]">恐縮ではありますが、その際はマイページにてご回答ください、</p>
 
-                <p className="text-[20px] text-[#B9324D] mb-[26px] mt-[30px]">③.内容によってはお断りさせていただきます。</p>
-                <p className="my-1 text-[#554744] text-[16px]">性的コンテンツや、暴力系、FXやカジノなどの内容では、</p>
-                <p className="text-[#554744] text-[16px]">丸投げ依頼の利用用途によってお断りさせていただく場合があります。</p>
-                <p className="text-[#554744] text-[16px]">あらかじめご了承ください</p>
+                <p className="text-[18px] text-[#B9324D] mb-[26px] mt-[30px]">③.内容によってはお断りさせていただきます。</p>
+                <p className="my-1 text-[#554744] text-[14px]">性的コンテンツや、暴力系、FXやカジノなどの内容では、</p>
+                <p className="text-[#554744] text-[14px]">丸投げ依頼の利用用途によってお断りさせていただく場合があります。</p>
+                <p className="text-[#554744] text-[14px]">あらかじめご了承ください</p>
 
             </div>
             {match_1024?(
@@ -620,7 +620,7 @@ const Step4 : React.FC<{}> = () => {
                 <img src={staticFiles.images.finish} style={{position:'absolute', right:0, width:'400px', opacity:'0.5', marginRight:'15%'}} />
             )}
         </div>
-        <button onClick={onSubmit} className="mb-[45px] btn-color py-2 px-5 rounded-[30px] text-[23px]" style={{fontWeight:fontBold, width:match_1024?'324px':'200px', marginLeft:match_1024?'10%':'27%', marginTop:match_1024?'30px':'20px'}}>完了</button>
+        <button onClick={onSubmit} className="mb-[45px] btn-color py-2 px-5 rounded-[30px] text-[20px]" style={{fontWeight:fontBold, width:match_1024?'324px':'200px', marginLeft:match_1024?'10%':'27%', marginTop:match_1024?'30px':'20px'}}>完了</button>
         </div>
         </>
     )

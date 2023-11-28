@@ -11,12 +11,6 @@ export type NavBarElement = {
   dropdownElements?: { name: string; subPath: string }[];
 };
 
-const itemClass =
-  "px-9 py-2 text-xl hover:text-lightBrown/[1] flex justify-center items-center whitespace-nowrap font-m1c ";
-const selectedItemClass = "";
-
-const dropdownContainer = "group relative inline-block";
-
 export const NavBar: React.FC<{
   elements: NavBarElement[];
   isMobile?: boolean;
@@ -30,7 +24,7 @@ export const NavBar: React.FC<{
       {elements.map((el) => (
         <Fragment key={el.name}>
             <button
-              className={`${match_1200 ? "text-xl px-9" : "text-ms px-4"} py-2  hover:text-lightBrown/[1] flex justify-center items-center whitespace-nowrap font-m1c`}
+              className={`${match_1200 ? "text-sm px-9" : "text-ms px-4"} py-2  hover:text-lightBrown/[1] flex justify-center items-center whitespace-nowrap font-m1c`}
               style={{whiteSpace:'nowrap', fontWeight:fontBold}}
               onClick={() => navigate(el.path)}
             ><img className="pr-3" src={el.imgPath}/>

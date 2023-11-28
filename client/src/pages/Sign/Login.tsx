@@ -72,7 +72,7 @@ export const Login = () => {
             <div className="bg-gradient-to-br from-[#FAEAD1] to-[#F5D0E9] w-full h-full p-[50px]" style={{position:'absolute', top:0, left:0, filter:'blur(10px)', zIndex:-10}}></div>
             <div className="flex flex-col justify-center items-center p-[50px] rounded-[20px] min-w-[500px] bg-[#c9c9c9ad]" style={{border:'2px solid #ffffff4d'}}>
                 <img src={staticFiles.icons.ic_logo} className="w-[250px]" />
-                <label className="text-[30px] text-[#000] py-[20px]" style={{fontWeight:800}}>ユーザーログイン</label>
+                <label className="text-[28px] text-[#000] py-[20px]" style={{fontWeight:800}}>ユーザーログイン</label>
                 <img src={staticFiles.images.profile} className="w-[120px] border-[4px] rounded-[1000px] mb-[30px]"/>
                 <Formik
                         validateOnChange={true}
@@ -149,7 +149,7 @@ export const Login = () => {
                           }}
                           />
 
-                        <Button type="submit" variant="contained" endIcon={<LoginIcon sx={{marginBottom:'7px'}} />} sx={{height:50, fontSize:20, width:'80%'}}>
+                        <Button type="submit" variant="contained" endIcon={<LoginIcon sx={{marginBottom:'7px'}} />} sx={{height:50, fontSize:18, width:'80%'}}>
                             ログイン
                         </Button>
                         </Form>
@@ -158,13 +158,13 @@ export const Login = () => {
                         
                     <Container maxWidth="sm" className="mt-[20px]">
                     <Stack direction="row" spacing={2} className = "justify-center items-center">
-                        <Typography color="textSecondary" sx={{marginTop:'10px', fontSize:16}}>まだ会員ではないお客様</Typography>
+                        <Typography color="textSecondary" sx={{marginTop:'10px', fontSize:14}}>まだ会員ではないお客様</Typography>
                         <Button variant="text" onClick={() => {navigate('/signup')}}>新規会員登録はこちら</Button>
                     </Stack>
                     </Container>
                     <Container maxWidth="sm" className="mt-[5px]">
                     <Stack direction="row" spacing={2} className = "justify-center items-center">
-                        <Typography color="textSecondary" sx={{marginTop:'10px', fontSize:16}}>パスワードを忘れたお客様</Typography>
+                        <Typography color="textSecondary" sx={{marginTop:'10px', fontSize:14}}>パスワードを忘れたお客様</Typography>
                         <Button variant="text" onClick={() => {navigate('/forgot')}}>パスワードの再設定はこちら</Button>
                     </Stack>
                     </Container>

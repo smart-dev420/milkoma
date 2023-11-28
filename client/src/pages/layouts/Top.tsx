@@ -127,10 +127,10 @@ export const Top = () => {
             </div>
             <img src={staticFiles.images.circle} className={`${match_1024 ? "" : "hidden"} w-[32px] py-3`} />
             <div className={`${match_1024 ? "" : "hidden"} flex flex-col ml-10`} >
-              <label className="text-xs font-m1c">ログイン中</label>
+              <label className="text-[9px] font-m1c">ログイン中</label>
                 <div className="flex flex-row justify-between">
-                  <label className="text-md font-m1c min-w-[140px]" style={{whiteSpace:'nowrap', fontWeight:fontBold}}>NeoPen株式会社</label>
-                  <label className="text-xs font-m1c ml-5 h-[17px] min-w-[75px] bg-[#F9E5D1] flex justify-center items-center text-center rounded-lg" style={{whiteSpace:'nowrap'}}>リクエスター</label>
+                  <label className="text-[14px] font-m1c min-w-[140px]" style={{whiteSpace:'nowrap', fontWeight:fontBold}}>NeoPen株式会社</label>
+                  <label className="text-[9px] font-m1c ml-5 h-[17px] min-w-[75px] bg-[#F9E5D1] flex justify-center items-center text-center rounded-lg" style={{whiteSpace:'nowrap'}}>リクエスター</label>
                 </div>
             </div>
             <div className={`${match_1024 ? "" : "hidden"} pl-12 pt-3 w-full justify-center flex`}>
@@ -163,7 +163,7 @@ export const Top = () => {
                     }} />
               </Badge>
                 <button 
-                  className={`${match_1500 ? "text-md min-w-[120px]" : match_1024 ? "text-ms min-w-[60px]" : "hidden"} font-m1c pl-4 mt-3`}
+                  className={`${match_1500 ? "text-[14px] min-w-[120px]" : match_1024 ? "text-[12px] min-w-[60px]" : "hidden"} font-m1c pl-4 mt-3`}
                   aria-controls={open ? 'account-menu' : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
@@ -183,23 +183,24 @@ export const Top = () => {
                   fill={isHovered == 2?'#F6CAA1':'#001219'} fill-rule="evenodd"/>
                 </svg>
                 <button 
-                  className={`${match_1500 ? "text-md min-w-[120px]" : match_1024 ? "text-ms min-w-[60px]" : "hidden"} font-m1c mt-3 `} 
+                  className={`${match_1500 ? "text-[14px] min-w-[120px]" : match_1024 ? "text-[12px] min-w-[60px]" : "hidden"} font-m1c mt-3 `} 
                   style={{whiteSpace:'nowrap', fontWeight:fontBold, color:isHovered == 2?'#F6CAA1':'#000'}}
                 >{loginStatus?"マイページ":"ログイン"}
                 </button>
               </label>
-              <button
-                onClick={()=>{navigate('/direct_request')}}  
-                className={`${match_1500 ? "ml-[10%] text-sm min-w-[170px]" : match_1024 ? "ml-1 text-ms min-w-[170px]" : "hidden"} font-m1c hover:bg-brown/[1] bg-pink h-[48px] rounded-[50px] text-white`} style={{whiteSpace:'nowrap', fontWeight:fontBold}}>
-                直接依頼をする
-              </button>
-              
+              <div style={{display:'flex', flexDirection:'row', justifyContent:'end'}}>
+                <button
+                  onClick={()=>{navigate('/direct_request')}}  
+                  className={`${match_1500 ? "text-[16px] min-w-[170px]" : match_1024 ? "ml-1 text-[12px] min-w-[170px]" : "hidden"} font-m1c hover:bg-brown/[1] bg-pink h-[48px] rounded-[50px] text-white`} style={{whiteSpace:'nowrap', fontWeight:fontBold}}>
+                  直接依頼をする
+                </button>
+              </div>
           </div>
           <div className={`${match_1024 ? "" : "hidden"}`}>
             <NavBar elements={pageLayoutNavBar} />
           </div>
         </div>
-      <React.Fragment>
+      {/* <React.Fragment> */}
         <Menu
           anchorEl={anchorEl}
           id="account-menu"
@@ -217,11 +218,11 @@ export const Top = () => {
                 onClick={handleClose} /></button>
             </div>
             {detail?(
-              <React.Fragment>
+              // <React.Fragment>
                 <div className="px-10 py-5">
                 新しいお知らせはありません {selectId}
                 </div>  
-              </React.Fragment>
+              // </React.Fragment>
             ):(
               fakeData.map((item:ItemElement) => (
                 <>
@@ -237,7 +238,7 @@ export const Top = () => {
               ))
             )}
         </Menu>
-      </React.Fragment>
+      {/* </React.Fragment> */}
       </>
     );
   };

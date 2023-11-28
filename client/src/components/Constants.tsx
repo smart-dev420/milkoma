@@ -121,10 +121,16 @@ export const staticFiles = {
 export const btnBackground = "#EE7D90"
 export const btnBackgroundHover = "#E28E9C"
 export const fontBold = "bold";
-export const fontSize20 = "20px";
 export const fontSize30 = "30px";
+export const fontSize28 = "28px";
 export const fontSize26 = "26px";
+export const fontSize24 = "24px";
+export const fontSize22 = "22px";
+export const fontSize20 = "20px";
 export const fontSize18 = "18px";
+export const fontSize16 = "16px";
+export const fontSize14 = "14px";
+export const fontSize12 = "12px";
 
 // export const API = "localhost:5000/";
 

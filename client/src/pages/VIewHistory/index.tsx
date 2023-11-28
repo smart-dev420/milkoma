@@ -83,11 +83,11 @@ export const ViewHistory = () => {
             <div className="w-full">
                 <div className="h-[220px]"></div>
                 <div className="px-[2vw]">
-                    <p className="text-[30px] text-[#001219] mt-[20px]" style={{letterSpacing:'-2px'}}>閲覧履歴</p>
-                    <p className="text-[19px] text-[#511523]" style={{letterSpacing:'-1px'}}>閲覧したことのあるインフルエンサー</p>
+                    <p className="text-[28px] text-[#001219] mt-[20px]" style={{letterSpacing:'-2px'}}>閲覧履歴</p>
+                    <p className="text-[16px] text-[#511523]" style={{letterSpacing:'-1px'}}>閲覧したことのあるインフルエンサー</p>
                     <div className="flex flex-col mt-[85px] items-center">
                         <div className="flex flex-row justify-center" style={{columnGap:'63px'}}>
-                            <span className="text-[25px] text-[#511523] " style={{letterSpacing:'-2px'}}>キーワード検索</span>
+                            <span className="text-[22px] text-[#511523] " style={{letterSpacing:'-2px'}}>キーワード検索</span>
                             <div className="flex flex-col w-[48%]">
                                 <TextField
                                     id="search"
@@ -107,19 +107,19 @@ export const ViewHistory = () => {
                                 onKeyDown={handleKeyDown}
                                 />
                                 <div className="flex flex-wrap px-[20px] pt-[20px]" style={{columnGap:'5px', rowGap:'10px'}}>
-                                    <span className="text-[16px] text-[#554744]" style={{whiteSpace:'nowrap'}}>最近の検索</span>
+                                    <span className="text-[14px] text-[#554744]" style={{whiteSpace:'nowrap'}}>最近の検索</span>
                                     {
                                         searchValue.map((item:any, index:number) => (
-                                            <button className="border rounded-[20px] mx-[5px] px-[15px] text-[14px] text-[#554744]" key={index}>{item}</button>
+                                            <button className="border rounded-[20px] mx-[5px] px-[15px] text-[12px] text-[#554744]" key={index}>{item}</button>
                                         ))
                                     }
                                 </div>
                             </div>
                         </div>
                         <div className="flex w-full px-[75px] items-center mt-[80px] mb-[60px]" style={{flexDirection:match_1024?'row':'column'}}>
-                            <label className="text-[25px] text-[#511523] w-[35%]" style={{width:match_1024?'35%':'100%'}}>登録インフルエンサー</label>
+                            <label className="text-[22px] text-[#511523] w-[35%]" style={{width:match_1024?'35%':'100%'}}>登録インフルエンサー</label>
                             <div className="flex flex-row items-center">
-                                <label className="text-[18px] text-[#511523] px-[10px]" style={{whiteSpace:"nowrap"}}>並び替え</label>
+                                <label className="text-[16px] text-[#511523] px-[10px]" style={{whiteSpace:"nowrap"}}>並び替え</label>
                                 <div className="flex flex-wrap" style={{columnGap:'20px', rowGap:'10px'}}>
                                     {btn_group.map((item) => (
                                         item.id < 4 ? (
@@ -132,7 +132,7 @@ export const ViewHistory = () => {
                                                 borderColor: '#CE6F82',
                                                 borderRadius: '25px',
                                                 width: '207px',
-                                                fontSize: '18px',
+                                                fontSize: '16px',
                                                 height: '44px',
                                                 whiteSpace:'nowrap'
                                             }}
@@ -175,7 +175,7 @@ const GridComponent: React.FC<{ count: number }> = ({ count }) => {
             <div className="flex flex-row ">
                 <img src={staticFiles.images.model} className="rounded-[25px] w-[100px]"/>
                 <div className="flex flex-col pl-[10px]">
-                    <span className="mt-[30px] w-[96px] h-[31px] text-[#fff] text-[15px] bg-[#F59ABF] rounded-[20px] text-center">コスメ</span>
+                    <span className="mt-[30px] w-[96px] h-[31px] text-[#fff] text-[14px] bg-[#F59ABF] rounded-[20px] text-center">コスメ</span>
                     <div className="flex flex-row mt-[10px]">
                         <img className="w-[34px] h-[34px] item-shadow rounded-[10px]" src={staticFiles.images.youtube} />
                         <img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.seventeen} />
@@ -184,10 +184,10 @@ const GridComponent: React.FC<{ count: number }> = ({ count }) => {
                     </div>
                 </div>
             </div>
-            <span className="mt-[30px] text-[#511523] text-[27px]" style={{letterSpacing:'-4px'}}>なまえ なまえ なまえ</span>
+            <span className="mt-[30px] text-[#511523] text-[24px]" style={{letterSpacing:'-4px'}}>なまえ なまえ なまえ</span>
             <div className="flex flex-row">
                 <img className="w-[20px]" src={staticFiles.icons.ic_user_plus} />
-                <span className="text-[15px] text-[#838688]">フォロワー数 116,900人</span>
+                <span className="text-[14px] text-[#838688]">フォロワー数 116,900人</span>
             </div>
             </div>
             </div>

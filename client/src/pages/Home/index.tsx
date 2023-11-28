@@ -1,7 +1,7 @@
 import { Card, useMediaQuery } from "@mui/material"
 import React, { useEffect, useState } from "react"
 import { CardElement, IntroCard } from "../../components/Card";
-import { fontBold, fontSize18, fontSize20, fontSize26, fontSize30, staticFiles } from "../../components/Constants";
+import { fontBold, fontSize18, fontSize20, fontSize26, fontSize28, fontSize30, staticFiles } from "../../components/Constants";
 import { HomeGrid } from "../../components/Grid";
 import { stat } from "fs";
 import { HomeSlider } from "../../components/Slider";
@@ -48,12 +48,12 @@ export const Home = () =>{
         <div className={`${match_1024 ? "h-[200px]" : (match_768 ? 'h-[10px]' : "mt-[-50px]")}`}></div>
         <HomeSlider />
         <img src={staticFiles.images.ellipse_right} style={{position:"absolute", zIndex:-1, top:"200px", right:0}} width={550} />
-        <p className="mt-[100px] my-5" style={{fontWeight:fontBold, fontSize:match_1024?fontSize30:fontSize20}}>おすすめインフルエンサー</p>
+        <p className="mt-[100px] my-5" style={{fontWeight:fontBold, fontSize:match_1024?fontSize28:fontSize20}}>おすすめインフルエンサー</p>
         <VerticalSlide />
         <img src={staticFiles.images.ellipse_two} style={{position:"absolute", zIndex:-1, top:"1450px", left:0}} width={650} />
-        <p className="mt-[100px] my-5" style={{fontWeight:fontBold, fontSize:match_1024?fontSize30:fontSize20}}>宣伝したいものから探す</p>
+        <p className="mt-[100px] my-5" style={{fontWeight:fontBold, fontSize:match_1024?fontSize28:fontSize20}}>宣伝したいものから探す</p>
         <IntroCard elements={cardData} space={3} />
-        <p className="mt-[100px] pb-5" style={{fontWeight:fontBold, fontSize:match_1024?fontSize30:fontSize20}}>最近公開された広告・動画</p>
+        <p className="mt-[100px] pb-5" style={{fontWeight:fontBold, fontSize:match_1024?fontSize28:fontSize20}}>最近公開された広告・動画</p>
         <label className="ml-[8vw] px-3 py-2 rounded-[20px] cursor-pointer" 
           style={{fontWeight:fontBold, backgroundColor:selectShowDirection == 0 ? selectColor:unSelectColor, color:selectShowDirection == 0? unSelectColor:selectColor}}
           onClick={() => {SetSelectShowDirection(0)}}
@@ -66,7 +66,7 @@ export const Home = () =>{
         <div className='my-5 flex w-full'>
         <HomeGrid state = {selectShowDirection}/>        
         </div>
-        <p className="mt-[100px] my-5" style={{fontWeight:fontBold, fontSize:match_1024?fontSize30:fontSize20}}>ミルコマとは？</p>
+        <p className="mt-[100px] my-5" style={{fontWeight:fontBold, fontSize:match_1024?fontSize28:fontSize20}}>ミルコマとは？</p>
         <img src={staticFiles.images.ellipse_three} style={{position:"absolute", zIndex:-1, top:"2800px", right:0}} width={700} />
         <div className={`${match_1024 ? "flex-row mx-[20px]" : "flex-col"} flex items-center justify-center`} style={{columnGap:'146px'}}>
           <div className="flex flex-col justify-center items-center " style={{fontWeight:fontBold}}>
@@ -181,19 +181,19 @@ const VerticalSlide = () => {
             >
             {data.map((item, index) => (
               <div className="flex flex-col w-[450px] p-[10px]">
-                <span key={index} className="py-[6px] w-[356px] bg-gradient-to-br from-[#F4B7A5] to-[#F7CF91] text-[#fff] text-[19px] rounded-[20px]" style={{whiteSpace:'nowrap', fontWeight:fontBold, textAlign:'center'}}>{item.title}</span>
+                <span key={index} className="py-[6px] w-[356px] bg-gradient-to-br from-[#F4B7A5] to-[#F7CF91] text-[#fff] text-[16px] rounded-[20px]" style={{whiteSpace:'nowrap', fontWeight:fontBold, textAlign:'center'}}>{item.title}</span>
                 <div className="flex flex-row mt-[30px]">
                   <img src={item.avatar} className="max-h-[65px] max-w-[65px]"/>
                   <div className="flex flex-col ml-[20px] mb-[35px]">
-                    <label className="text-[#838688] text-[15px]" style={{whiteSpace:'nowrap', textAlign:'left'}}>{item.mail}</label>
-                    <label className="text-[27px] text-[#001219]" style={{whiteSpace:'nowrap', fontWeight:fontBold}}>{item.name}</label>
+                    <label className="text-[#838688] text-[14px]" style={{whiteSpace:'nowrap', textAlign:'left'}}>{item.mail}</label>
+                    <label className="text-[24px] text-[#001219]" style={{whiteSpace:'nowrap', fontWeight:fontBold}}>{item.name}</label>
                   </div>
                 </div>
-                <div className="flex flex-row text-[#511523] text-[18px] justify-center items-center" style={{whiteSpace:'nowrap'}}>
+                <div className="flex flex-row text-[#511523] text-[16px] justify-center items-center" style={{whiteSpace:'nowrap'}}>
                   <img src={staticFiles.icons.ic_user_plus} className="max-w-[22px] max-h-[20px]"/>
-                  <label className="ml-[5px] mr-[65px] text-[18px]">フォロワー数 {item.follow}人</label>
+                  <label className="ml-[5px] mr-[65px] text-[16px]">フォロワー数 {item.follow}人</label>
                   <img src={staticFiles.icons.ic_heart} className="max-w-[25px]"/>
-                  <label className="text-[18px] ml-[5px]">いいね数 {item.heart}</label>
+                  <label className="text-[16px] ml-[5px]">いいね数 {item.heart}</label>
                 </div>
                 <button className="w-[206px] h-[41px] mt-[40px] rounded-[27px] btn-color" style={{fontWeight:fontBold}}>詳しく見る</button>
               </div>

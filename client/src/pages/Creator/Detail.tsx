@@ -1,5 +1,5 @@
 import { Box, Grid, useMediaQuery } from "@mui/material"
-import { fontBold, staticFiles } from "../../components/Constants"
+import { fontBold, fontSize12, fontSize14, fontSize16, fontSize24, fontSize28, staticFiles } from "../../components/Constants"
 import { useNavigate, useParams } from "react-router-dom";
 import { NumberFormatExample, showSentence } from "../../utils/appHelper";
 
@@ -29,11 +29,11 @@ export const CreatorDetail = () => {
                 {/** SNS Data */}
                     <Box flex={2} className="flex flex-row bg-gradient-to-br from-[#FDF6E0] to-[#F8D8C2] rounded-[20px]" style={{boxShadow:"0px 0px 35px 5px #FCEFD9", position:'relative'}}>
                         <img src={staticFiles.images.blog} className="w-[68%] rounded-[20px]" />
-                        <div className="flex flex-col items-center w-[32%] text-[19px] text-[#511523]" style={{justifyContent:'center', alignItems:'center'}}>
+                        <div className="flex flex-col items-center w-[32%] text-[#511523]" style={{justifyContent:'center', alignItems:'center', fontSize:fontSize16}}>
                             <label className="mt-[24px] mb-[30px]" style={{fontWeight:fontBold}}>動画・画像</label>
                             <GridItems sp={2} lg={6} path={staticFiles.images.blog1} sm="w-[102px] my-[5px]" />
                             <label className="mt-[179px] mb-[30px]" style={{fontWeight:fontBold}}>ジャンル</label>
-                            <div className="flex flex-wrap text-[#fff] text-[15px] text-center" style={{columnGap:'5px'}}>
+                            <div className="flex flex-wrap text-[#fff] text-center" style={{columnGap:'5px', fontSize:fontSize14}}>
                                 <span className="w-[96px] h-[31px] bg-[#F59ABF] rounded-[20px]" style={{fontWeight:fontBold}}>コスメ</span>
                                 <span className="w-[96px] h-[31px] bg-[#E38A86] rounded-[20px]" style={{fontWeight:fontBold}}>ブログ</span>
                             </div>
@@ -53,38 +53,38 @@ export const CreatorDetail = () => {
                         <div className="flex flex-row mt-[50px]">
                             <img src={creatorData.avatar} className="w-[65px] h-[65px]" />
                             <div className="flex flex-col ml-[20px]">
-                                <label className="text-[15px] text-[#838688]">{creatorData.email}</label>
-                                <label className="text-[27px] text-[#001219]" style={{fontWeight:fontBold}}>{creatorData.description}</label>
+                                <label className="text-[#838688]" style={{fontSize:fontSize14}}>{creatorData.email}</label>
+                                <label className="text-[#001219]" style={{fontWeight:fontBold, fontSize:fontSize24}}>{creatorData.description}</label>
                             </div>
                         </div>
-                        <div className="flex flex-row text-[19px] text-[#511523] items-center mt-[20px] mb-[26px]" style={{whiteSpace:'nowrap'}}>
+                        <div className="flex flex-row text-[#511523] items-center mt-[20px] mb-[26px]" style={{whiteSpace:'nowrap', fontSize:fontSize16}}>
                             <img src={staticFiles.icons.ic_user_plus_brown} className="w-[26px]"/>
                             <label className="px-[5px]">総フォロワー数 {creatorData.follower.toLocaleString()}人</label>
                             <img src={staticFiles.icons.ic_heart} className="w-[23px] ml-[63px] mr-[5px]" />
                             <label>総いいね数 {NumberFormatExample(creatorData.heart)}</label>
                         </div>
-                        <div className="text-[#511523] text-[18px] w-[534px]">
+                        <div className="text-[#511523] w-[534px]" style={{fontSize:fontSize16}}>
                            {showSentence(creatorData.personalData)}
                         </div>
-                        <label className="text-[19px] text-[#511523] mt-[29px] mb-[11px] ml-[20px]" style={{fontWeight:fontBold}}>できること・特殊な依頼</label>
-                        <div className="flex flex-row text-[#554744] text-[14px]" style={{columnGap:'15px', whiteSpace:'nowrap'}}>
+                        <label className="text-[#511523] mt-[29px] mb-[11px] ml-[20px]" style={{fontWeight:fontBold, fontSize:fontSize16}}>できること・特殊な依頼</label>
+                        <div className="flex flex-row text-[#554744]" style={{columnGap:'15px', whiteSpace:'nowrap', fontSize:fontSize12}}>
                             {creatorData.skill.map((item, index) => (
                                 <label className="bg-[#fff] px-[20px] py-[5px] rounded-[20px]" style={{border:'1px solid #554744'}}>{item}</label>
                             ))}
                         </div>
                         <div className="flex flex-row rounded-[20px] bg-[#fff] items-center w-[219px] h-[38px] mt-[30px]" style={{border:'1px solid #EBE4DC', zIndex:2}}>
                             <img className="w-[25px] ml-[14px]" src={staticFiles.images.footer} />
-                            <label className="text-[#511523] text-[18px]">ミルコマチョイス！</label>
+                            <label className="text-[#511523]" style={{fontSize:fontSize16}}>ミルコマチョイス！</label>
                         </div>
-                        <div className="rounded-[20px] w-[100%] bg-[#fff] pt-[34px] pb-[10px] px-[23px] text-[#511523] text-[18px]" style={{border:'1px solid #EBE4DC', marginTop:'-20px'}}>
+                        <div className="rounded-[20px] w-[100%] bg-[#fff] pt-[34px] pb-[10px] px-[23px] text-[#511523]" style={{fontSize:fontSize16,border:'1px solid #EBE4DC', marginTop:'-20px'}}>
                         総フォロワー数 {creatorData.follower.toLocaleString()}人！
                         {creatorData.mirucoma}
                         </div>
                         <div className="flex flex-row justify-center items-center mt-[79px]">
                             <button
-                                className="font-m1c hover:bg-[#E28E9C]/[1] bg-[#EE7D90] text-[19px] h-[41px] rounded-[50px] text-white px-[30px] "
+                                className="font-m1c hover:bg-[#E28E9C]/[1] bg-[#EE7D90] h-[41px] rounded-[50px] text-white px-[30px] "
                                 onClick={() => navigate(`/creator/step/${userId}`)}
-                                style={{boxShadow:"0px 0px 3px 2px #EE7D90", fontWeight:fontBold, whiteSpace:'nowrap'}}
+                                style={{boxShadow:"0px 0px 3px 2px #EE7D90", fontWeight:fontBold, whiteSpace:'nowrap', fontSize:fontSize16}}
                                 >
                                     この人に依頼したい
                             </button>
@@ -92,7 +92,7 @@ export const CreatorDetail = () => {
                         
                     </Box>
                 </div>
-                <p className="mt-[90px] mb-[52px] text-[#001219] text-[30px]" style={{fontWeight:fontBold}}>ミルコマで出した広告動画</p>
+                <p className="mt-[90px] mb-[52px] text-[#001219] " style={{fontWeight:fontBold, fontSize:fontSize28}}>ミルコマで出した広告動画</p>
                 </div>
             </div>
             <GridItems sp={6} lg={8} path={staticFiles.images.blog} sm="w-[298px] mx-[40px] my-[10px]" />
