@@ -12,7 +12,6 @@ import { API } from "../../axios";
 import { headers } from "../../utils/appHelper";
 
 interface Profile {
-    avatar: string;
     username: string;
     company: string;
     role: string;
@@ -33,8 +32,7 @@ export const Profile = () =>{
     const [ file, setFile ] = useState(null);
     const [ skill, setSkill ] = useState('');
     const [ profile, setProfile ] = useState<Profile>({
-        avatar: '',
-        username: 'asdf',
+        username: '',
         company: '',
         role: '',
         liveAccount: '',
@@ -47,8 +45,8 @@ export const Profile = () =>{
     const sessionData = sessionStorage.getItem('user');
     const userData = sessionData? JSON.parse(sessionData) : null;
 
-    /** Avatar Upload */
-    const [ fileName, setFileName ] = useState<File | null>(null);
+    /** Avatar and Basic Data */
+    const [ avatar, setAvatar ] = useState<File | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const handleButtonClick = () => {
         fileInputRef.current?.click();
@@ -58,10 +56,21 @@ export const Profile = () =>{
         const file = event.target.files?.[0];
         // Handle the selected file here
         if(file){
-            setFileName(file);
+            setAvatar(file);
             console.log(file);
         }
       };
+
+    const handleBasicDataSubmit = async () =>{
+        console.log('userId', userData.id);
+        let formData = new FormData();
+        if(avatar){
+            formData.append('avatar', avatar);
+            formData.append('id', userData.id);
+            formData.append('username', profile.username);
+            formData.append('company', profile.company);
+        }
+    }
 
 
     /** Verification Document Upload */
@@ -108,12 +117,19 @@ export const Profile = () =>{
                 
                 {/** Personal Data */}
                     <Box display='flex' flexDirection='column' sx={{rowGap:'20px', width:'40%'}}>
+                        
+
+                    {/** Basic Data */}
+                        <Box display='flex' flexDirection='column' sx={{rowGap:'20px', padding:'20px', border:'1px solid rgba(0,0,0,0.2)', borderRadius:'10px', marginTop:'20px'}}>
+                        <Typography sx={{paddingX:'10px', fontSize:'16px', fontWeight:fontBold, marginTop:'-32px', backgroundColor:'#FFF', width:'fit-content'}}>基本データ</Typography>
+                        
                         <Typography sx={{fontSize:'16px', fontWeight:fontBold}}>アバター</Typography>
                         <Box display='flex' flexDirection='row' sx={{alignItems:'end', columnGap:'20px'}}>
                             <CardMedia 
                                 component="img"
                                 sx={{width:'200px', height:'200px'}}
-                                image = {fileName? URL.createObjectURL(fileName):staticFiles.images.profile}/>
+                                image = {`${API}/api/avatar/${userData.id}`}
+                                />
                             <input
                                 ref={fileInputRef}
                                 type="file"
@@ -151,14 +167,10 @@ export const Profile = () =>{
                                         backgroundColor: '#FCF4F4'
                                     },
                                     }}
-                                onClick={()=>{setFileName(null)}}>
+                                onClick={()=>{setAvatar(null)}}>
                                 取り除く
                             </Button>
                         </Box>
-
-                    {/** Basic Data */}
-                        <Box display='flex' flexDirection='column' sx={{rowGap:'20px', padding:'20px', border:'1px solid rgba(0,0,0,0.2)', borderRadius:'10px', marginTop:'20px'}}>
-                            <Typography sx={{paddingX:'10px', fontSize:'16px', fontWeight:fontBold, marginBottom:'20px', marginTop:'-32px', backgroundColor:'#FFF', width:'fit-content'}}>基本データ</Typography>
                             <Box display='flex' flexDirection='row' sx={{columnGap:'10px', alignItems:'center', justifyContent:'space-between'}}>
                                 <Typography sx={{fontSize:'14px', fontWeight:fontBold, whiteSpace:'nowrap'}}>メールアドレス: </Typography>
                                 <TextField
@@ -213,9 +225,29 @@ export const Profile = () =>{
                                     }}
                                 />
                             </Box>  
+                            <Box display='flex' flexDirection='row' justifyContent='end'>
+                                <Button size="medium"
+                                    sx={{
+                                        backgroundColor:btnBackground, 
+                                        borderRadius:'36px', 
+                                        width:'30%',
+                                        height:'35px',
+                                        color: '#FFFFFF',
+                                        fontWeight:fontBold,
+                                        "&:hover": {
+                                            backgroundColor: btnBackgroundHover
+                                        },
+                                        }}
+                                    onClick={handleBasicDataSubmit}
+                                    >セーブ
+                                </Button>
+                            </Box>        
+                        </Box>
+                        <Box display='flex' flexDirection='column' sx={{rowGap:'20px', padding:'20px', border:'1px solid rgba(0,0,0,0.2)', borderRadius:'10px', marginTop:'20px'}}>
+                        <Typography sx={{paddingX:'10px', fontSize:'16px', fontWeight:fontBold, marginTop:'-32px', backgroundColor:'#FFF', width:'fit-content'}}>本人確認書類</Typography>
                             <Box display='flex' flexDirection='row' justifyContent='start' sx={{columnGap:'150px'}}>
                                 <Box display='flex' flexDirection='row' sx={{columnGap:'10px', alignItems:'center', justifyContent:'start', width:'50%'}}>
-                                    <Typography sx={{fontSize:'16px', whiteSpace:'nowrap'}}>本人確認書類: </Typography>
+                                    {/* <Typography sx={{fontSize:'16px', whiteSpace:'nowrap'}}>本人確認書類: </Typography> */}
                                     <label className="btn btn-default p-0 ">
                                         <input type="file" onChange={selectFile} />
                                     </label>
@@ -240,11 +272,10 @@ export const Profile = () =>{
                                         アップロード
                                     </Button>
                             </Box>
-                        </Box>
-
+                        </Box>                    
                     {/** Reset Password */}
                         <Box display='flex' flexDirection='column' sx={{rowGap:'20px', padding:'20px', border:'1px solid rgba(0,0,0,0.2)', borderRadius:'10px', marginTop:'20px'}}>
-                            <Typography sx={{paddingX:'10px', fontSize:'16px', fontWeight:fontBold, marginBottom:'20px', marginTop:'-32px', backgroundColor:'#FFF', width:'fit-content'}}>パスワードの変更</Typography>
+                            <Typography sx={{paddingX:'10px', fontSize:'16px', fontWeight:fontBold, marginTop:'-32px', backgroundColor:'#FFF', width:'fit-content'}}>パスワードの変更</Typography>
                             <Box display='flex' flexDirection='row' sx={{columnGap:'10px', alignItems:'center', justifyContent:'space-between'}}>
                                 <Typography sx={{fontSize:'14px', fontWeight:fontBold, whiteSpace:'nowrap'}}>パスワード: </Typography>
                                 <TextField
@@ -308,7 +339,7 @@ export const Profile = () =>{
                     <Box display='flex' flexDirection='column' sx={{width:'40%', rowGap:'20px'}}>
                     {/** SNS */}
                     <Box display='flex' flexDirection='column' sx={{rowGap:'20px', padding:'20px', border:'1px solid rgba(0,0,0,0.2)', borderRadius:'10px'}}>
-                        <Typography sx={{paddingX:'10px', fontSize:'16px', fontWeight:fontBold, marginBottom:'20px', marginTop:'-32px', backgroundColor:'#FFF', width:'fit-content'}}> SNS </Typography>
+                        <Typography sx={{paddingX:'10px', fontSize:'16px', fontWeight:fontBold, marginTop:'-32px', backgroundColor:'#FFF', width:'fit-content'}}> SNS </Typography>
                         <Box display='flex' flexDirection='row' sx={{columnGap:'10px', alignItems:'center', justifyContent:'space-between'}}>
                             <Typography sx={{fontSize:'14px', fontWeight:fontBold, whiteSpace:'nowrap'}}>17.Live: </Typography>
                             <TextField

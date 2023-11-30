@@ -15,8 +15,8 @@ const apiRoute = Router();
 /************************************************************/
 /**************************   GET   *************************/
 /************************************************************/
-// apiRoute.get("/avatar/:id", auth.getAvatar);
 
+apiRoute.get("/avatar/:id",                            auth.getAvatar);
 
 /************************************************************/
 /**************************   POST  *************************/
@@ -27,6 +27,7 @@ apiRoute.post("/getUserInfo",               existIDRequest, auth.getUserInfo);
 // apiRoute.post("/get_profile",               verifyToken,    existIDRequest, auth.readProfilebyID);
 apiRoute.post("/follower",                verifyToken,     auth.followUser);
 apiRoute.post("/heart",                verifyToken,     auth.heartUser);
+
 
 
 /******* Contract */

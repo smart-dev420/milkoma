@@ -345,7 +345,7 @@ export const getAvatar: RequestHandler = async (req, res) => {
   fs.access(filePath, fs.constants.F_OK, (err:any) => {
     if (err) {
       logger.error("No avatar exists");
-      const noavatar = path.join(rootPath, 'src/assets/avatar.svg');
+      const noavatar = path.join(rootPath, 'src/assets/avatar.png');
       res.status(200).sendFile(noavatar);
     } else {
       logger.info("Avatar exists");
