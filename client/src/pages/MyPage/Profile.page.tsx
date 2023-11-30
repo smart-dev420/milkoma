@@ -1,6 +1,6 @@
 import { Badge, Box, Button, CardMedia, Container, InputAdornment, Stack, TextField, TextareaAutosize, Typography } from "@mui/material"
 import { btnBackground, btnBackgroundHover, fontBold, staticFiles } from "../../components/Constants"
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PersonIcon from '@mui/icons-material/Person';
 import BusinessIcon from '@mui/icons-material/Business';
 import EmailIcon from '@mui/icons-material/Email';
@@ -10,8 +10,13 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import axios from "axios";
 import { API } from "../../axios";
 import { headers } from "../../utils/appHelper";
+import { toast } from "react-toastify";
+import { error } from "console";
+import { useDispatch } from "react-redux";
+import { setPage } from "../../slices/page";
 
 interface Profile {
+    avatar:string;
     username: string;
     company: string;
     role: string;
@@ -29,9 +34,17 @@ interface IFile {
 }
 
 export const Profile = () =>{
+    
+    const getProfile = async () => { 
+        const res = await axios.post(`${API}/api/getUserProfile`, {}, {headers});
+        setProfile(res.data);
+    }
+    const dispatch = useDispatch();
+    dispatch(setPage({page:6}));
     const [ file, setFile ] = useState(null);
     const [ skill, setSkill ] = useState('');
     const [ profile, setProfile ] = useState<Profile>({
+        avatar:'',
         username: '',
         company: '',
         role: '',
@@ -44,6 +57,9 @@ export const Profile = () =>{
     });
     const sessionData = sessionStorage.getItem('user');
     const userData = sessionData? JSON.parse(sessionData) : null;
+    useEffect(() =>{
+        getProfile();
+    },[]);
 
     /** Avatar and Basic Data */
     const [ avatar, setAvatar ] = useState<File | null>(null);
@@ -57,21 +73,35 @@ export const Profile = () =>{
         // Handle the selected file here
         if(file){
             setAvatar(file);
-            console.log(file);
+            setProfile({...profile, avatar:file.name});
         }
       };
 
     const handleBasicDataSubmit = async () =>{
-        console.log('userId', userData.id);
         let formData = new FormData();
         if(avatar){
             formData.append('avatar', avatar);
-            formData.append('id', userData.id);
-            formData.append('username', profile.username);
-            formData.append('company', profile.company);
+        }
+        console.log('userData - ', profile);
+        if(profile.username === '' || profile.company === ''){
+            toast.error('すべてのフィールドを挿入する必要があります。');
+            return;
+        }
+        formData.append('id', userData.id);
+        formData.append('username', profile.username);
+        formData.append('company', profile.company);
+        const query = `${API}/auth/updateProfile`;
+        try{
+            const res = await axios.post(query, formData, {headers});
+            if(res.status === 200){
+                toast.success(res.data.msg);
+            }else{
+                toast.error(res.data.msg);
+            }
+        }catch(error){
+            console.log(error);
         }
     }
-
 
     /** Verification Document Upload */
     const [currentFile, setCurrentFile] = useState<File | null>(null);
@@ -79,15 +109,15 @@ export const Profile = () =>{
        if(currentFile){
         let formData = new FormData();
         formData.append("file", currentFile);
-        console.log(currentFile);
-
-        const query = `${API}/api/uploadVerify`;
+        const query = `${API}/auth/uploadVerify/${userData.id}`;
         try{
             const res = await axios.post(query, formData, {headers});
             if(res.status === 200 ){
-                console.log('return', res.data)
+                console.log('return', res.data);
+                toast.success(res.data.msg);
             }else{
                 console.log(res)
+                toast.error(res.data.msg);
             }
         }
         catch(error:any){
@@ -108,7 +138,81 @@ export const Profile = () =>{
     const [ password, setPassword ] = useState({
         pswd1:'',
         pswd2:''
-    })
+    });
+
+    const handleResetPassword = async() => {
+        const regExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
+        if(!password.pswd1 || !password.pswd2){
+            toast.error('パスワードを入力する必要があります');
+            return;
+        } else if(!password.pswd1.match(regExp) || !password.pswd2.match(regExp)){
+            toast.error('有効なパスワードを入力して下さい。 大文字 1 つ、小文字 1 つ、特殊文字 1 つ、スペースなし');
+            return;
+        } else if(password.pswd1 !== password.pswd2){
+            toast.error('パスワードは一致する必要があります');
+            return;
+        }
+        let formData = new FormData();
+        formData.append('password', password.pswd1);
+        const query = `${API}/auth/changePassword/${userData.email}`;
+        try {
+            const res = await axios.post(query, formData, {headers});
+            if(res.status === 200){
+                toast.success("パスワードの変更が成功しました!");
+              }else{
+                console.log(res.status);
+            }
+        } catch (error:any) {
+            const result = error.response.data.msg;
+            toast.error(result);
+        }  
+    }
+
+    /** Update SNS Data */
+    const handleUpdateSNS = async () => {
+        let formData = new FormData();
+        if(!profile.liveAccount || !profile.youtubeAccount || !profile.tiktokAccount || !profile.instagramAccount){
+            toast.error('すべてのSNSデータを挿入する必要があります。');
+            return;
+        }
+        formData.append('id', userData.id);
+        formData.append('liveAccount', profile.liveAccount);
+        formData.append('youtubeAccount', profile.youtubeAccount);
+        formData.append('tiktokAccount', profile.tiktokAccount);
+        formData.append('instagramAccount', profile.instagramAccount);
+        const query = `${API}/auth/changeSNS`;
+        try{
+            const res = await axios.post(query, formData, {headers});
+            if(res.status === 200){
+                toast.success(res.data.msg);
+            }else{
+                console.log(res.status);
+            }
+        }catch(err){
+            console.error(err);
+        }
+    }
+
+    /** Update Skills */
+    const handleUpdateSkill = async () => {
+        let formData = new FormData();
+        formData.append('id', userData.id);
+        formData.append('detail', profile.description);
+        profile.skills.forEach((skill) => {
+            formData.append('skills', skill);
+          });
+        const query = `${API}/auth/changeSkills`;
+        try{
+            const res = await axios.post(query, formData, {headers});
+            if(res.status === 200){
+                toast.success(res.data.msg);
+            }else{
+                console.log(res.status);
+            }
+        }catch(error){
+            console.error(error);
+        }
+    }
     return(
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'50px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
             <Stack direction="column" spacing={2} sx={{paddingX:'50px'}}>
@@ -128,7 +232,7 @@ export const Profile = () =>{
                             <CardMedia 
                                 component="img"
                                 sx={{width:'200px', height:'200px'}}
-                                image = {`${API}/api/avatar/${userData.id}`}
+                                image = {avatar?URL.createObjectURL(avatar):`${API}/api/avatar/${userData.id}`}
                                 />
                             <input
                                 ref={fileInputRef}
@@ -329,6 +433,7 @@ export const Profile = () =>{
                                             backgroundColor: btnBackgroundHover
                                         },
                                         }}
+                                    onClick = {handleResetPassword}
                                     >変化する
                                 </Button>
                             </Box>
@@ -338,7 +443,7 @@ export const Profile = () =>{
                 {/** Social Network and Skils  */}
                     <Box display='flex' flexDirection='column' sx={{width:'40%', rowGap:'20px'}}>
                     {/** SNS */}
-                    <Box display='flex' flexDirection='column' sx={{rowGap:'20px', padding:'20px', border:'1px solid rgba(0,0,0,0.2)', borderRadius:'10px'}}>
+                    <Box display='flex' flexDirection='column' sx={{marginTop:'20px',rowGap:'20px', padding:'20px', border:'1px solid rgba(0,0,0,0.2)', borderRadius:'10px'}}>
                         <Typography sx={{paddingX:'10px', fontSize:'16px', fontWeight:fontBold, marginTop:'-32px', backgroundColor:'#FFF', width:'fit-content'}}> SNS </Typography>
                         <Box display='flex' flexDirection='row' sx={{columnGap:'10px', alignItems:'center', justifyContent:'space-between'}}>
                             <Typography sx={{fontSize:'14px', fontWeight:fontBold, whiteSpace:'nowrap'}}>17.Live: </Typography>
@@ -425,6 +530,7 @@ export const Profile = () =>{
                                         backgroundColor: btnBackgroundHover
                                     },
                                     }}
+                                onClick={handleUpdateSNS}
                                 >セーブ</Button>
                         </Box>
                     </Box>
@@ -508,6 +614,7 @@ export const Profile = () =>{
                                         backgroundColor: btnBackgroundHover
                                     },
                                     }}
+                                onClick={handleUpdateSkill}
                                 >セーブ
                             </Button>
                         </Box>

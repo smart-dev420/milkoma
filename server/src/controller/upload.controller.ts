@@ -99,7 +99,7 @@ export const uploadFile: RequestHandler = async (req, res) => {
 
   export const uploadVerifyFile: RequestHandler = async (req, res) => {
     if (!req.files) {
-      return res.status(500).send({ msg: "file is not found" })
+      return res.status(500).send({ msg: "ファイルが見つかりません" })
     }
     console.log("res - ", req.files);
     const files:any = req.files;

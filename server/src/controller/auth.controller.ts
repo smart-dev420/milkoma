@@ -12,7 +12,12 @@ import {
   resetPwd,
   optValidate,
   follow,
-  heart
+  heart,
+  updateUserProfile,
+  getUserProfileInfo,
+  changePswd,
+  changeSNSData,
+  changeSkillsData
 } from "../services/account.service";
 import { omit } from "lodash";
 import logger from "../utils/logger";
@@ -29,8 +34,10 @@ const avatarPath = path.join(rootPath, 'uploads/avatars');
 const providePath = path.join(rootPath, 'uploads/provides');
 const productPath = path.join(rootPath, 'uploads/products');
 const receiptPath = path.join(rootPath, 'uploads/receipts');
+const verifyPath = path.join(rootPath, 'uploads/verifies');
 const otpGenerator = require('otp-generator')
 import AWS from 'aws-sdk';
+import AccountModel from "../models/account.model";
 // AWS.config.update({ region: 'ap-northeast-1' }); 
 // const ses = new AWS.SES({ apiVersion: '2010-12-01' });
 
@@ -166,6 +173,20 @@ const resetPassword: RequestHandler = async (req, res) => {
   }
 }
 
+const changePassword: RequestHandler = async (req, res) => {
+  const email = req.params.email;
+  const password = req.body.password;
+  try {
+    await changePswd({email, password});
+    return res.status(StatusCodes.OK).send({msg : "パスワード変更済み！"}); // Password changed!
+  } catch (err: any) {
+    logger.error(err);
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send({ msg: err.message });
+  }
+}
+
 const forgotPassword: RequestHandler = async (req, res) => {
   const {email} = req.body;
   // const resetToken = crypto.randomBytes(20).toString('hex');
@@ -257,58 +278,50 @@ interface FileInterface {
   mv: any;
 }
 
-interface FilesInterface {
-  fname : string;
-  lname : string;
-  isPublic : boolean;
-  bio : string;
-  avatar: any;
-}
-
-const uploadProfile: RequestHandler = async (req, res) => {
-  // if (!req.files) {
-  //   return res.status(500).send({ msg: "file is not found" })
-  // }
-  const {id} = req.query;
-  const username:string   = req.body.username;
-  const secretcode:string = req.body.secretcode;
-  const fname:string      = req.body.fname;
-  const lname:string      = req.body.lname;
-  const email:string      = req.body.email;
-  const noPublic:boolean  = req.body.noPublic;
-  const bio:string        = req.body.bio;
-  const followers:number  = req.body.followers;
-  const following:number  = req.body.following;
-  const region:number     = req.body.region;
-  console.log("following",following);
-  const filename = id;
-  let resumename = '';
-  if (req.files){
-    const files:any = req.files;
-    if(files.avatar){
-      const avatarFile:FileInterface = files.avatar;
-      avatarFile.mv(`${avatarPath}/${filename}.png`, function (err:any) {
-        if (err) {
-            console.log(err)
-            return res.status(500).send({ result: "Error occured to upload avatar" });
-        }
-      });  
-    }
-    if(files.resume){
-      const resumeFile:FileInterface = files.resume;
-      resumename = uuidv4()
-      // resumeFile.mv(`${resumePath}/${resumename}.pdf`, function (err:any) {
-      //   if (err) {
-      //       console.log(err)
-      //       return res.status(500).send({ result: "Error occured to upload resume" });
-      //   }
-      // });  
-    }
-  }
-  saveProfile({id, username, secretcode, fname, lname, email, noPublic, bio, following, followers, region, resumename})
-  .then(() => res.status(200).send({ result : "success" }))
-  .catch(() => res.status(500).send({ result : "Error occured to upload profile"}));
-}
+// const uploadProfile: RequestHandler = async (req, res) => {
+//   // if (!req.files) {
+//   //   return res.status(500).send({ msg: "file is not found" })
+//   // }
+//   const {id} = req.query;
+//   const username:string   = req.body.username;
+//   const secretcode:string = req.body.secretcode;
+//   const fname:string      = req.body.fname;
+//   const lname:string      = req.body.lname;
+//   const email:string      = req.body.email;
+//   const noPublic:boolean  = req.body.noPublic;
+//   const bio:string        = req.body.bio;
+//   const followers:number  = req.body.followers;
+//   const following:number  = req.body.following;
+//   const region:number     = req.body.region;
+//   console.log("following",following);
+//   const filename = id;
+//   let resumename = '';
+//   if (req.files){
+//     const files:any = req.files;
+//     if(files.avatar){
+//       const avatarFile:FileInterface = files.avatar;
+//       avatarFile.mv(`${avatarPath}/${filename}.png`, function (err:any) {
+//         if (err) {
+//             console.log(err)
+//             return res.status(500).send({ result: "Error occured to upload avatar" });
+//         }
+//       });  
+//     }
+//     if(files.resume){
+//       const resumeFile:FileInterface = files.resume;
+//       resumename = uuidv4()
+//       // resumeFile.mv(`${resumePath}/${resumename}.pdf`, function (err:any) {
+//       //   if (err) {
+//       //       console.log(err)
+//       //       return res.status(500).send({ result: "Error occured to upload resume" });
+//       //   }
+//       // });  
+//     }
+//   }
+//   saveProfile({id, username, secretcode, fname, lname, email, noPublic, bio, following, followers, region, resumename})
+//   .then(() => res.status(200).send({ result : "success" }))
+//   .catch(() => res.status(500).send({ result : "Error occured to upload profile"}));
+// }
 
 const readProfilebyID: RequestHandler = async (req, res) => {
   try {
@@ -340,7 +353,8 @@ const getUserInfo: RequestHandler = async (req, res) => {
 
 export const getAvatar: RequestHandler = async (req, res) => {
   const id = req.params.id;
-  const file = id + ".png";
+  const getAvatar = await AccountModel.findOne({_id:id});
+  const file = getAvatar?.avatar;
   const filePath = path.join(avatarPath, file);
   fs.access(filePath, fs.constants.F_OK, (err:any) => {
     if (err) {
@@ -407,10 +421,65 @@ const heartUser:RequestHandler = async (req, res) => {
   }
 }
 
+const getUserProfile:RequestHandler = async (req, res) => {
+  const token = validateToken(req, res);
+  const result = await getUserProfileInfo({token});
+  return res.status(StatusCodes.OK).send(result);
+}
+
+const updateProfile:RequestHandler = async (req, res) => {
+  const data = req.body;
+  let fileName = data.avatar;
+  if (req.files) {
+    const files:any = req.files;
+    const file:FileInterface = files.avatar;
+    const extension = file.name.split('.');
+    fileName = data.id+'.'+extension[extension.length-1];
+    file.mv(`${avatarPath}/${fileName}`, function (err:any) {
+      if (err) {
+          console.log(err)
+          return res.status(500).send({ msg: "エラーがおきました" });
+      }
+    });
+  }
+  await updateUserProfile({data, fileName});
+  return res.status(200).send({msg:'正常に更新されました'});
+}
+
+const uploadVerify:RequestHandler = async (req, res) => {
+  if (!req.files) {
+    return res.status(500).send({ msg: "file is not found" })
+  }
+  const files:any = req.files;
+  const file:FileInterface = files.file;
+  const filename = req.params.id;
+  const ext = file.name.split('.');
+  const fileExtension = ext[ext.length - 1].toLowerCase();
+  file.mv(`${verifyPath}/${filename}.${fileExtension}`, function (err:any) {
+    if (err) {
+        console.log(err)
+        return res.status(500).send({ msg: "エラーがおきました" });
+    }
+      res.status(200).send({ msg : "正常に送信されました" });
+  });
+}
+
+const changeSNS:RequestHandler = async (req, res) => {
+    const data = req.body;
+    await changeSNSData({data});
+    return res.status(200).send({msg:'正常に更新されました'});
+}
+
+const changeSkills:RequestHandler = async (req, res) => {
+    const data = req.body;
+    await changeSkillsData({data});
+    return res.status(200).send({msg:'正常に更新されました'});
+}
+
 const auth = { 
   register, 
   login, 
-  uploadProfile, 
+  changePassword,
   readProfilebyID, 
   forgotPassword, 
   resetPassword, 
@@ -418,6 +487,11 @@ const auth = {
   getAvatar,
   optValidation,
   followUser,
-  heartUser
+  heartUser,
+  getUserProfile,
+  updateProfile,
+  uploadVerify,
+  changeSNS,
+  changeSkills
 };
 export default auth;

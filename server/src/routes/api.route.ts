@@ -23,6 +23,7 @@ apiRoute.get("/avatar/:id",                            auth.getAvatar);
 /************************************************************/
 
 apiRoute.post("/getUserInfo",               existIDRequest, auth.getUserInfo);
+apiRoute.post("/getUserProfile",            verifyToken, auth.getUserProfile);
 // apiRoute.post("/upload_profile",            verifyToken,    existIDRequest, auth.uploadProfile);
 // apiRoute.post("/get_profile",               verifyToken,    existIDRequest, auth.readProfilebyID);
 apiRoute.post("/follower",                verifyToken,     auth.followUser);

@@ -9,7 +9,7 @@ const accountSchema = new Schema(
     email: { type: String, required: true },
     password: { type: String, required: true },
     username : { type : String, default : 'unnamed', required: true },
-    avatar: { type: String, default: 'person' },
+    avatar: { type: String, default: 'avatar' },
     admin : { type : Boolean, default : false},
     company: { type: String, required: true},
     region : { type : String, default : "Japan",},

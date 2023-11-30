@@ -36,6 +36,18 @@ export async function resetPwd(input: any) {
   }
 }
 
+export async function changePswd(input: any) {
+  const salt = await bcrypt.genSalt(authConfig.salt);
+  const password = await bcrypt.hashSync(input.password, salt);
+  const email = input.email;
+  const result = await AccountModel.find({ email });
+  if (result.length > 0) {
+      return await AccountModel.updateOne({email}, {password});
+  } else {
+    throw Error("アカウントが見つかりません"); // Account not found
+  }
+}
+
 export async function createAccount(input: any) {
   try {
     logger.info("Creating account");
@@ -303,4 +315,40 @@ export async function heart(input: any){
     logger.error("Already like this user");
     throw Error("このユーザーはすでに「いいね」をしています!"); // Already like this user
   }
+}
+
+export async function getUserProfileInfo(input: any){
+  const email = getEmailFromToken(input.token);
+  const res = await AccountModel.findOne({ email }, '-_id -admin -follower -heart -password -region -resetpasswordexpire -resetpasswordtoken -__v');
+  return res;
+}
+
+export async function updateUserProfile(input:any){
+  const id = input.data.id;
+  const userName = input.data.username;
+  const company = input.data.company;
+  const avatar = input.fileName;
+  await AccountModel.updateOne({_id:id}, { username: userName, company:company, avatar:avatar});
+  logger.info("Successfully updated");
+  return true;
+}
+
+export async function changeSNSData(input:any){
+  const id = input.data.id;
+  const live = input.data.liveAccount;
+  const youtube = input.data.youtubeAccount;
+  const tiktok = input.data.tiktokAccount;
+  const instagram = input.data.instagramAccount;
+  await AccountModel.updateOne({_id:id}, { liveAccount: live, youtubeAccount:youtube, tiktokAccount:tiktok, instagramAccount: instagram});
+  logger.info("Successfully updated");
+  return true;
+}
+
+export async function changeSkillsData(input:any){
+  const id = input.data.id;
+  const detail = input.data.detail;
+  const skills = input.data.skills;
+  await AccountModel.updateOne({_id:id}, { description: detail, skills: skills});
+  logger.info("Successfully updated");
+  return true;
 }
