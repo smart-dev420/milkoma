@@ -1,15 +1,27 @@
 import { Grid, Hidden, InputAdornment, TextField, Typography, useMediaQuery } from "@mui/material"
 import { fontBold, fontSize20, fontSize28, fontSize30, staticFiles } from "../../components/Constants"
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { API } from "../../axios";
+import axios from "axios";
+import { headers } from "../../utils/appHelper";
 
 export const FindCreator = () => {
+    const getCreatorInfo = async () => {
+      const res = await axios.post(`${API}/api/getCreatorInfo`, {});
+      setCreatorInfo(res);
+    }
+    useEffect(() => {
+      getCreatorInfo();
+    }, []);
+    const [ creatorInfo, setCreatorInfo] = useState<any>();
+    console.log(creatorInfo);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);

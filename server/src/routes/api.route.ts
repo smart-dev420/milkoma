@@ -28,6 +28,7 @@ apiRoute.post("/getUserProfile",            verifyToken, auth.getUserProfile);
 // apiRoute.post("/get_profile",               verifyToken,    existIDRequest, auth.readProfilebyID);
 apiRoute.post("/follower",                verifyToken,     auth.followUser);
 apiRoute.post("/heart",                verifyToken,     auth.heartUser);
+apiRoute.post("/getCreatorInfo", auth.getCreatorInfo);
 
 
 

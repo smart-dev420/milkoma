@@ -476,6 +476,11 @@ const changeSkills:RequestHandler = async (req, res) => {
     return res.status(200).send({msg:'正常に更新されました'});
 }
 
+const getCreatorInfo:RequestHandler = async (req, res) => {
+  const data = await AccountModel.find({role:'creator'}, '-_id -admin -password -region -resetpasswordexpire -resetpasswordtoken -__v');
+  return res.status(200).send({data});
+}
+
 const auth = { 
   register, 
   login, 
@@ -492,6 +497,7 @@ const auth = {
   updateProfile,
   uploadVerify,
   changeSNS,
-  changeSkills
+  changeSkills,
+  getCreatorInfo
 };
 export default auth;

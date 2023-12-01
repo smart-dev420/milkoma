@@ -1,4 +1,4 @@
-import { Box, Button, CardMedia, Container, Grid, Slider, Stack, Typography } from "@mui/material"
+import { Box, Button, CardMedia, Container, Grid, Slider, Stack, TextareaAutosize, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { btnBackground, btnBackgroundHover, fontBold, staticFiles } from "../../components/Constants";
@@ -82,6 +82,15 @@ export const ChattingPage = () => {
                         </Typography>
                     </Box>
                 </Box>       
+
+                {/** Chatting Part */}
+                <TextareaAutosize style={{resize:"none", backgroundColor:'rgba(0,0,0,0)'}} disabled value='
+                asdfasfd
+                asdf
+                asdf
+                asdf
+                a'/>
+                    
             </Stack>
         </Container>
     )
