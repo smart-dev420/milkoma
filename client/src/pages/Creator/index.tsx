@@ -1,7 +1,7 @@
 import { Grid, Hidden, InputAdornment, TextField, Typography, useMediaQuery } from "@mui/material"
 import { fontBold, fontSize20, fontSize28, fontSize30, staticFiles } from "../../components/Constants"
 import SearchIcon from "@mui/icons-material/Search";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
@@ -11,17 +11,9 @@ import "slick-carousel/slick/slick-theme.css";
 import { API } from "../../axios";
 import axios from "axios";
 import { headers } from "../../utils/appHelper";
+import { toast } from "react-toastify";
 
 export const FindCreator = () => {
-    const getCreatorInfo = async () => {
-      const res = await axios.post(`${API}/api/getCreatorInfo`, {});
-      setCreatorInfo(res);
-    }
-    useEffect(() => {
-      getCreatorInfo();
-    }, []);
-    const [ creatorInfo, setCreatorInfo] = useState<any>();
-    console.log(creatorInfo);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -29,6 +21,14 @@ export const FindCreator = () => {
     const navigate = useNavigate();
     const match_768 = useMediaQuery('(min-width:768px)');
     const match_1024 = useMediaQuery('(min-width:1025px)');
+    const [ creatorInfo, setCreatorInfo] = useState<any>([]);
+    const getCreatorInfo = async () => {
+      const res = await axios.post(`${API}/api/getCreatorInfo`, {});
+      setCreatorInfo(res.data.data);
+    }
+    useEffect(() => {
+      getCreatorInfo();
+    }, []);
     return(
         <>
         <div style={{whiteSpace:'nowrap'}}>
@@ -104,10 +104,10 @@ export const FindCreator = () => {
             <SlickCarousel />
             <div className="flex flex-row justify-between pt-[85px] pb-[40px] px-[50px]">
                 <p className="text-[28px]" style={{fontWeight:fontBold}}>登録中のインフルエンサー</p>
-                <span className="text-[18px] mr-[100px] w-[286px] h-[40px] border rounded-[50px] text-center" style={{fontWeight:fontBold}}>登録数:6,820人</span>
+                <span className="text-[18px] mr-[100px] w-[286px] h-[40px] border rounded-[50px] text-center" style={{fontWeight:fontBold}}>登録数:{creatorInfo.length.toLocaleString()}人</span>
             </div>
             <div className = "px-[2vw]">
-                <GridComponent count={8} />
+                <GridComponent creatorInfo={creatorInfo}/>
             </div>
             <div className="flex flex-row justify-center items-center w-full my-[95px]">
                 <button className="btn-hover py-[11px]" onClick={() => {navigate('/creator/find')}} style={{fontWeight:fontBold}}>一覧を見る</button>
@@ -301,13 +301,28 @@ const VerticalSlide = () => {
     )
   }
 
-const GridComponent: React.FC<{ count: number }> = ({ count }) => {
-    const navigate = useNavigate();
+const GridComponent: React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
+  const navigate = useNavigate();
+  const handleFollow = async (email: string, index: number) => {
+    let formData = new FormData();
+    formData.append('email', email);
+    const query = `${API}/api/follower`;
+    try {
+      const res = await axios.post(query, formData, { headers });
+      if (res.status === 200) {
+        toast.success(res.data.msg);
+      } else {
+        console.log(res.status);
+      }
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
     return (
       <Grid container spacing={5} className='justify-center items-center'>
-        {Array.from({ length: count }).map((_, i) => (
-          <Grid item xs='auto' key={i}>
-            <div className="w-[361px] card-hover my-[15px] cursor-pointer" onClick={() => {navigate('/creator/find')}}>
+        {creatorInfo.map((item:any, index:number) => (
+          <Grid item xs='auto' key={index}>
+            <div className="w-[361px] card-hover my-[15px] cursor-pointer" >
             {/* <img
               src={staticFiles.images.introduction1}
               className='w-[252px] mx-6 my-2 rounded-[20px] cursor-pointer image-hover'
@@ -316,21 +331,32 @@ const GridComponent: React.FC<{ count: number }> = ({ count }) => {
             /> */}
             <div className="flex flex-col px-[20px] py-[30px]">
             <div className="flex flex-row ">
-                <img src={staticFiles.images.model} className="rounded-[25px] w-[100px]"/>
-                <div className="flex flex-col pl-[10px]">
-                    <span className="mt-[30px] w-[96px] h-[31px] text-[#fff] text-[14px] bg-[#F59ABF] rounded-[20px] text-center" style={{fontWeight:fontBold}}>コスメ</span>
-                    <div className="flex flex-row mt-[10px]">
-                        <img className="w-[34px] h-[34px] item-shadow rounded-[10px]" src={staticFiles.images.youtube} />
-                        <img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.seventeen} />
-                        <img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.twitter} />
-                        <img className="w-[34px] h-[34px] item-shadow rounded-[10px]" src={staticFiles.images.instagram} />
+                <img 
+                src = {`${API}/api/avatar/${item._id}`}
+                className="rounded-[25px] w-[100px] h-[100px]" onClick={() => {navigate('/creator/find')}}/>
+                <div className="flex flex-col pl-[10px]" style={{justifyContent:'end', rowGap:'5px'}}>
+                  <div className="flex flex-wrap" style={{rowGap:'5px', columnGap:'5px'}}>
+                  {
+                    item.skills.map((skill:string) =>(
+                      <span className="px-[10px] py-[3px] text-[#fff] text-[14px] bg-[#F59ABF] rounded-[20px] text-center" style={{fontWeight:fontBold}}>{skill}</span>
+                    ))
+                  }
+                  </div>
+                    <div className="flex flex-row " >
+                        <a href={`https://www.youtube.com/${item.youtubeAccount}`} target="_blank"><img className="w-[34px] h-[34px] item-shadow rounded-[10px]" src={staticFiles.images.youtube} style={{zIndex:20}}/></a>
+                        <a href={`https://17.live/${item.liveAccount}`} target="_blank"><img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.seventeen} /></a>
+                        <a href={`https://twitter.com/${item.twitterAccount}`} target="_blank"><img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.twitter} /></a>
+                        <a href={`https://www.instagram.com/${item.instagramAccount}`} target="_blank"><img className="w-[34px] h-[34px] item-shadow rounded-[10px]" src={staticFiles.images.instagram} /></a>
                     </div>
                 </div>
             </div>
-            <span className="mt-[30px] text-[#511523] text-[24px]" style={{letterSpacing:'-4px', fontWeight:fontBold}}>なまえ なまえ なまえ</span>
-            <div className="flex flex-row">
+            <span className="mt-[30px] text-[#511523] text-[24px]" style={{fontWeight:fontBold}}>{item.username}</span>
+            <div className="flex flex-row"
+            onClick={() => {
+              handleFollow(item.email, index);
+            }}>
                 <img className="w-[20px]" src={staticFiles.icons.ic_user_plus} />
-                <span className="text-[14px] text-[#838688]">フォロワー数 116,900人</span>
+                <span className="text-[14px] text-[#838688]">フォロワー数 {item.follower.length.toLocaleString()}人</span>
             </div>
             </div>
             </div>

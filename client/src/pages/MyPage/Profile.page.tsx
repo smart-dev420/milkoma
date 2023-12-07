@@ -24,6 +24,7 @@ interface Profile {
     youtubeAccount: string;
     tiktokAccount: string;
     instagramAccount: string;
+    twitterAccount: string;
     description: string;
     skills: string[]; 
   }
@@ -52,6 +53,7 @@ export const Profile = () =>{
         youtubeAccount: '',
         tiktokAccount: '',
         instagramAccount: '',
+        twitterAccount: '',
         description: '',
         skills: [],
     });
@@ -171,7 +173,7 @@ export const Profile = () =>{
     /** Update SNS Data */
     const handleUpdateSNS = async () => {
         let formData = new FormData();
-        if(!profile.liveAccount || !profile.youtubeAccount || !profile.tiktokAccount || !profile.instagramAccount){
+        if(!profile.liveAccount || !profile.youtubeAccount || !profile.tiktokAccount || !profile.instagramAccount || !profile.twitterAccount){
             toast.error('すべてのSNSデータを挿入する必要があります。');
             return;
         }
@@ -180,6 +182,7 @@ export const Profile = () =>{
         formData.append('youtubeAccount', profile.youtubeAccount);
         formData.append('tiktokAccount', profile.tiktokAccount);
         formData.append('instagramAccount', profile.instagramAccount);
+        formData.append('twitterAccount', profile.twitterAccount);
         const query = `${API}/auth/changeSNS`;
         try{
             const res = await axios.post(query, formData, {headers});
@@ -231,7 +234,7 @@ export const Profile = () =>{
                         <Box display='flex' flexDirection='row' sx={{alignItems:'end', columnGap:'20px'}}>
                             <CardMedia 
                                 component="img"
-                                sx={{width:'200px', height:'200px'}}
+                                sx={{width:'40%'}}
                                 image = {avatar?URL.createObjectURL(avatar):`${API}/api/avatar/${userData.id}`}
                                 />
                             <input
@@ -246,8 +249,8 @@ export const Profile = () =>{
                                 sx={{
                                     backgroundColor:btnBackground, 
                                     borderRadius:'36px', 
-                                    width:'130px',
-                                    height:'35px',
+                                    paddingX:'20px', 
+                                    paddingY:'5px',
                                     color: '#FFFFFF',
                                     fontWeight:fontBold,
                                     "&:hover": {
@@ -263,9 +266,9 @@ export const Profile = () =>{
                                 sx={{
                                     backgroundColor:'#FFF', 
                                     borderRadius:'36px', 
-                                    width:'130px', color:'#000000',
+                                    paddingX:'20px', 
+                                    paddingY:'5px', color:'#000000',
                                     border:'2px solid rgba(0,0,0,0.1)',
-                                    height:'35px',
                                     fontWeight:fontBold,
                                     "&:hover": {
                                         backgroundColor: '#FCF4F4'
@@ -350,18 +353,20 @@ export const Profile = () =>{
                         <Box display='flex' flexDirection='column' sx={{rowGap:'20px', padding:'20px', border:'1px solid rgba(0,0,0,0.2)', borderRadius:'10px', marginTop:'20px'}}>
                         <Typography sx={{paddingX:'10px', fontSize:'16px', fontWeight:fontBold, marginTop:'-32px', backgroundColor:'#FFF', width:'fit-content'}}>本人確認書類</Typography>
                             <Box display='flex' flexDirection='row' justifyContent='start' sx={{columnGap:'150px'}}>
-                                <Box display='flex' flexDirection='row' sx={{columnGap:'10px', alignItems:'center', justifyContent:'start', width:'50%'}}>
+                                <Box display='flex' flexDirection='row' sx={{columnGap:'10px', alignItems:'center', justifyContent:'start',}}>
                                     {/* <Typography sx={{fontSize:'16px', whiteSpace:'nowrap'}}>本人確認書類: </Typography> */}
                                     <label className="btn btn-default p-0 ">
                                         <input type="file" onChange={selectFile} />
                                     </label>
                                 </Box>
+                            </Box>
+                            <Box display='flex' flexDirection='row' justifyContent='end'>
                                 <Button
                                     size="medium"
                                     sx={{
                                         backgroundColor:btnBackground, 
                                         borderRadius:'36px', 
-                                        paddingX:'30px',
+                                        paddingX:'20px',
                                         height:'35px',
                                         color: '#FFFFFF',
                                         fontWeight:fontBold,
@@ -375,7 +380,7 @@ export const Profile = () =>{
                                     >
                                         アップロード
                                     </Button>
-                            </Box>
+                                </Box>
                         </Box>                    
                     {/** Reset Password */}
                         <Box display='flex' flexDirection='column' sx={{rowGap:'20px', padding:'20px', border:'1px solid rgba(0,0,0,0.2)', borderRadius:'10px', marginTop:'20px'}}>
@@ -512,6 +517,24 @@ export const Profile = () =>{
                                     endAdornment: (
                                     <InputAdornment position="end">
                                         <img width={25} src={staticFiles.icons.ic_instagram} />
+                                    </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </Box> 
+                        <Box display='flex' flexDirection='row' sx={{columnGap:'10px', alignItems:'center', justifyContent:'space-between'}}>
+                            <Typography sx={{fontSize:'14px', fontWeight:fontBold, whiteSpace:'nowrap'}}>Twitter: </Typography>
+                            <TextField
+                                type="text"
+                                variant="standard"
+                                placeholder="Twitter"
+                                value={profile.twitterAccount}
+                                sx={{backgroundColor:'rgba(0,0,0,0.05)', paddingX:'10px', paddingY:'5px', width:'80%', fontSize:'14px',}}
+                                onChange={(e)=>{setProfile({...profile, twitterAccount:e.target.value})}}
+                                InputProps={{
+                                    endAdornment: (
+                                    <InputAdornment position="end">
+                                        <img width={25} src={staticFiles.icons.ic_twitter} />
                                     </InputAdornment>
                                     ),
                                 }}

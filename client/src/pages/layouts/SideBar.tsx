@@ -10,6 +10,7 @@ export const SideBar = () => {
     const pageIndex = useSelector((state:any) => state.pages.index);
     const [ clicked, setClicked ] = useState<number>(useSelector((state:any) => state.pages.index));
     const [ isHovered, setIsHovered ] = useState<number>(-1);
+    const screenHeight = window.screen.height;
     const handleMouseLeave = () => {
         setIsHovered(-1);
     };
@@ -33,6 +34,7 @@ export const SideBar = () => {
 
     return(
         <div className="flex flex-col pl-[2vw] w-[300px]" style={{zIndex:10, position:'fixed', top:220}}>
+            <div className="flex flex-col" style={{overflowY:'auto', maxHeight:screenHeight-400+'px'}}>
             <label className="text-[#554744] text-[28px]" style={{fontWeight:fontBold}}>マイページ</label>
             <label className="text-[16px] text-[#554744]" style={{letterSpacing:'-2px'}}>{clicked != 7? (listItmes[clicked-1].name):''}</label>
                 {listItmes.map(item => (
@@ -58,6 +60,7 @@ export const SideBar = () => {
                     <svg width="20" height="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path fill = {clicked === 7 ? selectColor : (isHovered === 7 ? hoverColor : unSelectColor)} d="m497 273-168 168c-15 15-41 4.5-41-17v-96h-136c-13.3 0-24-10.7-24-24v-96c0-13.3 10.7-24 24-24h136v-96c0-21.4 25.9-32 41-17l168 168c9.3 9.4 9.3 24.6 0 34zm-305 163v-40c0-6.6-5.4-12-12-12h-84c-17.7 0-32-14.3-32-32v-192c0-17.7 14.3-32 32-32h84c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-84c-53 0-96 43-96 96v192c0 53 43 96 96 96h84c6.6 0 12-5.4 12-12z"/></svg>
                     <label className="text-[18px] pl-[18.6px] cursor-pointer" style={{ fontWeight:fontBold, color: clicked === 7 ? selectColor : (isHovered === 7 ? hoverColor : unSelectColor) }}>ログアウト</label>
                 </Button>
+                </div>
         </div>
     )
 }
