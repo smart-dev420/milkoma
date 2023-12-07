@@ -15,6 +15,7 @@ export default interface Account extends Document {
   youtubeAccount: string;
   tiktokAccount: string;
   instagramAccount: string;
+  twitterAccount: string;
   verify: boolean;
   resetpasswordtoken : string;
   resetpasswordexpire: number;

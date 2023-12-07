@@ -14,7 +14,7 @@ const adminArray = admins.split(',')
 export function getEmailFromToken(token: string) {
   const decoded = decode(token);
   const email = get(decoded, "user");
-  if (!decoded || !email) { return false;}
+  if (!decoded || !email) { return 'invalid';}
   return email;
 }
 
@@ -82,6 +82,7 @@ export async function createAccount(input: any) {
       youtubeAccount: input.youtube??"",
       tiktokAccount: input.tiktok??"",
       instagramAccount: input.instagram??"",
+      twitterAccount: input.twitter??"",
       verify:false,
       // region: input.region
     });
@@ -288,11 +289,11 @@ export async function optValidate(input:any) {
 export async function follow(input: any) {
     const email = getEmailFromToken(input.token);
     const follow = input.followingUser;
-    const result = await AccountModel.findOne({email});
+    const result = await AccountModel.findOne({follow});
     const followArray = result?.follower || [];
-    if (!followArray.includes(follow)) {
-      followArray.push(follow);
-      await AccountModel.updateOne({ email }, { follower: followArray });
+    if (!followArray.includes(email)) {
+      followArray.push(email);
+      await AccountModel.updateOne({ email:follow }, { follower: followArray });
       return true;
     }
     else {
@@ -304,11 +305,11 @@ export async function follow(input: any) {
 export async function heart(input: any){
   const email = getEmailFromToken(input.token);
   const heart = input.heartUser
-  const result = await AccountModel.findOne({email});
+  const result = await AccountModel.findOne({heart});
   const heartArray = result?.heart || [];
-  if (!heartArray.includes(heart)) {
-    heartArray.push(heart);
-    await AccountModel.updateOne({ email }, { heart: heartArray });
+  if (!heartArray.includes(email)) {
+    heartArray.push(email);
+    await AccountModel.updateOne({ email:heart }, { heart: heartArray });
     return true;
   }
   else {
@@ -339,7 +340,8 @@ export async function changeSNSData(input:any){
   const youtube = input.data.youtubeAccount;
   const tiktok = input.data.tiktokAccount;
   const instagram = input.data.instagramAccount;
-  await AccountModel.updateOne({_id:id}, { liveAccount: live, youtubeAccount:youtube, tiktokAccount:tiktok, instagramAccount: instagram});
+  const twitter = input.data.twitterAccount;
+  await AccountModel.updateOne({_id:id}, { liveAccount: live, youtubeAccount:youtube, tiktokAccount:tiktok, instagramAccount: instagram, twitterAccount: twitter});
   logger.info("Successfully updated");
   return true;
 }

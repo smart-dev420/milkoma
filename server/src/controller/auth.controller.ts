@@ -412,7 +412,7 @@ const heartUser:RequestHandler = async (req, res) => {
   const token = validateToken(req, res);
   try{
     await heart({token, heartUser});
-    return res.status(StatusCodes.OK).send({msg : "みたいな!"}); // Follow successful!
+    return res.status(StatusCodes.OK).send({msg : "みたいな!"}); // Heart successful!
   } catch (err:any){
     logger.error(err);
     return res
@@ -477,7 +477,7 @@ const changeSkills:RequestHandler = async (req, res) => {
 }
 
 const getCreatorInfo:RequestHandler = async (req, res) => {
-  const data = await AccountModel.find({role:'creator'}, '-_id -admin -password -region -resetpasswordexpire -resetpasswordtoken -__v');
+  const data = await AccountModel.find({role:'creator'}, '-admin -password -region -resetpasswordexpire -resetpasswordtoken -__v');
   return res.status(200).send({data});
 }
 
