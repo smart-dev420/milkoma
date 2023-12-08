@@ -32,7 +32,7 @@ export const FindCreator = () => {
     return(
         <>
         <div style={{whiteSpace:'nowrap'}}>
-            <div className="bg-gradient-to-br from-[#FAEAD1] to-[#F5D0E9] w-screen " style={{position:'absolute', top:0, left:0, filter:'blur(10px)', zIndex:-10, height:match_1024?'1150px':'2000px'}}></div>
+            <div className="bg-gradient-to-br from-[#FAEAD1] to-[#F5D0E9] w-screen " style={{position:'absolute', top:0, left:0, filter:'blur(10px)', zIndex:-10, height:match_1024?'1150px':'1850px'}}></div>
             <div className=" w-full " >
                 <div className="h-[220px]"></div>
                 <div className="pl-[2vw]">
@@ -78,15 +78,15 @@ export const FindCreator = () => {
                         </div>
                     </div>
                     <div className="flex flex-col justify-center items-center">
-                    <p className="text-[#511523] text-[28px] mt-[230px] mb-[40px]" style={{fontWeight:fontBold}}>まずは知っているインフルエンサーを検索！</p>
+                    <p className="text-[#511523] text-[28px] mb-[40px]" style={{fontWeight:fontBold, marginTop:match_1024?'230px':'100px'}}>まずは知っているインフルエンサーを検索！</p>
                     <TextField
                         id="search"
                         type="search"
                         label="キーワードで探す"
                         value={searchTerm}
                         onChange={handleChange}
-                        className="bg-[#FCF9F8] rounded-lg flex justify-center w-[45%]"
-                        sx={{marginBottom:"70px", height:"46px"}}
+                        className="bg-[#FCF9F8] rounded-lg flex justify-center "
+                        sx={{marginBottom:match_1024?"70px":'20px', height:"46px", width:match_1024?'45%':'80%'}}
                         InputProps={{
                             endAdornment: (
                             <InputAdornment position="end">
@@ -102,7 +102,7 @@ export const FindCreator = () => {
             最近在籍したインフルエンサー
             </p>
             <SlickCarousel creatorInfo = {creatorInfo}/>
-            <div className="flex flex-row justify-between pt-[85px] pb-[40px] px-[50px]">
+            <div className="flex flex-row justify-between pt-[85px] pb-[40px] px-[50px]" style={{columnGap:'100px'}}>
                 <p className="text-[28px]" style={{fontWeight:fontBold}}>登録中のインフルエンサー</p>
                 <span className="text-[18px] mr-[100px] w-[286px] h-[40px] border rounded-[50px] text-center" style={{fontWeight:fontBold}}>登録数:{creatorInfo.length.toLocaleString()}人</span>
             </div>
@@ -118,7 +118,53 @@ export const FindCreator = () => {
 }
 
 const VerticalSlide : React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
-
+  let data = [
+    {
+      id: 0,
+      title: '17.Live受け取ったギフト No.1',
+      mail: '@hikarusannnouragawa',
+      name: 'ひかる社長の密着日記 ',
+      avatar: staticFiles.images.avatar,
+      follow:'116,900',
+      heart: '3.9M',
+    },
+    {
+      id: 1,
+      title: '17.Live受け取ったギフト No.1',
+      mail: '@hikarusannnouragawa',
+      name: 'ひかる社長の密着日記 ',
+      avatar: staticFiles.images.avatar,
+      follow:'116,900',
+      heart: '3.9M',
+    },
+    {
+      id: 2,
+      title: '17.Live受け取ったギフト No.1',
+      mail: '@hikarusannnouragawa',
+      name: 'ひかる社長の密着日記 ',
+      avatar: staticFiles.images.avatar,
+      follow:'116,900',
+      heart: '3.9M',
+    },
+    {
+      id: 3,
+      title: '17.Live受け取ったギフト No.1',
+      mail: '@hikarusannnouragawa',
+      name: 'ひかる社長の密着日記 ',
+      avatar: staticFiles.images.avatar,
+      follow:'116,900',
+      heart: '3.9M',
+    },
+    {
+      id: 4,
+      title: '17.Live受け取ったギフト No.1',
+      mail: '@hikarusannnouragawa',
+      name: 'ひかる社長の密着日記 ',
+      avatar: staticFiles.images.avatar,
+      follow:'116,900',
+      heart: '3.9M',
+    },
+  ];
     const match_768 = useMediaQuery('(min-width:768px)');
     const match_1024 = useMediaQuery('(min-width:1025px)');
     const navigate = useNavigate();
@@ -129,24 +175,28 @@ const VerticalSlide : React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
 
     useEffect(() => {
       if (creatorInfo && creatorInfo.length > 0) {
-        setCreator(creatorInfo.slice(0, 5));
+        if(creatorInfo.length > 5){
+          setCreator(creatorInfo.slice(0, 5));
+        }
+        else {
+          setCreator(creatorInfo);
+        }
       }
-    }, [creatorInfo]); // Depend on creatorInfo changes
+    }, [creatorInfo]);
     
     return(
       <>
         {match_1024?(
         <>
-          <div className="border-[#E7BBC7] border-[5px] rounded-[25px] h-[473px] w-[100%] " style={{position:"absolute", zIndex: -1}}></div>
-          <div className = "slider-content w-[100%] h-[570px]" style={{position:"absolute", marginLeft:"113px", marginTop:"50px"}}></div>
+          <div className="border-[#E7BBC7] border-[5px] rounded-[25px] h-[473px] w-[62%] " style={{position:"absolute", zIndex: -1}}></div>
+          <div className = "slider-content w-[55%] h-[570px]" style={{position:"absolute", marginLeft:"113px", marginTop:"50px"}}></div>
         </>
         ):null}
-        {match_1024?(
-          <>
-          <img src={staticFiles.images.blog} className = "w-[348px] rounded-[20px] mt-[90px]" 
-          style={{position:'absolute', marginLeft:"55px", boxShadow:'0px 0px 15px 3px #E5BAA7', zIndex:2}}/>
-          <div className="ml-[450px] mt-[180px]" style={{zIndex:5, width:'1000px'}}>
-            {creator.length > 0?(
+        <div className = {`${match_1024 ?"":"home-slider-content rounded-[20px] min-h-[590px] px-[20px] py-[20px]"}`}  style={{width:match_1024?"100%":"80%"}}>
+          <img src={staticFiles.images.blog} className = "w-[348px] rounded-[20px]" 
+          style={{position:match_1024?'absolute':'relative',  margin:match_1024?'90px 0px 40px 55px':'auto', boxShadow:'0px 0px 15px 3px #E5BAA7'}}/>
+          <div style={{marginLeft:match_1024?'450px':'0px', marginTop:match_1024?'180px ':'50px', width:match_1024?'600px':'',}}>
+            {creator.length > 0? (
                 <Carousel 
                 autoPlay={true}
                 showArrows={false}
@@ -160,7 +210,7 @@ const VerticalSlide : React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
                   if (isSelected) {
                     return (
                       <li
-                        className="custom-indicator1 selected"
+                        className="custom-indicator selected"
                         aria-label={`Selected: ${label} ${index + 1}`}
                         title={`Selected: ${label} ${index + 1}`}
                       />
@@ -168,7 +218,7 @@ const VerticalSlide : React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
                   }
                   return (
                     <li
-                      className="custom-indicator1"
+                      className="custom-indicator"
                       onClick={clickHandler}
                       onKeyDown={clickHandler}
                       value={index}
@@ -182,97 +232,31 @@ const VerticalSlide : React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
                 }}
                 >
                 {creator.map((item:any, index:number) => (
-                    <div className="flex flex-col w-[450px] p-[10px]">
-                      <span key={index} className="py-[6px] w-[320px] bg-gradient-to-br from-[#F4B7A5] to-[#F7CF91] text-[#fff] text-[19px] rounded-[20px]" style={{whiteSpace:'nowrap', textAlign:'center', fontWeight:fontBold}}>17.Live受け取ったギフト No.1</span>
-                      <div className="flex flex-row mt-[30px]">
-                          <img src = {`${API}/api/avatar/${item._id}`} className="max-h-[65px] max-w-[65px]" style={{borderRadius:'5px'}}/>
-                          <div className="flex flex-col ml-[20px] mb-[35px]">
-                              <label className="text-[#838688] text-[14px]" style={{whiteSpace:'nowrap', textAlign:'left'}}>{item.email}</label>
-                              <label className="text-[24px] text-[#001219]" style={{whiteSpace:'nowrap'}}>{item.username}</label>
-                          </div>
+                  <div className="flex flex-col w-[450px] p-[10px]">
+                    <span key={index} className="py-[6px] w-[356px] bg-gradient-to-br from-[#F4B7A5] to-[#F7CF91] text-[#fff] text-[16px] rounded-[20px]" style={{whiteSpace:'nowrap', fontWeight:fontBold, textAlign:'center'}}>17.Live受け取ったギフト No.1</span>
+                    <div className="flex flex-row mt-[30px]">
+                      <img src = {`${API}/api/avatar/${item._id}`} className="max-h-[65px] max-w-[65px]"/>
+                      <div className="flex flex-col ml-[20px] mb-[35px]">
+                        <label className="text-[#838688] text-[14px]" style={{whiteSpace:'nowrap', textAlign:'left'}}>{item.email}</label>
+                        <label className="text-[24px] text-[#001219]" style={{whiteSpace:'nowrap', fontWeight:fontBold}}>{item.username}</label>
                       </div>
-                    <div className="flex flex-row text-[#511523] text-[16px] justify-center items-center" style={{whiteSpace:'nowrap'}}>
-                        <img src={staticFiles.icons.ic_user_plus_brown} className="max-w-[22px] max-h-[20px]"/>
-                        <label className="ml-[5px] mr-[65px] text-[16px]">フォロワー数 {item.follower.length.toLocaleString()}人</label>
-                        <img src={staticFiles.icons.ic_heart} className="max-w-[20px]"/>
-                        <label className="text-[16px] ml-[5px]">いいね数 { NumberFormatExample(item.heart.length) }</label>
                     </div>
-                    <button className="w-[206px] h-[41px] mt-[40px] rounded-[27px] btn-color" 
-                      onClick={() => handleFind(item._id)}
-                      >
-                      詳しく見る
+                    <div className="flex flex-row text-[#511523] text-[16px] justify-center items-center" style={{whiteSpace:'nowrap'}}>
+                      <img src={staticFiles.icons.ic_user_plus_brown} className="max-w-[22px] max-h-[20px]"/>
+                      <label className="ml-[5px] mr-[65px] text-[16px]">フォロワー数 {item.follower.length.toLocaleString()}人</label>
+                      <img src={staticFiles.icons.ic_heart} className="max-w-[20px]"/>
+                      <label className="text-[16px] ml-[5px]">いいね数 {NumberFormatExample(item.heart.length)}</label>
+                    </div>
+                    <button className="w-[206px] h-[41px] mt-[40px] rounded-[27px] btn-color" style={{fontWeight:fontBold}}
+                        onClick={() => handleFind(item._id)}>
+                        詳しく見る
                     </button>
                   </div>
                 ))}
                 </Carousel>
             ):null}
+          </div>
         </div>
-          </>)
-        :( <div className = "home-slider-content rounded-[20px] min-h-[590px] px-[20px] py-[20px]" style={{width:match_1024?"60%":"80%"}}>
-        <img src={staticFiles.images.blog} className = "w-[348px] rounded-[20px]" style={{position:match_1024?'absolute':'relative', margin:match_1024?'30px 0px 40px -150px':'auto', boxShadow:'0px 0px 15px 3px #E5BAA7'}}/>
-        <div style={{marginLeft:match_1024?'35%':'0px', marginTop:match_1024?'120px ':'50px'}}>
-          {creator.length > 0? (
-              <Carousel 
-              autoPlay={true}
-              showArrows={false}
-              showIndicators={true}
-              showStatus={false}
-              showThumbs={false}
-              infiniteLoop={true}
-              stopOnHover={true}
-              axis='vertical'
-              renderIndicator={(clickHandler, isSelected, index, label) => {
-                if (isSelected) {
-                  return (
-                    <li
-                      className="custom-indicator selected"
-                      aria-label={`Selected: ${label} ${index + 1}`}
-                      title={`Selected: ${label} ${index + 1}`}
-                    />
-                  );
-                }
-                return (
-                  <li
-                    className="custom-indicator"
-                    onClick={clickHandler}
-                    onKeyDown={clickHandler}
-                    value={index}
-                    key={index}
-                    role="button"
-                    tabIndex={0}
-                    title={`${label} ${index + 1}`}
-                    aria-label={`${label} ${index + 1}`}
-                  />
-                );
-              }}
-              >
-              {creator.map((item:any, index:number) => (
-                <div className="flex flex-col w-[450px] p-[10px]">
-                  <span key={index} className="py-[6px] w-[356px] bg-gradient-to-br from-[#F4B7A5] to-[#F7CF91] text-[#fff] text-[16px] rounded-[20px]" style={{whiteSpace:'nowrap', fontWeight:fontBold, textAlign:'center'}}>17.Live受け取ったギフト No.1</span>
-                  <div className="flex flex-row mt-[30px]">
-                    <img src = {`${API}/api/avatar/${item._id}`} className="max-h-[65px] max-w-[65px]"/>
-                    <div className="flex flex-col ml-[20px] mb-[35px]">
-                      <label className="text-[#838688] text-[14px]" style={{whiteSpace:'nowrap', textAlign:'left'}}>{item.email}</label>
-                      <label className="text-[24px] text-[#001219]" style={{whiteSpace:'nowrap', fontWeight:fontBold}}>{item.username}</label>
-                    </div>
-                  </div>
-                  <div className="flex flex-row text-[#511523] text-[16px] justify-center items-center" style={{whiteSpace:'nowrap'}}>
-                    <img src={staticFiles.icons.ic_user_plus_brown} className="max-w-[22px] max-h-[20px]"/>
-                    <label className="ml-[5px] mr-[65px] text-[16px]">フォロワー数 {item.follower.length.toLocaleString()}人</label>
-                    <img src={staticFiles.icons.ic_heart} className="max-w-[20px]"/>
-                    <label className="text-[16px] ml-[5px]">いいね数 {NumberFormatExample(item.heart.length)}</label>
-                  </div>
-                  <button className="w-[206px] h-[41px] mt-[40px] rounded-[27px] btn-color" style={{fontWeight:fontBold}}
-                      onClick={() => handleFind(item._id)}>
-                      詳しく見る
-                  </button>
-                </div>
-              ))}
-              </Carousel>
-          ):null}
-      </div>
-      </div>)}
-        
       </>
     )
   }

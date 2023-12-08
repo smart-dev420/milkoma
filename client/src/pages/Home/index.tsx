@@ -7,6 +7,9 @@ import { stat } from "fs";
 import { HomeSlider } from "../../components/Slider";
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
+import { API } from "../../axios";
+import axios from "axios";
+import { NumberFormatExample } from "../../utils/appHelper";
 
 const cardData: CardElement[] = [
     {
@@ -41,7 +44,14 @@ export const Home = () =>{
   const [ selectShowDirection, SetSelectShowDirection ] = useState(0); // 0:virtical, 1:horizontal
   const selectColor = '#511523';
   const unSelectColor = '#FFFFFF';
-
+  const [ creatorInfo, setCreatorInfo] = useState<any>([]);
+  const getCreatorInfo = async () => {
+    const res = await axios.post(`${API}/api/getCreatorInfo`, {});
+    setCreatorInfo(res.data.data);
+  }
+  useEffect(() => {
+    getCreatorInfo();
+  }, []);
   
     return(
         <div className="px-[2vw]">
@@ -49,7 +59,7 @@ export const Home = () =>{
         <HomeSlider />
         <img src={staticFiles.images.ellipse_right} style={{position:"absolute", zIndex:-1, top:"200px", right:0}} width={550} />
         <p className="mt-[100px] my-5" style={{fontWeight:fontBold, fontSize:match_1024?fontSize28:fontSize20}}>おすすめインフルエンサー</p>
-        <VerticalSlide />
+        <VerticalSlide creatorInfo={creatorInfo} />
         <img src={staticFiles.images.ellipse_two} style={{position:"absolute", zIndex:-1, top:"1450px", left:0}} width={650} />
         <p className="mt-[100px] my-5" style={{fontWeight:fontBold, fontSize:match_1024?fontSize28:fontSize20}}>宣伝したいものから探す</p>
         <IntroCard elements={cardData} space={3} />
@@ -89,7 +99,7 @@ export const Home = () =>{
     )
 }
 
-const VerticalSlide = () => {
+const VerticalSlide: React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
   let data = [
     {
       id: 0,
@@ -139,12 +149,26 @@ const VerticalSlide = () => {
   ];
   const match_768 = useMediaQuery('(min-width:768px)');
   const match_1024 = useMediaQuery('(min-width:1025px)');
+  const [creator, setCreator] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (creatorInfo && creatorInfo.length > 0) {
+      if(creatorInfo.length > 5){
+        setCreator(creatorInfo.slice(0, 5));
+      }
+      else {
+        setCreator(creatorInfo);
+      }
+    } 
+  }, [creatorInfo]);
+  
   return(
     <>
     <div className="flex justify-center items-center " style={{flexDirection:match_1024?'row':'column'}}>
       <div className = "home-slider-content rounded-[20px] min-h-[590px] px-[20px] py-[20px]" style={{width:match_1024?"60%":"80%"}}>
         <img src={staticFiles.images.blog} className = "w-[348px] rounded-[20px]" style={{position:match_1024?'absolute':'relative', margin:match_1024?'30px 0px 40px -150px':'auto', boxShadow:'0px 0px 15px 3px #E5BAA7'}}/>
         <div style={{marginLeft:match_1024?'35%':'0px', marginTop:match_1024?'120px ':'50px'}}>
+        {creator.length > 0 ? (
           <Carousel 
             autoPlay={true}
             showArrows={false}
@@ -179,26 +203,30 @@ const VerticalSlide = () => {
               );
             }}
             >
-            {data.map((item, index) => (
+            {creatorInfo.map((item:any, index:number) => (
               <div className="flex flex-col w-[450px] p-[10px]">
-                <span key={index} className="py-[6px] w-[356px] bg-gradient-to-br from-[#F4B7A5] to-[#F7CF91] text-[#fff] text-[16px] rounded-[20px]" style={{whiteSpace:'nowrap', fontWeight:fontBold, textAlign:'center'}}>{item.title}</span>
+                  <span key={index} className="py-[6px] w-[356px] bg-gradient-to-br from-[#F4B7A5] to-[#F7CF91] text-[#fff] text-[16px] rounded-[20px]" style={{whiteSpace:'nowrap', fontWeight:fontBold, textAlign:'center'}}>
+                      17.Live受け取ったギフト No.1
+                  </span>
                 <div className="flex flex-row mt-[30px]">
-                  <img src={item.avatar} className="max-h-[65px] max-w-[65px]"/>
+                  <img src = {`${API}/api/avatar/${item._id}`} className="max-h-[65px] max-w-[65px]"/>
                   <div className="flex flex-col ml-[20px] mb-[35px]">
-                    <label className="text-[#838688] text-[14px]" style={{whiteSpace:'nowrap', textAlign:'left'}}>{item.mail}</label>
-                    <label className="text-[24px] text-[#001219]" style={{whiteSpace:'nowrap', fontWeight:fontBold}}>{item.name}</label>
+                    <label className="text-[#838688] text-[14px]" style={{whiteSpace:'nowrap', textAlign:'left'}}>{item.email}</label>
+                    <label className="text-[24px] text-[#001219]" style={{whiteSpace:'nowrap', fontWeight:fontBold}}>{item.username}</label>
                   </div>
                 </div>
                 <div className="flex flex-row text-[#511523] text-[16px] justify-center items-center" style={{whiteSpace:'nowrap'}}>
                   <img src={staticFiles.icons.ic_user_plus} className="max-w-[22px] max-h-[20px]"/>
-                  <label className="ml-[5px] mr-[65px] text-[16px]">フォロワー数 {item.follow}人</label>
+                  <label className="ml-[5px] mr-[65px] text-[16px]">フォロワー数 {item.follower.length.toLocaleString()}人</label>
                   <img src={staticFiles.icons.ic_heart} className="max-w-[25px]"/>
-                  <label className="text-[16px] ml-[5px]">いいね数 {item.heart}</label>
+                  <label className="text-[16px] ml-[5px]">いいね数 {NumberFormatExample(item.heart.length)}</label>
                 </div>
                 <button className="w-[206px] h-[41px] mt-[40px] rounded-[27px] btn-color" style={{fontWeight:fontBold}}>詳しく見る</button>
               </div>
             ))}
         </Carousel>
+        ):null
+        }
       </div>
       </div>
     </div>
