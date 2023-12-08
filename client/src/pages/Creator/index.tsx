@@ -300,42 +300,36 @@ const GridComponent: React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
         {creatorInfo.map((item:any, index:number) => (
           index < 8 ?(<Grid item xs='auto' key={index}>
           <div className="w-[361px] card-hover my-[15px] cursor-pointer" >
-          {/* <img
-            src={staticFiles.images.introduction1}
-            className='w-[252px] mx-6 my-2 rounded-[20px] cursor-pointer image-hover'
-            style={{ background: 'white' }}
-            alt={`Image ${i}`}
-          /> */}
-          <div className="flex flex-col px-[20px] py-[30px]">
-          <div className="flex flex-row ">
-              <img 
-              src = {`${API}/api/avatar/${item._id}`}
-              className="rounded-[25px] w-[100px] h-[100px]" onClick={() => {navigate(`/creator/detail/${item._id}`)}}/>
-              <div className="flex flex-col pl-[10px]" style={{justifyContent:'end', rowGap:'5px'}}>
-                <div className="flex flex-wrap" style={{rowGap:'5px', columnGap:'5px'}}>
-                {
-                  item.skills.map((skill:string) =>(
-                    <span className="px-[10px] py-[3px] text-[#fff] text-[14px] bg-[#F59ABF] rounded-[20px] text-center" style={{fontWeight:fontBold}}>{skill}</span>
-                  ))
-                }
-                </div>
-                  <div className="flex flex-row " >
-                      <a href={`https://www.youtube.com/${item.youtubeAccount}`} target="_blank"><img className="w-[34px] h-[34px] item-shadow rounded-[10px]" src={staticFiles.images.youtube} style={{zIndex:20}}/></a>
-                      <a href={`https://17.live/${item.liveAccount}`} target="_blank"><img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.seventeen} /></a>
-                      <a href={`https://twitter.com/${item.twitterAccount}`} target="_blank"><img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.twitter} /></a>
-                      <a href={`https://www.instagram.com/${item.instagramAccount}`} target="_blank"><img className="w-[34px] h-[34px] item-shadow rounded-[10px]" src={staticFiles.images.instagram} /></a>
+              <div className="flex flex-col px-[20px] py-[30px]">
+                  <div className="flex flex-row ">
+                      <img 
+                        src = {`${API}/api/avatar/${item._id}`}
+                        className="rounded-[25px] w-[100px] h-[100px]" onClick={() => {navigate(`/creator/detail/${item._id}`)}}/>
+                      <div className="flex flex-col pl-[10px]" style={{justifyContent:'end', rowGap:'5px'}}>
+                        <div className="flex flex-wrap" style={{rowGap:'5px', columnGap:'5px'}}>
+                        {
+                          item.skills.map((skill:string) =>(
+                            <span className="px-[10px] py-[3px] text-[#fff] text-[14px] bg-[#F59ABF] rounded-[20px] text-center" style={{fontWeight:fontBold}}>{skill}</span>
+                          ))
+                        }
+                        </div>
+                          <div className="flex flex-row " >
+                              <a href={`https://www.youtube.com/${item.youtubeAccount}`} target="_blank"><img className="w-[34px] h-[34px] item-shadow rounded-[10px]" src={staticFiles.images.youtube} style={{zIndex:20}}/></a>
+                              <a href={`https://17.live/${item.liveAccount}`} target="_blank"><img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.seventeen} /></a>
+                              <a href={`https://twitter.com/${item.twitterAccount}`} target="_blank"><img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.twitter} /></a>
+                              <a href={`https://www.instagram.com/${item.instagramAccount}`} target="_blank"><img className="w-[34px] h-[34px] item-shadow rounded-[10px]" src={staticFiles.images.instagram} /></a>
+                          </div>
+                      </div>
                   </div>
+              <span className="mt-[30px] text-[#511523] text-[24px]" style={{fontWeight:fontBold}}>{item.username}</span>
+              <div className="flex flex-row"
+                onClick={() => {
+                  handleFollow(item.email, index);
+                }}>
+                  <img className="w-[20px]" src={staticFiles.icons.ic_user_plus} />
+                  <span className="text-[14px] text-[#838688]">フォロワー数 {(item.follower.length + followState[index]).toLocaleString()}人</span>
               </div>
-          </div>
-          <span className="mt-[30px] text-[#511523] text-[24px]" style={{fontWeight:fontBold}}>{item.username}</span>
-          <div className="flex flex-row"
-          onClick={() => {
-            handleFollow(item.email, index);
-          }}>
-              <img className="w-[20px]" src={staticFiles.icons.ic_user_plus} />
-              <span className="text-[14px] text-[#838688]">フォロワー数 {(item.follower.length + followState[index]).toLocaleString()}人</span>
-          </div>
-          </div>
+            </div>
           </div>
         </Grid>):null
           

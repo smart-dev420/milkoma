@@ -1,8 +1,10 @@
 import { Button, Grid, InputAdornment, TextField, useMediaQuery } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
-import { staticFiles } from "../../components/Constants";
+import { fontBold, staticFiles } from "../../components/Constants";
+import axios from "axios";
+import { API } from "../../axios";
 
 const btn_group:{id: number; name: string;}[] = [
     {
@@ -76,7 +78,17 @@ export const ViewHistory = () => {
           const updatedArrayString = JSON.stringify(existingArray);
           sessionStorage.setItem('searchValue', updatedArrayString);
         }
-      };
+    };
+        
+    const [ creatorInfo, setCreatorInfo] = useState<any>([]);
+    const getCreatorInfo = async () => {
+        const res = await axios.post(`${API}/api/getCreatorInfo`, {});
+        setCreatorInfo(res.data.data);
+    }
+    useEffect(() => {
+        getCreatorInfo();
+    }, []);
+    
     return(
         <>
             <div className="bg-gradient-to-br from-[#FAEAD1] to-[#F5D0E9] w-full h-[480px]" style={{position:'absolute', top:-120, left:0, filter:'blur(10px)', zIndex:-10}}></div>
@@ -148,7 +160,7 @@ export const ViewHistory = () => {
                                 </div>      
                             </div>               
                     </div>
-                        <GridComponent count={page}/>
+                        <GridComponent count={page} creatorInfo={creatorInfo}/>
                         <div className="my-[59px]">
                         <button
                             onClick={() => {setPage((prevPage) => prevPage + 8); console.log(page)}}
@@ -164,35 +176,48 @@ export const ViewHistory = () => {
     )
 }
 
-const GridComponent: React.FC<{ count: number }> = ({ count }) => {
+const GridComponent: React.FC<{ count: number; creatorInfo: any }> = ({ count, creatorInfo }) => {
     const navigate = useNavigate();
     return (
       <Grid container spacing={5} className='justify-center items-center'>
-        {Array.from({ length: count }).map((_, i) => (
-          <Grid item xs='auto' key={i}>
-            <div className="w-[361px] card-hover my-[15px] cursor-pointer" onClick={() => {navigate('')}}>
-            <div className="flex flex-col px-[20px] py-[30px]">
-            <div className="flex flex-row ">
-                <img src={staticFiles.images.model} className="rounded-[25px] w-[100px]"/>
-                <div className="flex flex-col pl-[10px]">
-                    <span className="mt-[30px] w-[96px] h-[31px] text-[#fff] text-[14px] bg-[#F59ABF] rounded-[20px] text-center">コスメ</span>
-                    <div className="flex flex-row mt-[10px]">
-                        <img className="w-[34px] h-[34px] item-shadow rounded-[10px]" src={staticFiles.images.youtube} />
-                        <img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.seventeen} />
-                        <img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.twitter} />
-                        <img className="w-[34px] h-[34px] item-shadow rounded-[10px]" src={staticFiles.images.instagram} />
-                    </div>
-                </div>
-            </div>
-            <span className="mt-[30px] text-[#511523] text-[24px]" style={{letterSpacing:'-4px'}}>なまえ なまえ なまえ</span>
-            <div className="flex flex-row">
-                <img className="w-[20px]" src={staticFiles.icons.ic_user_plus} />
-                <span className="text-[14px] text-[#838688]">フォロワー数 116,900人</span>
-            </div>
-            </div>
-            </div>
-          </Grid>
-        ))}
+        {
+            creatorInfo.length > 0 && (
+                creatorInfo.map((item:any, index:number) => (
+                    index < count && (
+                        <Grid item xs='auto' key={index}>
+                            <div className="w-[361px] card-hover my-[15px] cursor-pointer" onClick={() => {navigate('')}}>
+                                <div className="flex flex-col px-[20px] py-[30px]">
+                                    <div className="flex flex-row ">
+                                        <img 
+                                            src = {`${API}/api/avatar/${item._id}`}
+                                            className="rounded-[25px] w-[100px]"/>
+                                        <div className="flex flex-col pl-[10px]" style={{justifyContent:'end', rowGap:'5px'}}>
+                                            <div className="flex flex-wrap" style={{rowGap:'5px', columnGap:'5px'}}>
+                                                {
+                                                    item.skills.map((skill:string) =>(
+                                                        <span className="px-[10px] py-[3px] text-[#fff] text-[14px] bg-[#F59ABF] rounded-[20px] text-center" style={{fontWeight:fontBold}}>{skill}</span>
+                                                    ))
+                                                }
+                                            </div>
+                                            <div className="flex flex-row">
+                                                <a href={`https://www.youtube.com/${item.youtubeAccount}`} target="_blank"><img className="w-[34px] h-[34px] item-shadow rounded-[10px]" src={staticFiles.images.youtube} style={{zIndex:20}}/></a>
+                                                <a href={`https://17.live/${item.liveAccount}`} target="_blank"><img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.seventeen} /></a>
+                                                <a href={`https://twitter.com/${item.twitterAccount}`} target="_blank"><img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.twitter} /></a>
+                                                <a href={`https://www.instagram.com/${item.instagramAccount}`} target="_blank"><img className="w-[34px] h-[34px] item-shadow rounded-[10px]" src={staticFiles.images.instagram} /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span className="mt-[30px] text-[#511523] text-[24px]" style={{letterSpacing:'-1px'}}>{item.username}</span>
+                                    <div className="flex flex-row">
+                                        <img className="w-[20px]" src={staticFiles.icons.ic_user_plus} />
+                                        <span className="text-[14px] text-[#838688]">フォロワー数 {item.follower.length.toLocaleString()}人</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </Grid>
+                    )
+                ))
+            )}
       </Grid>
     );
 };
