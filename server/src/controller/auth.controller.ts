@@ -397,8 +397,11 @@ const followUser:RequestHandler = async (req, res) => {
   const followingUser = req.body.email;
   const token = validateToken(req, res);
   try{
-    await follow({token, followingUser});
-    return res.status(StatusCodes.OK).send({msg : "フォローされました!"}); // Follow successful!
+    const result = await follow({token, followingUser});
+    if(result){
+      return res.status(StatusCodes.OK).send({msg : "フォローされました!", state: 1}); // Follow successful!
+    }
+    return res.status(StatusCodes.OK).send({msg : "すでにこのユーザーをフォローしています", state: 0}); // Already follow this user
   } catch (err:any){
     logger.error(err);
     return res
@@ -411,8 +414,11 @@ const heartUser:RequestHandler = async (req, res) => {
   const heartUser = req.body.email;
   const token = validateToken(req, res);
   try{
-    await heart({token, heartUser});
-    return res.status(StatusCodes.OK).send({msg : "みたいな!"}); // Heart successful!
+    const result = await heart({token, heartUser});
+    if(result){
+      return res.status(StatusCodes.OK).send({msg : "みたいな!", state: 1}); // Heart successful!
+    }
+    return res.status(StatusCodes.OK).send({msg : "このユーザーはすでに「いいね」をしています", state: 0}); // Already like this user
   } catch (err:any){
     logger.error(err);
     return res
@@ -481,6 +487,13 @@ const getCreatorInfo:RequestHandler = async (req, res) => {
   return res.status(200).send({data});
 }
 
+const getCreatorProfile:RequestHandler = async (req, res) => {
+  const userId = req.params.id;
+  console.log('userId', userId);
+  const data = await AccountModel.findOne({_id: userId}, '-admin -password -region -role -resetpasswordexpire -resetpasswordtoken -__v -strikes');
+  return res.status(200).send({data});
+}
+
 const auth = { 
   register, 
   login, 
@@ -498,6 +511,7 @@ const auth = {
   uploadVerify,
   changeSNS,
   changeSkills,
-  getCreatorInfo
+  getCreatorInfo,
+  getCreatorProfile
 };
 export default auth;

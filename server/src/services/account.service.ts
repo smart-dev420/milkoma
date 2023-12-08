@@ -289,23 +289,24 @@ export async function optValidate(input:any) {
 export async function follow(input: any) {
     const email = getEmailFromToken(input.token);
     const follow = input.followingUser;
-    const result = await AccountModel.findOne({follow});
+    const result = await AccountModel.findOne({email:follow});
     const followArray = result?.follower || [];
     if (!followArray.includes(email)) {
       followArray.push(email);
       await AccountModel.updateOne({ email:follow }, { follower: followArray });
+      logger.info("Follow");
       return true;
     }
     else {
       logger.error("Already follow this user");
-      throw Error("すでにこのユーザーをフォローしています"); // Already follow this user
+      return false;
     }
 }
 
 export async function heart(input: any){
   const email = getEmailFromToken(input.token);
   const heart = input.heartUser
-  const result = await AccountModel.findOne({heart});
+  const result = await AccountModel.findOne({email: heart});
   const heartArray = result?.heart || [];
   if (!heartArray.includes(email)) {
     heartArray.push(email);
@@ -314,7 +315,8 @@ export async function heart(input: any){
   }
   else {
     logger.error("Already like this user");
-    throw Error("このユーザーはすでに「いいね」をしています!"); // Already like this user
+    // throw Error("このユーザーはすでに「いいね」をしています!"); // Already like this user
+    return false;
   }
 }
 

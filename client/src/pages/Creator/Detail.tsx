@@ -1,11 +1,24 @@
-import { Box, Grid, useMediaQuery } from "@mui/material"
+import { Box, Grid, TextareaAutosize, useMediaQuery } from "@mui/material"
 import { fontBold, fontSize12, fontSize14, fontSize16, fontSize24, fontSize28, staticFiles } from "../../components/Constants"
 import { useNavigate, useParams } from "react-router-dom";
 import { NumberFormatExample, showSentence } from "../../utils/appHelper";
+import { API } from "../../axios";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export const CreatorDetail = () => {
     const navigate = useNavigate();
     const { userId } = useParams();
+    const query = `${API}/api/getCreatorProfile/${userId}`;
+    const [ creatorInfo, setCreatorInfo] = useState<any>({});
+    const getCreatorInfo = async () => {
+      const res = await axios.post(query, {});
+      setCreatorInfo(res.data.data);
+    }
+    useEffect(() => {
+      getCreatorInfo();
+    }, []);
+    console.log('data - ', creatorInfo);
     const creatorData = {
         gift: '17.Live受け取ったギフト No.1',
         avatar: staticFiles.images.avatar,
@@ -25,7 +38,8 @@ export const CreatorDetail = () => {
             <div className="px-[2vw]">
                 <div className="flex flex-col mx-[125px]">
                 <div className="flex" style={{columnGap:'75px', flexDirection:match_1024?'row':'column'}}>
-                
+                {creatorInfo && Object.keys(creatorInfo).length > 0 && ( 
+                    <>
                 {/** SNS Data */}
                     <Box flex={2} className="flex flex-row bg-gradient-to-br from-[#FDF6E0] to-[#F8D8C2] rounded-[20px]" style={{boxShadow:"0px 0px 35px 5px #FCEFD9", position:'relative'}}>
                         <img src={staticFiles.images.blog} className="w-[68%] rounded-[20px]" />
@@ -34,41 +48,54 @@ export const CreatorDetail = () => {
                             <GridItems sp={2} lg={6} path={staticFiles.images.blog1} sm="w-[102px] my-[5px]" />
                             <label className="mt-[179px] mb-[30px]" style={{fontWeight:fontBold}}>ジャンル</label>
                             <div className="flex flex-wrap text-[#fff] text-center" style={{columnGap:'5px', fontSize:fontSize14}}>
-                                <span className="w-[96px] h-[31px] bg-[#F59ABF] rounded-[20px]" style={{fontWeight:fontBold}}>コスメ</span>
-                                <span className="w-[96px] h-[31px] bg-[#E38A86] rounded-[20px]" style={{fontWeight:fontBold}}>ブログ</span>
+                            {creatorInfo.skills.map((item:string, index:number) => (
+                                index < 2? (
+                                    index % 2 == 0?(
+                                        <span className="w-[96px] h-[31px] bg-[#F59ABF] rounded-[20px]" style={{fontWeight:fontBold}}>{item}</span>
+                                    ):(
+                                        <span className="w-[96px] h-[31px] bg-[#E38A86] rounded-[20px]" style={{fontWeight:fontBold}}>{item}</span>
+                                    )
+                                ):null                                
+                            ))}
                             </div>
                             <label className="mt-[34px]" style={{fontWeight:fontBold}}>活動しているSNS</label>
                             <div className="flex flex-wrap mt-[30px] mb-[25px]" style={{columnGap:'8px'}}>
-                                <img src={staticFiles.images.youtube} className="w-[50px] h-[50px] rounded-[15px] log-shadow cursor-pointer image-hover"/>
-                                <img src={staticFiles.images.seventeen} className="w-[50px] h-[50px] rounded-[15px] log-shadow cursor-pointer image-hover"/>
-                                <img src={staticFiles.images.twitter} className="w-[50px] h-[50px] rounded-[15px] log-shadow cursor-pointer image-hover"/>
-                                <img src={staticFiles.images.instagram} className="w-[50px] h-[50px] rounded-[15px] log-shadow cursor-pointer image-hover"/>
+                            <a href={`https://www.youtube.com/${creatorInfo.youtubeAccount}`} target="_blank"><img src={staticFiles.images.youtube} className="w-[50px] h-[50px] rounded-[15px] log-shadow cursor-pointer image-hover"/></a>
+                            <a href={`https://17.live/${creatorInfo.liveAccount}`} target="_blank"><img src={staticFiles.images.seventeen} className="w-[50px] h-[50px] rounded-[15px] log-shadow cursor-pointer image-hover"/></a>
+                            <a href={`https://twitter.com/${creatorInfo.twitterAccount}`} target="_blank"><img src={staticFiles.images.twitter} className="w-[50px] h-[50px] rounded-[15px] log-shadow cursor-pointer image-hover"/></a>
+                            <a href={`https://www.instagram.com/${creatorInfo.instagramAccount}`} target="_blank"><img src={staticFiles.images.instagram} className="w-[50px] h-[50px] rounded-[15px] log-shadow cursor-pointer image-hover"/></a>
                             </div>
                         </div>
                     </Box>
                     <Box flex={1} className="flex flex-col mt-[120px] w-[100%]">
                         <label className="w-[356px] py-[10px] bg-gradient-to-br from-[#F4B7A5] to-[#F7CF91] text-center text-[#fff] rounded-[20px]" style={{boxShadow:"0px 0px 20px 2px #F7CD93", fontWeight:fontBold}}>
-                            {creatorData.gift}
+                            17.Live受け取ったギフト No.1
                         </label>
                         <div className="flex flex-row mt-[50px]">
-                            <img src={creatorData.avatar} className="w-[65px] h-[65px]" />
+                            <img src = {`${API}/api/avatar/${creatorInfo._id}`} className="w-[65px] h-[65px]" style={{borderRadius:'10px'}}/>
                             <div className="flex flex-col ml-[20px]">
-                                <label className="text-[#838688]" style={{fontSize:fontSize14}}>{creatorData.email}</label>
-                                <label className="text-[#001219]" style={{fontWeight:fontBold, fontSize:fontSize24}}>{creatorData.description}</label>
+                                <label className="text-[#838688]" style={{fontSize:fontSize14}}>{creatorInfo.email}</label>
+                                <label className="text-[#001219]" style={{fontWeight:fontBold, fontSize:fontSize24}}>{creatorInfo.username}</label>
                             </div>
                         </div>
                         <div className="flex flex-row text-[#511523] items-center mt-[20px] mb-[26px]" style={{whiteSpace:'nowrap', fontSize:fontSize16}}>
                             <img src={staticFiles.icons.ic_user_plus_brown} className="w-[26px]"/>
-                            <label className="px-[5px]">総フォロワー数 {creatorData.follower.toLocaleString()}人</label>
+                            <label className="px-[5px]">総フォロワー数 {creatorInfo.follower.length.toLocaleString()}人</label>
                             <img src={staticFiles.icons.ic_heart} className="w-[23px] ml-[63px] mr-[5px]" />
-                            <label>総いいね数 {NumberFormatExample(creatorData.heart)}</label>
+                            <label>総いいね数 {NumberFormatExample(creatorInfo.heart)}</label>
                         </div>
                         <div className="text-[#511523] w-[534px]" style={{fontSize:fontSize16}}>
-                           {showSentence(creatorData.personalData)}
+                        <TextareaAutosize
+                            aria-label="description"
+                            placeholder=""
+                            value={creatorInfo.description}
+                            style={{resize:"none", backgroundColor:'rgba(0,0,0,0)', width:'100%'}} disabled
+                            readOnly // Make it read-only if needed
+                            />
                         </div>
                         <label className="text-[#511523] mt-[29px] mb-[11px] ml-[20px]" style={{fontWeight:fontBold, fontSize:fontSize16}}>できること・特殊な依頼</label>
                         <div className="flex flex-row text-[#554744]" style={{columnGap:'15px', whiteSpace:'nowrap', fontSize:fontSize12}}>
-                            {creatorData.skill.map((item, index) => (
+                            {creatorInfo.skills.map((item:string, index:number) => (
                                 <label className="bg-[#fff] px-[20px] py-[5px] rounded-[20px]" style={{border:'1px solid #554744'}}>{item}</label>
                             ))}
                         </div>
@@ -77,7 +104,7 @@ export const CreatorDetail = () => {
                             <label className="text-[#511523]" style={{fontSize:fontSize16}}>ミルコマチョイス！</label>
                         </div>
                         <div className="rounded-[20px] w-[100%] bg-[#fff] pt-[34px] pb-[10px] px-[23px] text-[#511523]" style={{fontSize:fontSize16,border:'1px solid #EBE4DC', marginTop:'-20px'}}>
-                        総フォロワー数 {creatorData.follower.toLocaleString()}人！
+                        総フォロワー数 {creatorInfo.follower.length.toLocaleString()}人！
                         {creatorData.mirucoma}
                         </div>
                         <div className="flex flex-row justify-center items-center mt-[79px]">
@@ -89,8 +116,9 @@ export const CreatorDetail = () => {
                                     この人に依頼したい
                             </button>
                         </div>
-                        
-                    </Box>
+                    </Box>                        
+                    </>
+                    )}
                 </div>
                 <p className="mt-[90px] mb-[52px] text-[#001219] " style={{fontWeight:fontBold, fontSize:fontSize28}}>ミルコマで出した広告動画</p>
                 </div>
