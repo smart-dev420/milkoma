@@ -165,7 +165,6 @@ const IntroComponent: React.FC<{ data: any; }> = ({ data }) => {
     },[data._id])
     return(
         <>
-        {/* {console.log('create - ', creator._id)} */}
         { creator && creator?._id && (
               <div className="px-[2vw]">
               <p className="text-[28px] text-[#001219] mt-[20px]" style={{letterSpacing:'-4px', fontWeight:fontBold}}>クリエイター指名</p>

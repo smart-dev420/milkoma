@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { CardElement, IntroCard } from "../../components/Card";
-import { fontBold, staticFiles } from "../../components/Constants";
+import { fontBold, scrollTop, staticFiles } from "../../components/Constants";
 import { Grid, TextareaAutosize, useMediaQuery, TextField, ButtonGroup, Button } from "@mui/material";
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -91,8 +91,9 @@ const btn_group2:{id: number; name: string;}[] = [
   
 export const DirectPage = () => {
     // const [ selectTab, setSelectTab ] = useState<number>(0);
+    scrollTop();
     const selectTab = useSelector((state:any) => state.direct.step);
-    console.log("step", selectTab);
+    // console.log("step", selectTab);
     const selectColor:string = "#E38A86";
     const unselectColor:string = "#D9D9D9";
     const dispatch = useDispatch();

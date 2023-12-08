@@ -1,5 +1,5 @@
 import { Box, Button, CardMedia, Checkbox, Container, Dialog, DialogContent, DialogTitle, IconButton, Stack, Typography } from "@mui/material"
-import { btnBackground, btnBackgroundHover, fontBold, staticFiles } from "../../components/Constants"
+import { btnBackground, btnBackgroundHover, fontBold, scrollTop, staticFiles } from "../../components/Constants"
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { setPage } from "../../slices/page";
@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import contract, { setContract } from "../../slices/contract";
 
 export const ContractPage = () => {
+    scrollTop();
     const dispatch = useDispatch();
     dispatch(setPage({page:2}));
     const navigate = useNavigate();

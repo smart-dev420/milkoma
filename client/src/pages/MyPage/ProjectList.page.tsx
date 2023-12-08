@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPage } from "../../slices/page";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fontBold, staticFiles } from "../../components/Constants";
+import { fontBold, scrollTop, staticFiles } from "../../components/Constants";
 import { statusColor } from "./Home.page";
 import { btnBackground, btnBackgroundHover } from "../../components/Constants";
 export const ProjectList = () => {
@@ -25,6 +25,7 @@ export const ProjectList = () => {
             count: 12,
         },
     ];
+    scrollTop();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const pageIndex = useSelector((state:any) => state.pages.index);

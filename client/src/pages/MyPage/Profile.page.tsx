@@ -1,5 +1,5 @@
 import { Badge, Box, Button, CardMedia, Container, InputAdornment, Stack, TextField, TextareaAutosize, Typography } from "@mui/material"
-import { btnBackground, btnBackgroundHover, fontBold, staticFiles } from "../../components/Constants"
+import { btnBackground, btnBackgroundHover, fontBold, scrollTop, staticFiles } from "../../components/Constants"
 import { useEffect, useRef, useState } from "react";
 import PersonIcon from '@mui/icons-material/Person';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -35,7 +35,7 @@ interface IFile {
 }
 
 export const Profile = () =>{
-    
+    scrollTop();
     const getProfile = async () => { 
         const res = await axios.post(`${API}/api/getUserProfile`, {}, {headers});
         setProfile(res.data);

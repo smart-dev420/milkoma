@@ -1,7 +1,7 @@
 import { Card, useMediaQuery } from "@mui/material"
 import React, { useEffect, useState } from "react"
 import { CardElement, IntroCard } from "../../components/Card";
-import { fontBold, fontSize18, fontSize20, fontSize26, fontSize28, fontSize30, staticFiles } from "../../components/Constants";
+import { fontBold, fontSize18, fontSize20, fontSize26, fontSize28, fontSize30, scrollTop, staticFiles } from "../../components/Constants";
 import { HomeGrid } from "../../components/Grid";
 import { stat } from "fs";
 import { HomeSlider } from "../../components/Slider";
@@ -39,6 +39,7 @@ const cardData: CardElement[] = [
   ];
   
 export const Home = () =>{
+  scrollTop();
   const match_768 = useMediaQuery('(min-width:768px)');
   const match_1024 = useMediaQuery('(min-width:1025px)');
   const [ selectShowDirection, SetSelectShowDirection ] = useState(0); // 0:virtical, 1:horizontal

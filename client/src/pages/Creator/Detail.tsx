@@ -1,5 +1,5 @@
 import { Box, Grid, TextareaAutosize, useMediaQuery } from "@mui/material"
-import { fontBold, fontSize12, fontSize14, fontSize16, fontSize24, fontSize28, staticFiles } from "../../components/Constants"
+import { fontBold, fontSize12, fontSize14, fontSize16, fontSize24, fontSize28, scrollTop, staticFiles } from "../../components/Constants"
 import { useNavigate, useParams } from "react-router-dom";
 import { NumberFormatExample, showSentence } from "../../utils/appHelper";
 import { API } from "../../axios";
@@ -18,7 +18,7 @@ export const CreatorDetail = () => {
     useEffect(() => {
       getCreatorInfo();
     }, []);
-    console.log('data - ', creatorInfo);
+    scrollTop();
     const creatorData = {
         gift: '17.Live受け取ったギフト No.1',
         avatar: staticFiles.images.avatar,

@@ -132,6 +132,9 @@ export const fontSize16 = "16px";
 export const fontSize14 = "14px";
 export const fontSize12 = "12px";
 
+export const scrollTop = () => {
+  window.scrollTo(0, 0);
+}
 // export const API = "localhost:5000/";
 
 // export const fetcher =

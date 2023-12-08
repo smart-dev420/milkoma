@@ -1,5 +1,5 @@
 import { Grid, Hidden, InputAdornment, TextField, Typography, useMediaQuery } from "@mui/material"
-import { fontBold, fontSize20, fontSize28, fontSize30, staticFiles } from "../../components/Constants"
+import { fontBold, fontSize20, fontSize28, fontSize30, scrollTop, staticFiles } from "../../components/Constants"
 import SearchIcon from "@mui/icons-material/Search";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ import { NumberFormatExample, headers } from "../../utils/appHelper";
 import { toast } from "react-toastify";
 
 export const FindCreator = () => {
+    scrollTop();
     const [searchTerm, setSearchTerm] = useState<string>("");
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);

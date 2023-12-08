@@ -1,5 +1,5 @@
 import { Box, Button, Card, CardMedia, Container, Divider, Grid, Icon, Stack, Typography } from "@mui/material"
-import { fontBold, staticFiles } from "../../components/Constants"
+import { fontBold, scrollTop, staticFiles } from "../../components/Constants"
 import { SpaceY } from "../../components/SpaceY"
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import Slider from '@mui/material/Slider';
@@ -46,6 +46,7 @@ export const HomePage = () => {
             date: '2023年1月1日',
         },
     ];
+    scrollTop();
     const dispatch = useDispatch();
     dispatch(setPage({page:1}));
     const [ verify, setVerify ] = useState(false);

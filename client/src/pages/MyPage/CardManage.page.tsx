@@ -1,7 +1,7 @@
 import { Box, Button, CardMedia, Checkbox, Container, Dialog, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, Slider, Stack, TextField, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { btnBackground, btnBackgroundHover, fontBold, staticFiles } from "../../components/Constants";
+import { btnBackground, btnBackgroundHover, fontBold, scrollTop, staticFiles } from "../../components/Constants";
 import { setPage } from "../../slices/page";
 import { useState } from "react";
 import { showSentence } from "../../utils/appHelper";
@@ -29,6 +29,7 @@ const validationSchema = yup.object().shape({
 });
 
 export const CardManage = () => {
+    scrollTop();
     const [open, setOpen] = useState<boolean>(false);
     const [deleteDialog, setDeleteDialog] = useState<boolean>(false);
     const [ isHovered, setIsHovered ] = useState<boolean>(false);

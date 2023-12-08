@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Box, Button, CardMedia, Container, Dialog, DialogContent, DialogTitle, IconButton, Stack, TextField, Typography } from "@mui/material"
-import { fontBold, staticFiles } from "../../components/Constants"
+import { fontBold, scrollTop, staticFiles } from "../../components/Constants"
 import { styled } from '@mui/material/styles';
 import Slider, { SliderThumb, SliderValueLabelProps } from '@mui/material/Slider';
 import { useDispatch, useSelector } from "react-redux";
@@ -163,7 +163,7 @@ export const DetailPage = () => {
         follow: 12345678,
         heart: 3900000,
     }
-    
+    scrollTop();
     const totalPrice = data.influencePrice + data.creatorPrice;
     const handleContract = () => {
         // setData(prevData => ({ ...prevData, contracted: true }));

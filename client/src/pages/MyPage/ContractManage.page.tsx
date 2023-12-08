@@ -1,7 +1,7 @@
 import { Box, Container, Grid, Slider, Stack, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { btnBackground, btnBackgroundHover, fontBold, staticFiles } from "../../components/Constants";
+import { btnBackground, btnBackgroundHover, fontBold, scrollTop, staticFiles } from "../../components/Constants";
 import { statusColor } from "./Home.page";
 import { setPage } from "../../slices/page";
 import { useState } from "react";
@@ -25,6 +25,7 @@ export const ContractManage = () => {
             count: 12,
         },
     ];
+    scrollTop();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const pageIndex = useSelector((state:any) => state.pages.index);

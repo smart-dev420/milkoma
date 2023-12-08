@@ -2,7 +2,7 @@ import { Button, Grid, InputAdornment, TextField, useMediaQuery } from "@mui/mat
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
-import { fontBold, staticFiles } from "../../components/Constants";
+import { fontBold, scrollTop, staticFiles } from "../../components/Constants";
 import axios from "axios";
 import { API } from "../../axios";
 
@@ -30,6 +30,7 @@ const btn_group:{id: number; name: string;}[] = [
 ];
 
 export const ViewHistory = () => {
+    scrollTop();
     const navigate = useNavigate();
     const [ selectId, setSelectId ] = useState<string>("");
     const [ page, setPage ] = useState(8);
@@ -88,7 +89,7 @@ export const ViewHistory = () => {
     useEffect(() => {
         getCreatorInfo();
     }, []);
-    
+
     return(
         <>
             <div className="bg-gradient-to-br from-[#FAEAD1] to-[#F5D0E9] w-full h-[480px]" style={{position:'absolute', top:-120, left:0, filter:'blur(10px)', zIndex:-10}}></div>

@@ -1,12 +1,13 @@
 import { Box, Button, CardMedia, Container, Grid, Slider, Stack, TextareaAutosize, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { btnBackground, btnBackgroundHover, fontBold, staticFiles } from "../../components/Constants";
+import { btnBackground, btnBackgroundHover, fontBold, scrollTop, staticFiles } from "../../components/Constants";
 import { setPage } from "../../slices/page";
 import { useState } from "react";
 import { showSentence } from "../../utils/appHelper";
 
 export const ChattingPage = () => {
+    scrollTop();
     const dispatch = useDispatch();
     dispatch(setPage({page:2}));
     const navigate = useNavigate();

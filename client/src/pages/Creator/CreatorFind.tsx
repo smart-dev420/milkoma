@@ -1,9 +1,12 @@
 import { Button, Checkbox, Grid, InputAdornment, TextField, makeStyles, useMediaQuery } from "@mui/material"
 import { fontBold, fontSize12, fontSize14, fontSize16, fontSize18, fontSize22, fontSize24, fontSize26, staticFiles } from "../../components/Constants"
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import React from "react";
+import { NumberFormatExample } from "../../utils/appHelper";
+import axios from "axios";
+import { API } from "../../axios";
 
 const chkList1 = [
     {
@@ -227,6 +230,15 @@ export const CreatorFind = () => {
         backgroundColor: "#ee7d902c",
       };
 
+      const [ creatorInfo, setCreatorInfo] = useState<any>([]);
+      const getCreatorInfo = async () => {
+          const res = await axios.post(`${API}/api/getCreatorInfo`, {});
+          setCreatorInfo(res.data.data);
+      }
+      useEffect(() => {
+          getCreatorInfo();
+      }, []);
+
     const [searchTerm, setSearchTerm] = useState<string>("");
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -410,11 +422,11 @@ export const CreatorFind = () => {
                 
                 {/** List Data */}
                     <div className="mt-[47px]">
-                        {fakeData.map((item, index) => (
-                            index < page?(
-                            <ItemComponent element={item} recommend={item.recommand}/>):null
+                        {
+                            creatorInfo.length > 0 && creatorInfo.map((item:any, index:number) => (
+                                index < page?(
+                                <ItemComponent creator={item} recommend={item.recommand}/>):null
                         ))}
-                        
                     </div>
 
                 {/** Next Search */}
@@ -434,9 +446,7 @@ export const CreatorFind = () => {
     )
 }
 
-
-
-const ItemComponent:React.FC<{element:listProps, recommend:boolean}> = ({element, recommend}) => {
+const ItemComponent:React.FC<{creator:any, recommend:boolean}> = ({creator, recommend}) => {
     const style = {
         marginTop: '-50px',
         display: recommend ? '' : 'none',
@@ -446,57 +456,65 @@ const ItemComponent:React.FC<{element:listProps, recommend:boolean}> = ({element
       const match_1024 = useMediaQuery('(min-width:1025px)');
     return(
         <div className="w-[100%] px-[45px] pt-[25px] pb-[29px] my-[33px] list-style flex" style={{flexDirection:match_1024?'row':'column', columnGap:'132px'}}>
-            <div style={{display:'flex', flexDirection:'row'}}>
-                <div className="flex flex-col items-center">
-                <img className="w-[167px] h-[167px] rounded-[30px]" src={element.avatar} onClick={() => navigate(`/creator/detail/${element.userId}`)}/>
-                <div className="rounded-[30px] bg-[#F4B7A5] text-center text-[#fff] w-[80%] h-[37px] flex justify-center items-center" style={style}>
-                    <span style={{fontWeight:fontBold}}>おすすめ</span>
-                </div>
-                </div>
-                <div className="flex flex-col pl-[30px] pt-[8px]">
-                    <label className="text-[#511523] title-hover" onClick={() => navigate(`/creator/detail/${element.userId}`)} style={{fontWeight:fontBold, fontSize:fontSize24}}>{element.title}</label>
-                    <div className="flex flex-row text-[#838688]" style={{fontSize:fontSize16}}>
-                        <img src={staticFiles.icons.ic_heart_gray} className="w-[16px] mr-[5px]"/><span>いいね数 {element.heart}</span>
-                    </div>
-                    <div className="flex flex-row text-[#838688]" style={{fontSize:fontSize16}}>
-                        <img src={staticFiles.icons.ic_user_plus} className="w-[20px] mr-[5px]"/><span>フォロワー数 {element.follow}人</span>
-                    </div>
-                    <div className="flex flex-row text-[#fff] text-center mt-[23px]" style={{fontSize:fontSize14}}>
-                        <span className="w-[96px] h-[31px] bg-[#F59ABF] rounded-[20px] mr-[15px]" style={{fontWeight:fontBold}}>コスメ</span>
-                        <span className="w-[96px] h-[31px] bg-[#E38A86] rounded-[20px]" style={{fontWeight:fontBold}}>ブログ</span>
-                        <img src={staticFiles.images.youtube} className="w-[30px] h-[30px] ml-[30px] mr-[4px] rounded-[8px] log-shadow"/>
-                        <img src={staticFiles.images.seventeen} className="w-[30px] h-[30px] mx-[4px] rounded-[8px] log-shadow"/>
-                        <img src={staticFiles.images.twitter} className="w-[30px] h-[30px] mx-[4px] rounded-[8px] log-shadow"/>
-                        <img src={staticFiles.images.instagram} className="w-[30px] h-[30px] mx-[4px] rounded-[8px] log-shadow"/>
-                    </div>
-                </div>
-            </div>
-            <div style={{display:'flex', flexDirection:'row', marginTop:match_1024?'0px':'20px', alignItems:match_1024?'center':'start'}}>
-                <div style={{display:'flex', flexDirection:match_1024?'row':'column'}}>
-                    <div className="flex flex-col">
-                        <label className="text-[#511523]" style={{fontWeight:fontBold, fontSize:fontSize16}}>動画・画像</label>
-                        <div className="flex flex-row mt-[11px]">
-                            <img src={staticFiles.images.blog1} className="w-[131px] rounded-[20px] mr-[25px] image-hover"/>
-                            <img src={staticFiles.images.blog1} className="w-[131px] rounded-[20px] image-hover"/>
+            { creator && (
+                <>
+                    <div style={{display:'flex', flexDirection:'row'}}>
+                        <div className="flex flex-col items-center">
+                            <img className="w-[167px] h-[167px] rounded-[30px]" 
+                                src = {`${API}/api/avatar/${creator._id}`}
+                                onClick={() => navigate(`/creator/detail/${creator._id}`)}/>
+                            <div className="rounded-[30px] bg-[#F4B7A5] text-center text-[#fff] w-[80%] h-[37px] flex justify-center items-center" style={style}>
+                                <span style={{fontWeight:fontBold}}>おすすめ</span>
+                            </div>
+                        </div>
+                    <div className="flex flex-col pl-[30px] pt-[8px]">
+                        <label className="text-[#511523] title-hover" onClick={() => navigate(`/creator/detail/${creator._id}`)} style={{fontWeight:fontBold, fontSize:fontSize24}}>{creator.username}</label>
+                        <div className="flex flex-row text-[#838688]" style={{fontSize:fontSize16}}>
+                            <img src={staticFiles.icons.ic_heart_gray} className="w-[16px] mr-[5px]"/>
+                            <span>いいね数 {NumberFormatExample(creator.heart.length)}</span>
+                        </div>
+                        <div className="flex flex-row text-[#838688]" style={{fontSize:fontSize16}}>
+                            <img src={staticFiles.icons.ic_user_plus} className="w-[20px] mr-[5px]"/>
+                            <span>フォロワー数 {creator.follower.length.toLocaleString()}人</span>
+                        </div>
+                        <div className="flex flex-row text-[#fff] text-center mt-[23px]" style={{fontSize:fontSize14}}>
+                            <span className="w-[96px] h-[31px] bg-[#F59ABF] rounded-[20px] mr-[15px]" style={{fontWeight:fontBold}}>コスメ</span>
+                            <span className="w-[96px] h-[31px] bg-[#E38A86] rounded-[20px]" style={{fontWeight:fontBold}}>ブログ</span>
+                            <a href={`https://www.youtube.com/${creator.youtubeAccount}`} target="_blank"><img src={staticFiles.images.youtube} className="w-[30px] h-[30px] ml-[30px] mr-[4px] rounded-[8px] log-shadow"/></a>
+                            <a href={`https://17.live/${creator.liveAccount}`} target="_blank"><img src={staticFiles.images.seventeen} className="w-[30px] h-[30px] mx-[4px] rounded-[8px] log-shadow"/></a>
+                            <a href={`https://twitter.com/${creator.twitterAccount}`} target="_blank"><img src={staticFiles.images.twitter} className="w-[30px] h-[30px] mx-[4px] rounded-[8px] log-shadow"/></a>
+                            <a href={`https://www.instagram.com/${creator.instagramAccount}`} target="_blank"><img src={staticFiles.images.instagram} className="w-[30px] h-[30px] mx-[4px] rounded-[8px] log-shadow"/></a>
                         </div>
                     </div>
-                    <div className="flex items-center justify-center">
-                        <label className="text-[#554744] mt-[45px] title-hover" style={{whiteSpace:'nowrap', fontSize:fontSize14}} onClick={() => navigate(`/creator/detail/${element.userId}`)}>+5枚のメディア</label>
                     </div>
-                </div>
-                <div style={{display:'flex', flexDirection:match_1024?'row':'column'}}>
-                    <div className="flex flex-col ml-[59px] mr-[15px]">
-                        <label className="text-[#511523]" style={{fontWeight:fontBold, fontSize:fontSize16}}>広告・動画</label>
-                        <div className="flex flex-row mt-[11px]">
-                            <img src={staticFiles.images.blog2} className="w-[93px] rounded-[20px] mr-[25px] image-hover"/>
-                            <img src={staticFiles.images.blog2} className="w-[93px] rounded-[20px] image-hover"/>
+                    <div style={{display:'flex', flexDirection:'row', marginTop:match_1024?'0px':'20px', alignItems:match_1024?'center':'start'}}>
+                        <div style={{display:'flex', flexDirection:match_1024?'row':'column'}}>
+                            <div className="flex flex-col">
+                                <label className="text-[#511523]" style={{fontWeight:fontBold, fontSize:fontSize16}}>動画・画像</label>
+                                <div className="flex flex-row mt-[11px]">
+                                    <img src={staticFiles.images.blog1} className="w-[131px] rounded-[20px] mr-[25px] image-hover"/>
+                                    <img src={staticFiles.images.blog1} className="w-[131px] rounded-[20px] image-hover"/>
+                                </div>
+                            </div>
+                            <div className="flex items-center justify-center">
+                                <label className="text-[#554744] mt-[45px] title-hover" style={{whiteSpace:'nowrap', fontSize:fontSize14}} onClick={() => navigate(`/creator/detail/${creator._id}`)}>+5枚のメディア</label>
+                            </div>
+                        </div>
+                        <div style={{display:'flex', flexDirection:match_1024?'row':'column'}}>
+                            <div className="flex flex-col ml-[59px] mr-[15px]">
+                                <label className="text-[#511523]" style={{fontWeight:fontBold, fontSize:fontSize16}}>広告・動画</label>
+                                <div className="flex flex-row mt-[11px]">
+                                    <img src={staticFiles.images.blog2} className="w-[93px] rounded-[20px] mr-[25px] image-hover"/>
+                                    <img src={staticFiles.images.blog2} className="w-[93px] rounded-[20px] image-hover"/>
+                                </div>
+                            </div>
+                            <div className="flex items-center justify-center">
+                                <label className="text-[#554744] mt-[45px] title-hover" style={{whiteSpace:'nowrap', fontSize:fontSize14}} onClick={() => navigate(`/creator/detail/${creator._id}`)}>+5個の広告</label>
+                            </div>
                         </div>
                     </div>
-                    <div className="flex items-center justify-center">
-                        <label className="text-[#554744] mt-[45px] title-hover" style={{whiteSpace:'nowrap', fontSize:fontSize14}} onClick={() => navigate(`/creator/detail/${element.userId}`)}>+5個の広告</label>
-                    </div>
-                </div>
-            </div>
+                </>
+            )}
         </div>
     )
 }
