@@ -39,7 +39,7 @@ export async function insertData(input: any) {
       const email = getEmailFromToken(input.token);
       let creatorEmail = input.data.creatorEmail;
       if(!creatorEmail){
-        creatorEmail = 'admin@gmail.com';
+        creatorEmail = 'admin';
       }
       const doc: Contract = new ContractModel({
         clientEmail: email,

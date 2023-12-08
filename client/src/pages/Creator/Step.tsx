@@ -11,7 +11,10 @@ import Typography from '@mui/material/Typography';
 import { useDispatch, useSelector } from "react-redux";
 import { setStep, setCategory, setQuestion, setInit } from "../../slices/creator"
 import { useNavigate, useParams } from "react-router-dom";
-import { NumberFormatExample, showSentence } from "../../utils/appHelper";
+import { NumberFormatExample, headers, showSentence } from "../../utils/appHelper";
+import { API } from "../../axios";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const cardData: CardElement[] = [
     {
@@ -88,19 +91,29 @@ const btn_group2:{id: number; name: string;}[] = [
 export const CreatorStep = () => {
     // const [ selectTab, setSelectTab ] = useState<number>(0);
     const selectTab = useSelector((state:any) => state.creator.step);
-    console.log("step", selectTab);
     const selectColor:string = "#E38A86";
     const unselectColor:string = "#D9D9D9";
     const dispatch = useDispatch();
+    
     const {userId} = useParams();
-    console.log("userId", userId);
+    const query = `${API}/api/getCreatorProfile/${userId}`;
+    const [ creatorInfo, setCreatorInfo] = useState<any>({});
+    const getCreatorInfo = async () => {
+      const res = await axios.post(query, {});
+      setCreatorInfo(res.data.data);
+    }
+    useEffect(() => {
+      getCreatorInfo();
+    }, []);
+    console.log("userData", creatorInfo);
+
     const match_768 = useMediaQuery('(min-width:768px)');
     const match_1024 = useMediaQuery('(min-width:1025px)');
     return (
         <>
         <div className="bg-gradient-to-br from-[#FAEAD1] to-[#F5D0E9] w-full h-[480px]" style={{position:'absolute', top:-120, left:0, filter:'blur(10px)', zIndex:-10}}></div>
         <div className="h-[200px]"></div>
-        <IntroComponent />
+        <IntroComponent data = { creatorInfo }/>
         <div className="px-[2vw] flex justify-center items-center flex-col mt-[70px]">
             <p className="text-[#554744] text-[16px]">インフルエンサーを指名して依頼します。</p>
             <p className="text-[#554744] text-[16px]">インフルエンサーを確認してリクエストしてください</p>
@@ -126,7 +139,7 @@ export const CreatorStep = () => {
                 </div>
             </div>
             <div className="flex flex-col w-[83%] rounded-[25px] bg-[#FFFFFF] py-[70px] my-[90px]" style={{boxShadow: "0px 0px 15px 1px #EE7D90", }}>
-                {selectTab === 0 ? <Step1 elements={cardData} space={4} /> : selectTab === 1? <Step2 /> : selectTab === 2 ? <Step3 /> : <Step4 />}
+                {selectTab === 0 ? <Step1 elements={cardData} space={4} /> : selectTab === 1? <Step2 /> : selectTab === 2 ? <Step3 data = { creatorInfo } /> : <Step4 />}
             </div>
         </div>
         </>
@@ -141,42 +154,51 @@ const creatorData = {
     heart: 3900000,
 }
 
-const IntroComponent = () => {
+const IntroComponent: React.FC<{ data: any; }> = ({ data }) => {
     const selectTab = useSelector((state:any) => state.creator.step);
     const match_768 = useMediaQuery('(min-width:768px)');
     const match_1024 = useMediaQuery('(min-width:1025px)');
+    console.log('data - ', data);
+    const [ creator, setCreator ] = useState<any>(null);
+    useEffect(() => {
+        if(data._id !== undefined) setCreator(data);
+    },[data._id])
     return(
         <>
+        {/* {console.log('create - ', creator._id)} */}
+        { creator && creator?._id && (
+              <div className="px-[2vw]">
+              <p className="text-[28px] text-[#001219] mt-[20px]" style={{letterSpacing:'-4px', fontWeight:fontBold}}>クリエイター指名</p>
+              <p className="text-[16px] text-[#511523]" style={{letterSpacing:'-1px', fontWeight:fontBold}}>インフルエンサーを指名して依頼する</p>
+              {selectTab < 2 ? (    
+              <div className="flex flex-row items-center w-full justify-center">
+                  <div className="flex flex-col w-[60%] mt-[137px]">
+                      <div className="flex flex-row">
+                          <span className="w-[12px] h-[36px] rounded-[20px] bg-[#F6D7CF]"></span>
+                          <label className="text-[22px] text-[#001219] mx-[14px] mb-[23px]" style={{fontWeight:fontBold}}>依頼したいインフルエンサー</label>
+                      </div>
+                      <div className="flex" style={{whiteSpace:'nowrap', flexDirection:match_1024?'row':'column'}}>
+                          <div className="flex flex-row">
+                              <img src = {`${API}/api/avatar/${creator._id}`} className="w-[71px] h-[71px]" style={{borderRadius:'10px'}}/>
+                              <div className="flex flex-col justify-center ml-[22px]">
+                                  <label className="text-[#838688] text-[14px]">{creator.email}</label>
+                                  <label className="text-[#001219] text-[26px]" style={{fontWeight:fontBold}}>{creator.username}</label>
+                              </div>
+                          </div>
+                          <div className="flex flex-row mb-[10px] items-center" style={{marginLeft:match_1024?'126px':'', marginTop:'10px'}}>
+                              <img src={staticFiles.icons.ic_user_plus_brown} className="w-[28px] h-[25px]" />
+                              <label className="text-[#511523] text-[18px] mx-[10px]" style={{letterSpacing:'-3px'}}>総フォロワー数 {creator.follower.length.toLocaleString()}人</label>
+                              <img src={staticFiles.icons.ic_heart} className="w-[25px] h-[25px] ml-[84px]" />
+                              <label className="text-[#511523] text-[18px] ml-[5px]">総いいね数 {NumberFormatExample(creator.heart.length)}</label>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              ): null
+              }
+          </div>    
+        )}
         
-            <div className="px-[2vw]">
-                <p className="text-[28px] text-[#001219] mt-[20px]" style={{letterSpacing:'-4px', fontWeight:fontBold}}>クリエイター指名</p>
-                <p className="text-[16px] text-[#511523]" style={{letterSpacing:'-1px', fontWeight:fontBold}}>インフルエンサーを指名して依頼する</p>
-                {selectTab < 2?(    
-                <div className="flex flex-row items-center w-full justify-center">
-                    <div className="flex flex-col w-[60%] mt-[137px]">
-                        <div className="flex flex-row">
-                            <span className="w-[12px] h-[36px] rounded-[20px] bg-[#F6D7CF]"></span>
-                            <label className="text-[22px] text-[#001219] mx-[14px] mb-[23px]" style={{fontWeight:fontBold}}>依頼したいインフルエンサー</label>
-                        </div>
-                        <div className="flex" style={{whiteSpace:'nowrap', flexDirection:match_1024?'row':'column'}}>
-                            <div className="flex flex-row">
-                                <img src={creatorData.avatar} className="w-[71px] h-[71px]" />
-                                <div className="flex flex-col justify-center ml-[22px]">
-                                    <label className="text-[#838688] text-[14px]">{creatorData.email}</label>
-                                    <label className="text-[#001219] text-[26px]" style={{fontWeight:fontBold}}>{creatorData.description}</label>
-                                </div>
-                            </div>
-                            <div className="flex flex-row mb-[10px] items-center" style={{marginLeft:match_1024?'126px':'', marginTop:'10px'}}>
-                                <img src={staticFiles.icons.ic_user_plus_brown} className="w-[28px] h-[25px]" />
-                                <label className="text-[#511523] text-[18px] mx-[10px]" style={{letterSpacing:'-3px'}}>総フォロワー数 {creatorData.follower.toLocaleString()}人</label>
-                                <img src={staticFiles.icons.ic_heart} className="w-[25px] h-[25px] ml-[84px]" />
-                                <label className="text-[#511523] text-[18px] ml-[5px]">総いいね数 {NumberFormatExample(creatorData.heart)}</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                ): null}
-            </div>
         </>
     )
 }
@@ -399,7 +421,7 @@ const Step2 : React.FC<{}> = () => {
     )
 }
 
-const Step3 : React.FC<{}> = () => {
+const Step3 : React.FC<{data:any}> = ({data}) => {
     const dispatch = useDispatch();
     const question1 = useSelector((state:any) => state.creator.question1);
     const question2 = useSelector((state:any) => state.creator.question2);
@@ -407,6 +429,11 @@ const Step3 : React.FC<{}> = () => {
     const category = useSelector((state:any) => state.creator);
     const [open, setOpen] = React.useState<boolean>(false);
     const [ isHovered, setIsHovered ] = useState<boolean>(false);
+    const [ creator, setCreator ] = useState<any>(null);
+    useEffect(() => {
+        if(data._id !== undefined) setCreator(data);
+    },[data._id])
+
     const content = ""
     const handleClickOpen = () => {
         setOpen(true);
@@ -448,25 +475,27 @@ const Step3 : React.FC<{}> = () => {
                 <div className="flex flex-row">
                     <label className="text-[22px] text-[#B9324D] mb-[23px]" >依頼したいインフルエンサー</label>
                 </div>
-                <div className="flex " style={{whiteSpace:'nowrap', flexDirection:match_1024?'row':'column', columnGap:'280px'}}>
+                { creator && creator._id && (
+                    <div className="flex " style={{whiteSpace:'nowrap', flexDirection:match_1024?'row':'column', columnGap:'280px'}}>
                     <div className="flex flex-row">
-                        <img src={creatorData.avatar} className="w-[71px] h-[71px]" />
+                        <img src = {`${API}/api/avatar/${creator._id}`} className="w-[71px] h-[71px]" style={{borderRadius:'10px'}}/>
                         <div className="flex flex-col justify-center ml-[22px]">
-                            <label className="text-[#838688] text-[14px]">{creatorData.email}</label>
-                            <label className="text-[#511523] text-[26px]" style={{fontWeight:fontBold}}>{creatorData.description}</label>
+                            <label className="text-[#838688] text-[14px]">{creator.email}</label>
+                            <label className="text-[#511523] text-[26px]" style={{fontWeight:fontBold}}>{creator.username}</label>
                         </div>
                     </div>
                     <div className="flex mt-[10px]" style={{flexDirection:match_1024?'row':'column', columnGap:'84px', alignItems:match_1024?'center':'', rowGap:'10px'}}>
                         <div className="flex flex-row">
                             <img src={staticFiles.icons.ic_user_plus_brown} className="w-[28px] h-[25px] "/>
-                            <label className="text-[#511523] text-[18px] mx-[10px]" style={{letterSpacing:'-3px'}}>総フォロワー数 {creatorData.follower.toLocaleString()}人</label>
+                            <label className="text-[#511523] text-[18px] mx-[10px]" style={{letterSpacing:'-3px'}}>総フォロワー数 {creator.follower.length.toLocaleString()}人</label>
                         </div>
                         <div className="flex flex-row">
                             <img src={staticFiles.icons.ic_heart} className="w-[25px] h-[25px]" />
-                            <label className="text-[#511523] text-[18px] ml-[5px]">総いいね数 {NumberFormatExample(creatorData.heart)}M</label>
+                            <label className="text-[#511523] text-[18px] ml-[5px]">総いいね数 {NumberFormatExample(creator.heart.length)}</label>
                         </div>
                     </div>
                 </div>
+                )}
             </div>
         </div>
 
@@ -594,6 +623,37 @@ const Step4 : React.FC<{}> = () => {
         navigate('/'); 
         dispatch(setInit()); 
     }
+    const {userId} = useParams();
+    const data = useSelector((state:any) => state.creator);
+    const onSubmit = async () => {
+        
+        console.log("data", data);
+        const formData = {
+            creatorEmail:userId,
+            category: data.title,
+            description: data.description,
+            step1: data.question1,
+            step2: data.question2,
+            step3: btn_group2[data.question3].name,
+            status: 0,
+        };
+        const query = `${API}/api/insertContract`;
+        try {
+            const res = await axios.post(query, formData, {headers});
+            if(res.status === 200){
+                console.log('return' , res.data)
+                toast.success(res.data.msg);
+                navigate('/'); 
+                dispatch(setInit()); 
+              }else{
+                console.log(res)
+                // context.alertError(res.data.err)
+            }
+        } catch (error:any) {
+            const result = error.response.data.msg;
+            toast.error(result);
+        }
+    }
     const match_1024 = useMediaQuery('(min-width:1025px)');
     return(
         <>
@@ -634,7 +694,7 @@ const Step4 : React.FC<{}> = () => {
             )}
             
         </div>
-            <button onClick={handleHome} className="btn-color py-2 px-5 rounded-[30px] text-[20px]" style={{fontWeight:fontBold, width:match_1024?'324px':'200px', marginLeft:match_1024?'10%':'27%', marginTop:match_1024?'':'20px'}}>マイページへ</button>
+            <button onClick={onSubmit} className="btn-color py-2 px-5 rounded-[30px] text-[20px]" style={{fontWeight:fontBold, width:match_1024?'324px':'200px', marginLeft:match_1024?'10%':'27%', marginTop:match_1024?'':'20px'}}>マイページへ</button>
         </div>
         </>
     )
