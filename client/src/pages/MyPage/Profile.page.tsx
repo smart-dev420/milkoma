@@ -42,7 +42,6 @@ export const Profile = () =>{
     }
     const dispatch = useDispatch();
     dispatch(setPage({page:6}));
-    const [ file, setFile ] = useState(null);
     const [ skill, setSkill ] = useState('');
     const [ profile, setProfile ] = useState<Profile>({
         avatar:'',
@@ -70,21 +69,20 @@ export const Profile = () =>{
         fileInputRef.current?.click();
       };
     
-      const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         // Handle the selected file here
         if(file){
             setAvatar(file);
             setProfile({...profile, avatar:file.name});
         }
-      };
+    };
 
     const handleBasicDataSubmit = async () =>{
         let formData = new FormData();
         if(avatar){
             formData.append('avatar', avatar);
         }
-        console.log('userData - ', profile);
         if(profile.username === '' || profile.company === ''){
             toast.error('すべてのフィールドを挿入する必要があります。');
             return;

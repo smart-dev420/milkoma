@@ -5,12 +5,14 @@ import { styled } from '@mui/material/styles';
 import Slider, { SliderThumb, SliderValueLabelProps } from '@mui/material/Slider';
 import { useDispatch, useSelector } from "react-redux";
 import { setPage } from "../../slices/page";
-import { NumberFormatExample, showSentence } from "../../utils/appHelper";
+import { NumberFormatExample, headers, showSentence } from "../../utils/appHelper";
 import CloseIcon from '@mui/icons-material/Close';
 import { btnBackground, btnBackgroundHover } from "../../components/Constants";
 import { useNavigate } from "react-router-dom";
 import { FileUploader } from "react-drag-drop-files";
 import { toast } from "react-toastify";
+import { API } from "../../axios";
+import axios from "axios";
 
 const box_shadow ='0 0 4px 5px rgba(255,255,255,0.5)';
 
@@ -145,8 +147,8 @@ export const DetailPage = () => {
         bill: false,
         step: 1,
         isMessage: false,
-        influencePrice: 75678,
-        creatorPrice: 35678,
+        creatorPrice: 75678,
+        sitePrice: 35678,
         defaultPrice: '00,000円',
         calulatorPrice: '見積もり中',
         productIntro: '自社の美容液の紹介をしたい。新商品です。発売予定は12月1日です。@@@商品のURLはhttps://mirucoma.comです。@@@ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。',
@@ -164,7 +166,7 @@ export const DetailPage = () => {
         heart: 3900000,
     }
     scrollTop();
-    const totalPrice = data.influencePrice + data.creatorPrice;
+    const totalPrice = data.creatorPrice + data.sitePrice;
     const handleContract = () => {
         // setData(prevData => ({ ...prevData, contracted: true }));
         navigate('/mypage/contract');
@@ -204,20 +206,15 @@ export const DetailPage = () => {
 
     /** File Upload */
     const fileTypes = ["jpg", "png", "gif", "pdf", "doc", "docx", "avi", "mp4", "mp3", "txt", "rtf"];
-    const [file, setFile] = useState(null);
+    const [file, setFile] = useState<File | null>(null);
     const handleChange = (file:any) => {
-        // const extension = file.name.split('.');
-        // if(!fileTypes.includes(extension[extension.length - 1].toLowerCase())){
-        //     toast.error("ファイル形式エラー");
-        //     return;
-        // }
         setFile(file);
         setUploadFileName(file.name);
-        console.log('file - ', file);
     };
     const [ uploadOpen, setUploadOpen ] = useState<boolean>(false);
-    const [ uploadFileName, setUploadFileName ] = useState<string>('');
-    const [ fileName, setFileName ] = useState<string>('');
+    const [ uploadFileName, setUploadFileName ] = useState<string>(''); // Uploaded file name
+    const [ fileName, setFileName ] = useState<string>('');             // Inserted file name
+    const [ contractId, setContractId ] = useState<string>('1234');
     const handleUpload = () => {
         setUploadOpen(true);
     }
@@ -227,13 +224,32 @@ export const DetailPage = () => {
     }
 
     const handleFileUpload = async () => {
-        // const formData = new FormData();
-        // formData.append('file', file);
+        let formData = new FormData();
+        if(file){
+            formData.append('file', file);
+        }
+        else {
+            toast.error('ファイルが見つかりません');
+            return;
+        }
         const userData = sessionStorage.getItem('user');
-        const formData = {
-            userEmail: userData?JSON.parse(userData).email:'',
-        };
-        console.log('formData - ', formData);
+        if(userData){ formData.append('userEmail', JSON.parse(userData).email); }
+        else { toast.error('ユーザーデータが見つかりません!'); return;}
+        formData.append('contractId', contractId);
+        formData.append('filename', fileName);
+        console.log('fileData - ', file);
+        const query = `${API}/api/upload_provide`;
+        try{
+            const res = await axios.post(query, formData, {headers});
+            if( res.status === 200 ){
+                console.log('return', res.data);
+                toast.success(res.data.msg);
+                handleUploadClose();
+            } else {
+                console.log(res);
+                toast.error(res.data.msg);
+            }
+        }catch(err){ console.error(err); }
     }
 
     return (
@@ -265,7 +281,7 @@ export const DetailPage = () => {
                 <Typography flex={2} sx={{color:'#554744', fontSize:'16px', marginLeft:'23px', fontWeight:fontBold}}>2023年1月10日依頼</Typography>
                 </Box>
         {/** Product Data and Status Data */}                
-                <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{marginTop:'28px'}}>
+                <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{marginTop:'28px', columnGap:'30px'}}>
                     <Box display='flex' flexDirection='column' sx={{border:'3px solid #DF8391', borderRadius:'30px', width:'471px', padding:'33px'}}>
                         <Typography sx={{color:'#85766D', fontSize:'12px', marginBottom:'7px', fontWeight:fontBold}}>案件名</Typography>
                         <Typography sx={{color:'#B9324D', fontSize:'18px', marginBottom:'26px', fontWeight:fontBold}}>商品紹介の案件</Typography>
@@ -320,7 +336,7 @@ export const DetailPage = () => {
                             </Box>
                             <Button sx={{
                                     backgroundColor:btnBackground, 
-                                    width:'241px', borderRadius:'36px', 
+                                    paddingX:'6%', borderRadius:'36px', 
                                     color:'#ffffff', fontSize:'17px',
                                     marginY:'7px',
                                     "&:hover": {
@@ -382,7 +398,7 @@ export const DetailPage = () => {
 
         {/** Contract */}                            
                 <Typography sx={{fontSize:'22px', color:'#511523', marginTop:'60px', marginBottom:'32px', fontWeight:fontBold}}>金額・契約書管理</Typography>
-                <Box display='flex' flexDirection='row' justifyContent='space-between'>
+                <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{columnGap:'30px'}}>
                     <Box display='flex' flexDirection='column' sx={{
                         backgroundColor:data.contracted?'#FFFFFF':'#F9E6CE',
                         borderRadius:'33px', 
@@ -423,14 +439,14 @@ export const DetailPage = () => {
                                 <Box display='flex' flexDirection='row' alignItems='center'>
                                     <Box display='flex' flexDirection='column' flex={3}>
                                         <Typography sx={{fontSize:'10px', color:'#85766D', fontWeight:fontBold}}>インフルエンサー費用</Typography>
-                                        <Typography sx={{fontSize:'18px', color:'#001219', lineHeight:'100%', marginTop:'3px', fontWeight:fontBold}}>{data.bill?data.defaultPrice:data.influencePrice.toLocaleString()+'円'}</Typography>
+                                        <Typography sx={{fontSize:'18px', color:'#001219', lineHeight:'100%', marginTop:'3px', fontWeight:fontBold}}>{data.bill?data.defaultPrice:data.creatorPrice.toLocaleString()+'円'}</Typography>
                                     </Box>
                                     <Box display='flex' flexDirection='column' flex={1}>
                                         <Typography sx={{fontSize:'18px', color:'#001219', fontWeight:fontBold}}>+</Typography>
                                     </Box>
                                     <Box display='flex' flexDirection='column' flex={3}>
                                         <Typography sx={{fontSize:'10px', color:'#85766D', fontWeight:fontBold}}>ディレクター費用</Typography>
-                                        <Typography sx={{fontSize:'18px', color:'#001219', lineHeight:'100%', marginTop:'3px', fontWeight:fontBold}}>{data.bill?data.defaultPrice:data.creatorPrice.toLocaleString()+'円'}</Typography>
+                                        <Typography sx={{fontSize:'18px', color:'#001219', lineHeight:'100%', marginTop:'3px', fontWeight:fontBold}}>{data.bill?data.defaultPrice:data.sitePrice.toLocaleString()+'円'}</Typography>
                                     </Box>
                                     <Box display='flex' flexDirection='column' flex={1}>
                                         <Typography sx={{fontSize:'18px', color:'#001219', fontWeight:fontBold}}>=</Typography>
@@ -444,13 +460,13 @@ export const DetailPage = () => {
                             <Box display='flex' flexDirection='column' flex={4} alignItems='center'>
                                 <Button sx={{
                                     backgroundColor: data.bill?'#B9B2B1':data.paid?'#ffffff':btnBackground, 
-                                    width:'241px', borderRadius:'36px', 
-                                    color: data.bill?'#FFFFFF':data.paid?btnBackground:'#ffffff', fontSize:'16px',
+                                    paddingX:'20%', borderRadius:'36px', 
+                                    color: data.bill?'#FFFFFF':data.paid?btnBackground:'#ffffff', fontSize:'15px',
                                     marginY:'7px', fontWeight:fontBold,
                                     border:data.bill?'':data.paid?'2px solid #DF8391':'',
                                     "&:hover": {
                                         backgroundColor: data.bill?'#B9B2B1': '#D48996',
-                                        color:data.bill?'#FFFFFF':data.paid?'#FFFFFF':btnBackground
+                                        color:data.bill?'#FFFFFF':data.paid?'#FFFFFF':'#FFF'
                                     },
                                     }}
                                     onClick={data.paid?handleBill:handlePaid}
