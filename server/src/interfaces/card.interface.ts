@@ -5,10 +5,16 @@ export default interface Card extends Document {
 
 export type CardDataType = {
     type: string;
+    email: string;
     name: string;
-    number: number;
-    year: string;
-    month: string;
-    cvc: string;
-    status: boolean;
+    cardId: string;
+    clientId: string;
+    price: { type: Number, required: true },
+    subscriptionId: { type: String, required: true },
+    // paymentMethod: { type: String, required: true },
+    // number: number;
+    // year: string;
+    // month: string;
+    // cvc: string;
+    // status: boolean;
 }

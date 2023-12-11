@@ -1,12 +1,13 @@
-export default interface Product extends Document {
+export interface Product extends Document {
     userEmail: string;
-    clientEmail: string;
     contractId: string;
-    productData: ProductDataType[];
+    productData: ProductData[];
 }
 
-export type ProductDataType = {
+interface ProductData {
+    title: string;
     fileName: string;
-    capacity: string;
-    createdDate: string;
-}
+    fileExtension: string;
+    fileSize: number;
+    createdDate: Date;
+  }

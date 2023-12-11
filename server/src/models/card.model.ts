@@ -5,7 +5,10 @@ import modelConstants from "../constants/schema_names";
 const cardSchema = new Schema(
     {
         email: { type: String, required: true, unique: true },
-        cardData: { type: Array, required: true },
+        contractId: { type: String, required: true },
+        // cardData: { type: Array, required: true },
+        payData: { type: Array, required: true },
+        date: { type: Date, default: Date.now() },
     },
     {
       collection: modelConstants.card,
