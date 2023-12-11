@@ -84,3 +84,20 @@ export const showSentence = (str:string) => {
   ));
   return element;
 }
+
+export const convertSize = (size:number) => {
+  let capacity;
+  if( size >= 1024 * 1024 * 1024){
+    capacity = (size / 1024 / 1024 / 1024).toFixed(2) + 'GB';
+  }
+  else if( size >= 1024 * 1024 || size < 1024 * 1024 * 1024 ){
+    capacity = (size / 1024 / 1024).toFixed(2) + 'MB';
+  }
+  else if( size >= 1024 || size < 1024 * 1024 ){
+    capacity = (size / 1024 ).toFixed(2) + 'KB';
+  }
+  else {
+    capacity = size + 'Byte';
+  }
+  return capacity;
+}
