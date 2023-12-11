@@ -40,6 +40,5 @@ apiRoute.post("/getCreatorInfo",            verifyToken,          contract.getCr
 // apiRoute.post("/test", stripe.test);
 
 /******** Provide File */
-apiRoute.post("/upload_provide",            verifyToken,          provide.uploadFile);
-apiRoute.post("/uploadVerify",              verifyToken,          provide.uploadVerifyFile);
+apiRoute.post("/upload_provide",            verifyToken,          provide.uploadProvideFile);
 export default apiRoute;

@@ -1,12 +1,13 @@
-export default interface Provide extends Document {
+export interface Provide extends Document {
     userEmail: string;
-    creatorEmail: string;
     contractId: string;
-    provideData: ProvideDataType[];
-}
+    provideData: ProvideData[];
+  }
 
-export type ProvideDataType = {
+interface ProvideData {
+    title: string;
     fileName: string;
-    capacity: string;
-    createdDate: string;
-}
+    fileExtension: string;
+    fileSize: number;
+    createdDate: Date;
+  }

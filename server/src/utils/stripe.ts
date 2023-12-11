@@ -1,46 +1,46 @@
 import axios from 'axios'
 
-const stripeBearerToken = process.env.STRIPE_BEARER_TOKEN;
-const price30 = process.env.SUBSCRIBE_PRICE_UNICHAT_30;
-const price55 = process.env.SUBSCRIBE_PRICE_UNICHAT_55;
-const price75 = process.env.SUBSCRIBE_PRICE_UNICHAT_75;
-const price100 = process.env.SUBSCRIBE_PRICE_UNICHAT_100;
-const price125 = process.env.SUBSCRIBE_PRICE_UNICHAT_125;
-const price150 = process.env.SUBSCRIBE_PRICE_UNICHAT_150;
-const price175 = process.env.SUBSCRIBE_PRICE_UNICHAT_175;
-const price200 = process.env.SUBSCRIBE_PRICE_UNICHAT_200;
-const price225 = process.env.SUBSCRIBE_PRICE_UNICHAT_225;
-const price250 = process.env.SUBSCRIBE_PRICE_UNICHAT_250;
-const price275 = process.env.SUBSCRIBE_PRICE_UNICHAT_275;
-const price300 = process.env.SUBSCRIBE_PRICE_UNICHAT_300;
-const price325 = process.env.SUBSCRIBE_PRICE_UNICHAT_325;
-const price350 = process.env.SUBSCRIBE_PRICE_UNICHAT_350;
-const price375 = process.env.SUBSCRIBE_PRICE_UNICHAT_375;
-const price400 = process.env.SUBSCRIBE_PRICE_UNICHAT_400;
-const price425 = process.env.SUBSCRIBE_PRICE_UNICHAT_425;
-const price450 = process.env.SUBSCRIBE_PRICE_UNICHAT_450;
-const price475 = process.env.SUBSCRIBE_PRICE_UNICHAT_475;
-const price500 = process.env.SUBSCRIBE_PRICE_UNICHAT_500;
-const price525 = process.env.SUBSCRIBE_PRICE_UNICHAT_525;
-const price550 = process.env.SUBSCRIBE_PRICE_UNICHAT_550;
-const price575 = process.env.SUBSCRIBE_PRICE_UNICHAT_575;
-const price600 = process.env.SUBSCRIBE_PRICE_UNICHAT_600;
-const price625 = process.env.SUBSCRIBE_PRICE_UNICHAT_625;
-const price650 = process.env.SUBSCRIBE_PRICE_UNICHAT_650;
-const price675 = process.env.SUBSCRIBE_PRICE_UNICHAT_675;
-const price700 = process.env.SUBSCRIBE_PRICE_UNICHAT_700;
-const price725 = process.env.SUBSCRIBE_PRICE_UNICHAT_725;
-const price750 = process.env.SUBSCRIBE_PRICE_UNICHAT_750;
-const price775 = process.env.SUBSCRIBE_PRICE_UNICHAT_775;
-const price800 = process.env.SUBSCRIBE_PRICE_UNICHAT_800;
-const price825 = process.env.SUBSCRIBE_PRICE_UNICHAT_825;
-const price850 = process.env.SUBSCRIBE_PRICE_UNICHAT_850;
-const price875 = process.env.SUBSCRIBE_PRICE_UNICHAT_875;
-const price900 = process.env.SUBSCRIBE_PRICE_UNICHAT_900;
-const price925 = process.env.SUBSCRIBE_PRICE_UNICHAT_925;
-const price950 = process.env.SUBSCRIBE_PRICE_UNICHAT_950;
-const price975 = process.env.SUBSCRIBE_PRICE_UNICHAT_975;
-const price1000 = process.env.SUBSCRIBE_PRICE_UNICHAT_1000;
+const stripeBearerToken = process.env.STRIPE_SECRET_KEY;
+const price30 = process.env.SUBSCRIBE_PRICE_NEOPEN_30;
+const price55 = process.env.SUBSCRIBE_PRICE_NEOPEN_55;
+const price75 = process.env.SUBSCRIBE_PRICE_NEOPEN_75;
+const price100 = process.env.SUBSCRIBE_PRICE_NEOPEN_100;
+const price125 = process.env.SUBSCRIBE_PRICE_NEOPEN_125;
+const price150 = process.env.SUBSCRIBE_PRICE_NEOPEN_150;
+const price175 = process.env.SUBSCRIBE_PRICE_NEOPEN_175;
+const price200 = process.env.SUBSCRIBE_PRICE_NEOPEN_200;
+const price225 = process.env.SUBSCRIBE_PRICE_NEOPEN_225;
+const price250 = process.env.SUBSCRIBE_PRICE_NEOPEN_250;
+const price275 = process.env.SUBSCRIBE_PRICE_NEOPEN_275;
+const price300 = process.env.SUBSCRIBE_PRICE_NEOPEN_300;
+const price325 = process.env.SUBSCRIBE_PRICE_NEOPEN_325;
+const price350 = process.env.SUBSCRIBE_PRICE_NEOPEN_350;
+const price375 = process.env.SUBSCRIBE_PRICE_NEOPEN_375;
+const price400 = process.env.SUBSCRIBE_PRICE_NEOPEN_400;
+const price425 = process.env.SUBSCRIBE_PRICE_NEOPEN_425;
+const price450 = process.env.SUBSCRIBE_PRICE_NEOPEN_450;
+const price475 = process.env.SUBSCRIBE_PRICE_NEOPEN_475;
+const price500 = process.env.SUBSCRIBE_PRICE_NEOPEN_500;
+const price525 = process.env.SUBSCRIBE_PRICE_NEOPEN_525;
+const price550 = process.env.SUBSCRIBE_PRICE_NEOPEN_550;
+const price575 = process.env.SUBSCRIBE_PRICE_NEOPEN_575;
+const price600 = process.env.SUBSCRIBE_PRICE_NEOPEN_600;
+const price625 = process.env.SUBSCRIBE_PRICE_NEOPEN_625;
+const price650 = process.env.SUBSCRIBE_PRICE_NEOPEN_650;
+const price675 = process.env.SUBSCRIBE_PRICE_NEOPEN_675;
+const price700 = process.env.SUBSCRIBE_PRICE_NEOPEN_700;
+const price725 = process.env.SUBSCRIBE_PRICE_NEOPEN_725;
+const price750 = process.env.SUBSCRIBE_PRICE_NEOPEN_750;
+const price775 = process.env.SUBSCRIBE_PRICE_NEOPEN_775;
+const price800 = process.env.SUBSCRIBE_PRICE_NEOPEN_800;
+const price825 = process.env.SUBSCRIBE_PRICE_NEOPEN_825;
+const price850 = process.env.SUBSCRIBE_PRICE_NEOPEN_850;
+const price875 = process.env.SUBSCRIBE_PRICE_NEOPEN_875;
+const price900 = process.env.SUBSCRIBE_PRICE_NEOPEN_900;
+const price925 = process.env.SUBSCRIBE_PRICE_NEOPEN_925;
+const price950 = process.env.SUBSCRIBE_PRICE_NEOPEN_950;
+const price975 = process.env.SUBSCRIBE_PRICE_NEOPEN_975;
+const price1000 = process.env.SUBSCRIBE_PRICE_NEOPEN_1000;
 const price999 = process.env.SUBSCRIBE_PRICE_ADVISOR_999;
 
 export const subscribe = async (input: any) => {
@@ -52,7 +52,6 @@ export const subscribe = async (input: any) => {
       "Authorization": "Bearer " + stripeBearerToken
     };
     let token = details       //If GPay payment 'gpay'
-    if (method === 'card') {    //If Credit card payment
       const { cardNumber, expiredYear, expiredMonth, ccv } = JSON.parse(details)
       const cardBody = {
         "card[number]": cardNumber,
@@ -70,7 +69,6 @@ export const subscribe = async (input: any) => {
       const cardData = cardToken.data
       token = cardData['id']
       console.log(token);
-    }
 
     const pmBody = {
       "type": "card",
@@ -83,7 +81,7 @@ export const subscribe = async (input: any) => {
     const pmData = pmToken.data
 
     const customerBody = {
-      "description": "Subscribe UniChat Private Server",
+      "description": "Subscribe Neopen Private Server",
       "payment_method": pmData['id'],
       "invoice_settings[default_payment_method]": pmData['id'],
       "email": email,
