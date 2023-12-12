@@ -114,8 +114,37 @@ const uploadProvideFile: RequestHandler = async (req, res) => {
     }
   }
   
+  const provideDownload: RequestHandler = async (req, res) => {
+    const fileName = req.params.filename;
+    const filePath = path.join(providePath, fileName);
+    console.log('fileName - ', fileName);
+    console.log('filePath - ', filePath);
+    fs.access(filePath, fs.constants.F_OK, (err:any) => {
+      if (err) {
+        logger.error("No file exists");
+        res.status(200).send({msg:'No file exists'});
+      } else {
+        logger.info("File exists");
+        res.status(200).sendFile(filePath);
+      }
+    });
+  }
+
+  const getProvideFiles: RequestHandler = async (req, res) => {
+    const contractId = req.params.id;
+    try{
+      const result = await ProvideModel.findOne({contractId:contractId});
+      return res.status(200).send({data: result?.provideData});
+    }catch(error) {
+      logger.error(error);
+      throw error;
+    }
+    
+  }
 
   const provide = { 
     uploadProvideFile,
+    provideDownload,
+    getProvideFiles
   };
   export default provide;

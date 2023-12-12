@@ -233,7 +233,7 @@ const VerticalSlide : React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
                 }}
                 >
                 {creator.map((item:any, index:number) => (
-                  <div className="flex flex-col w-[450px] p-[10px]">
+                  <div className="flex flex-col w-[450px] p-[10px]" key={index}>
                     <span key={index} className="py-[6px] w-[356px] bg-gradient-to-br from-[#F4B7A5] to-[#F7CF91] text-[#fff] text-[16px] rounded-[20px]" style={{whiteSpace:'nowrap', fontWeight:fontBold, textAlign:'center'}}>17.Live受け取ったギフト No.1</span>
                     <div className="flex flex-row mt-[30px]">
                       <img src = {`${API}/api/avatar/${item._id}`} className="max-h-[65px] max-w-[65px]"/>
@@ -299,7 +299,8 @@ const GridComponent: React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
     return (
       <Grid container spacing={5} className='justify-center items-center'>
         {creatorInfo.map((item:any, index:number) => (
-          index < 8 ?(<Grid item xs='auto' key={index}>
+          index < 8 ?(
+          <Grid item xs='auto' key={index}>
           <div className="w-[361px] card-hover my-[15px] cursor-pointer" >
               <div className="flex flex-col px-[20px] py-[30px]">
                   <div className="flex flex-row ">
@@ -309,8 +310,8 @@ const GridComponent: React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
                       <div className="flex flex-col pl-[10px]" style={{justifyContent:'end', rowGap:'5px'}}>
                         <div className="flex flex-wrap" style={{rowGap:'5px', columnGap:'5px'}}>
                         {
-                          item.skills.map((skill:string) =>(
-                            <span className="px-[10px] py-[3px] text-[#fff] text-[14px] bg-[#F59ABF] rounded-[20px] text-center" style={{fontWeight:fontBold}}>{skill}</span>
+                          item.skills.map((skill:string, index:number) =>(
+                            <span key={index} className="px-[10px] py-[3px] text-[#fff] text-[14px] bg-[#F59ABF] rounded-[20px] text-center" style={{fontWeight:fontBold}}>{skill}</span>
                           ))
                         }
                         </div>
@@ -359,14 +360,14 @@ const SlickCarousel : React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
       <Slider {...settings}>
         {creatorInfo.map((item:any, index:number) =>(
           index < slideNumber ? (
-          <div className="flex ml-[-10px] ">
+          <div className="flex ml-[-10px] " key={index}>
             <div className="flex flex-row rounded-[20px] mx-[50px] my-[30px] image-hover-reverse " style={{boxShadow:'0px 0px 20px 5px #E5BAA7'}}>
               <img src = {`${API}/api/avatar/${item._id}`} className="w-[40%]" style={{borderRadius: '20px 0 0 20px', objectFit:'cover', aspectRatio:'1.0'}}/>
               <div className="flex flex-col justify-center px-[20px] py-[10px]">
               <div className="flex flex-wrap" style={{rowGap:'5px', columnGap:'5px'}}>
                 {
-                  item.skills.map((skill:string) =>(
-                    <span className="px-[10px] py-[3px] text-[#fff] text-[14px] bg-[#F59ABF] rounded-[20px] text-center" style={{fontWeight:fontBold}}>{skill}</span>
+                  item.skills.map((skill:string, index:number) =>(
+                    <span key={index} className="px-[10px] py-[3px] text-[#fff] text-[14px] bg-[#F59ABF] rounded-[20px] text-center" style={{fontWeight:fontBold}}>{skill}</span>
                   ))
                 }
                 </div>

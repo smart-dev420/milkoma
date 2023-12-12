@@ -172,7 +172,6 @@ export const Top = () => {
                     お知らせ
                 </button>
               </label>
-              {/* <img src={staticFiles.icons.ic_user_unfill} className={`${match_1500 ? "pl-10" : match_1024 ? "pl-4" : "hidden" } pr-3 mt-2`}/> */}
               <label className="flex flex-row " style={{alignItems:'center', marginLeft:'50px'}}
                 onMouseEnter={()=>setIsHovered(2)}
                 onMouseLeave={handleMouseLeave}
@@ -180,7 +179,7 @@ export const Top = () => {
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="17.693" height="20.22" viewBox="0 0 17.693 20.22" style={{marginTop:'10px', display:match_1024?'':'none'}}>
                   <path id="Path_176" data-name="Path 176" d="M80.165,6.321a6.319,6.319,0,1,0-10.426,4.8A8.838,8.838,0,0,0,65,18.959a1.264,1.264,0,1,0,2.528,0,6.319,6.319,0,0,1,12.638,0,1.264,1.264,0,1,0,2.528,0,9.045,9.045,0,0,0-1.617-5.1,8.568,8.568,0,0,0-3.123-2.736A6.3,6.3,0,0,0,80.165,6.321Zm-6.319,3.791a3.791,3.791,0,1,1,3.791-3.791,3.791,3.791,0,0,1-3.791,3.791" transform="translate(-65 -0.002)" 
-                  fill={isHovered == 2?'#F6CAA1':'#001219'} fill-rule="evenodd"/>
+                  fill={isHovered == 2?'#F6CAA1':'#001219'} />
                 </svg>
                 <button 
                   className={`${match_1500 ? "text-[14px] min-w-[120px]" : match_1024 ? "text-[12px] min-w-[60px]" : "hidden"} font-m1c mt-3 `} 
@@ -200,7 +199,6 @@ export const Top = () => {
             <NavBar elements={pageLayoutNavBar} />
           </div>
         </div>
-      {/* <React.Fragment> */}
         <Menu
           anchorEl={anchorEl}
           id="account-menu"
@@ -218,14 +216,12 @@ export const Top = () => {
                 onClick={handleClose} /></button>
             </div>
             {detail?(
-              // <React.Fragment>
                 <div className="px-10 py-5">
                 新しいお知らせはありません {selectId}
                 </div>  
-              // </React.Fragment>
             ):(
-              fakeData.map((item:ItemElement) => (
-                <>
+              fakeData.map((item:ItemElement, index:number) => (
+                <div key={index}>
                 <div className="flex flex-row p-5">
                     <div className="flex flex-col w-[85%]">
                       <p>{item.name}</p>
@@ -234,11 +230,10 @@ export const Top = () => {
                   <button key={item.id} onClick={()=>{setDetail(true); setSelectId(item.id)}} className="hover:bg-btHover/[1] bg-btColor w-[157px] h-[39x] rounded-[50px] text-white">詳しく見る</button>
                 </div>
                 <Divider />
-                </>
+                </div>
               ))
             )}
         </Menu>
-      {/* </React.Fragment> */}
       </>
     );
   };

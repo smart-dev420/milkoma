@@ -41,4 +41,6 @@ apiRoute.post("/getCreatorInfo",            verifyToken,          contract.getCr
 
 /******** Provide File */
 apiRoute.post("/upload_provide",            verifyToken,          provide.uploadProvideFile);
+apiRoute.post("/getProvideFiles/:id",       verifyToken,          provide.getProvideFiles);
+apiRoute.get("/provideDownload/:filename",  verifyToken,          provide.provideDownload);
 export default apiRoute;
