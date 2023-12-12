@@ -8,7 +8,7 @@ import { setPage } from "../../slices/page";
 import { NumberFormatExample, convertSize, headers, showSentence } from "../../utils/appHelper";
 import CloseIcon from '@mui/icons-material/Close';
 import { btnBackground, btnBackgroundHover } from "../../components/Constants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FileUploader } from "react-drag-drop-files";
 import { toast } from "react-toastify";
 import { API } from "../../axios";
@@ -165,21 +165,20 @@ export const DetailPage = () => {
         follow: 12345678,
         heart: 3900000,
     }
-    scrollTop();
     const totalPrice = data.creatorPrice + data.sitePrice;
-
     const [ uploadOpen, setUploadOpen ] = useState<boolean>(false);
     const [ uploadFileName, setUploadFileName ] = useState<string>(''); // Uploaded file name
     const [ fileName, setFileName ] = useState<string>('');             // Inserted file name
-    const [ contractId, setContractId ] = useState<string>('1234');
+    const { cid } = useParams();
+    const contractId = cid??'';
     const [ open, setOpen ] = useState<boolean>(false);
     const [ isHovered, setIsHovered ] = useState<boolean>(false);
     const fileTypes = ["jpg", "png", "gif", "pdf", "doc", "docx", "avi", "mp4", "mp3", "txt", "rtf"];
-    const [file, setFile] = useState<File | null>(null);
+    const [ file, setFile ] = useState<File | null>(null);
 
     const handleContract = () => {
         // setData(prevData => ({ ...prevData, contracted: true }));
-        navigate('/mypage/contract');
+        navigate(`/mypage/contract/${contractId}`);
     }
     const handleContractCheck = () => {
         setData(prevData => ({ ...prevData, contractCheck: true }));

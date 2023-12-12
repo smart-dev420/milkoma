@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { setPage } from "../../slices/page";
 import { showSentence } from "../../utils/appHelper";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import contract, { setContract } from "../../slices/contract";
 
 export const ContractPage = () => {
-    scrollTop();
+
+    const { cid } = useParams();
+    const contractId = cid??'';
     const dispatch = useDispatch();
     dispatch(setPage({page:2}));
     const navigate = useNavigate();
@@ -46,6 +48,9 @@ export const ContractPage = () => {
     const handleHoverLeave = () => {
         setIsHovered(false);
     }
+    useEffect(()=>{
+        scrollTop();
+    }, [open])
 
     return(
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'50px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
@@ -60,7 +65,7 @@ export const ContractPage = () => {
                             backgroundColor: btnBackgroundHover
                         },
                         }}
-                    onClick={()=>{navigate('/mypage/detail')}}>
+                    onClick={()=>{navigate(`/mypage/detail/${contractId}`); }}>
                         <CardMedia
                             component="img"
                             alt="Image1"

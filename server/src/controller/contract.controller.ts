@@ -7,6 +7,7 @@ import { getEmailFromToken, readCreatorInfo, readProfile } from "../services/acc
 import Contract from "../interfaces/contract.interface";
 import ContractModel from "../models/contract.model";
 import AccountModel from "../models/account.model";
+import { allContract } from "../services/contract.service";
 
 const validateToken = (req:any, res:any) => {
     const { authorization } = req.body.token || req.query.token || req.headers;
@@ -41,6 +42,7 @@ export async function insertData(input: any) {
       if(!creatorEmail){
         creatorEmail = 'admin';
       }
+      console.log('data - ', input.data.step1);
       const doc: Contract = new ContractModel({
         clientEmail: email,
         creatorEmail: creatorEmail,
@@ -70,8 +72,19 @@ const getCreatorInfo: RequestHandler = async (req, res) => {
   }
 }
 
+const getAllContract: RequestHandler = async (req, res) => {
+  try{
+    const userEmail = req.params.email;
+    const info = await allContract(userEmail);
+    return res.status(StatusCodes.OK).send(info);
+  } catch (error: any) {
+    console.error(error);
+  }
+}
+
 const contract = { 
     insertContract,
-    getCreatorInfo
+    getCreatorInfo,
+    getAllContract
   };
   export default contract;

@@ -557,8 +557,8 @@ const Step4 : React.FC<{}> = () => {
         const formData = {
             category: data.title,
             description: data.description,
-            step1: data.question1,
-            step2: data.question2,
+            step1: data.question1.toString(),
+            step2: data.question2.toString(),
             step3: btn_group2[data.question3].name,
             status: 0,
         };
