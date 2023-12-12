@@ -135,6 +135,15 @@ export const fontSize12 = "12px";
 export const scrollTop = () => {
   window.scrollTo(0, 0);
 }
+
+export const cardColor0 = '#F5DFDE';
+export const cardColor1 = '#F9E6CE';
+export const cardHoverColor0 = '#F7B6B3';
+export const cardHoverColor1 = '#EDCBA1';
+export const cardSidebar0 = '#EE7D90';
+export const cardSidebar1 = '#EE7A4B';
+export const cardTextColor0 = '#E4443B';
+export const cardTextColor1 = '#554744';
 // export const API = "localhost:5000/";
 
 // export const fetcher =

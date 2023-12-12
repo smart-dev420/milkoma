@@ -15,4 +15,5 @@ authRoute.post("/uploadVerify/:id",         verifyToken,                   auth.
 authRoute.post("/changePassword/:email",    verifyToken,                   auth.changePassword);
 authRoute.post("/changeSNS",                verifyToken,                   auth.changeSNS);
 authRoute.post("/changeSkills",             verifyToken,                   auth.changeSkills);
+authRoute.post("/verify/:email",            verifyToken,                   auth.verifyData);
 export default authRoute;

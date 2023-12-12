@@ -8,9 +8,9 @@ export default interface Contract extends Document {
     step3: string;
     status: number;
     cancel: string;
+    creatorPrice: string;
+    fee: string;
     createdDate: string;
-    createdTime: string;
     endDate: string;
-    endTime: string;
   }
   

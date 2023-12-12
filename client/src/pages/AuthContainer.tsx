@@ -10,7 +10,7 @@ const AuthContainer = () => {
   const user_data = sessionStorage?.getItem('user');
   const user = user_data ? JSON.parse(user_data) : null;
   if(user !== null){
-    console.log("user - ", user)
+    // console.log("user - ", user)
     dispatch(signin(user))
     axios.post(`${API}/api/getUserInfo?id=${user.id}`)
     .then(res => {

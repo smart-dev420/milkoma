@@ -121,12 +121,12 @@ export const router = createHashRouter([
         errorElement: <NotFound />,
       },
       {
-        path: "detail",
+        path: "detail/:cid",
         element: <DetailPage />,
         errorElement: <NotFound />,
       },
       {
-        path: "contract",
+        path: "contract/:cid",
         element: <ContractPage />,
         errorElement: <NotFound />,
       },

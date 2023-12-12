@@ -30,7 +30,7 @@ const btn_group:{id: number; name: string;}[] = [
 ];
 
 export const ViewHistory = () => {
-    scrollTop();
+    // scrollTop();
     const navigate = useNavigate();
     const [ selectId, setSelectId ] = useState<string>("");
     const [ page, setPage ] = useState(8);

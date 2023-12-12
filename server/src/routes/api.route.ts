@@ -37,7 +37,8 @@ apiRoute.post("/getCreatorProfile/:id",                           auth.getCreato
 apiRoute.post("/insertContract",            verifyToken,          contract.insertContract);
 apiRoute.post("/getCreatorInfo",            verifyToken,          contract.getCreatorInfo);
 
-// apiRoute.post("/test", stripe.test);
+/******* Get contract data */
+apiRoute.post("/getAllContract/:email",     verifyToken,          contract.getAllContract);
 
 /******** Provide File */
 apiRoute.post("/upload_provide",            verifyToken,          provide.uploadProvideFile);

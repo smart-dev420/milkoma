@@ -28,7 +28,7 @@ export const getCurrentDateTimeString = () => {
 
 export const getDateTimeString = (str:string) => {
   const strDate = str.split(' ');
-  const date = getDateString(strDate[0]);
+  const date = getDateString(str);
   const time = strDate[1].split(':');
   const hour = time[0];
   const min = time[1];
@@ -37,11 +37,12 @@ export const getDateTimeString = (str:string) => {
 }
 
 export const getDateString = (str:string) => {
-  const strDate = str.split('-');
+  const strDateTime = str.split('T');
+  const strDate = strDateTime[0].split('-');
   const year = strDate[0];
   const month = strDate[1];
   const day = strDate[2];
-  const date = `${year}年-${month}月-${day}日`;
+  const date = `${year}年 ${month}月 ${day}日`;
   return date;
 }
 

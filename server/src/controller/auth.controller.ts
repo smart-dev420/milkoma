@@ -489,9 +489,18 @@ const getCreatorInfo:RequestHandler = async (req, res) => {
 
 const getCreatorProfile:RequestHandler = async (req, res) => {
   const userId = req.params.id;
-  console.log('userId', userId);
   const data = await AccountModel.findOne({_id: userId}, '-admin -password -region -role -resetpasswordexpire -resetpasswordtoken -__v -strikes');
   return res.status(200).send({data});
+}
+
+const verifyData:RequestHandler = async (req, res) => {
+  const email = req.params.email;
+  try{
+    const data = await AccountModel.findOne({email: email}, 'verify');
+    return res.status(200).send(data?.verify);
+  } catch(err){
+    console.error(err);
+  }
 }
 
 const auth = { 
@@ -512,6 +521,7 @@ const auth = {
   changeSNS,
   changeSkills,
   getCreatorInfo,
-  getCreatorProfile
+  getCreatorProfile,
+  verifyData
 };
 export default auth;
