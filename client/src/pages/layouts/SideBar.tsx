@@ -37,8 +37,8 @@ export const SideBar = () => {
             <div className="flex flex-col" style={{overflowY:'auto', maxHeight:screenHeight-400+'px'}}>
             <label className="text-[#554744] text-[28px]" style={{fontWeight:fontBold}}>マイページ</label>
             <label className="text-[16px] text-[#554744]" style={{letterSpacing:'-2px'}}>{clicked != 7? (listItmes[clicked-1].name):''}</label>
-                {listItmes.map(item => (
-                    <Button
+                {listItmes.map((item, index) => (
+                    <Button key={index}
                         onMouseEnter={()=>{setIsHovered(item.id)}}
                         onMouseLeave={handleMouseLeave}
                         onClick={() => {setClicked(item.id); dispatch(setPage({page:item.id})); navigate(item.url)}}

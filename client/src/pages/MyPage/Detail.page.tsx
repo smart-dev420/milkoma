@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, CardMedia, Container, Dialog, DialogContent, DialogTitle, IconButton, Stack, TextField, Typography } from "@mui/material"
 import { fontBold, scrollTop, staticFiles } from "../../components/Constants"
 import { styled } from '@mui/material/styles';
 import Slider, { SliderThumb, SliderValueLabelProps } from '@mui/material/Slider';
 import { useDispatch, useSelector } from "react-redux";
 import { setPage } from "../../slices/page";
-import { NumberFormatExample, headers, showSentence } from "../../utils/appHelper";
+import { NumberFormatExample, convertSize, headers, showSentence } from "../../utils/appHelper";
 import CloseIcon from '@mui/icons-material/Close';
 import { btnBackground, btnBackgroundHover } from "../../components/Constants";
 import { useNavigate } from "react-router-dom";
@@ -167,6 +167,16 @@ export const DetailPage = () => {
     }
     scrollTop();
     const totalPrice = data.creatorPrice + data.sitePrice;
+
+    const [ uploadOpen, setUploadOpen ] = useState<boolean>(false);
+    const [ uploadFileName, setUploadFileName ] = useState<string>(''); // Uploaded file name
+    const [ fileName, setFileName ] = useState<string>('');             // Inserted file name
+    const [ contractId, setContractId ] = useState<string>('1234');
+    const [ open, setOpen ] = useState<boolean>(false);
+    const [ isHovered, setIsHovered ] = useState<boolean>(false);
+    const fileTypes = ["jpg", "png", "gif", "pdf", "doc", "docx", "avi", "mp4", "mp3", "txt", "rtf"];
+    const [file, setFile] = useState<File | null>(null);
+
     const handleContract = () => {
         // setData(prevData => ({ ...prevData, contracted: true }));
         navigate('/mypage/contract');
@@ -182,9 +192,19 @@ export const DetailPage = () => {
         setData(prevData => ({ ...prevData, bill: true }));
     }
 
+    const [ provideFiles, setProvideFiles ] = useState<any>([]);
+    const getProvideFileList = async () => {
+        const res = await axios.post(`${API}/api/getProvideFiles/${contractId}`, {}, {headers});
+        setProvideFiles(res.data.data);
+    }
+    useEffect(() => {
+        getProvideFileList();
+    }, []);
+
+    console.log('fileList - ', provideFiles);
+
     /** Bill Dialog */
-    const [open, setOpen] = useState<boolean>(false);
-    const [ isHovered, setIsHovered ] = useState<boolean>(false);
+
     const handleClose = () => {
         setOpen(false);
         setIsHovered(false);
@@ -205,16 +225,12 @@ export const DetailPage = () => {
     }
 
     /** File Upload */
-    const fileTypes = ["jpg", "png", "gif", "pdf", "doc", "docx", "avi", "mp4", "mp3", "txt", "rtf"];
-    const [file, setFile] = useState<File | null>(null);
+
     const handleChange = (file:any) => {
         setFile(file);
         setUploadFileName(file.name);
     };
-    const [ uploadOpen, setUploadOpen ] = useState<boolean>(false);
-    const [ uploadFileName, setUploadFileName ] = useState<string>(''); // Uploaded file name
-    const [ fileName, setFileName ] = useState<string>('');             // Inserted file name
-    const [ contractId, setContractId ] = useState<string>('1234');
+
     const handleUpload = () => {
         setUploadOpen(true);
     }
@@ -223,6 +239,7 @@ export const DetailPage = () => {
         setIsHovered(false);
     }
 
+    // File download
     const handleFileUpload = async () => {
         let formData = new FormData();
         if(file){
@@ -251,6 +268,26 @@ export const DetailPage = () => {
             }
         }catch(err){ console.error(err); }
     }
+
+    const handleDownload = async (fileName:string) => {
+        try {
+          const response = await axios.get(`${API}/api/provideDownload/${fileName}`, {
+            responseType: 'blob',
+            headers,
+          });
+    
+          // Create a temporary URL to download the file
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', fileName);
+          document.body.appendChild(link);
+          link.click();
+        } catch (error) {
+          // Handle errors
+          console.error('File download error:', error);
+        }
+    };
 
     return (
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'68px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
@@ -529,11 +566,11 @@ export const DetailPage = () => {
                             </Button>
                         </Box>
                         <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' sx={{border:'2px dashed #AA3D4F', borderRadius:'15px', width:'100%', marginTop:'16px', paddingY:'22px', paddingX:'27px', rowGap:'10px'}}>
-                            {data.userDownload.length === 0?
+                            {!provideFiles?
                                 (<Typography sx={{fontSize:'14px', color:'#001219', textAlign:'center', whiteSpace:'nowrap',paddingY:'126px'}}>まだファイル共有はされていません</Typography>)
                                 :(
-                                    data.userDownload.map((item, index) => (
-                                        <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', border:'1px solid #AA3D4F', borderRadius:'10px', paddingY:'12px', paddingX:'7px'}}>
+                                    provideFiles && provideFiles.map((item:any, index:number) => (
+                                        <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', border:'1px solid #AA3D4F', borderRadius:'10px', paddingY:'12px', paddingX:'7px'}} key={index}>
                                             <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center' 
                                                 sx={{ backgroundColor:'#F0F0F0', borderRadius:'50%', width:'46px', height:'46px'}}>
                                                 <CardMedia
@@ -543,8 +580,8 @@ export const DetailPage = () => {
                                                 />
                                             </Box>
                                             <Box display='flex' flexDirection='column' flex={6} sx={{marginX:'7px'}}>
-                                                <Typography sx={{color:'#424242', fontSize:'11px', fontWeight:fontBold}}>{item.name}</Typography>
-                                                <Typography sx={{color:'#424242', fontSize:'10px'}}>{item.capacity}</Typography>
+                                                <Typography sx={{color:'#424242', fontSize:'11px', fontWeight:fontBold}}>{item.title}</Typography>
+                                                <Typography sx={{color:'#424242', fontSize:'10px'}}>{convertSize(item.fileSize)}</Typography>
                                             </Box>
                                             <Button sx={{
                                                 backgroundColor:'#AA3D4F', 
@@ -553,7 +590,8 @@ export const DetailPage = () => {
                                                 "&:hover": {
                                                     backgroundColor: '#E38A86'
                                                 },
-                                                }}>
+                                                }}
+                                            onClick={()=>handleDownload( item.fileName + '.' + item.fileExtension )}>
                                                 <CardMedia
                                                     component="img"
                                                     alt="Image1"
@@ -578,7 +616,7 @@ export const DetailPage = () => {
                                 (<Typography sx={{fontSize:'14px', color:'#001219', textAlign:'center', whiteSpace:'nowrap',paddingY:'126px'}}>まだファイル共有はされていません</Typography>)
                                 :(
                                     data.productDownload.map((item, index) => (
-                                        <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', border:'1px solid #EE7D90', borderRadius:'10px', paddingY:'12px', paddingX:'7px'}}>
+                                        <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', border:'1px solid #EE7D90', borderRadius:'10px', paddingY:'12px', paddingX:'7px'}} key={index}>
                                             <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center' 
                                                 sx={{ backgroundColor:'#F0F0F0', borderRadius:'50%', width:'46px', height:'46px'}}>
                                                 <CardMedia

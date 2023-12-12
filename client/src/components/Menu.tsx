@@ -159,7 +159,7 @@ export const MainMenu = () => {
       <Divider />
       <List>
         {menuItems.map((item, index) => (
-          <ListItem key={item.name} disablePadding>
+          <ListItem key={index} disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 <img src = {item.imgPath} />
@@ -197,7 +197,6 @@ export const MainMenu = () => {
       >
         {list()}
       </Drawer>
-      <React.Fragment>
         <Menu
           anchorEl={anchorEl}
           id="account-menu"
@@ -215,14 +214,12 @@ export const MainMenu = () => {
                 onClick={handleClose} /></button>
             </div>
             {detail?(
-              <React.Fragment>
                 <div className="px-10 py-5">
                 新しいお知らせはありません {selectId}
                 </div>  
-              </React.Fragment>
             ):(
-              fakeData.map((item:ItemElement) => (
-                <>
+              fakeData.map((item:ItemElement, index:number) => (
+                <div key={index}>
                 <div className="flex flex-row p-5">
                     <div className="flex flex-col w-[85%]">
                       <p>{item.name}</p>
@@ -231,11 +228,10 @@ export const MainMenu = () => {
                   <button key={item.id} onClick={()=>{setDetail(true); setSelectId(item.id)}} className="hover:bg-btHover/[1] bg-btColor w-[157px] h-[39x] rounded-[50px] text-white">詳しく見る</button>
                 </div>
                 <Divider />
-                </>
+                </div>
               ))
             )}
         </Menu>
-      </React.Fragment>
     </>)
 }
 
