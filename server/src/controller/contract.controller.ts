@@ -7,7 +7,7 @@ import { getEmailFromToken, readCreatorInfo, readProfile } from "../services/acc
 import Contract from "../interfaces/contract.interface";
 import ContractModel from "../models/contract.model";
 import AccountModel from "../models/account.model";
-import { allContract } from "../services/contract.service";
+import { allContract, getContract } from "../services/contract.service";
 
 const validateToken = (req:any, res:any) => {
     const { authorization } = req.body.token || req.query.token || req.headers;
@@ -48,8 +48,8 @@ export async function insertData(input: any) {
         creatorEmail: creatorEmail,
         category: input.data.category,
         description: input.data.description,
-        stpe1: input.data.stpe1,
-        stpe2: input.data.stpe2,
+        step1: input.data.step1,
+        step2: input.data.step2,
         step3: input.data.step3,
         status: 0,
         cancel: '', 
@@ -61,10 +61,12 @@ export async function insertData(input: any) {
     }
   }
 
-const getCreatorInfo: RequestHandler = async (req, res) => {
+const getCreatorData: RequestHandler = async (req, res) => {
   try {
     logger.info("Getting contract creator info");
-    const info = await readCreatorInfo({role : 'creator'});
+    const contractId = req.params.id;
+    const data = await ContractModel.findOne({ _id: contractId });
+    const info = await AccountModel.findOne({ email: data?.creatorEmail }, 'email username avatar heart follower');
     return res.status(StatusCodes.OK).send(info);
   } catch (error: any) {
     logger.error("Getting contract creator info Failed");
@@ -82,9 +84,44 @@ const getAllContract: RequestHandler = async (req, res) => {
   }
 }
 
+const getContractInfo: RequestHandler = async (req, res) => {
+  try{
+    const contractId = req.params.id;
+    const info = await getContract(contractId);
+    return res.status(StatusCodes.OK).send(info);
+  }catch(err){
+    console.error(err);
+  }
+}
+
+const setContract: RequestHandler = async (req, res) => {
+  try{
+    const contractId = req.params.id;
+    const info = await ContractModel.updateOne({ _id: contractId }, { confirm: true });
+    return res.status(StatusCodes.OK).send(info);
+  } catch (err){
+    console.error(err);
+  }
+}
+
+const nextStep: RequestHandler = async (req, res) => {
+  try{
+    const contractId = req.params.id;
+    const status = parseInt(req.body.currentStatus) + 1;
+    console.log('data - ', contractId, '---', status);
+    const info = await ContractModel.updateOne({ _id: contractId }, { status: status });
+    return res.status(StatusCodes.OK).send(info);
+  } catch (err){
+    console.error(err);
+  }
+}
+
 const contract = { 
     insertContract,
-    getCreatorInfo,
-    getAllContract
+    getCreatorData,
+    getAllContract,
+    getContractInfo,
+    setContract,
+    nextStep,
   };
   export default contract;

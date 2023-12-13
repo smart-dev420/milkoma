@@ -5,6 +5,7 @@ import logger from "../utils/logger";
 import { verifyToken } from '../middlewares/auth.jwt';
 import ProvideModel from "../models/provide.model";
 import { Provide } from "../interfaces/provide.interface";
+import { saveFile } from "../services/contract.service";
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const fs = require('fs');
@@ -72,46 +73,6 @@ const uploadProvideFile: RequestHandler = async (req, res) => {
       }
     });
     
-  }
-
-  export async function saveFile(input: any): Promise<void> {
-    try {
-      console.log("Uploading Provide File");
-      const { title, filename, fileExtension, size, provideData } = input;
-  
-      const existing = await ProvideModel.findOne({ userEmail: provideData.userEmail, contractId: provideData.contractId });
-  
-      if (existing) {
-        console.log("Already the data exists");
-        existing.provideData.push({
-          title: title,
-          fileName: filename,
-          fileExtension: fileExtension,
-          fileSize: size,
-          createdDate: new Date(),
-        });
-        await existing.save();
-      } else {
-        const newProvideData = {
-          title: title,
-          fileName: filename,
-          fileExtension: fileExtension,
-          fileSize: size,
-          createdDate: new Date(),
-        };
-  
-        const docData = {
-          userEmail: provideData.userEmail,
-          contractId: provideData.contractId,
-          provideData: [newProvideData]
-        };
-  
-        await ProvideModel.create(docData);
-      }
-    } catch (error) {
-      console.log("Upload Failed");
-      throw error;
-    }
   }
   
   const provideDownload: RequestHandler = async (req, res) => {

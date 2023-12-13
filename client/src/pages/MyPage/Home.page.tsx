@@ -50,14 +50,15 @@ export const HomePage = () => {
         console.log('contract data', contractData);
         const verifyData = await axios.post(`${API}/auth/verify/${user.email}`, {}, {headers});
         setVerify(verifyData.data);
-        const requestContract = contractData.filter((item:any) => item.status === 0).length;
+        const requestContract = contractData.filter((item:any) => item.status === 0 ).length;
         const acceptContract = contractData.filter((item:any) => item.status === 1).length;
         const progressContract = contractData.filter((item:any) => item.status === 2).length;
-        const endContract = contractData.filter((item:any) => item.status === 3).length;
+        const developContract = contractData.filter((item:any) => item.status === 3).length;
+        const endContract = contractData.filter((item:any) => item.status === 4).length;
         statusList = [];
-        statusList.push({name:"依頼中", counter: requestContract});
-        statusList.push({name:"相談中", counter: acceptContract});
-        statusList.push({name:"製作中", counter: progressContract});
+        statusList.push({name:"依頼中", counter: acceptContract});
+        statusList.push({name:"相談中", counter: progressContract});
+        statusList.push({name:"製作中", counter: developContract});
         statusList.push({name:"完了", counter: endContract});
         setStateList(statusList);
     }
@@ -244,8 +245,8 @@ const CreateGrid:React.FC<{count:number, data:any}> = ({ count, data }) => {
                 key={ index }
                 >
                 <Box display="flex" flexDirection="column">
-                <Typography sx={{color:'#554744', fontSize:'10px', marginBottom:'20px', paddingX:'30px', fontWeight:fontBold}}>{getDateString(item.createdDate.toString())}依頼</Typography>
-                <Typography sx={{textAlign:'center', color:'#001219', fontSize:'18px', marginBottom:'8px', paddingX:'30px', fontWeight:fontBold}}>{item.category}</Typography>
+                <Typography sx={{color:'#554744', fontSize:'10px', marginBottom:'20px', paddingX:'30px', fontWeight:fontBold}}>{getDateString(item.createdDate.toString())} 依頼</Typography>
+                <Typography sx={{textAlign:'center', color:'#001219', fontSize:'18px', marginBottom:'8px', paddingX:'30px', fontWeight:fontBold}}>{item.category}の案件</Typography>
                 <Typography sx={{color:'#85766D', fontSize:'11px', paddingX:'30px', fontWeight:fontBold}}>内容</Typography>
                 <Typography sx={{fontSize:'12px', paddingX:'30px', height:'60px', overflow:'hidden', textOverflow:'ellipsis'}}>
                     {item.description}
@@ -295,7 +296,7 @@ const CancelGrid:React.FC<{count:number, data: any}> = ({ count, data }) => {
                       },}}>
                 <Box display="flex" flexDirection="column">
                 <Typography sx={{color:'#554744', fontSize:'10px', marginBottom:'20px', paddingX:'30px', fontWeight:fontBold}}>{getDateString(item.createdDate.toString())}</Typography>
-                <Typography sx={{textAlign:'center', color:'#001219', fontSize:'18px', marginBottom:'8px', paddingX:'30px', fontWeight:fontBold}}>{item.category}</Typography>
+                <Typography sx={{textAlign:'center', color:'#001219', fontSize:'18px', marginBottom:'8px', paddingX:'30px', fontWeight:fontBold}}>{item.category}の案件</Typography>
                 <Typography sx={{color:'#85766D', fontSize:'11px', paddingX:'30px', fontWeight:fontBold}}>内容</Typography>
                 <Typography sx={{fontSize:'12px', paddingX:'30px', height:'120px', overflow:'hidden', textOverflow:'ellipsis'}}>
                 {item.description}

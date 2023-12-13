@@ -25,7 +25,7 @@ export const ProjectList = () => {
             count: 12,
         },
     ];
-    scrollTop();
+    // scrollTop();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const pageIndex = useSelector((state:any) => state.pages.index);

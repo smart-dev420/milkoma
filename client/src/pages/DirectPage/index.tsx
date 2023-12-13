@@ -559,7 +559,7 @@ const Step4 : React.FC<{}> = () => {
             description: data.description,
             step1: data.question1.toString(),
             step2: data.question2.toString(),
-            step3: btn_group2[data.question3].name,
+            step3: data.question3 + 1,
             status: 0,
         };
         const query = `${API}/api/insertContract`;
