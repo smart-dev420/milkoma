@@ -282,33 +282,35 @@ const CancelGrid:React.FC<{count:number, data: any}> = ({ count, data }) => {
         <Grid container spacing={1} className='items-center' style={{marginLeft:'30px'}}>
         {
         filteredItems.map((item: any, index: number) => (
-            <Grid item xs="auto" > 
-            <Box 
-                sx={{backgroundColor:'#fff',
-                    width:'314px', marginX:'15px',
-                    marginY:'5px', height:'310px', 
-                    borderRadius:'50px', 
-                    paddingTop:'27px', paddingBottom:'16px', 
-                    cursor:'pointer',
-                    boxShadow:'0px 0px 10px 3px #00000018',
-                    "&:hover": {
-                        backgroundColor: '#FFF5F5'
-                      },}}>
-                <Box display="flex" flexDirection="column">
-                <Typography sx={{color:'#554744', fontSize:'10px', marginBottom:'20px', paddingX:'30px', fontWeight:fontBold}}>{getDateString(item.createdDate.toString())}</Typography>
-                <Typography sx={{textAlign:'center', color:'#001219', fontSize:'18px', marginBottom:'8px', paddingX:'30px', fontWeight:fontBold}}>{item.category}の案件</Typography>
-                <Typography sx={{color:'#85766D', fontSize:'11px', paddingX:'30px', fontWeight:fontBold}}>内容</Typography>
-                <Typography sx={{fontSize:'12px', paddingX:'30px', height:'120px', overflow:'hidden', textOverflow:'ellipsis'}}>
-                {item.description}
-                </Typography>
-                <Box sx={{height:'2px', backgroundColor:'#FBF4ED', width:'100%', marginTop:'13px'}}></Box>
-                </Box>
-                <Box display="flex" flexDirection="row" alignItems="center" justifyContent="flex-start" sx={{marginTop:'10px', paddingX:'30px'}}>
-                    <Typography sx={{fontSize:'10px', color:'#fff', paddingY:'7px', width:'56px', backgroundColor:btnBackgroundHover, textAlign:'center', borderRadius:'60px', fontWeight:fontBold}}>状況</Typography>
-                    <Typography sx={{fontSize:'11px', marginLeft:'10px', fontWeight:fontBold}}>{item.status == 0 ?'内容を確認しています':item.cancel}</Typography>
-                </Box>                
-               </Box>
-            </Grid>
+            index < count && (
+                <Grid item xs="auto" > 
+                <Box 
+                    sx={{backgroundColor:'#fff',
+                        width:'314px', marginX:'15px',
+                        marginY:'5px', height:'310px', 
+                        borderRadius:'50px', 
+                        paddingTop:'27px', paddingBottom:'16px', 
+                        cursor:'pointer',
+                        boxShadow:'0px 0px 10px 3px #00000018',
+                        "&:hover": {
+                            backgroundColor: '#FFF5F5'
+                          },}}>
+                    <Box display="flex" flexDirection="column">
+                    <Typography sx={{color:'#554744', fontSize:'10px', marginBottom:'20px', paddingX:'30px', fontWeight:fontBold}}>{getDateString(item.createdDate.toString())}</Typography>
+                    <Typography sx={{textAlign:'center', color:'#001219', fontSize:'18px', marginBottom:'8px', paddingX:'30px', fontWeight:fontBold}}>{item.category}の案件</Typography>
+                    <Typography sx={{color:'#85766D', fontSize:'11px', paddingX:'30px', fontWeight:fontBold}}>内容</Typography>
+                    <Typography sx={{fontSize:'12px', paddingX:'30px', height:'120px', overflow:'hidden', textOverflow:'ellipsis'}}>
+                    {item.description}
+                    </Typography>
+                    <Box sx={{height:'2px', backgroundColor:'#FBF4ED', width:'100%', marginTop:'13px'}}></Box>
+                    </Box>
+                    <Box display="flex" flexDirection="row" alignItems="center" justifyContent="flex-start" sx={{marginTop:'10px', paddingX:'30px'}}>
+                        <Typography sx={{fontSize:'10px', color:'#fff', paddingY:'7px', width:'56px', backgroundColor:btnBackgroundHover, textAlign:'center', borderRadius:'60px', fontWeight:fontBold}}>状況</Typography>
+                        <Typography sx={{fontSize:'11px', marginLeft:'10px', fontWeight:fontBold}}>{item.status == 0 ?'内容を確認しています':item.cancel}</Typography>
+                    </Box>                
+                   </Box>
+                </Grid>
+            )
         ))
         }
     </Grid>
