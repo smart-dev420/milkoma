@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import Slider, { SliderThumb, SliderValueLabelProps } from '@mui/material/Slider';
 import { useDispatch, useSelector } from "react-redux";
 import { setPage } from "../../slices/page";
-import { NumberFormatExample, convertSize, headers, showSentence } from "../../utils/appHelper";
+import { NumberFormatExample, convertSize, getDateString, getProvideDate, headers, showSentence } from "../../utils/appHelper";
 import CloseIcon from '@mui/icons-material/Close';
 import { btnBackground, btnBackgroundHover } from "../../components/Constants";
 import { useNavigate, useParams } from "react-router-dom";
@@ -87,31 +87,17 @@ const statusValues = [
         description: "ご依頼いただいた内容についてミルコマディレクターからメッセージが来ています。@@@内容をご確認ください",
     }, 
     { 
-        title: "インフルエンサー確定・撮影中(納期2023/1/15)",
+        title: "インフルエンサー確定・撮影中",
         description: "現在、インフルエンサーが撮影中です。@@@撮影後、動画編集を行います。",
     }, 
     {
-        title: "動画編集中(納期2023/1/15)", 
+        title: "動画編集中", 
         description: "現在、撮影された動画を編集中です。@@@編集後、検修をお願いいたします。",
     },
     {
         title: "検修をお願いします。",
         description: "「ファイル・検修管理」からファイルを確認して、@@@検修を行ってください",
     }];
-const downloadData = [
-    {
-        name:'ダウンロードファイル.rtf',
-        capacity:'3.5GB',
-    },
-    {
-        name:'ダウンロードファイル.rtf',
-        capacity:'3.5GB',
-    },
-    {
-        name:'ダウンロードファイル.rtf',
-        capacity:'3.5GB',
-    },
-];
 
 const productDownloadData = [
     {
@@ -147,25 +133,11 @@ export const DetailPage = () => {
         bill: false,
         step: 1,
         isMessage: false,
-        creatorPrice: 75678,
-        sitePrice: 35678,
-        defaultPrice: '00,000円',
-        calulatorPrice: '見積もり中',
-        productIntro: '自社の美容液の紹介をしたい。新商品です。発売予定は12月1日です。@@@商品のURLはhttps://mirucoma.comです。@@@ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。',
         sampleMessage:'この度は、ミルコマをご利用いただきましてありがとうございます。@@@「商品紹介の案件」について、何点かお伺いしたいことがありますのでご返答いただきますと幸いです。@@@よろしくお願いします',
         noMessage: 'まだメッセージはありません。',
-        userDownload: downloadData,
         productDownload: productDownloadData,
     });
 
-    const creatorData = {
-        avatar: staticFiles.images.avatar,
-        email: '@hikarusannnouragawa',
-        describe: 'ひかる社長の密着日記 ',
-        follow: 12345678,
-        heart: 3900000,
-    }
-    const totalPrice = data.creatorPrice + data.sitePrice;
     const [ uploadOpen, setUploadOpen ] = useState<boolean>(false);
     const [ uploadFileName, setUploadFileName ] = useState<string>(''); // Uploaded file name
     const [ fileName, setFileName ] = useState<string>('');             // Inserted file name
@@ -175,6 +147,9 @@ export const DetailPage = () => {
     const [ isHovered, setIsHovered ] = useState<boolean>(false);
     const fileTypes = ["jpg", "png", "gif", "pdf", "doc", "docx", "avi", "mp4", "mp3", "txt", "rtf"];
     const [ file, setFile ] = useState<File | null>(null);
+    const [ contractInfo, setContractInfo ] = useState<any>(null);
+    const [ creatorInfo, setCreatorInfo ] = useState<any>(null);
+    const [ nextStep, setNextStep ] = useState<boolean>(false);
 
     const handleContract = () => {
         // setData(prevData => ({ ...prevData, contracted: true }));
@@ -196,11 +171,24 @@ export const DetailPage = () => {
         const res = await axios.post(`${API}/api/getProvideFiles/${contractId}`, {}, {headers});
         setProvideFiles(res.data.data);
     }
+    const getContractInfo = async () => {
+        const res = await axios.post(`${API}/api/getContractInfo/${contractId}`, {}, {headers});
+        setContractInfo(res.data);
+    }
+    const getCreatorData = async () => {
+        const res = await axios.post(`${API}/api/getCreatorData/${contractId}`, {}, {headers});
+        setCreatorInfo(res.data);
+    }
+
     useEffect(() => {
         getProvideFileList();
-    }, []);
+    }, [uploadOpen]);
 
-    console.log('fileList - ', provideFiles);
+    useEffect(() => {
+        getContractInfo();
+        getCreatorData();
+        setNextStep(false);
+    }, [nextStep])
 
     /** Bill Dialog */
 
@@ -238,7 +226,14 @@ export const DetailPage = () => {
         setIsHovered(false);
     }
 
-    // File download
+    const handleStateUp = async () => {
+        let formData = new FormData();
+        formData.append('currentStatus', contractInfo.status);
+        await axios.post(`${API}/api/nextStep/${contractId}`, formData, {headers});
+        setNextStep(true);
+    }
+
+    // File Upload
     const handleFileUpload = async () => {
         let formData = new FormData();
         if(file){
@@ -268,6 +263,7 @@ export const DetailPage = () => {
         }catch(err){ console.error(err); }
     }
 
+    // File Download
     const handleDownload = async (fileName:string) => {
         try {
           const response = await axios.get(`${API}/api/provideDownload/${fileName}`, {
@@ -290,7 +286,8 @@ export const DetailPage = () => {
 
     return (
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'68px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
-            <Stack direction="column" sx={{paddingX:'18px', width:'100%'}}>
+            { contractInfo && (
+                <Stack direction="column" sx={{paddingX:'18px', width:'100%'}}>
         {/** Back button and Page Title */}    
                 <Box display='flex' flexDirection='row' alignItems='center'>
                     <Button sx={{
@@ -314,13 +311,13 @@ export const DetailPage = () => {
                     </Button>
 
                 <Typography flex={9} sx={{color:'#511523', fontSize:'22px', marginLeft:'23px', fontWeight:fontBold}}>案件詳細</Typography>
-                <Typography flex={2} sx={{color:'#554744', fontSize:'16px', marginLeft:'23px', fontWeight:fontBold}}>2023年1月10日依頼</Typography>
+                <Typography flex={2} sx={{color:'#554744', fontSize:'16px', marginLeft:'23px', fontWeight:fontBold}}>{getDateString(contractInfo.createdDate)}依頼</Typography>
                 </Box>
         {/** Product Data and Status Data */}                
                 <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{marginTop:'28px', columnGap:'30px'}}>
                     <Box display='flex' flexDirection='column' sx={{border:'3px solid #DF8391', borderRadius:'30px', width:'471px', padding:'33px'}}>
                         <Typography sx={{color:'#85766D', fontSize:'12px', marginBottom:'7px', fontWeight:fontBold}}>案件名</Typography>
-                        <Typography sx={{color:'#B9324D', fontSize:'18px', marginBottom:'26px', fontWeight:fontBold}}>商品紹介の案件</Typography>
+                        <Typography sx={{color:'#B9324D', fontSize:'18px', marginBottom:'26px', fontWeight:fontBold}}>{contractInfo.category}の案件</Typography>
                         <Typography sx={{color:'#85766D', fontSize:'10px', marginBottom:'9px', fontWeight:fontBold}}>依頼内容</Typography>
                         <Box display='flex' flexDirection='row'>
                             <Typography sx={{
@@ -333,7 +330,7 @@ export const DetailPage = () => {
                                 borderRadius:'38px',
                                 whiteSpace:'nowrap'
                                 }}>
-                                    広告運用を行う際に使う
+                                    {contractInfo.step2}
                             </Typography>
                             <Typography sx={{
                                 border:'1px solid #CE6F82', 
@@ -346,20 +343,25 @@ export const DetailPage = () => {
                                 marginLeft:'15px',
                                 whiteSpace:'nowrap'
                                 }}>
-                                    希望納期:5ヶ月
+                                    希望納期: {contractInfo.step3}ヶ月
                             </Typography>
                         </Box>
                         <Typography sx={{color:'#001219', fontSize:'12px', marginTop:'14px'}}>
-                            {showSentence(data.productIntro)}
+                            {contractInfo.step1}
                         </Typography>
                     </Box>
                     <Box display='flex' flexDirection='column' sx={{ width:'64%'}}>
                         <Typography sx={{marginTop:'15px', color:'#511523', fontSize:'18px', fontWeight:fontBold}}>現在状況</Typography>
-                        <Typography sx={{marginTop:'40px', color:'#B9324D', fontSize:'20px', fontWeight:fontBold}}>{statusValues[data.step-1].title}</Typography>
+                        <Typography sx={{marginTop:'40px', color:'#B9324D', fontSize:'20px', fontWeight:fontBold}}>{statusValues[contractInfo.status-1].title}
+                        {
+                            (contractInfo.status === 2 || contractInfo.status === 3) && 
+                            `(納期 ${getProvideDate(contractInfo.createdDate, contractInfo.step3)})`
+                        }
+                        </Typography>
                         <StatusSlider
                             aria-label="slider"
                             defaultValue={25}
-                            value = {25 * data.step}
+                            value = {25 * contractInfo.status}
                             marks={marks}
                             step={25}
                             min={0}
@@ -367,10 +369,10 @@ export const DetailPage = () => {
                             sx={{width:'100%', marginTop:'30px', marginBottom:'45px'}}
                         />
                         <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center'>
-                            <Box display='flex' flexDirection='column' sx={{width:'65%', marginTop:'15px',  border:'2px dashed #857D7B', borderRadius:'15px', paddingX:'15px', paddingY:'30px'}}>
-                                {showSentence(statusValues[data.step-1].description)}
+                            <Box display='flex' flexDirection='column' sx={{width:'100%', marginTop:'15px',  border:'2px dashed #857D7B', borderRadius:'15px', paddingX:'15px', paddingY:'30px'}}>
+                                {showSentence(statusValues[contractInfo.status-1].description)}
                             </Box>
-                            <Button sx={{
+                            {/* <Button sx={{
                                     backgroundColor:btnBackground, 
                                     paddingX:'6%', borderRadius:'36px', 
                                     color:'#ffffff', fontSize:'17px',
@@ -380,25 +382,27 @@ export const DetailPage = () => {
                                     },
                                     }}>
                                         研修完了
-                            </Button>
+                            </Button> */}
                         </Box>
                         
                     </Box>
                 </Box>
 
-        {/** Creator Data */}                            
-                <Box display='flex' flexDirection='column' sx={{marginTop:'60px', display:data.contractCheck?'':'none'}}>
+        {/** Creator Data */}
+                {
+                creatorInfo && (
+                    <Box display='flex' flexDirection='column' sx={{marginTop:'60px', display:data.contractCheck?'':'none'}}>
                     <Typography sx={{color:'#511523', fontSize:'22px', fontWeight:fontBold}}>参加するインフルエンサー</Typography>
                     <Box display='flex' flexDirection='row' alignItems='center' sx={{marginTop:'30px'}}>
                         <CardMedia 
                             component="img"
                             alt="Image2"
                             sx={{borderRadius:'20px', width:'63px', height:'63px', marginRight:'22px'}}
-                            image={creatorData.avatar}
+                            image = {`${API}/api/avatar/${creatorInfo._id}`}
                         />
                         <Box display='flex' flexDirection='column' flex={3}>
-                            <Typography sx={{color:'#838688', fontSize:'14px'}}>{creatorData.email}</Typography>
-                            <Typography sx={{color:'#001219', fontSize:'26px', letterSpacing:'-3px', whiteSpace:'nowrap', fontWeight:fontBold}}>{creatorData.describe}</Typography>
+                            <Typography sx={{color:'#838688', fontSize:'14px'}}>{creatorInfo.email}</Typography>
+                            <Typography sx={{color:'#001219', fontSize:'26px', letterSpacing:'-3px', whiteSpace:'nowrap', fontWeight:fontBold}}>{creatorInfo.username}</Typography>
                         </Box>
                         <Box display='flex' flexDirection='row' flex={3} alignItems='center' sx={{ marginTop:'15px'}}>
                             <CardMedia 
@@ -407,7 +411,7 @@ export const DetailPage = () => {
                                 sx={{width:'28px', marginRight:'9px', aspectRatio:'1.217'}}
                                 image={staticFiles.images.userPlusBrown}
                             />
-                            <Typography sx={{color:'#511523', fontSize:'18px'}}>総フォロワー数 {creatorData.follow.toLocaleString()}人</Typography>
+                            <Typography sx={{color:'#511523', fontSize:'18px'}}>総フォロワー数 {creatorInfo.follower.length.toLocaleString()}人</Typography>
                         </Box>
                         <Box display='flex' flexDirection='row' flex={3} alignItems='center' sx={{ marginTop:'15px'}}>
                             <CardMedia 
@@ -416,7 +420,7 @@ export const DetailPage = () => {
                                 sx={{width:'21px', marginRight:'9px'}}
                                 image={staticFiles.icons.ic_heart}
                             />
-                            <Typography sx={{color:'#511523', fontSize:'18px'}}>総いいね数 {NumberFormatExample(creatorData.heart)}</Typography>
+                            <Typography sx={{color:'#511523', fontSize:'18px'}}>総いいね数 {NumberFormatExample(creatorInfo.heart.length)}</Typography>
                         </Box>
                         <Button sx={{
                                     backgroundColor:btnBackground, 
@@ -430,13 +434,14 @@ export const DetailPage = () => {
                                         詳細へ
                         </Button>
                     </Box>
-                </Box>
-
+                    </Box>
+                )}                            
+               
         {/** Contract */}                            
                 <Typography sx={{fontSize:'22px', color:'#511523', marginTop:'60px', marginBottom:'32px', fontWeight:fontBold}}>金額・契約書管理</Typography>
                 <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{columnGap:'30px'}}>
                     <Box display='flex' flexDirection='column' sx={{
-                        backgroundColor:data.contracted?'#FFFFFF':'#F9E6CE',
+                        backgroundColor:contractInfo.confirm?'#FFFFFF':'#F9E6CE',
                         borderRadius:'33px', 
                         width:'468px', 
                         paddingY:'35px', 
@@ -446,21 +451,21 @@ export const DetailPage = () => {
                         <Typography sx={{fontSize:'18px', color:'#001219', marginBottom:'16px', fontWeight:fontBold}}>契約書</Typography>
                         <Typography sx={{fontSize:'12px', color:'#001219', marginBottom:'9px', fontWeight:fontBold}}>依頼を行う前に必ずお読みいただき、契約書を締結してください</Typography>
                         <Typography sx={{fontSize:'10px', color:'#E4443B', marginBottom:'11px', fontWeight:fontBold}}>
-                            {data.contractCheck?'依頼内容を確認中です。':data.contracted?'締結済みです':'締結を行わないと制作が進行しません'}
+                            {data.contractCheck?'依頼内容を確認中です。':contractInfo.confirm?'締結済みです':'締結を行わないと制作が進行しません'}
                         </Typography>
                         <Box display='flex' flexDirection='column' alignItems='center'>
                             <Button 
                             sx={{
-                                backgroundColor:data.contractCheck?'#B9B2B1':data.contracted?'#E38A86':'#EE7A4B', 
+                                backgroundColor:data.contractCheck?'#B9B2B1':contractInfo.confirm?'#E38A86':'#EE7A4B', 
                                 width:'183px', borderRadius:'36px', fontWeight:fontBold,
                                 color:'#ffffff', fontSize:'10px',
                                 "&:hover": {
-                                    backgroundColor: data.contractCheck?'#B9B2B1':data.contracted?btnBackgroundHover:'#D58463'
+                                    backgroundColor: data.contractCheck?'#B9B2B1':contractInfo.confirm?btnBackgroundHover:'#D58463'
                                 },
                                 }}
-                                onClick={data.contracted?handleContractCheck:handleContract}
+                                onClick={contractInfo.confirm?handleContractCheck:handleContract}
                                 >
-                                    {data.contractCheck?"確認する":data.contracted?"締結済み・確認する":"確認する"}
+                                    {data.contractCheck?"確認する":contractInfo.confirm?"締結済み・確認する":"確認する"}
                             </Button>
                         </Box>
                     </Box>
@@ -475,20 +480,20 @@ export const DetailPage = () => {
                                 <Box display='flex' flexDirection='row' alignItems='center'>
                                     <Box display='flex' flexDirection='column' flex={3}>
                                         <Typography sx={{fontSize:'10px', color:'#85766D', fontWeight:fontBold}}>インフルエンサー費用</Typography>
-                                        <Typography sx={{fontSize:'18px', color:'#001219', lineHeight:'100%', marginTop:'3px', fontWeight:fontBold}}>{data.bill?data.defaultPrice:data.creatorPrice.toLocaleString()+'円'}</Typography>
+                                        <Typography sx={{fontSize:'18px', color:'#001219', lineHeight:'100%', marginTop:'3px', fontWeight:fontBold}}>{contractInfo.billed?'00,000円':contractInfo.creatorPrice.toLocaleString()+'円'}</Typography>
                                     </Box>
                                     <Box display='flex' flexDirection='column' flex={1}>
                                         <Typography sx={{fontSize:'18px', color:'#001219', fontWeight:fontBold}}>+</Typography>
                                     </Box>
                                     <Box display='flex' flexDirection='column' flex={3}>
                                         <Typography sx={{fontSize:'10px', color:'#85766D', fontWeight:fontBold}}>ディレクター費用</Typography>
-                                        <Typography sx={{fontSize:'18px', color:'#001219', lineHeight:'100%', marginTop:'3px', fontWeight:fontBold}}>{data.bill?data.defaultPrice:data.sitePrice.toLocaleString()+'円'}</Typography>
+                                        <Typography sx={{fontSize:'18px', color:'#001219', lineHeight:'100%', marginTop:'3px', fontWeight:fontBold}}>{contractInfo.billed?'00,000円':contractInfo.fee.toLocaleString()+'円'}</Typography>
                                     </Box>
                                     <Box display='flex' flexDirection='column' flex={1}>
                                         <Typography sx={{fontSize:'18px', color:'#001219', fontWeight:fontBold}}>=</Typography>
                                     </Box>
                                     <Box display='flex' flexDirection='column' alignItems='' flex={3} sx={{marginTop:'auto'}}>
-                                        <Typography sx={{fontSize:'24px', color:'#B9324D', lineHeight:'100%', marginTop:'5px', fontWeight:fontBold}}>{data.bill?data.calulatorPrice:totalPrice.toLocaleString()+'円'}</Typography>
+                                        <Typography sx={{fontSize:'24px', color:'#B9324D', lineHeight:'100%', marginTop:'5px', fontWeight:fontBold}}>{contractInfo.billed?'見積もり中':(contractInfo.creatorPrice + contractInfo.fee).toLocaleString()+'円'}</Typography>
                                     </Box>
                                 </Box>
 
@@ -509,7 +514,7 @@ export const DetailPage = () => {
                                     >
                                         {data.bill?'CALCULATING':data.paid?'領収書発行':'お支払い'}
                                 </Button>
-                                <Typography sx={{fontSize:'10px', color:'#001219'}}>{data.bill?'料金確定までお待ちください':data.paid?'お支払い済みです':'支払い期限:2023年12月1日10:00'}</Typography>
+                                <Typography sx={{fontSize:'10px', color:'#001219'}}>{data.bill?'料金確定までお待ちください':data.paid?'お支払い済みです':'支払い期限:' + getProvideDate(contractInfo.createdDate, 1)}</Typography>
                             </Box>
                         </Box>
                     </Box>
@@ -547,7 +552,23 @@ export const DetailPage = () => {
                 </Box>
 
         {/** File Upload and Download  */}
-                <Typography sx={{color:'#511523', fontSize:'22px', marginTop:'60px', fontWeight:fontBold}}>ファイル・検修管理</Typography>
+                <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{marginTop:'60px'}}>
+                    <Typography sx={{color:'#511523', fontSize:'22px', fontWeight:fontBold}}>ファイル・検修管理</Typography>
+                    { contractInfo.status < 4 && (
+                        <Button sx={{
+                        backgroundColor:btnBackground, 
+                        width:'241px', borderRadius:'36px', 
+                        color:'#ffffff', fontSize:'16px', fontWeight:fontBold,
+                        "&:hover": {
+                            backgroundColor: '#D48996'
+                        },
+                        }}
+                        onClick={handleStateUp}>
+                            {contractInfo.status === 3?'完了':'次の一歩'}
+                    </Button>
+                    )}
+                    
+                </Box>
                 <Box display='flex' flexDirection='row' sx={{marginTop:'33px', columnGap:'50px'}}>
                     <Box display='flex' flexDirection='column' flex={6} >
                         <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{ minHeight:'27px'}}>
@@ -849,6 +870,7 @@ export const DetailPage = () => {
         </Dialog>
 
             </Stack>
+            )}
         </Container>
     )
 }

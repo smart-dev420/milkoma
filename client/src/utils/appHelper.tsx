@@ -46,6 +46,13 @@ export const getDateString = (str:string) => {
   return date;
 }
 
+export const getProvideDate = (createdDate: string, month: number) => {
+  const date = new Date(createdDate).getTime() + month * 30 * 24 * 3600 * 1000;
+  const newDate = new Date(date);
+  const res = newDate.getFullYear() + '/' + (newDate.getMonth() + 1) + '/' + newDate.getDate();
+  return res;
+};
+
 export const reqPost = async (url:any, payload:any) => {
   const token = sessionStorage.getItem('token')
   const headers = {

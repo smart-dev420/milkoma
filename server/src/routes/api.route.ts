@@ -35,10 +35,13 @@ apiRoute.post("/getCreatorProfile/:id",                           auth.getCreato
 
 /******* Contract */
 apiRoute.post("/insertContract",            verifyToken,          contract.insertContract);
-apiRoute.post("/getCreatorInfo",            verifyToken,          contract.getCreatorInfo);
+apiRoute.post("/getCreatorData/:id",        verifyToken,          contract.getCreatorData);
 
 /******* Get contract data */
 apiRoute.post("/getAllContract/:email",     verifyToken,          contract.getAllContract);
+apiRoute.post("/getContractInfo/:id",       verifyToken,          contract.getContractInfo);
+apiRoute.post("/setContract/:id",           verifyToken,          contract.setContract);
+apiRoute.post("/nextStep/:id",              verifyToken,          contract.nextStep);
 
 /******** Provide File */
 apiRoute.post("/upload_provide",            verifyToken,          provide.uploadProvideFile);
