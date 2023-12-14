@@ -159,6 +159,7 @@ export const DetailPage = () => {
         setData(prevData => ({ ...prevData, contractCheck: true }));
     }
     const handlePaid = () => {
+        navigate(`/mypage/pay/${contractId}`);
         setData(prevData => ({ ...prevData, paid: true, step: 2 }));
     }
     const handleBill = () => {

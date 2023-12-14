@@ -6,3 +6,4 @@ export { ContractManage } from './ContractManage.page';
 export { ChattingPage } from './Chatting.page';
 export { CardManage } from './CardManage.page';
 export { Profile } from './Profile.page';
+export { Payment } from './Payment.page'
