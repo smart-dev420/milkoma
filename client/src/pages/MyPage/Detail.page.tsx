@@ -424,15 +424,15 @@ export const DetailPage = () => {
                             <Typography sx={{color:'#511523', fontSize:'18px'}}>総いいね数 {NumberFormatExample(creatorInfo.heart.length)}</Typography>
                         </Box>
                         <Button sx={{
-                                    backgroundColor:btnBackground, 
-                                    width:'241px', borderRadius:'36px', 
-                                    color:'#ffffff', fontSize:'16px', fontWeight: fontBold, 
-                                    marginY:'7px',
-                                    "&:hover": {
-                                        backgroundColor: '#D48996'
-                                    },
-                                    }}>
-                                        詳細へ
+                            backgroundColor:btnBackground, 
+                            width:'241px', borderRadius:'36px', 
+                            color:'#ffffff', fontSize:'16px', fontWeight: fontBold, 
+                            marginY:'7px',
+                            "&:hover": {
+                                backgroundColor: '#D48996'
+                            },
+                            }}>
+                                詳細へ
                         </Button>
                     </Box>
                     </Box>

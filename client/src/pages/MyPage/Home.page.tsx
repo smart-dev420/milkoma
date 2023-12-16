@@ -44,23 +44,27 @@ export const HomePage = () => {
     const user = user_data ? JSON.parse(user_data) : null;
 
     const getData = async () => {
-        const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, {headers});
-        const contractData = res.data;
-        setContract(res.data);
-        console.log('contract data', contractData);
-        const verifyData = await axios.post(`${API}/auth/verify/${user.email}`, {}, {headers});
-        setVerify(verifyData.data);
-        const requestContract = contractData.filter((item:any) => item.status === 0 ).length;
-        const acceptContract = contractData.filter((item:any) => item.status === 1).length;
-        const progressContract = contractData.filter((item:any) => item.status === 2).length;
-        const developContract = contractData.filter((item:any) => item.status === 3).length;
-        const endContract = contractData.filter((item:any) => item.status === 4).length;
-        statusList = [];
-        statusList.push({name:"依頼中", counter: acceptContract});
-        statusList.push({name:"相談中", counter: progressContract});
-        statusList.push({name:"製作中", counter: developContract});
-        statusList.push({name:"完了", counter: endContract});
-        setStateList(statusList);
+        try{
+            const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, {headers});
+            const contractData = res.data;
+            setContract(res.data);
+            console.log('contract data', contractData);
+            const verifyData = await axios.post(`${API}/auth/verify/${user.email}`, {}, {headers});
+            setVerify(verifyData.data);
+            const requestContract = contractData.filter((item:any) => item.status === 0 ).length;
+            const acceptContract = contractData.filter((item:any) => item.status === 1).length;
+            const progressContract = contractData.filter((item:any) => item.status === 2).length;
+            const developContract = contractData.filter((item:any) => item.status === 3).length;
+            const endContract = contractData.filter((item:any) => item.status === 4).length;
+            statusList = [];
+            statusList.push({name:"依頼中", counter: acceptContract});
+            statusList.push({name:"相談中", counter: progressContract});
+            statusList.push({name:"製作中", counter: developContract});
+            statusList.push({name:"完了", counter: endContract});
+            setStateList(statusList);
+        }catch(err){
+            console.log(err);
+        }
     }
     useEffect(()=>{
         getData();

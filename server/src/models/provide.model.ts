@@ -4,7 +4,7 @@ import modelConstants from "../constants/schema_names";
 
 const provideSchema = new Schema(
     {
-        userEmail: { type: String, required: true, unique: true },
+        userEmail: { type: String, required: true },
         // creatorEmail: { type: String, required: true, unique: true },
         contractId: { type: String, required: true, unique: true },
         provideData: [{ 
