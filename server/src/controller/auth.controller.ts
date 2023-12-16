@@ -278,65 +278,6 @@ interface FileInterface {
   mv: any;
 }
 
-// const uploadProfile: RequestHandler = async (req, res) => {
-//   // if (!req.files) {
-//   //   return res.status(500).send({ msg: "file is not found" })
-//   // }
-//   const {id} = req.query;
-//   const username:string   = req.body.username;
-//   const secretcode:string = req.body.secretcode;
-//   const fname:string      = req.body.fname;
-//   const lname:string      = req.body.lname;
-//   const email:string      = req.body.email;
-//   const noPublic:boolean  = req.body.noPublic;
-//   const bio:string        = req.body.bio;
-//   const followers:number  = req.body.followers;
-//   const following:number  = req.body.following;
-//   const region:number     = req.body.region;
-//   console.log("following",following);
-//   const filename = id;
-//   let resumename = '';
-//   if (req.files){
-//     const files:any = req.files;
-//     if(files.avatar){
-//       const avatarFile:FileInterface = files.avatar;
-//       avatarFile.mv(`${avatarPath}/${filename}.png`, function (err:any) {
-//         if (err) {
-//             console.log(err)
-//             return res.status(500).send({ result: "Error occured to upload avatar" });
-//         }
-//       });  
-//     }
-//     if(files.resume){
-//       const resumeFile:FileInterface = files.resume;
-//       resumename = uuidv4()
-//       // resumeFile.mv(`${resumePath}/${resumename}.pdf`, function (err:any) {
-//       //   if (err) {
-//       //       console.log(err)
-//       //       return res.status(500).send({ result: "Error occured to upload resume" });
-//       //   }
-//       // });  
-//     }
-//   }
-//   saveProfile({id, username, secretcode, fname, lname, email, noPublic, bio, following, followers, region, resumename})
-//   .then(() => res.status(200).send({ result : "success" }))
-//   .catch(() => res.status(500).send({ result : "Error occured to upload profile"}));
-// }
-
-const readProfilebyID: RequestHandler = async (req, res) => {
-  try {
-    const {id} = req.query;
-    const result = await readProfile({_id:id});
-    if(result.length !== 1){
-      throw Error("No profile found")
-    }
-    return res.status(StatusCodes.OK).send({result : result[0]});
-  } catch (err) {
-      logger.error(err);
-      return res.status(StatusCodes.BAD_REQUEST).send({result : null});
-  }
-}
-
 const getUserInfo: RequestHandler = async (req, res) => {
   try {
     const {id} = req.query;
@@ -507,7 +448,6 @@ const auth = {
   register, 
   login, 
   changePassword,
-  readProfilebyID, 
   forgotPassword, 
   resetPassword, 
   getUserInfo,

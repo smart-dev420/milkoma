@@ -10,63 +10,64 @@ export const subscribe = async (input: any) => {
       "Content-Type": "application/x-www-form-urlencoded",
       "Authorization": "Bearer " + stripeBearerToken
     };
-    let token = details       
-      const { cardNumber, expiredYear, expiredMonth, cvc } = JSON.parse(details)
-      const cardBody = {
-        "card[number]": cardNumber,
-        "card[exp_month]": expiredMonth,
-        "card[exp_year]": expiredYear,
-        "card[cvc]": cvc,
-      }
+    let token = details;    
+    console.log('token', token);
+    //   const { cardNumber, expiredYear, expiredMonth, cvc } = JSON.parse(details)
+    //   const cardBody = {
+    //     "card[number]": cardNumber,
+    //     "card[exp_month]": expiredMonth,
+    //     "card[exp_year]": expiredYear,
+    //     "card[cvc]": cvc,
+    //   }
 
-      const cardToken = await axios.post('https://api.stripe.com/v1/tokens', cardBody, { headers })
+    //   const cardToken = await axios.post('https://api.stripe.com/v1/tokens', cardBody, { headers })
 
-      if (cardToken.status !== 200) {
-        console.log("Failed in getting tokens in stripe.")
-        throw Error("Failed in getting tokens in stripe.")
-      }
-      const cardData = cardToken.data
-      token = cardData['id']
-      console.log(token);
+    //   if (cardToken.status !== 200) {
+    //     console.log("Failed in getting tokens in stripe.")
+    //     throw Error("Failed in getting tokens in stripe.")
+    //   }
+    //   const cardData = cardToken.data
+    //   token = cardData['id']
+    //   console.log(token);
 
-    const pmBody = {
-      "type": "card",
-      "card[token]": token,
-    }
-    const pmToken = await axios.post('https://api.stripe.com/v1/payment_methods', pmBody, { headers })
-    if (pmToken.status != 200) {
-      throw Error('Failed in getting payment_methods in stripe.')
-    }
-    const pmData = pmToken.data
+    // const pmBody = {
+    //   "type": "card",
+    //   "card[token]": token,
+    // }
+    // const pmToken = await axios.post('https://api.stripe.com/v1/payment_methods', pmBody, { headers })
+    // if (pmToken.status != 200) {
+    //   throw Error('Failed in getting payment_methods in stripe.')
+    // }
+    // const pmData = pmToken.data
 
-    const customerBody = {
-      "description": "Subscribe Neopen Private Server",
-      "payment_method": pmData['id'],
-      "invoice_settings[default_payment_method]": pmData['id'],
-      "email": email,
-      "name": name,
-    }
-    const customerToken = await axios.post('https://api.stripe.com/v1/customers', customerBody, { headers })
-    if (customerToken.status != 200) {
-      throw Error('Failed in getting customers in stripe.')
-    }
-    const customerData = customerToken.data
-    const customerID = customerData['id']
+    // const customerBody = {
+    //   "description": "Subscribe Neopen Private Server",
+    //   "payment_method": pmData['id'],
+    //   "invoice_settings[default_payment_method]": pmData['id'],
+    //   "email": email,
+    //   "name": name,
+    // }
+    // const customerToken = await axios.post('https://api.stripe.com/v1/customers', customerBody, { headers })
+    // if (customerToken.status != 200) {
+    //   throw Error('Failed in getting customers in stripe.')
+    // }
+    // const customerData = customerToken.data
+    // const customerID = customerData['id']
 
-    const subPrice = price;
-    const subscribeBody = {
-      "customer": customerID,
-      "items[0][price]": subPrice,
-    }
-    const subscriptionToken = await axios.post('https://api.stripe.com/v1/subscriptions', subscribeBody, { headers })
-    if (subscriptionToken.status != 200) {
-      throw Error('Failed in subscribing with current customer in stripe.')
-    }
-    const subscriptionData = subscriptionToken.data
-    return {
-      subscriptionId: subscriptionData['id'],
-      customerID: customerID,
-    }
+    // const subPrice = price;
+    // const subscribeBody = {
+    //   "customer": customerID,
+    //   "items[0][price]": subPrice,
+    // }
+    // const subscriptionToken = await axios.post('https://api.stripe.com/v1/subscriptions', subscribeBody, { headers })
+    // if (subscriptionToken.status != 200) {
+    //   throw Error('Failed in subscribing with current customer in stripe.')
+    // }
+    // const subscriptionData = subscriptionToken.data
+    // return {
+    //   subscriptionId: subscriptionData['id'],
+    //   customerID: customerID,
+    // }
   } catch (error: any) {
     console.log(error)
     throw error

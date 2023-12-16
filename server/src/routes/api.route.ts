@@ -24,8 +24,6 @@ apiRoute.get("/avatar/:id",                                       auth.getAvatar
 
 apiRoute.post("/getUserInfo",               existIDRequest,       auth.getUserInfo);
 apiRoute.post("/getUserProfile",            verifyToken,          auth.getUserProfile);
-// apiRoute.post("/upload_profile",            verifyToken,    existIDRequest, auth.uploadProfile);
-// apiRoute.post("/get_profile",               verifyToken,    existIDRequest, auth.readProfilebyID);
 apiRoute.post("/follower",                  verifyToken,          auth.followUser);
 apiRoute.post("/heart",                     verifyToken,          auth.heartUser);
 apiRoute.post("/getCreatorInfo",                                  auth.getCreatorInfo);
@@ -36,6 +34,8 @@ apiRoute.post("/getCreatorProfile/:id",                           auth.getCreato
 /******* Contract */
 apiRoute.post("/insertContract",            verifyToken,          contract.insertContract);
 apiRoute.post("/getCreatorData/:id",        verifyToken,          contract.getCreatorData);
+apiRoute.post("/stripe_payment/:id",        verifyToken,          contract.stripe_payment);
+
 
 /******* Get contract data */
 apiRoute.post("/getAllContract/:email",     verifyToken,          contract.getAllContract);

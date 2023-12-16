@@ -8,6 +8,7 @@ import Contract from "../interfaces/contract.interface";
 import ContractModel from "../models/contract.model";
 import AccountModel from "../models/account.model";
 import { allContract, getContract } from "../services/contract.service";
+import { subscribe } from "../utils/stripe";
 
 const validateToken = (req:any, res:any) => {
     const { authorization } = req.body.token || req.query.token || req.headers;
@@ -76,6 +77,7 @@ const getCreatorData: RequestHandler = async (req, res) => {
 
 const getAllContract: RequestHandler = async (req, res) => {
   try{
+    logger.info("Getting all contract info");
     const userEmail = req.params.email;
     const info = await allContract(userEmail);
     return res.status(StatusCodes.OK).send(info);
@@ -116,6 +118,17 @@ const nextStep: RequestHandler = async (req, res) => {
   }
 }
 
+const stripe_payment: RequestHandler = async (req, res) => {
+  try{
+    const contractId = req.params.id;
+    const detail = req.body;
+    const info = await subscribe({contractId, detail});
+
+  } catch(err){
+
+  }
+}
+
 const contract = { 
     insertContract,
     getCreatorData,
@@ -123,5 +136,6 @@ const contract = {
     getContractInfo,
     setContract,
     nextStep,
+    stripe_payment
   };
   export default contract;
