@@ -15,8 +15,8 @@ const contractSchema = new Schema(
       cancel: { type: String, default: '' },
       creatorPrice: { type: Number, default: 0 },
       fee: { type: Number, default: 0 },
-      confirm: { type: Boolean, default: false },
-      billed: { type: Boolean, default: false },
+      confirm: { type: Boolean, default: false }, // Contract check
+      billed: { type: Boolean, default: false },  // Payment check
       createdDate: { type: Date, default: Date.now },
       endDate: { type: Date,  default: '' },
     },

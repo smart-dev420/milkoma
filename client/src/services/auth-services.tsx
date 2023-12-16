@@ -13,7 +13,7 @@ const authServices: {
   };
 
 authServices.getCurrentUser = async () => {
-    const user = sessionStorage.getItem("user");
+    const user = localStorage.getItem("user");
     return user;
 };
 

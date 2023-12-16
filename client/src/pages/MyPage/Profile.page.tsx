@@ -37,7 +37,7 @@ interface IFile {
 export const Profile = () =>{
     scrollTop();
     const getProfile = async () => { 
-        const res = await axios.post(`${API}/api/getUserProfile`, {}, {headers});
+        const res = await axios.post(`${API}/api/getUserProfile`, {}, headers());
         setProfile(res.data);
     }
     const dispatch = useDispatch();
@@ -56,7 +56,7 @@ export const Profile = () =>{
         description: '',
         skills: [],
     });
-    const sessionData = sessionStorage.getItem('user');
+    const sessionData = localStorage.getItem('user');
     const userData = sessionData? JSON.parse(sessionData) : null;
     useEffect(() =>{
         getProfile();
@@ -92,7 +92,7 @@ export const Profile = () =>{
         formData.append('company', profile.company);
         const query = `${API}/auth/updateProfile`;
         try{
-            const res = await axios.post(query, formData, {headers});
+            const res = await axios.post(query, formData, headers());
             if(res.status === 200){
                 toast.success(res.data.msg);
             }else{
@@ -111,7 +111,7 @@ export const Profile = () =>{
         formData.append("file", currentFile);
         const query = `${API}/auth/uploadVerify/${userData.id}`;
         try{
-            const res = await axios.post(query, formData, {headers});
+            const res = await axios.post(query, formData, headers());
             if(res.status === 200 ){
                 console.log('return', res.data);
                 toast.success(res.data.msg);
@@ -156,7 +156,7 @@ export const Profile = () =>{
         formData.append('password', password.pswd1);
         const query = `${API}/auth/changePassword/${userData.email}`;
         try {
-            const res = await axios.post(query, formData, {headers});
+            const res = await axios.post(query, formData, headers());
             if(res.status === 200){
                 toast.success("パスワードの変更が成功しました!");
               }else{
@@ -183,7 +183,7 @@ export const Profile = () =>{
         formData.append('twitterAccount', profile.twitterAccount);
         const query = `${API}/auth/changeSNS`;
         try{
-            const res = await axios.post(query, formData, {headers});
+            const res = await axios.post(query, formData, headers());
             if(res.status === 200){
                 toast.success(res.data.msg);
             }else{
@@ -204,7 +204,7 @@ export const Profile = () =>{
           });
         const query = `${API}/auth/changeSkills`;
         try{
-            const res = await axios.post(query, formData, {headers});
+            const res = await axios.post(query, formData, headers());
             if(res.status === 200){
                 toast.success(res.data.msg);
             }else{

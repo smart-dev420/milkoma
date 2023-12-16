@@ -25,7 +25,7 @@ export const ContractPage = () => {
     const [ contractInfo, setContractInfo ] = useState<any>(null);
 
     const getContractInfo = async () => {
-        const res = await axios.post(`${API}/api/getContractInfo/${contractId}`, {}, {headers});
+        const res = await axios.post(`${API}/api/getContractInfo/${contractId}`, {}, headers());
         setContractInfo(res.data);
     }
 
@@ -55,7 +55,7 @@ export const ContractPage = () => {
         setOpen(false);
         setData(prevData => ({ ...prevData, contracted: true }));
         try{
-            await axios.post(`${API}/api/setContract/${contractId}`, {}, {headers});
+            await axios.post(`${API}/api/setContract/${contractId}`, {}, headers());
         } catch (e) {
             console.error(e);
         }

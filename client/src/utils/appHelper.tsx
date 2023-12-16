@@ -1,11 +1,15 @@
 import { HOST_URL } from '../components/Constants';
 import axios from 'axios';
-export const token = sessionStorage.getItem('token')
-export const headers = {
-  "Accept": "application/json",
-  "Content-Type": "application/x-www-form-urlencoded",
-  "Authorization": "Bearer " + token
-};
+
+export const headers = () => {
+  const token = localStorage?.getItem('token');
+  const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Authorization": "Bearer " + token
+  };
+  return { headers };
+}
 export const getCurrentDateString = () => {
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -54,7 +58,7 @@ export const getProvideDate = (createdDate: string, month: number) => {
 };
 
 export const reqPost = async (url:any, payload:any) => {
-  const token = sessionStorage.getItem('token')
+  const token = localStorage.getItem('token')
   const headers = {
     "Accept": "application/json",
     "Content-Type": "application/x-www-form-urlencoded",

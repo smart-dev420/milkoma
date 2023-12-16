@@ -217,7 +217,7 @@ export const CreatorFind = () => {
     const [ selectId, setSelectId ] = useState<string>("");
     const [ page, setPage ] = useState(5);
     
-    const existingArrayString = sessionStorage.getItem('searchValue');
+    const existingArrayString = localStorage.getItem('searchValue');
     const existingArray = existingArrayString ? JSON.parse(existingArrayString) : [];
     const [ searchValue, setSearchValue ] = useState(existingArray);
     const sxStyles = {
@@ -267,7 +267,7 @@ export const CreatorFind = () => {
           existingArray.push(newValue);
           setSearchValue(existingArray);
           const updatedArrayString = JSON.stringify(existingArray);
-          sessionStorage.setItem('searchValue', updatedArrayString);
+          localStorage.setItem('searchValue', updatedArrayString);
         }
       };
     

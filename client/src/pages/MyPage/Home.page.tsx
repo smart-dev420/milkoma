@@ -40,16 +40,16 @@ export const HomePage = () => {
     const [ moreView2, setMoreView2 ] = useState(4);
     const [ contract, setContract ] = useState<any>([]);
     const [ stateList, setStateList ] = useState<any>([]);
-    const user_data = sessionStorage?.getItem('user');
+    const user_data = localStorage?.getItem('user');
     const user = user_data ? JSON.parse(user_data) : null;
 
     const getData = async () => {
         try{
-            const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, {headers});
+            const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, headers());
             const contractData = res.data;
             setContract(res.data);
             console.log('contract data', contractData);
-            const verifyData = await axios.post(`${API}/auth/verify/${user.email}`, {}, {headers});
+            const verifyData = await axios.post(`${API}/auth/verify/${user.email}`, {}, headers());
             setVerify(verifyData.data);
             const requestContract = contractData.filter((item:any) => item.status === 0 ).length;
             const acceptContract = contractData.filter((item:any) => item.status === 1).length;

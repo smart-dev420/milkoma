@@ -19,13 +19,13 @@ export const ProjectList = () => {
     const [ moreView2, setMoreView2 ] = useState(4);
 
     let statusList: { name: string, counter: number }[] = [];
-    const user_data = sessionStorage?.getItem('user');
+    const user_data = localStorage?.getItem('user');
     const user = user_data ? JSON.parse(user_data) : null;
     const [ contract, setContract ] = useState<any>([]);
     const [ stateList, setStateList ] = useState<any>([]);
 
     const getData = async () => {
-        const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, {headers});
+        const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, headers());
         const contractData = res.data;
         setContract(res.data);
         const acceptContract = contractData.filter((item:any) => item.status === 1).length;

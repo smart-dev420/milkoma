@@ -52,10 +52,10 @@ export const Login = () => {
               const verify = res.data.emailverify;
               toast.success("成功!");
               const id = res.data._id;
-              sessionStorage.setItem('token', token);
+              localStorage.setItem('token', token);
               const user = JSON.stringify({ email, id })
               dispatch(signin({email, id}))
-              sessionStorage.setItem('user', user);
+              localStorage.setItem('user', user);
               navigate('/');
             }else{
               console.log(res)
