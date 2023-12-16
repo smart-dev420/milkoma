@@ -169,15 +169,15 @@ export const DetailPage = () => {
 
     const [ provideFiles, setProvideFiles ] = useState<any>([]);
     const getProvideFileList = async () => {
-        const res = await axios.post(`${API}/api/getProvideFiles/${contractId}`, {}, {headers});
+        const res = await axios.post(`${API}/api/getProvideFiles/${contractId}`, {}, headers());
         setProvideFiles(res.data.data);
     }
     const getContractInfo = async () => {
-        const res = await axios.post(`${API}/api/getContractInfo/${contractId}`, {}, {headers});
+        const res = await axios.post(`${API}/api/getContractInfo/${contractId}`, {}, headers());
         setContractInfo(res.data);
     }
     const getCreatorData = async () => {
-        const res = await axios.post(`${API}/api/getCreatorData/${contractId}`, {}, {headers});
+        const res = await axios.post(`${API}/api/getCreatorData/${contractId}`, {}, headers());
         setCreatorInfo(res.data);
     }
 
@@ -230,7 +230,7 @@ export const DetailPage = () => {
     const handleStateUp = async () => {
         let formData = new FormData();
         formData.append('currentStatus', contractInfo.status);
-        await axios.post(`${API}/api/nextStep/${contractId}`, formData, {headers});
+        await axios.post(`${API}/api/nextStep/${contractId}`, formData, headers());
         setNextStep(true);
     }
 
@@ -252,7 +252,7 @@ export const DetailPage = () => {
         console.log('fileData - ', file);
         const query = `${API}/api/upload_provide`;
         try{
-            const res = await axios.post(query, formData, {headers});
+            const res = await axios.post(query, formData, headers());
             if( res.status === 200 ){
                 console.log('return', res.data);
                 toast.success(res.data.msg);
@@ -267,6 +267,12 @@ export const DetailPage = () => {
     // File Download
     const handleDownload = async (fileName:string) => {
         try {
+            const token = localStorage?.getItem('token');
+            const headers = {
+              "Accept": "application/json",
+              "Content-Type": "application/x-www-form-urlencoded",
+              "Authorization": "Bearer " + token
+            };
           const response = await axios.get(`${API}/api/provideDownload/${fileName}`, {
             responseType: 'blob',
             headers,

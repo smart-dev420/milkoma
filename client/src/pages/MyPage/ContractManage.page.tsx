@@ -21,7 +21,7 @@ export const ContractManage = () => {
     const user = user_data ? JSON.parse(user_data) : null;
     const [ contract, setContract ] = useState<any>([]);
     const getData = async () => {
-        const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, {headers});
+        const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, headers());
         setContract(res.data);
     }
     useEffect(()=>{

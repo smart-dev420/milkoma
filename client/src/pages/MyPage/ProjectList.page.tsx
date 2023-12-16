@@ -25,7 +25,7 @@ export const ProjectList = () => {
     const [ stateList, setStateList ] = useState<any>([]);
 
     const getData = async () => {
-        const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, {headers});
+        const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, headers());
         const contractData = res.data;
         setContract(res.data);
         const acceptContract = contractData.filter((item:any) => item.status === 1).length;

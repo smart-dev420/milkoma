@@ -55,7 +55,7 @@ export const Payment = () => {
         cvc:'',
     });
     const getContractInfo = async () => {
-        const res = await axios.post(`${API}/api/getContractInfo/${contractId}`, {}, {headers});
+        const res = await axios.post(`${API}/api/getContractInfo/${contractId}`, {}, headers());
         setContractInfo(res.data);
     }
     useEffect(() => {

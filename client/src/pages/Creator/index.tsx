@@ -119,53 +119,7 @@ export const FindCreator = () => {
 }
 
 const VerticalSlide : React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
-  let data = [
-    {
-      id: 0,
-      title: '17.Live受け取ったギフト No.1',
-      mail: '@hikarusannnouragawa',
-      name: 'ひかる社長の密着日記 ',
-      avatar: staticFiles.images.avatar,
-      follow:'116,900',
-      heart: '3.9M',
-    },
-    {
-      id: 1,
-      title: '17.Live受け取ったギフト No.1',
-      mail: '@hikarusannnouragawa',
-      name: 'ひかる社長の密着日記 ',
-      avatar: staticFiles.images.avatar,
-      follow:'116,900',
-      heart: '3.9M',
-    },
-    {
-      id: 2,
-      title: '17.Live受け取ったギフト No.1',
-      mail: '@hikarusannnouragawa',
-      name: 'ひかる社長の密着日記 ',
-      avatar: staticFiles.images.avatar,
-      follow:'116,900',
-      heart: '3.9M',
-    },
-    {
-      id: 3,
-      title: '17.Live受け取ったギフト No.1',
-      mail: '@hikarusannnouragawa',
-      name: 'ひかる社長の密着日記 ',
-      avatar: staticFiles.images.avatar,
-      follow:'116,900',
-      heart: '3.9M',
-    },
-    {
-      id: 4,
-      title: '17.Live受け取ったギフト No.1',
-      mail: '@hikarusannnouragawa',
-      name: 'ひかる社長の密着日記 ',
-      avatar: staticFiles.images.avatar,
-      follow:'116,900',
-      heart: '3.9M',
-    },
-  ];
+
     const match_768 = useMediaQuery('(min-width:768px)');
     const match_1024 = useMediaQuery('(min-width:1025px)');
     const navigate = useNavigate();
@@ -280,7 +234,7 @@ const GridComponent: React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
         toast.error('自分に従うことはできません');
         return;
       }
-      const res = await axios.post(query, formData, { headers });
+      const res = await axios.post(query, formData, headers());
       if (res.status === 200) {
         toast.success(res.data.msg);
         if(res.data.state == 1){
@@ -301,12 +255,12 @@ const GridComponent: React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
         {creatorInfo.map((item:any, index:number) => (
           index < 8 ?(
           <Grid item xs='auto' key={index}>
-          <div className="w-[361px] card-hover my-[15px] cursor-pointer" >
+          <div className="w-[361px] card-hover my-[15px] cursor-pointer" onClick={() => {navigate(`/creator/detail/${item._id}`)}}>
               <div className="flex flex-col px-[20px] py-[30px]">
                   <div className="flex flex-row ">
                       <img 
                         src = {`${API}/api/avatar/${item._id}`}
-                        className="rounded-[25px] w-[100px] h-[100px]" onClick={() => {navigate(`/creator/detail/${item._id}`)}}/>
+                        className="rounded-[25px] w-[100px] h-[100px]" />
                       <div className="flex flex-col pl-[10px]" style={{justifyContent:'end', rowGap:'5px'}}>
                         <div className="flex flex-wrap" style={{rowGap:'5px', columnGap:'5px'}}>
                         {
@@ -315,7 +269,7 @@ const GridComponent: React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
                           ))
                         }
                         </div>
-                          <div className="flex flex-row " >
+                          <div className="flex flex-row ">
                               <a href={`https://www.youtube.com/${item.youtubeAccount}`} target="_blank"><img className="w-[34px] h-[34px] item-shadow rounded-[10px]" src={staticFiles.images.youtube} style={{zIndex:20}}/></a>
                               <a href={`https://17.live/${item.liveAccount}`} target="_blank"><img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.seventeen} /></a>
                               <a href={`https://twitter.com/${item.twitterAccount}`} target="_blank"><img className="w-[34px] h-[34px] mx-[5px] item-shadow rounded-[10px]" src={staticFiles.images.twitter} /></a>

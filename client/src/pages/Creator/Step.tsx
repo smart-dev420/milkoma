@@ -638,7 +638,7 @@ const Step4 : React.FC<{}> = () => {
         };
         const query = `${API}/api/insertContract`;
         try {
-            const res = await axios.post(query, formData, {headers});
+            const res = await axios.post(query, formData, headers());
             if(res.status === 200){
                 console.log('return' , res.data)
                 toast.success(res.data.msg);

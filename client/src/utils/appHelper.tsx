@@ -1,11 +1,15 @@
 import { HOST_URL } from '../components/Constants';
 import axios from 'axios';
-export const token = localStorage.getItem('token')
-export const headers = {
-  "Accept": "application/json",
-  "Content-Type": "application/x-www-form-urlencoded",
-  "Authorization": "Bearer " + token
-};
+
+export const headers = () => {
+  const token = localStorage?.getItem('token');
+  const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Authorization": "Bearer " + token
+  };
+  return { headers };
+}
 export const getCurrentDateString = () => {
   const currentDate = new Date();
   const year = currentDate.getFullYear();

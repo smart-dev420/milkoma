@@ -10,7 +10,7 @@ const authConfig = {
   accessTokenSecret: process.env.SECRET || SECRET,
   refreshTokenSecret: process.env.REFRESH_SECRET || REFRESH_SECRET,
   salt: 10,
-  accessTokenTtl: 15 * 60 * 1000,
+  accessTokenTtl: 5 * 1000,
   refreshTokenTtl: 365 * 24 * 60 * 1000,
   admins : adminArray,
 };

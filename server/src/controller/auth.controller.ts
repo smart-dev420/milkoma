@@ -107,9 +107,6 @@ let sendEmail = (recipientEmail:string, name:string, option:string) => {
   return AWS_SES.sendEmail(params).promise();
 };
 
-
-
-
 const login: RequestHandler = async (req, res) => {
   logger.info('Login')
   try {
