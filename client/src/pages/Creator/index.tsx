@@ -270,7 +270,7 @@ const GridComponent: React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
   const [ followState, setFollowState ] = useState(initialArray);
 
   const handleFollow = async (email: string, index: number) => {
-    const userData = sessionStorage.getItem('user');
+    const userData = localStorage.getItem('user');
     const userEmail = userData?JSON.parse(userData).email:'';
     let formData = new FormData();
     formData.append('email', email);

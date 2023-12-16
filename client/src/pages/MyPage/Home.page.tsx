@@ -40,7 +40,7 @@ export const HomePage = () => {
     const [ moreView2, setMoreView2 ] = useState(4);
     const [ contract, setContract ] = useState<any>([]);
     const [ stateList, setStateList ] = useState<any>([]);
-    const user_data = sessionStorage?.getItem('user');
+    const user_data = localStorage?.getItem('user');
     const user = user_data ? JSON.parse(user_data) : null;
 
     const getData = async () => {

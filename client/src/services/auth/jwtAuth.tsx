@@ -33,15 +33,15 @@ jwtAuthAxios.interceptors.response.use(
 export const setAuthToken = (token:string) => {
     if(token) {
         jwtAuthAxios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-        sessionStorage.setItem('token', token);
+        localStorage.setItem('token', token);
     } else {
         delete jwtAuthAxios.defaults.headers.common['Authorization'];
-        sessionStorage.removeItem('token');
+        localStorage.removeItem('token');
     }
 };
 
 export const getAuthToken = () => {
-    return sessionStorage.getItem("token");
+    return localStorage.getItem("token");
 };
 
 //todo: define interceptors and other configuration like baseURL, headers etc. here

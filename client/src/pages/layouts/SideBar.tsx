@@ -27,8 +27,8 @@ export const SideBar = () => {
         setClicked(7); 
         dispatch(setInitPage());
         dispatch(signout());
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('user');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
         navigate('/login');
     }
 

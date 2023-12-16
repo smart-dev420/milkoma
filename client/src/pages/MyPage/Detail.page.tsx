@@ -244,7 +244,7 @@ export const DetailPage = () => {
             toast.error('ファイルが見つかりません');
             return;
         }
-        const userData = sessionStorage.getItem('user');
+        const userData = localStorage.getItem('user');
         if(userData){ formData.append('userEmail', JSON.parse(userData).email); }
         else { toast.error('ユーザーデータが見つかりません!'); return;}
         formData.append('contractId', contractId);

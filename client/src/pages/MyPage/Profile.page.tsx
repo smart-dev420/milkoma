@@ -56,7 +56,7 @@ export const Profile = () =>{
         description: '',
         skills: [],
     });
-    const sessionData = sessionStorage.getItem('user');
+    const sessionData = localStorage.getItem('user');
     const userData = sessionData? JSON.parse(sessionData) : null;
     useEffect(() =>{
         getProfile();

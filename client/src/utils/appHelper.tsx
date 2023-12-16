@@ -1,6 +1,6 @@
 import { HOST_URL } from '../components/Constants';
 import axios from 'axios';
-export const token = sessionStorage.getItem('token')
+export const token = localStorage.getItem('token')
 export const headers = {
   "Accept": "application/json",
   "Content-Type": "application/x-www-form-urlencoded",
@@ -54,7 +54,7 @@ export const getProvideDate = (createdDate: string, month: number) => {
 };
 
 export const reqPost = async (url:any, payload:any) => {
-  const token = sessionStorage.getItem('token')
+  const token = localStorage.getItem('token')
   const headers = {
     "Accept": "application/json",
     "Content-Type": "application/x-www-form-urlencoded",
