@@ -491,6 +491,16 @@ const userVerify:RequestHandler = async (req, res) => {
   }
 }
 
+const userDelete:RequestHandler = async (req, res) => {
+  try{
+    const userId = req.params.id;
+    await AccountModel.deleteOne({_id: userId});
+    return res.status(StatusCodes.OK).send({msg:'正常に削除されました'});
+  }catch(err){
+    console.error(err);
+  }
+}
+
 const auth = { 
   register, 
   login, 
@@ -512,6 +522,7 @@ const auth = {
   verifyData,
   getAdmin,
   getAllClientInfo,
-  userVerify
+  userVerify,
+  userDelete
 };
 export default auth;

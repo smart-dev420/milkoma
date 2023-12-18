@@ -30,7 +30,8 @@ apiRoute.post("/getCreatorInfo",                                  auth.getCreato
 apiRoute.post("/getCreatorProfile/:id",     verifyToken,          auth.getCreatorProfile);
 apiRoute.post("/getAdmin",                  verifyToken,          auth.getAdmin)
 apiRoute.post("/getAllClientInfo",          verifyToken,          auth.getAllClientInfo);
-apiRoute.post("/userVerify/:id",                verifyToken,          auth.userVerify);
+apiRoute.post("/userVerify/:id",            verifyToken,          auth.userVerify);
+apiRoute.post("/userDelete/:id",            verifyToken,          auth.userDelete); 
 
 /******* Contract */
 apiRoute.post("/insertContract",            verifyToken,          contract.insertContract);

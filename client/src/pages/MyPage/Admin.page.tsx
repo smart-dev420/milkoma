@@ -154,6 +154,7 @@ export const Admin = () => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [ rows, setRows ] = React.useState<any[]>([]);
+    const [ flag, setFlag ] = React.useState<boolean>(false);
     const getClientsInfo = async () => {
       const query = `${API}/api/getAllClientInfo`;
       const res = await axios.post(query, {}, headers());
@@ -170,11 +171,12 @@ export const Admin = () => {
         });
       }
       setRows(clientInfo);
+      setFlag(false);
     }
   
     React.useEffect(() =>{
       getClientsInfo();
-    }, [])
+    }, [flag])
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
       page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -199,6 +201,7 @@ export const Admin = () => {
         const res = await axios.post(query, {}, headers());
         if(res.status === 200){
           toast.success(res.data.msg);
+          setFlag(true);
         } else { console.log(res)}
       } catch (e) {
         console.error(e);
@@ -206,7 +209,16 @@ export const Admin = () => {
     }
 
     const handleUserDelete = async (id:string) => {
-
+      const query = `${API}/api/userDelete/${id}`;
+      try{
+        const res = await axios.post(query, {}, headers());
+        if(res.status === 200){
+          toast.success(res.data.msg);
+          setFlag(true);
+        } else { console.log(res) }
+      } catch(err){
+        console.error(err);
+      }
     }
 
     const handleDocDownload = async (id:string) => {
