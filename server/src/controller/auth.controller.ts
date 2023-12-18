@@ -24,6 +24,10 @@ import { omit } from "lodash";
 import logger from "../utils/logger";
 import { verifyToken } from '../middlewares/auth.jwt';
 const { v4: uuidv4 } = require('uuid');
+import { decode, sign } from "jsonwebtoken";
+import { get } from "lodash";
+import dotenv from "dotenv";
+dotenv.config({ path: "./.env" });
 
 import nodemailer from 'nodemailer';
 // const nodemailer = require('nodemailer');
@@ -107,6 +111,13 @@ let sendEmail = (recipientEmail:string, name:string, option:string) => {
   };
   return AWS_SES.sendEmail(params).promise();
 };
+
+export function getEmailFromToken(token: string) {
+  const decoded = decode(token);
+  const email = get(decoded, "user");
+  if (!decoded || !email) { return 'invalid';}
+  return email;
+}
 
 const login: RequestHandler = async (req, res) => {
   logger.info('Login')
@@ -404,11 +415,14 @@ const uploadVerify:RequestHandler = async (req, res) => {
   const filename = req.params.id;
   const ext = file.name.split('.');
   const fileExtension = ext[ext.length - 1].toLowerCase();
-  file.mv(`${verifyPath}/${filename}.${fileExtension}`, function (err:any) {
+  file.mv(`${verifyPath}/${filename}.${fileExtension}`, async function (err:any) {
     if (err) {
         console.log(err)
         return res.status(500).send({ msg: "エラーがおきました" });
     }
+      const token = validateToken(req, res);
+      const email = getEmailFromToken(token);
+      await AccountModel.updateOne({ email: email}, {verify_doc:filename+'.'+fileExtension});
       res.status(200).send({ msg : "正常に送信されました" });
   });
 }
@@ -472,9 +486,9 @@ const getAdmin:RequestHandler = async (req, res) => {
   }
 }
 
-const getAllClientInfo:RequestHandler = async (req, res) => {
+const getAllUsersInfo:RequestHandler = async (req, res) => {
   try{
-    const info = await AccountModel.find({role:'client', admin: false}, 'avatar username email company verify');
+    const info = await AccountModel.find({admin: false}, 'avatar username email company role verify verify_doc');
     return res.status(StatusCodes.OK).send(info);
   } catch(err){
     console.error(err);
@@ -501,6 +515,20 @@ const userDelete:RequestHandler = async (req, res) => {
   }
 }
 
+const verifyDownload: RequestHandler = async (req, res) => {
+  const fileName = req.params.filename;
+  const filePath = path.join(verifyPath, fileName);
+  fs.access(filePath, fs.constants.F_OK, (err:any) => {
+    if (err) {
+      logger.error("No file exists");
+      res.status(200).send({msg:'No file exists'});
+    } else {
+      logger.info("File exists");
+      res.status(200).sendFile(filePath);
+    }
+  });
+}
+
 const auth = { 
   register, 
   login, 
@@ -521,8 +549,9 @@ const auth = {
   getCreatorProfile,
   verifyData,
   getAdmin,
-  getAllClientInfo,
+  getAllUsersInfo,
   userVerify,
-  userDelete
+  userDelete,
+  verifyDownload
 };
 export default auth;
