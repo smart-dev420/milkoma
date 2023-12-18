@@ -137,7 +137,7 @@ const stripe_payment: RequestHandler = async (req, res) => {
     const stripeBearerToken = process.env.STRIPE_SECRET_KEY;
     const stripe = require("stripe")(stripeBearerToken);
     const paymentIntent = await stripe.paymentIntents.create({
-      amount ,
+      amount: 50000,
       currency: "usd", 
     });
     console.log('payment - ', paymentIntent);

@@ -1,0 +1,58 @@
+{
+  "eslint.validate": ["javascript", "javascriptreact", "typescript"],
+  "editor.formatOnSave": true,
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "[javascriptreact][javascript][typescript]": {
+    // You can use ther "Pretteir" formatter here but it is not as good
+    // "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[json][jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[css][scss][less]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  },
+  "css.format.newlineBetweenSelectors": true,
+  "css.format.newlineBetweenRules": true,
+  "scss.format.newlineBetweenSelectors": true,
+  "scss.format.newlineBetweenRules": true,
+  "debug.internalConsoleOptions": "neverOpen",
+  "javascript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+  "javascript.format.placeOpenBraceOnNewLineForFunctions": true,
+  "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+  "typescript.format.placeOpenBraceOnNewLineForFunctions": true,
+  "typescript.suggest.autoImports": true,
+
+  // Hide files in the left window
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "node_modules": true,
+    "lib": true,
+    ".gitlab-ci.yml": true,
+    ".npmrc": true,
+    ".prettierrc": true,
+    ".gitignore": true,
+    "session_data": true,
+    "**/session_data": true,
+    "tsconfig.release.json": true
+  },
+  "hide-files.files": [
+    "node_modules",
+    "lib",
+    ".gitlab-ci.yml",
+    ".npmrc",
+    ".prettierrc",
+    ".gitignore"
+  ]
+}

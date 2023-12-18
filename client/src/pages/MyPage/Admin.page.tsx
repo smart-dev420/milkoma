@@ -15,6 +15,7 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import DownloadIcon from '@mui/icons-material/Download';
+import CurrencyYenIcon from '@mui/icons-material/CurrencyYen';
 
 import React from "react";
 import { API } from "../../axios";
@@ -321,7 +322,7 @@ export const Admin = () => {
                         <Tab label="クライアントリスト" icon={<PersonIcon />} iconPosition="start" {...a11yProps(0)} />
                         <Tab label="リクエスタリスト" icon={<PeopleIcon />} iconPosition="start" {...a11yProps(1)} />
                         <Tab label="契約状況一覧" icon={<ListAltIcon />} iconPosition="start" {...a11yProps(2)} />
-                        <Tab label="契約価格表" icon={<ListAltIcon />} iconPosition="start" {...a11yProps(3)} />
+                        <Tab label="契約価格表" icon={<CurrencyYenIcon />} iconPosition="start" {...a11yProps(3)} />
                     </Tabs>
                 </Box>
               {/** Clients Table */}
