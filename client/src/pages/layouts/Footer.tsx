@@ -48,7 +48,7 @@ export const Footer = () => {
     const match_1500 = useMediaQuery('(min-width:1200px)');
     const match_1024 = useMediaQuery('(min-width:1025px)');
     return(
-        <div className="w-full mb-[47px] px-[155px]">
+        <div className="w-full mb-[30px] px-[155px]">
             <div className="flex flex-row">
                 <div className="w-[90%]">
                     {pageLayoutFooter.map((data)=>(

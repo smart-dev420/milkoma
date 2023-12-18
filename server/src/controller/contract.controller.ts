@@ -120,12 +120,30 @@ const nextStep: RequestHandler = async (req, res) => {
 
 const stripe_payment: RequestHandler = async (req, res) => {
   try{
-    const contractId = req.params.id;
-    const detail = req.body;
-    const info = await subscribe({contractId, detail});
-
+    // const token = validateToken(req, res);
+    // const email = getEmailFromToken(token);
+    // const contractId = req.params.id;
+    // const detail = {
+    //   email: email,
+    //   username: req.body.username,
+    //   cardNumber: req.body.cardNumber,
+    //   month: req.body.month,
+    //   year: req.body.year,
+    //   cvc: req.body.cvc
+    // }
+    // const info = await subscribe({contractId, detail});
+    // return res.status(StatusCodes.OK).send(info);
+    const amount =req.body
+    const stripeBearerToken = process.env.STRIPE_SECRET_KEY;
+    const stripe = require("stripe")(stripeBearerToken);
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount ,
+      currency: "usd", 
+    });
+    console.log('payment - ', paymentIntent);
+    res.status(200).json(paymentIntent.client_secret);
   } catch(err){
-
+    console.error(err);
   }
 }
 

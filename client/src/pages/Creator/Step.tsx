@@ -99,7 +99,7 @@ export const CreatorStep = () => {
     const query = `${API}/api/getCreatorProfile/${userId}`;
     const [ creatorInfo, setCreatorInfo] = useState<any>({});
     const getCreatorInfo = async () => {
-      const res = await axios.post(query, {});
+      const res = await axios.post(query, {}, headers());
       setCreatorInfo(res.data.data);
     }
     useEffect(() => {

@@ -356,3 +356,9 @@ export async function changeSkillsData(input:any){
   logger.info("Successfully updated");
   return true;
 }
+
+export async function getAdminData(input: any){
+  const email = getEmailFromToken(input.token);
+  const res = await AccountModel.findOne({ email }, 'admin');
+  return res;
+}

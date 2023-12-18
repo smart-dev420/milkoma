@@ -6,25 +6,14 @@ import { API } from "../../axios";
 import { getDateString, headers } from "../../utils/appHelper";
 import { useDispatch } from "react-redux";
 import { Box, Button, Card, CardMedia, Container, Dialog, DialogContent, DialogTitle, Divider, Grid, Icon, IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material"
-import * as yup from "yup";
-import {Form, Formik} from "formik";
 import { toast } from "react-toastify";
-
-type FormData = {
-    cardNumber: string;
-    username: string;
-    month: string;
-    year: string;
-    cvc: string;
-  };
-  
-const validationSchema = yup.object().shape({
-    cardNumber: yup.string().required('エラー'),
-    username: yup.string().required('エラー'),
-    month: yup.string().required('エラー'),
-    year: yup.string().required('エラー'),
-    cvc: yup.string().required('エラー'),
-});
+import {
+    CardNumberElement,
+    CardExpiryElement,
+    CardCvcElement,
+    useStripe, 
+    useElements
+  } from "@stripe/react-stripe-js";
 
 export const Payment = () => {
     const navigate = useNavigate();
@@ -72,7 +61,7 @@ export const Payment = () => {
     }
 
     const handlePrePay = () => {
-        if (isNaN(parseFloat(card.cardNumber)) || card.cardNumber.length > 16){
+        if (isNaN(parseInt(card.cardNumber)) || card.cardNumber.length > 16){
             toast.error('有効な値を挿入してください。');
         } else if (card.username == ''){
             toast.error('ユーザー名が必要です');
@@ -96,18 +85,67 @@ export const Payment = () => {
         formData.append('month', card.month);
         formData.append('year', card.year);
         formData.append('cvc', card.cvc);
-        const query = `${API}/`;
+        const query = `${API}/api/stripe_payment/${contractId}`;
 
-        toast.success("ok");
-        setOpen(false);
-        // try {
-            
-        // } catch (error:any) {
-        //     const result = error.response.data.msg;
-        //     toast.error(result);
-        // }
+        try {
+            const res = await axios.post(query, formData, headers());
+            console.log('res - ', res);
+            toast.success("ok");
+            setOpen(false);            
+        } catch (error:any) {
+            const result = error.response.data.msg;
+            toast.error(result);
+        }
     };
 
+    const stripe = useStripe();
+    const elements = useElements();
+  
+    const handlePayment = async (event: any) => {
+      event.preventDefault();
+  
+      try {
+        // Make a POST request to your backend to get the client_secret
+        const response = await axios.post(
+            `${API}/api/stripe_payment/${contractId}`,
+          { amount: 200 }
+        );
+  
+        if (response.status === 200) {
+            const cardElement = elements?.getElement(CardNumberElement);
+
+            if (!cardElement) {
+              // Handle the case where the card element is not available or undefined
+              console.error('Card element is not available');
+              return; // Or perform appropriate error handling
+            }
+            
+            // Now you can proceed to use the card element
+            const confirmPayment = await stripe?.confirmCardPayment(
+              response.data.client_secret,
+              {
+                payment_method: {
+                  card: cardElement,
+                },
+              }
+            );
+  
+          if (confirmPayment?.paymentIntent?.status === 'succeeded') {
+            console.log('Payment confirmed!');
+            // Handle successful payment here
+          } else if (confirmPayment?.paymentIntent?.status === 'requires_action') {
+            // Handle additional authentication steps if required
+            // For example, use confirmCardPayment with the handleCardAction option
+          } else {
+            console.log('Payment failed!');
+            // Handle payment failure or other statuses here
+          }
+        }
+      } catch (error) {
+        console.error('Error processing payment:', error);
+        // Handle error scenarios here
+      }
+    };
     return(
     <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'68px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
         <Stack direction="column" sx={{paddingX:'18px', width:'100%'}}>
@@ -205,6 +243,13 @@ export const Payment = () => {
                     </Box>
                 </Box>
             )}
+
+            <form onSubmit={handlePayment}>
+            <CardNumberElement/>
+            <CardExpiryElement />
+            <CardCvcElement />    
+            <button>Confirm Payment</button>
+            </form>
 
             <Box display='flex' flexDirection='row' sx={{ columnGap: '50px' }}>
                 <CardMedia 
