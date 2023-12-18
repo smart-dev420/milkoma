@@ -30,7 +30,7 @@ export const TestPayment = () => {
         // Make a POST request to your backend to get the client_secret
         const response = await axios.post(
             `${API}/api/stripe_payment/${contractId}`,
-          { amount: 200 }, headers()
+          { amount: 20000 }, headers()
         );
             console.log('response - ', response);
         // if (response.status === 200) {

@@ -29,8 +29,10 @@ apiRoute.post("/heart",                     verifyToken,          auth.heartUser
 apiRoute.post("/getCreatorInfo",                                  auth.getCreatorInfo);
 apiRoute.post("/getCreatorProfile/:id",     verifyToken,          auth.getCreatorProfile);
 apiRoute.post("/getAdmin",                  verifyToken,          auth.getAdmin)
-apiRoute.post("/getAllClientInfo",          verifyToken,          auth.getAllClientInfo);
-apiRoute.post("/userVerify/:id",                verifyToken,          auth.userVerify);
+apiRoute.post("/getAllUsersInfo",          verifyToken,          auth.getAllUsersInfo);
+apiRoute.post("/userVerify/:id",            verifyToken,          auth.userVerify);
+apiRoute.post("/userDelete/:id",            verifyToken,          auth.userDelete); 
+apiRoute.get("/verifyDownload/:filename",   verifyToken,          auth.verifyDownload)
 
 /******* Contract */
 apiRoute.post("/insertContract",            verifyToken,          contract.insertContract);

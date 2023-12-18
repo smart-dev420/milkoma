@@ -17,6 +17,7 @@ export default interface Account extends Document {
   instagramAccount: string;
   twitterAccount: string;
   verify: boolean;
+  verify_doc: string;
   resetpasswordtoken : string;
   resetpasswordexpire: number;
   handleCard:string;

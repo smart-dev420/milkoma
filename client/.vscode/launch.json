@@ -1,0 +1,42 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest",
+      "env": { "CI": "true" },
+      "args": ["test", "--runInBand", "--no-cache", "SearchQuery.spec.ts"],
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/jest",
+      "smartStep": true,
+      "internalConsoleOptions": "openOnSessionStart",
+      "cwd": "${workspaceRoot}/tests",
+      "console": "integratedTerminal",
+      "protocol": "inspector"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Current File",
+      "args": ["${file}"],
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "sourceMaps": true,
+      "smartStep": true,
+      "internalConsoleOptions": "openOnSessionStart",
+      "cwd": "${fileDirname}",
+      "protocol": "inspector"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "DemoStepLoop",
+      "args": ["DemoStepLoop.ts"],
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "sourceMaps": true,
+      "smartStep": true,
+      "internalConsoleOptions": "openOnSessionStart",
+      "cwd": "${workspaceFolder}/demo",
+      "protocol": "inspector"
+    }
+  ]
+}

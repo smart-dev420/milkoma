@@ -55,7 +55,9 @@ export const SideBar = () => {
         <div className="flex flex-col pl-[2vw] w-[300px]" style={{zIndex:10, position:'fixed', top:220}}>
             <div className="flex flex-col" style={{overflowY:'auto', maxHeight:screenHeight-400+'px'}}>
                 <label className="text-[#554744] text-[28px]" style={{fontWeight:fontBold}}>マイページ</label>
-                <label className="text-[16px] text-[#554744]" style={{letterSpacing:'-2px'}}>{clicked != 7? (listItmes[clicked-1].name):''}</label>
+                <label className="text-[16px] text-[#554744]" style={{letterSpacing:'-2px'}}>
+                    {clicked != 7? (listItmes[clicked-1].name):'管理者ページ'}
+                    </label>
                 <div className="flex flex-col" style={{rowGap:'30px', marginTop:'30px'}}>
                 {listItmes.map((item, index) => (
                     <Button key={index}

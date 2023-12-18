@@ -51,7 +51,7 @@ export const subscribe = async (input: any) => {
     const paymentIntent = await stripe.paymentIntents.create({
       payment_method: paymentMethod.id,
       amount: 75*100, // USD*100
-      currency: 'inr',
+      currency: 'usd',
       confirm: true,
       payment_method_types: ['card'],
       });
