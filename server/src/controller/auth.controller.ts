@@ -17,7 +17,8 @@ import {
   getUserProfileInfo,
   changePswd,
   changeSNSData,
-  changeSkillsData
+  changeSkillsData,
+  getAdminData
 } from "../services/account.service";
 import { omit } from "lodash";
 import logger from "../utils/logger";
@@ -366,9 +367,13 @@ const heartUser:RequestHandler = async (req, res) => {
 }
 
 const getUserProfile:RequestHandler = async (req, res) => {
-  const token = validateToken(req, res);
-  const result = await getUserProfileInfo({token});
-  return res.status(StatusCodes.OK).send(result);
+  try{
+    const token = validateToken(req, res);
+    const result = await getUserProfileInfo({token});
+    return res.status(StatusCodes.OK).send(result);
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 const updateProfile:RequestHandler = async (req, res) => {
@@ -410,25 +415,41 @@ const uploadVerify:RequestHandler = async (req, res) => {
 
 const changeSNS:RequestHandler = async (req, res) => {
     const data = req.body;
-    await changeSNSData({data});
-    return res.status(200).send({msg:'正常に更新されました'});
+    try{
+      await changeSNSData({data});
+      return res.status(200).send({msg:'正常に更新されました'});
+    } catch(err) {
+      console.log(err)
+    }
 }
 
 const changeSkills:RequestHandler = async (req, res) => {
     const data = req.body;
-    await changeSkillsData({data});
-    return res.status(200).send({msg:'正常に更新されました'});
+    try{
+      await changeSkillsData({data});
+      return res.status(200).send({msg:'正常に更新されました'});
+    } catch (err){
+      console.log(err);
+    }
 }
 
 const getCreatorInfo:RequestHandler = async (req, res) => {
-  const data = await AccountModel.find({role:'creator'}, '-admin -password -region -resetpasswordexpire -resetpasswordtoken -__v');
-  return res.status(200).send({data});
+  try{
+    const data = await AccountModel.find({role:'creator'}, '-admin -password -region -resetpasswordexpire -resetpasswordtoken -__v');
+    return res.status(200).send({data});
+  } catch(err){
+    console.log(err);
+  }
 }
 
 const getCreatorProfile:RequestHandler = async (req, res) => {
   const userId = req.params.id;
-  const data = await AccountModel.findOne({_id: userId}, '-admin -password -region -role -resetpasswordexpire -resetpasswordtoken -__v -strikes');
-  return res.status(200).send({data});
+  try{
+    const data = await AccountModel.findOne({_id: userId}, '-admin -password -region -role -resetpasswordexpire -resetpasswordtoken -__v -strikes');
+    return res.status(200).send({data});
+  }catch(err){
+    console.log(err);
+  }
 }
 
 const verifyData:RequestHandler = async (req, res) => {
@@ -437,6 +458,35 @@ const verifyData:RequestHandler = async (req, res) => {
     const data = await AccountModel.findOne({email: email}, 'verify');
     return res.status(200).send(data?.verify);
   } catch(err){
+    console.error(err);
+  }
+}
+
+const getAdmin:RequestHandler = async (req, res) => {
+  const token = validateToken(req, res);
+  try{
+    const result = await getAdminData({token});
+    return res.status(StatusCodes.OK).send(result);
+  } catch(err) {
+    console.error(err);
+  }
+}
+
+const getAllClientInfo:RequestHandler = async (req, res) => {
+  try{
+    const info = await AccountModel.find({role:'client', admin: false}, 'avatar username email company verify');
+    return res.status(StatusCodes.OK).send(info);
+  } catch(err){
+    console.error(err);
+  }
+}
+
+const userVerify:RequestHandler = async (req, res) => {
+  try{
+    const userId = req.params.id;
+    await AccountModel.updateOne({_id: userId}, {verify: true});
+    return res.status(StatusCodes.OK).send({msg:'アップデート成功'});
+  }catch(err){
     console.error(err);
   }
 }
@@ -459,6 +509,9 @@ const auth = {
   changeSkills,
   getCreatorInfo,
   getCreatorProfile,
-  verifyData
+  verifyData,
+  getAdmin,
+  getAllClientInfo,
+  userVerify
 };
 export default auth;

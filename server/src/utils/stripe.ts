@@ -1,27 +1,63 @@
 import axios from 'axios'
+import Stripe from 'stripe'
 
 const stripeBearerToken = process.env.STRIPE_SECRET_KEY;
 
 export const subscribe = async (input: any) => {
   try {
-    const { email, name, method, price, details } = input;
-    const headers = {
-      "Accept": "application/json",
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Authorization": "Bearer " + stripeBearerToken
-    };
-    let token = details;    
-    console.log('token', token);
-    //   const { cardNumber, expiredYear, expiredMonth, cvc } = JSON.parse(details)
-    //   const cardBody = {
-    //     "card[number]": cardNumber,
-    //     "card[exp_month]": expiredMonth,
-    //     "card[exp_year]": expiredYear,
-    //     "card[cvc]": cvc,
-    //   }
+    // const { email, name, method, price, details } = input;
+    const contractId = input.contractId;
+    const details = input.detail;
+    // const headers = {
+    //   "Accept": "application/json",
+    //   "Content-Type": "application/x-www-form-urlencoded",
+    //   "Authorization": "Bearer " + stripeBearerToken
+    // };
+    // let token = details;    
+    // const cardBody = {
+    //   "card[number]": details.cardNumber,
+    //   "card[exp_month]": details.month,
+    //   "card[exp_year]": details.year,
+    //   "card[cvc]": details.cvc,
+    // }
+    
+    // const cardToken = await axios.post('https://api.stripe.com/v1/tokens', cardBody, { headers })
 
-    //   const cardToken = await axios.post('https://api.stripe.com/v1/tokens', cardBody, { headers })
+    const stripe = require("stripe")(stripeBearerToken);
+    // const customer = await stripe.customers.create({
+    //   name: details.username,
+    //   email: details.email,
+    //   });
+    // console.log('customer', customer)
+    // const card_Token = await stripe.tokens.create({
+    //   card: {
+    //   name: details.username,
+    //   number: '4242424242424242',
+    //   exp_month: 12,
+    //   exp_year: 2023,
+    //   cvc: '314',
+    //   },
+    //   });
+    let paymentMethod = await stripe.paymentMethods.create({
+      type: 'card',
+      card: {
+      number: '4242424242424242',
+      exp_month: 9,
+      exp_year: 2022,
+      cvc: '314',
+      },
+      });
 
+    const paymentIntent = await stripe.paymentIntents.create({
+      payment_method: paymentMethod.id,
+      amount: 75*100, // USD*100
+      currency: 'inr',
+      confirm: true,
+      payment_method_types: ['card'],
+      });
+      
+    console.log('card_Token', paymentIntent);
+    // console.log('token', cardToken);
     //   if (cardToken.status !== 200) {
     //     console.log("Failed in getting tokens in stripe.")
     //     throw Error("Failed in getting tokens in stripe.")

@@ -27,9 +27,10 @@ apiRoute.post("/getUserProfile",            verifyToken,          auth.getUserPr
 apiRoute.post("/follower",                  verifyToken,          auth.followUser);
 apiRoute.post("/heart",                     verifyToken,          auth.heartUser);
 apiRoute.post("/getCreatorInfo",                                  auth.getCreatorInfo);
-apiRoute.post("/getCreatorProfile/:id",                           auth.getCreatorProfile);
-
-
+apiRoute.post("/getCreatorProfile/:id",     verifyToken,          auth.getCreatorProfile);
+apiRoute.post("/getAdmin",                  verifyToken,          auth.getAdmin)
+apiRoute.post("/getAllClientInfo",          verifyToken,          auth.getAllClientInfo);
+apiRoute.post("/userVerify/:id",                verifyToken,          auth.userVerify);
 
 /******* Contract */
 apiRoute.post("/insertContract",            verifyToken,          contract.insertContract);
