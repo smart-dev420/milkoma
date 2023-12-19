@@ -507,6 +507,20 @@ export const Admin = () => {
       }
     }
 
+    // Contract Payment
+    const handleContractPayment = async (id: string) => {
+      const query = `${API}/api/contractPayment/${id}`;
+      try{
+        const contract_data = contractPayments.filter((item, index) => item._id === id);
+        const res = await axios.post(query, { price: contract_data[0].creatorPrice, fee: contract_data[0].fee }, headers());
+        if(res.status === 200){
+          toast.success(res.data.msg);
+        }
+      } catch(err){
+        console.error(err);
+      }
+    }
+
     return(
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{ paddingTop:'30px', paddingBottom:'40px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
             <Stack direction="column" sx={{paddingX:'26px', width:'100%' }}>
@@ -941,8 +955,8 @@ export const Admin = () => {
                       </TableRow>
                     </TableHead>
                       <TableBody>
-                        {(contractPayments.length > 0 && contractRowsPerPage > 0
-                          ? contractPayments.slice(currentContractPage * contractRowsPerPage, currentContractPage * contractRowsPerPage + contractRowsPerPage)
+                        {(contractPayments.length > 0 && contractPaymentRowsPerPage > 0
+                          ? contractPayments.slice(currentContractPaymentPage * contractPaymentRowsPerPage, currentContractPaymentPage * contractPaymentRowsPerPage + contractPaymentRowsPerPage)
                           : contractPayments
                         ).map((row, index) => (
                           <StyledTableRow key={row._id} >
@@ -1009,8 +1023,8 @@ export const Admin = () => {
                                                   border: '1px solid green',
                                               }, 
                                     }} startIcon={<DoneOutlineIcon sx={{marginBottom:'5px'}}/>}
-                                disabled = {row.status > 0 && true}
-                                onClick={() => handleConfirmContract(row._id, index + currentContractPage * contractRowsPerPage)}
+                                disabled = {row.billed}
+                                onClick={() => handleContractPayment(row._id)}
                               >
                                 料金適用
                               </Button>

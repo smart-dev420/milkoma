@@ -397,7 +397,7 @@ export const DetailPage = () => {
 
         {/** Creator Data */}
                 {
-                creatorInfo && (
+                creatorInfo && creatorInfo.billed && (
                     <Box display='flex' flexDirection='column' sx={{marginTop:'60px', display:data.contractCheck?'':'none'}}>
                     <Typography sx={{color:'#511523', fontSize:'22px', fontWeight:fontBold}}>参加するインフルエンサー</Typography>
                     <Box display='flex' flexDirection='row' alignItems='center' sx={{marginTop:'30px'}}>
@@ -559,7 +559,9 @@ export const DetailPage = () => {
                 </Box>
 
         {/** File Upload and Download  */}
-                <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{marginTop:'60px'}}>
+                
+                {contractInfo.billed && (<>
+                    <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{marginTop:'60px'}}>
                     <Typography sx={{color:'#511523', fontSize:'22px', fontWeight:fontBold}}>ファイル・検修管理</Typography>
                     { contractInfo.status < 4 && (
                         <Button sx={{
@@ -576,7 +578,7 @@ export const DetailPage = () => {
                     )}
                     
                 </Box>
-                <Box display='flex' flexDirection='row' sx={{marginTop:'33px', columnGap:'50px'}}>
+                    <Box display='flex' flexDirection='row' sx={{marginTop:'33px', columnGap:'50px'}}>
                     <Box display='flex' flexDirection='column' flex={6} >
                         <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{ minHeight:'27px'}}>
                             <Typography sx={{fontSize:'18px', color:'#B9324D', whiteSpace:'nowrap', fontWeight:fontBold}}>あなたから</Typography>
@@ -680,6 +682,9 @@ export const DetailPage = () => {
                         </Box>
                     </Box>
                 </Box>
+                </>
+                )}
+                
         {/** Bill Download Dialog */}                                    
         <Dialog
             onClose={handleClose}
