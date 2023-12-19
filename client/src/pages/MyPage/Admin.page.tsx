@@ -1,4 +1,4 @@
-import { Container, Stack, Tabs, Tab, Box, Typography, TableContainer, TableHead, TableRow, TableFooter, TablePagination, Button } from "@mui/material"
+import { Container, Stack, Tabs, Tab, Box, Typography, TableContainer, TableHead, TableRow, TableFooter, TablePagination, Button, TextField } from "@mui/material"
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -16,6 +16,11 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import DownloadIcon from '@mui/icons-material/Download';
 import CurrencyYenIcon from '@mui/icons-material/CurrencyYen';
+import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import CancelIcon from '@mui/icons-material/Cancel';
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import Autocomplete from '@mui/material/Autocomplete';
 
 import React from "react";
 import { API } from "../../axios";
@@ -25,12 +30,25 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setPage } from "../../slices/page";
+import { fontBold } from "../../components/Constants";
 interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
     value: number;
   }
   
+  const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+    height: 10,
+    borderRadius: 5,
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      borderRadius: 5,
+      backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
+    },
+  }));
+
   interface TablePaginationActionsProps {
     count: number;
     page: number;
@@ -169,36 +187,93 @@ export const Admin = () => {
     };
     
     // Page change event
-    const [currentPage, setCurrentPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [currentClientPage, setCurrentClientPage] = React.useState(0);
+    const [clientRowsPerPage, setClientRowsPerPage] = React.useState(5);
+    const [currentCreatorPage, setCurrentCreatorPage] = React.useState(0);
+    const [creatorRowsPerPage, setCreatorRowsPerPage] = React.useState(5);
+    const [currentContractPage, setCurrentContractPage] = React.useState(0);
+    const [contractRowsPerPage, setContractRowsPerPage] = React.useState(5);
+    const [currentContractPaymentPage, setCurrentContractPaymentPage] = React.useState(0);
+    const [contractPaymentRowsPerPage, setContractPaymentRowsPerPage] = React.useState(5);
     const [ clients, setClients ] = React.useState<any[]>([]);
     const [ creators, setCreators ] = React.useState<any[]>([]);
-    const [ flag, setFlag ] = React.useState<boolean>(false);
-
+    const [ contracts, setContracts ] = React.useState<any[]>([]);
+    const [ creatorInfo, setCreatorInfo ] = React.useState();
+    const [ contractPayments, setContractPayments] = React.useState<any[]>([]);
     
     // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows =
-    currentPage > 0 ? Math.max(0, (1 + currentPage) * rowsPerPage - clients.length) : 0;
+    const emptyClientRows =
+    currentClientPage > 0 ? Math.max(0, (1 + currentClientPage) * clientRowsPerPage - clients.length) : 0;
   
-    const handleChangePage = (
+    const emptyCreatorRows =
+    currentCreatorPage > 0 ? Math.max(0, (1 + currentCreatorPage) * creatorRowsPerPage - creators.length) : 0;
+
+    const emptyContractRows = 
+    currentContractPage > 0 ? Math.max(0, (1 + currentContractPage) * contractRowsPerPage - contracts.length) : 0;
+
+    const emptyContractPaymentRows = 
+    currentContractPaymentPage > 0 ? Math.max(0, (1 + currentContractPaymentPage) * contractPaymentRowsPerPage - contractPayments.length) : 0;
+
+    const handleChangeClientPage = (
       event: React.MouseEvent<HTMLButtonElement> | null,
       newPage: number,
     ) => {
-      setCurrentPage(newPage);
+      setCurrentClientPage(newPage);
+    };
+
+    const handleChangeCreatorPage = (
+      event: React.MouseEvent<HTMLButtonElement> | null,
+      newPage: number,
+    ) => {
+      setCurrentClientPage(newPage);
+    };
+
+    const handleChangeContractPage = (
+      event: React.MouseEvent<HTMLButtonElement> | null,
+      newPage: number,
+    ) => {
+      setCurrentContractPage(newPage);
+    };
+
+    const handleChangeContractPaymentPage = (
+      event: React.MouseEvent<HTMLButtonElement> | null,
+      newPage: number,
+    ) => {
+      setCurrentContractPaymentPage(newPage);
     };
   
-    const handleChangeRowsPerPage = (
+    const handleChangeClientRowsPerPage = (
       event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
-      setCurrentPage(0);
+      setClientRowsPerPage(parseInt(event.target.value, 10));
+      setCurrentClientPage(0);
+    };
+
+    const handleChangeCreatorRowsPerPage = (
+      event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+      setCreatorRowsPerPage(parseInt(event.target.value, 10));
+      setCurrentCreatorPage(0);
+    };
+
+    const handleChangeContractRowsPerPage = (
+      event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+      setContractRowsPerPage(parseInt(event.target.value, 10));
+      setCurrentContractPage(0);
+    };
+
+    const handleChangeContractPaymentRowsPerPage = (
+      event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+      setContractPaymentRowsPerPage(parseInt(event.target.value, 10));
+      setCurrentContractPaymentPage(0);
     };
 
     // Get users data from Database
     const getClientsInfo = async () => {
       const query = `${API}/api/getAllUsersInfo`;
       const res = await axios.post(query, {}, headers());
-      console.log('res - ', res.data);
       let usersInfo: any[] = [];
       for(const item of res.data){
         usersInfo.push({
@@ -217,9 +292,22 @@ export const Admin = () => {
       setClients(clientsInfo);
       setCreators(creatorsInfo);
     }
-  
+
+    // Get All Contract 
+    const getAllContracts = async () => {
+      const query = `${API}/api/getAllContracts`;
+      try{
+        const res = await axios.post(query, {}, headers());
+        const info = res.data.sort((a:any, b:any) => a.status - b.status);
+        setContracts(info);
+        setContractPayments(info.filter((item:any) => {return item.status === 0 || item.status === 1}).sort((a:any, b:any) => {return a.billed === b.billed ? 0 : a.billed ? -1 : 1;}));
+      } catch(err) {
+        console.log(err);
+      }
+    }
     React.useEffect(() =>{
       getClientsInfo();
+      getAllContracts();
     }, [])
     
     // Verify user
@@ -243,13 +331,13 @@ export const Admin = () => {
           }
           else if (tab === 1){
             setCreators(prevCreators => {
-              // Create a new array by mapping through the previous clients array
+              // Create a new array by mapping through the previous creators array
               return prevCreators.map((creator, index) => {
                 // If the current index matches the index to update, modify the 'verify' field
                 if (index === selectedIndex) {
                   return { ...creator, verify: true }; // Update the 'verify' field
                 }
-                return creator; // Return the unchanged client for other indices
+                return creator; // Return the unchanged creator for other indices
               });
             });
           }
@@ -284,6 +372,19 @@ export const Admin = () => {
       }
     }
 
+    // Filter by Email
+    const handleSearch = (email: string, tab: number) => {
+      if(email){
+        if(tab === 0){
+          setClients(clients.filter((item, index) => item.email == email));
+        } else {
+          setCreators(creators.filter((item, index) => item.email == email));
+        }
+      } else {
+        getClientsInfo();
+      }
+    }
+
     // Verify Doc Download
     const handleDocDownload = async (fileName:string) => {
         try {
@@ -311,7 +412,100 @@ export const Admin = () => {
       }
     }
 
+    // Confirm contract
+    const handleConfirmContract = async (id: string, selectedIndex:number) => {
+      const query = `${API}/api/contractConfirm/${id}`;
+      try{
+        const res = await axios.post(query, {}, headers());
+        if(res.status === 200){
+          toast.success(res.data.msg);
+          setContracts(prevContracts => {
+            // Create a new array by mapping through the previous contracts array
+            return prevContracts.map((contract, index) => {
+              // If the current index matches the index to update, modify the 'status' field
+              if (index === selectedIndex) {
+                return { ...contract, status: 1 }; // Update the 'status' field
+              }
+              return contract; // Return the unchanged contract for other indices
+            });
+          });
+        }
+      } catch(err){
+        console.error(err);
+      }
+    }
+    
+    // Cancel contract
+    const handleCancelContract = async (id: string, selectedIndex:number) => {
+      const query = `${API}/api/contractCancel/${id}`;
+      try{
+        const res = await axios.post(query, {}, headers());
+        if(res.status === 200){
+          toast.success(res.data.msg);
+          setContracts(prevContracts => {
+            // Create a new array by mapping through the previous contracts array
+            return prevContracts.map((contract, index) => {
+              // If the current index matches the index to update, modify the 'status' field
+              if (index === selectedIndex) {
+                return { ...contract, status: -1 }; // Update the 'status' field
+              }
+              return contract; // Return the unchanged contract for other indices
+            });
+          });
+        }
+      }catch(err){
+        console.error(err);
+      }
+    }
 
+    // Add Creator
+    const handleAddCreator = async (id: string, selectedIndex:number) => {
+      const query = `${API}/api/addCreator/${id}`;
+      try{
+        const res = await axios.post(query, {creator_email: creatorInfo}, headers());
+        if(res.status === 200){
+          toast.success(res.data.msg);
+          setContracts(prevContracts => {
+            // Create a new array by mapping through the previous contracts array
+            return prevContracts.map((contract, index) => {
+              // If the current index matches the index to update, modify the 'creatorEmail' field
+              if (index === selectedIndex) {
+                return { ...contract, creatorEmail: creatorInfo }; // Update the 'creatorEmail' field
+              }
+              return contract; // Return the unchanged contract for other indices
+            });
+          });
+        }
+      } catch(err){
+        console.error(err);
+      }
+    }
+
+    // Search Contract
+    const handleContractSearch = (email: string, tab: number) => {
+      if(email){
+        if(tab === 0){
+          setContracts(contracts.filter((item, index) => item.clientEmail == email));
+        } else {
+          setContracts(contracts.filter((item, index) => item.creatorEmail == email));
+        }
+      } else {
+        getAllContracts();
+      }
+    }
+
+    // Search Contract Payment
+    const handleContractPaymentSearch = (email: string, tab: number) => {
+      if(email){
+        if(tab === 0){
+          setContractPayments(contractPayments.filter((item, index) => item.clientEmail == email).sort((a:any, b:any) => {return a.billed === b.billed ? 0 : a.billed ? -1 : 1;}));
+        } else {
+          setContractPayments(contractPayments.filter((item, index) => item.creatorEmail == email).sort((a:any, b:any) => {return a.billed === b.billed ? 0 : a.billed ? -1 : 1;}));
+        }
+      } else {
+        getAllContracts();
+      }
+    }
 
     return(
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{ paddingTop:'30px', paddingBottom:'40px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
@@ -327,6 +521,19 @@ export const Admin = () => {
                 </Box>
               {/** Clients Table */}
                 <CustomTabPanel value={value} index={0}>
+                    <Box display='flex' flexDirection='row' alignItems='center' sx={{columnGap:'5px', marginBottom:'10px' }}>
+                    <Typography sx={{fontSize:'20px'}}>メール: </Typography>
+                    <Autocomplete
+                      id="free-solo-demo"
+                      freeSolo
+                      options={clients.map((client) => client.email)}
+                      size="small"
+                      sx={{ width: 400, border: '1px solid #000000', }}
+                      onChange={(e, value) => { handleSearch(value, 0)}} // Use onChange to capture selected value
+                      renderInput={(params) => <TextField {...params} label="" />}
+                    />
+                    </Box>
+                    {/* リクエスタの電子メールを入力してください */}
                   <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
                     <TableHead>
@@ -340,8 +547,8 @@ export const Admin = () => {
                       </TableRow>
                     </TableHead>
                       <TableBody>
-                        {(clients.length > 0 && rowsPerPage > 0
-                          ? clients.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage)
+                        {(clients.length > 0 && clientRowsPerPage > 0
+                          ? clients.slice(currentClientPage * clientRowsPerPage, currentClientPage * clientRowsPerPage + clientRowsPerPage)
                           : clients
                         ).map((row, index) => (
                           <StyledTableRow key={row.name}>
@@ -361,7 +568,7 @@ export const Admin = () => {
                             <TableCell style={{ width: 160 }} align="center">
                               <Box display='flex' sx={{flexDirection:row.verify?'column':'row'}}>
                                 <Typography sx={{fontSize:'14px', backgroundColor:row.verify?'green':'#ee7d90', paddingX:'20px', paddingY:'10px', borderRadius:'10px', color:'#FFFFFF'}}>{row.verify?'検証済み':'検証されていません'}</Typography>
-                                  {!row.verify && (
+                                  {!row.verify && row.verify_doc != '' && (
                                     <IconButton aria-label="download" onClick={()=>handleDocDownload(row.verify_doc)}>
                                     <DownloadIcon />
                                   </IconButton>
@@ -376,9 +583,9 @@ export const Admin = () => {
                                                   border: '1px solid green',
                                               }, 
                                     }} startIcon={<HowToRegIcon sx={{marginBottom:'5px'}}/>}
-                                onClick={() => handleVerify(row.userid, index, 0)}
+                                onClick={() => handleVerify(row.userid, index + currentClientPage * clientRowsPerPage, 0)}
                               >
-                                Verify
+                                検証
                               </Button>
                               <Button variant="outlined" 
                                 sx={{color:'#e73636',
@@ -387,15 +594,15 @@ export const Admin = () => {
                                         border: '1px solid #e73636',
                                     },
                                 }} startIcon={<DeleteForeverIcon sx={{marginBottom:'5px'}}/>}
-                                onClick={() => handleUserDelete(row.userid, index, 0)}
+                                onClick={() => handleUserDelete(row.userid, index + currentClientPage * clientRowsPerPage, 0)}
                                 >
-                                Delete
+                                削除します
                               </Button>
                             </TableCell>
                           </StyledTableRow>
                         ))}
-                        {emptyRows > 0 && (
-                          <TableRow style={{ height: 53 * emptyRows }}>
+                        {emptyClientRows > 0 && (
+                          <TableRow style={{ height: 53 * emptyClientRows }}>
                             <TableCell colSpan={6} />
                           </TableRow>
                         )}
@@ -406,16 +613,16 @@ export const Admin = () => {
                             rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                             colSpan={6}
                             count={clients.length}
-                            rowsPerPage={rowsPerPage}
-                            page={currentPage}
+                            rowsPerPage={clientRowsPerPage}
+                            page={currentClientPage}
                             SelectProps={{
                               inputProps: {
                                 'aria-label': 'rows per page',
                               },
                               native: true,
                             }}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            onPageChange={handleChangeClientPage}
+                            onRowsPerPageChange={handleChangeClientRowsPerPage}
                             ActionsComponent={TablePaginationActions}
                             labelRowsPerPage="ページごとの行数" 
                           />
@@ -426,6 +633,18 @@ export const Admin = () => {
                 </CustomTabPanel>
               {/** Creator Table */}  
                 <CustomTabPanel value={value} index={1}>
+                    <Box display='flex' flexDirection='row' alignItems='center' sx={{columnGap:'5px', marginBottom:'10px' }}>
+                        <Typography sx={{fontSize:'20px'}}>メール: </Typography>
+                        <Autocomplete
+                          id="free-solo-demo"
+                          freeSolo
+                          options={creators.map((creator) => creator.email)}
+                          size="small"
+                          sx={{ width: 400, border: '1px solid #000000',}}
+                          onChange={(e, value) => { handleSearch(value, 1)}} // Use onChange to capture selected value
+                          renderInput={(params) => <TextField {...params} label="" />}
+                        />
+                    </Box>
                   <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
                     <TableHead>
@@ -439,8 +658,8 @@ export const Admin = () => {
                       </TableRow>
                     </TableHead>
                       <TableBody>
-                        {(creators.length > 0 && rowsPerPage > 0
-                          ? creators.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage)
+                        {(creators.length > 0 && creatorRowsPerPage > 0
+                          ? creators.slice(currentCreatorPage * creatorRowsPerPage, currentCreatorPage * creatorRowsPerPage + creatorRowsPerPage)
                           : creators
                         ).map((row, index) => (
                           <StyledTableRow key={row.name}>
@@ -460,7 +679,7 @@ export const Admin = () => {
                             <TableCell style={{ width: 160 }} align="center">
                               <Box display='flex' sx={{flexDirection:row.verify?'column':'row'}}>
                                 <Typography sx={{fontSize:'14px', backgroundColor:row.verify?'green':'#ee7d90', paddingX:'20px', paddingY:'10px', borderRadius:'10px', color:'#FFFFFF'}}>{row.verify?'検証済み':'検証されていません'}</Typography>
-                                  {!row.verify && (
+                                  {!row.verify && row.verify_doc != '' && (
                                     <IconButton aria-label="download" onClick={()=>handleDocDownload(row.verify_doc)}>
                                     <DownloadIcon />
                                   </IconButton>
@@ -475,9 +694,9 @@ export const Admin = () => {
                                                   border: '1px solid green',
                                               }, 
                                     }} startIcon={<HowToRegIcon sx={{marginBottom:'5px'}}/>}
-                                onClick={() => handleVerify(row.userid, index, 1)}
+                                onClick={() => handleVerify(row.userid, index + currentCreatorPage * creatorRowsPerPage, 1)}
                               >
-                                Verify
+                                検証
                               </Button>
                               <Button variant="outlined" 
                                 sx={{color:'#e73636',
@@ -486,15 +705,15 @@ export const Admin = () => {
                                         border: '1px solid #e73636',
                                     },
                                 }} startIcon={<DeleteForeverIcon sx={{marginBottom:'5px'}}/>}
-                                onClick={() => handleUserDelete(row.userid, index, 1)}
+                                onClick={() => handleUserDelete(row.userid, index + currentCreatorPage * creatorRowsPerPage, 1)}
                                 >
-                                Delete
+                                削除します
                               </Button>
                             </TableCell>
                           </StyledTableRow>
                         ))}
-                        {emptyRows > 0 && (
-                          <TableRow style={{ height: 53 * emptyRows }}>
+                        {emptyCreatorRows > 0 && (
+                          <TableRow style={{ height: 53 * emptyCreatorRows }}>
                             <TableCell colSpan={6} />
                           </TableRow>
                         )}
@@ -505,16 +724,16 @@ export const Admin = () => {
                             rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                             colSpan={6}
                             count={creators.length}
-                            rowsPerPage={rowsPerPage}
-                            page={currentPage}
+                            rowsPerPage={creatorRowsPerPage}
+                            page={currentCreatorPage}
                             SelectProps={{
                               inputProps: {
                                 'aria-label': 'rows per page',
                               },
                               native: true,
                             }}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            onPageChange={handleChangeCreatorPage}
+                            onRowsPerPageChange={handleChangeCreatorRowsPerPage}
                             ActionsComponent={TablePaginationActions}
                             labelRowsPerPage="ページごとの行数" 
                           />
@@ -525,11 +744,320 @@ export const Admin = () => {
                 </CustomTabPanel>
               {/** Contract Status Table */}
                 <CustomTabPanel value={value} index={2}>
-                    Item Three
+                  <Box display='flex' flexDirection='row' alignItems='center' sx={{columnGap:'5px', marginBottom:'10px' }}>
+                    <Typography sx={{fontSize:'20px'}}>クライアント: </Typography>
+                    <Autocomplete
+                      id="free-solo-demo"
+                      freeSolo
+                      options={clients.map((client) => client.email)}
+                      size="small"
+                      sx={{ width: 250, border: '1px solid #000000', marginRight:'30px'}}
+                      onChange={(e, value) => { handleContractSearch(value, 0)}} // Use onChange to capture selected value
+                      renderInput={(params) => <TextField {...params} label="" />}
+                    />
+                    <Typography sx={{fontSize:'20px'}}>リクエスター: </Typography>
+                    <Autocomplete
+                      id="free-solo-demo"
+                      freeSolo
+                      options={creators.map((creator) => creator.email)}
+                      size="small"
+                      sx={{ width: 250, border: '1px solid #000000', }}
+                      onChange={(e, value) => { handleContractSearch(value, 1)}} // Use onChange to capture selected value
+                      renderInput={(params) => <TextField {...params} label="" />}
+                    />
+                    </Box>
+                  <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell>契約名</StyledTableCell>
+                        <StyledTableCell align="center">クライアント</StyledTableCell>
+                        <StyledTableCell align="center">リクエスター</StyledTableCell>
+                        <StyledTableCell align="center">製品の種類</StyledTableCell>
+                        <StyledTableCell align="center">使用方法</StyledTableCell>
+                        <StyledTableCell align="center">配送日</StyledTableCell>
+                        <StyledTableCell align="center">進捗状況</StyledTableCell>
+                        <StyledTableCell align="center">契約している状態</StyledTableCell>
+                        <StyledTableCell align="center">アクション</StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                      <TableBody>
+                        {(contracts.length > 0 && contractRowsPerPage > 0
+                          ? contracts.slice(currentContractPage * contractRowsPerPage, currentContractPage * contractRowsPerPage + contractRowsPerPage)
+                          : contracts
+                        ).map((row, index) => (
+                          <StyledTableRow key={row._id} >
+                            <TableCell component="th" scope="row" style={{ width: 80, fontSize:'12px' }}>
+                              {row.category}
+                            </TableCell>
+                            <TableCell style={{ width: 50 }} align="left">
+                              {row.clientEmail}
+                            </TableCell>
+                            <TableCell style={{ width: 150 }} align="left">
+                              {row.creatorEmail == 'admin' ? (
+                                <Box display='flex' flexDirection='row' justifyContent='center'>
+                                <Autocomplete
+                                    id="free-solo-demo"
+                                    freeSolo
+                                    options={creators.map((creator) => creator.email)}
+                                    sx={{ width: 210, height:'40px', border: '1px solid #000000' }}
+                                    size="small"
+                                    onChange={(e, value) => setCreatorInfo(value)} // Use onChange to capture selected value
+                                    renderInput={(params) => <TextField {...params} label="リクエスタの割り当て" />}
+                                />
+
+                                <IconButton 
+                                  sx={{
+                                    color:'green',
+                                    marginX:'5px',
+                                    width:50, height:50,
+                                  "&:hover": {
+                                              border: '1px solid green',
+                                          }, 
+                                  }}
+                                  onClick={()=>{handleAddCreator(row._id, index + currentContractPage * contractRowsPerPage)}}
+                                  aria-label="add">
+                                  <DoneOutlineIcon />
+                                </IconButton>
+                              </Box>
+                              ):row.creatorEmail}
+                            </TableCell>
+                            <TableCell style={{ width: 100 }} align="left">
+                              {row.step1}
+                            </TableCell>
+                            <TableCell style={{ width: 100 }} align="center">
+                              {row.step2}
+                            </TableCell>
+                            <TableCell style={{ width: 80 }} align="center">
+                              {row.step3 > 0 ? row.step3 + 'ヶ月': '相談したい'}
+                            </TableCell>
+                            <TableCell style={{ width: 100 }} align="center">
+                              {row.status >= 0 ? (
+                                <BorderLinearProgress variant="determinate" value={25 * row.status} />
+                                ):(
+                                <Typography sx={{color:'#ee7d90', fontWeight:fontBold, fontSize:'12px'}}>中止されました</Typography>
+                              )}
+                            </TableCell>
+                            <TableCell style={{ width: 100 }} align="center">
+                              <Typography sx={{fontSize:'12px', backgroundColor:row.confirm?'green':'#ee7d90', paddingX:'10px', paddingY:'2px', borderRadius:'10px', color:'#FFFFFF'}}>
+                                {row.confirm?'締結':'締結なし'}
+                              </Typography>
+                            </TableCell>
+                            <TableCell style={{ width: 250 }} align="center">
+                              <Button variant="outlined" 
+                                sx={{color:'green', border:'1px solid green', 
+                                      marginX:'5px',
+                                      "&:hover": {
+                                                  border: '1px solid green',
+                                              }, 
+                                    }} startIcon={<DoneOutlineIcon sx={{marginBottom:'5px'}}/>}
+                                disabled = {row.status > 0 && true}
+                                onClick={() => handleConfirmContract(row._id, index + currentContractPage * contractRowsPerPage)}
+                              >
+                                確認
+                              </Button>
+                              <Button variant="outlined" 
+                                sx={{color:'#ee7d90', border:'1px solid #ee7d90', 
+                                      marginX:'5px',
+                                      "&:hover": {
+                                                  border: '1px solid #ee7d90',
+                                              }, 
+                                    }} startIcon={<CancelIcon sx={{marginBottom:'5px'}}/>}
+                                disabled = {row.status == -1 && true}
+                                onClick={() => handleCancelContract(row._id, index + currentContractPage * contractRowsPerPage)}
+                              >
+                                取り消す
+                              </Button>
+                            </TableCell>
+                          </StyledTableRow>
+                        ))}
+                        {emptyContractRows > 0 && (
+                          <TableRow style={{ height: 53 * emptyContractRows }}>
+                            <TableCell colSpan={9} />
+                          </TableRow>
+                        )}
+                      </TableBody>
+                      <TableFooter>
+                        <TableRow>
+                          <TablePagination
+                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                            colSpan={9}
+                            count={contracts.length}
+                            rowsPerPage={contractRowsPerPage}
+                            page={currentContractPage}
+                            SelectProps={{
+                              inputProps: {
+                                'aria-label': 'rows per page',
+                              },
+                              native: true,
+                            }}
+                            onPageChange={handleChangeContractPage}
+                            onRowsPerPageChange={handleChangeContractRowsPerPage}
+                            ActionsComponent={TablePaginationActions}
+                            labelRowsPerPage="ページごとの行数" 
+                          />
+                        </TableRow>
+                      </TableFooter>
+                    </Table>
+                  </TableContainer>   
                 </CustomTabPanel>
               {/** Contract Price Table */}
                 <CustomTabPanel value={value} index={3}>
-                      Price
+                <Box display='flex' flexDirection='row' alignItems='center' sx={{columnGap:'5px', marginBottom:'10px' }}>
+                    <Typography sx={{fontSize:'20px'}}>クライアント: </Typography>
+                    <Autocomplete
+                      id="free-solo-demo"
+                      freeSolo
+                      options={clients.map((client) => client.email)}
+                      size="small"
+                      sx={{ width: 250, border: '1px solid #000000', marginRight:'30px'}}
+                      onChange={(e, value) => { handleContractPaymentSearch(value, 0)}} // Use onChange to capture selected value
+                      renderInput={(params) => <TextField {...params} label="" />}
+                    />
+                    <Typography sx={{fontSize:'20px'}}>リクエスター: </Typography>
+                    <Autocomplete
+                      id="free-solo-demo"
+                      freeSolo
+                      options={creators.map((creator) => creator.email)}
+                      size="small"
+                      sx={{ width: 250, border: '1px solid #000000', }}
+                      onChange={(e, value) => { handleContractPaymentSearch(value, 1)}} // Use onChange to capture selected value
+                      renderInput={(params) => <TextField {...params} label="" />}
+                    />
+                    </Box>
+                  <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell>契約名</StyledTableCell>
+                        <StyledTableCell align="center">クライアント</StyledTableCell>
+                        <StyledTableCell align="center">リクエスター</StyledTableCell>
+                        <StyledTableCell align="center">製品の種類</StyledTableCell>
+                        <StyledTableCell align="center">使用方法</StyledTableCell>
+                        <StyledTableCell align="center">インフルエンサー費用</StyledTableCell>
+                        <StyledTableCell align="center">ディレクター費用</StyledTableCell>
+                        <StyledTableCell align="center">合計金額</StyledTableCell>
+                        <StyledTableCell align="center">アクション</StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                      <TableBody>
+                        {(contractPayments.length > 0 && contractRowsPerPage > 0
+                          ? contractPayments.slice(currentContractPage * contractRowsPerPage, currentContractPage * contractRowsPerPage + contractRowsPerPage)
+                          : contractPayments
+                        ).map((row, index) => (
+                          <StyledTableRow key={row._id} >
+                            <TableCell component="th" scope="row" style={{ width: 80, fontSize:'12px' }}>
+                              {row.category}
+                            </TableCell>
+                            <TableCell style={{ width: 50 }} align="left">
+                              {row.clientEmail}
+                            </TableCell>
+                            <TableCell style={{ width: 150 }} align="left">
+                              {row.creatorEmail}
+                            </TableCell>
+                            <TableCell style={{ width: 100 }} align="left">
+                              {row.step1}
+                            </TableCell>
+                            <TableCell style={{ width: 100 }} align="left">
+                              {row.step2}
+                            </TableCell>
+                            <TableCell style={{ width: 150 }} align="left">
+                              {!row.billed ? (
+                              <Box display='flex' flexDirection='row' alignItems='center' sx={{columnGap:'5px'}}>
+                              <TextField
+                                size="small"
+                                sx={{ border: '1px solid #000' }}
+                                value={row.creatorPrice}
+                                onChange={(e) => {
+                                  const updatedPayments = [...contractPayments];
+                                  updatedPayments[index].creatorPrice = e.target.value;
+                                  setContractPayments(updatedPayments);
+                                }}
+                              />
+                              円
+                              </Box>
+                              ):
+                              row.creatorPrice.toLocaleString()+'円'}
+                            </TableCell>
+                            <TableCell style={{ width: 100 }} align="left">
+                              {!row.billed ? (
+                                <Box display='flex' flexDirection='row' alignItems='center' sx={{columnGap:'5px'}}>
+                                <TextField
+                                  size="small"
+                                  sx={{ border: '1px solid #000' }}
+                                  value={row.fee}
+                                  onChange={(e) => {
+                                    const updatedPayments = [...contractPayments];
+                                    updatedPayments[index].fee = e.target.value;
+                                    setContractPayments(updatedPayments);
+                                  }}
+                                />
+                                円
+                                </Box>
+                                ):
+                                row.fee.toLocaleString()+'円'}
+                            </TableCell>
+                            <TableCell style={{ width: 80 }} align="left">
+                              {(parseFloat(row.creatorPrice) + parseFloat(row.fee)).toLocaleString()} 円
+                            </TableCell>
+                          
+                            <TableCell style={{ width: 150 }} align="center">
+                              <Button variant="outlined" 
+                                sx={{color:'green', border:'1px solid green', 
+                                      marginX:'5px',
+                                      "&:hover": {
+                                                  border: '1px solid green',
+                                              }, 
+                                    }} startIcon={<DoneOutlineIcon sx={{marginBottom:'5px'}}/>}
+                                disabled = {row.status > 0 && true}
+                                onClick={() => handleConfirmContract(row._id, index + currentContractPage * contractRowsPerPage)}
+                              >
+                                料金適用
+                              </Button>
+                              {/* <Button variant="outlined" 
+                                sx={{color:'#ee7d90', border:'1px solid #ee7d90', 
+                                      marginX:'5px',
+                                      "&:hover": {
+                                                  border: '1px solid #ee7d90',
+                                              }, 
+                                    }} startIcon={<CancelIcon sx={{marginBottom:'5px'}}/>}
+                                disabled = {row.status == -1 && true}
+                                onClick={() => handleCancelContract(row._id, index + currentContractPage * contractRowsPerPage)}
+                              >
+                                確認
+                              </Button> */}
+                            </TableCell>
+                          </StyledTableRow>
+                        ))}
+                        {emptyContractPaymentRows > 0 && (
+                          <TableRow style={{ height: 53 * emptyContractPaymentRows }}>
+                            <TableCell colSpan={9} />
+                          </TableRow>
+                        )}
+                      </TableBody>
+                      <TableFooter>
+                        <TableRow>
+                          <TablePagination
+                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                            colSpan={9}
+                            count={contractPayments.length}
+                            rowsPerPage={contractPaymentRowsPerPage}
+                            page={currentContractPaymentPage}
+                            SelectProps={{
+                              inputProps: {
+                                'aria-label': 'rows per page',
+                              },
+                              native: true,
+                            }}
+                            onPageChange={handleChangeContractPaymentPage}
+                            onRowsPerPageChange={handleChangeContractPaymentRowsPerPage}
+                            ActionsComponent={TablePaginationActions}
+                            labelRowsPerPage="ページごとの行数" 
+                          />
+                        </TableRow>
+                      </TableFooter>
+                    </Table>
+                  </TableContainer> 
                 </CustomTabPanel>
                 </Box>
             </Stack>

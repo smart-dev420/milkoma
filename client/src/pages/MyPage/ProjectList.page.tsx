@@ -199,7 +199,7 @@ const CancelGrid:React.FC<{count:number, data: any}> = ({ count, data }) => {
                 </Box>
                 <Box display="flex" flexDirection="row" alignItems="center" justifyContent="flex-start" sx={{marginTop:'10px', paddingX:'30px'}}>
                     <Typography sx={{fontSize:'10px', color:'#fff', paddingY:'7px', width:'56px', backgroundColor:btnBackgroundHover, textAlign:'center', borderRadius:'60px', fontWeight:fontBold}}>状況</Typography>
-                    <Typography sx={{fontSize:'11px', marginLeft:'10px', fontWeight:fontBold}}>{item.status == 0 ?'内容を確認しています':item.cancel}</Typography>
+                    <Typography sx={{fontSize:'11px', marginLeft:'10px', fontWeight:fontBold, color:item.status == 0?'#000000':'red'}}>{item.status == 0 ?'内容を確認しています':'依頼を受注できません'}</Typography>
                 </Box>                
                </Box>
             </Grid>

@@ -554,12 +554,13 @@ const Step4 : React.FC<{}> = () => {
     const onSubmit = async () => {
         
         console.log("data", data);
+        const step3 = data.question3 > 2 ? 0 : data.question3 + 1;
         const formData = {
             category: data.title,
             description: data.description,
             step1: data.question1.toString(),
             step2: data.question2.toString(),
-            step3: data.question3 + 1,
+            step3: step3,
             status: 0,
         };
         const query = `${API}/api/insertContract`;

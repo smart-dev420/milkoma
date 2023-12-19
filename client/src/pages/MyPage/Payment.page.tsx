@@ -205,7 +205,7 @@ export const Payment = () => {
                                 marginLeft:'15px',
                                 whiteSpace:'nowrap'
                                 }}>
-                                    希望納期: {contractInfo.step3}ヶ月
+                                    希望納期: {contractInfo.step3 > 0 ? contractInfo.step3 + 'ヶ月': '相談したい'}
                             </Typography>
                         </Box>
                     </Box>
