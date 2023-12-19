@@ -24,7 +24,7 @@ const accountSchema = new Schema(
     instagramAccount: { type:String, default:"" },
     twitterAccount: { type:String, default:"" },
     verify: { type: Boolean, default: false },
-    verify_doc: { type: String, },
+    verify_doc: { type: String, default: ''},
     resetpasswordtoken : { type : String, default:'' },
     resetpasswordexpire: { type : Number, default:0 }, 
     handleCard : { type : String, default:'' },

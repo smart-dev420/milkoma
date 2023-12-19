@@ -350,7 +350,7 @@ export const DetailPage = () => {
                                 marginLeft:'15px',
                                 whiteSpace:'nowrap'
                                 }}>
-                                    希望納期: {contractInfo.step3}ヶ月
+                                    希望納期: {contractInfo.step3 > 0 ? contractInfo.step3 + 'ヶ月': '相談したい'}
                             </Typography>
                         </Box>
                         <Typography sx={{color:'#001219', fontSize:'12px', marginTop:'14px'}}>

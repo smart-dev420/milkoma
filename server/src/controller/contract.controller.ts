@@ -39,9 +39,12 @@ export async function insertData(input: any) {
     try {
       logger.info("Adding contract");
       const email = getEmailFromToken(input.token);
-      let creatorEmail = input.data.creatorEmail;
-      if(!creatorEmail){
+      const res = await AccountModel.findOne({_id: input.data.creatorEmail}, 'email');
+      let creatorEmail;
+      if(!res){
         creatorEmail = 'admin';
+      } else {
+        creatorEmail = res.email;
       }
       console.log('data - ', input.data.step1);
       const doc: Contract = new ContractModel({
@@ -118,6 +121,46 @@ const nextStep: RequestHandler = async (req, res) => {
   }
 }
 
+const getAllContracts: RequestHandler = async (req, res) => {
+  try{
+    const info = await ContractModel.find();
+    return res.status(StatusCodes.OK).send(info);
+  } catch(err){
+    console.error(err);
+  }
+}
+
+const contractConfirm: RequestHandler = async (req, res) => {
+  try{
+    const contractId = req.params.id;
+    await ContractModel.updateOne({_id: contractId}, {status: 1});
+    return res.status(StatusCodes.OK).send({msg:'正常に確認されました'});
+  } catch (err){
+    console.error(err);
+  }
+}
+
+const contractCancel: RequestHandler = async (req, res) => {
+  try{
+    const contractId = req.params.id;
+    await ContractModel.updateOne({_id: contractId}, {status: -1});
+    return res.status(StatusCodes.OK).send({msg:'正常にキャンセルされました'});
+  } catch (err){
+    console.error(err);
+  }
+}
+
+const addCreator: RequestHandler = async (req, res) => {
+  try{
+    const contractId = req.params.id;
+    const creatorEmail = req.body.creator_email;
+    await ContractModel.updateOne({_id: contractId}, {creatorEmail: creatorEmail});
+    return res.status(StatusCodes.OK).send({msg:'正常に追加されました'});
+  } catch (err){
+    console.error(err);
+  }
+}
+
 const stripe_payment: RequestHandler = async (req, res) => {
   try{
     // const token = validateToken(req, res);
@@ -147,6 +190,8 @@ const stripe_payment: RequestHandler = async (req, res) => {
   }
 }
 
+
+
 const contract = { 
     insertContract,
     getCreatorData,
@@ -154,6 +199,10 @@ const contract = {
     getContractInfo,
     setContract,
     nextStep,
-    stripe_payment
+    stripe_payment,
+    getAllContracts,
+    contractConfirm,
+    contractCancel,
+    addCreator
   };
   export default contract;

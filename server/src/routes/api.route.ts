@@ -38,13 +38,16 @@ apiRoute.get("/verifyDownload/:filename",   verifyToken,          auth.verifyDow
 apiRoute.post("/insertContract",            verifyToken,          contract.insertContract);
 apiRoute.post("/getCreatorData/:id",        verifyToken,          contract.getCreatorData);
 apiRoute.post("/stripe_payment/:id",        verifyToken,          contract.stripe_payment);
-
+apiRoute.post("/contractConfirm/:id",       verifyToken,          contract.contractConfirm);
+apiRoute.post("/contractCancel/:id",        verifyToken,          contract.contractCancel);
+apiRoute.post("/addCreator/:id",            verifyToken,          contract.addCreator);
 
 /******* Get contract data */
 apiRoute.post("/getAllContract/:email",     verifyToken,          contract.getAllContract);
 apiRoute.post("/getContractInfo/:id",       verifyToken,          contract.getContractInfo);
 apiRoute.post("/setContract/:id",           verifyToken,          contract.setContract);
 apiRoute.post("/nextStep/:id",              verifyToken,          contract.nextStep);
+apiRoute.post("/getAllContracts",           verifyToken,          contract.getAllContracts);
 
 /******** Provide File */
 apiRoute.post("/upload_provide",            verifyToken,          provide.uploadProvideFile);
