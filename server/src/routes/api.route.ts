@@ -41,6 +41,7 @@ apiRoute.post("/stripe_payment/:id",        verifyToken,          contract.strip
 apiRoute.post("/contractConfirm/:id",       verifyToken,          contract.contractConfirm);
 apiRoute.post("/contractCancel/:id",        verifyToken,          contract.contractCancel);
 apiRoute.post("/addCreator/:id",            verifyToken,          contract.addCreator);
+apiRoute.post("/contractPayment/:id",       verifyToken,          contract.contractPayment);
 
 /******* Get contract data */
 apiRoute.post("/getAllContract/:email",     verifyToken,          contract.getAllContract);

@@ -161,6 +161,18 @@ const addCreator: RequestHandler = async (req, res) => {
   }
 }
 
+const contractPayment: RequestHandler = async (req, res) => {
+  try{
+    const contractId = req.params.id;
+    const price = req.body.price;
+    const fee = req.body.fee;
+    await ContractModel.updateOne({_id: contractId}, {creatorPrice:price, fee:fee});
+    return res.status(StatusCodes.OK).send({msg:'正常に追加されました'});
+  } catch (err){
+    console.error(err);
+  }
+}
+
 const stripe_payment: RequestHandler = async (req, res) => {
   try{
     // const token = validateToken(req, res);
@@ -176,11 +188,11 @@ const stripe_payment: RequestHandler = async (req, res) => {
     // }
     // const info = await subscribe({contractId, detail});
     // return res.status(StatusCodes.OK).send(info);
-    const amount =req.body
+    const amount =req.body.amount;
     const stripeBearerToken = process.env.STRIPE_SECRET_KEY;
     const stripe = require("stripe")(stripeBearerToken);
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: 50000,
+      amount: parseInt(amount),
       currency: "usd", 
     });
     console.log('payment - ', paymentIntent);
@@ -203,6 +215,7 @@ const contract = {
     getAllContracts,
     contractConfirm,
     contractCancel,
-    addCreator
+    addCreator,
+    contractPayment
   };
   export default contract;
