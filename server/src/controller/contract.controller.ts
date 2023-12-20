@@ -188,15 +188,43 @@ const stripe_payment: RequestHandler = async (req, res) => {
     // }
     // const info = await subscribe({contractId, detail});
     // return res.status(StatusCodes.OK).send(info);
-    const amount =req.body.amount;
+    console.log('*****************************', req.body.token)
+    const { token, amount } = req.body;
+    const idempotencyKey = uuidv4();
     const stripeBearerToken = process.env.STRIPE_SECRET_KEY;
     const stripe = require("stripe")(stripeBearerToken);
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: parseInt(amount),
-      currency: "usd", 
-    });
-    console.log('payment - ', paymentIntent);
-    res.status(200).json(paymentIntent.client_secret);
+    
+    try {
+      const customer = await stripe.customers.create({
+        email: token.email,
+        source: token.id // Assuming 'token' contains the payment method ID (e.g., card token)
+      });
+    
+      const charge = await stripe.charges.create({
+        amount: amount * 100,
+        currency: 'usd',
+        customer: customer.id,
+        receipt_email: token.email
+      }, {
+        idempotencyKey: idempotencyKey
+      });
+    
+      res.status(200).json(charge);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({ error: 'An error occurred while processing your payment.' });
+    }
+
+    // const amount =req.body.amount;
+    // const stripeBearerToken = process.env.STRIPE_SECRET_KEY;
+    // const stripe = require("stripe")(stripeBearerToken);
+    
+    // const paymentIntent = await stripe.paymentIntents.create({
+    //   amount: parseInt(amount),
+    //   currency: "usd", 
+    // });
+    // console.log('payment - ', paymentIntent);
+    // res.status(200).json(paymentIntent.client_secret);
   } catch(err){
     console.error(err);
   }

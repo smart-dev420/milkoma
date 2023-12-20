@@ -28,11 +28,12 @@ apiRoute.post("/follower",                  verifyToken,          auth.followUse
 apiRoute.post("/heart",                     verifyToken,          auth.heartUser);
 apiRoute.post("/getCreatorInfo",                                  auth.getCreatorInfo);
 apiRoute.post("/getCreatorProfile/:id",     verifyToken,          auth.getCreatorProfile);
-apiRoute.post("/getAdmin",                  verifyToken,          auth.getAdmin)
-apiRoute.post("/getAllUsersInfo",          verifyToken,          auth.getAllUsersInfo);
+apiRoute.post("/getAdmin",                  verifyToken,          auth.getAdmin);
+apiRoute.post("/getAllUsersInfo",           verifyToken,          auth.getAllUsersInfo);
 apiRoute.post("/userVerify/:id",            verifyToken,          auth.userVerify);
 apiRoute.post("/userDelete/:id",            verifyToken,          auth.userDelete); 
-apiRoute.get("/verifyDownload/:filename",   verifyToken,          auth.verifyDownload)
+apiRoute.get("/verifyDownload/:filename",   verifyToken,          auth.verifyDownload);
+apiRoute.post("/getRole",                   verifyToken,          auth.getRole);
 
 /******* Contract */
 apiRoute.post("/insertContract",            verifyToken,          contract.insertContract);
@@ -54,4 +55,7 @@ apiRoute.post("/getAllContracts",           verifyToken,          contract.getAl
 apiRoute.post("/upload_provide",            verifyToken,          provide.uploadProvideFile);
 apiRoute.post("/getProvideFiles/:id",       verifyToken,          provide.getProvideFiles);
 apiRoute.get("/provideDownload/:filename",  verifyToken,          provide.provideDownload);
+apiRoute.post("/upload_product",            verifyToken,          provide.uploadProductFile);
+apiRoute.post("/getProductFiles/:id",       verifyToken,          provide.getProductFiles);
+apiRoute.get("/productDownload/:filename",  verifyToken,          provide.productDownload);
 export default apiRoute;
