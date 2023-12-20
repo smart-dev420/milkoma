@@ -48,6 +48,7 @@
     "react-slick": "^0.29.0",
     "react-spring": "^9.7.3",
     "react-spring-3d-carousel": "^1.3.4",
+    "react-stripe-checkout": "^2.6.3",
     "react-toastify": "^9.1.3",
     "slick-carousel": "^1.8.1",
     "state-pool": "^0.10.0",

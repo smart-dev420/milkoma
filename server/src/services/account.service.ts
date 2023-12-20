@@ -362,3 +362,9 @@ export async function getAdminData(input: any){
   const res = await AccountModel.findOne({ email }, 'admin');
   return res;
 }
+
+export async function getUserRole(input: any){
+  const email = getEmailFromToken(input.token);
+  const res = await AccountModel.findOne({ email }, 'role');
+  return res;
+}

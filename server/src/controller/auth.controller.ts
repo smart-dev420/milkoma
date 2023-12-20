@@ -18,7 +18,8 @@ import {
   changePswd,
   changeSNSData,
   changeSkillsData,
-  getAdminData
+  getAdminData,
+  getUserRole
 } from "../services/account.service";
 import { omit } from "lodash";
 import logger from "../utils/logger";
@@ -521,12 +522,22 @@ const verifyDownload: RequestHandler = async (req, res) => {
   fs.access(filePath, fs.constants.F_OK, (err:any) => {
     if (err) {
       logger.error("No file exists");
-      res.status(200).send({msg:'No file exists'});
+      res.status(StatusCodes.OK).send({msg:'No file exists'});
     } else {
       logger.info("File exists");
-      res.status(200).sendFile(filePath);
+      res.status(StatusCodes.OK).sendFile(filePath);
     }
   });
+}
+
+const getRole: RequestHandler = async (req, res) => {
+  const token = validateToken(req, res);
+  try{
+    const info = await getUserRole({token});
+    return res.status(StatusCodes.OK).send({role:info?.role});
+  } catch(err){
+    console.error(err);
+  }
 }
 
 const auth = { 
@@ -552,6 +563,7 @@ const auth = {
   getAllUsersInfo,
   userVerify,
   userDelete,
-  verifyDownload
+  verifyDownload,
+  getRole
 };
 export default auth;

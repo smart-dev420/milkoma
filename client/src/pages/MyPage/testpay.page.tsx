@@ -14,7 +14,7 @@ import {
     useStripe, 
     useElements
   } from "@stripe/react-stripe-js";
-
+import Stripe from "react-stripe-checkout"
 
 export const TestPayment = () => {
     const navigate = useNavigate();
@@ -68,14 +68,35 @@ export const TestPayment = () => {
         // Handle error scenarios here
       }
     };
+
+    const handleToken = async (totalAmount: number, token: any) => {
+      try{
+        const query = `${API}/api/stripe_payment/${contractId}`;
+        const res = await axios.post(query, {token: token.id, amount: totalAmount}, headers());
+        console.log('res - ', res);
+      }catch(err){
+        console.log(err)
+      }
+    }
+
+    const tokenHandler = (token: any) => {
+      handleToken(100, token);
+    }
+
     return(
 
-            <form>
-            <CardNumberElement/>
-            <CardExpiryElement />
-            <CardCvcElement />    
-            <button onClick={handlePayment}>Confirm Payment</button>
-            </form>
-
+            // <form>
+            // <CardNumberElement/>
+            // <CardExpiryElement />
+            // <CardCvcElement />    
+            // <button onClick={handlePayment}>Confirm Payment</button>
+            // </form>
+      <div>
+        <Stripe
+        locale="ja" 
+        stripeKey="pk_test_51L0i70J9gsB8v3ioEZ100YCmxVcelkpsnM1ZcM9rbHYud3zLEq6A5VFdXcKyn7LU9oIEAWrfqqSYazpfOOGfxuUt00qYe45aRg"
+        token={tokenHandler}
+        />
+      </div>
     )
 }

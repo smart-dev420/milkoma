@@ -13,6 +13,7 @@ import { FileUploader } from "react-drag-drop-files";
 import { toast } from "react-toastify";
 import { API } from "../../axios";
 import axios from "axios";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const box_shadow ='0 0 4px 5px rgba(255,255,255,0.5)';
 
@@ -150,7 +151,17 @@ export const DetailPage = () => {
     const [ contractInfo, setContractInfo ] = useState<any>(null);
     const [ creatorInfo, setCreatorInfo ] = useState<any>(null);
     const [ nextStep, setNextStep ] = useState<boolean>(false);
+    const [ role, setRole ] = useState<string>('');
+    const [ uploadState, setUploadState ] = useState<boolean>(false);
 
+    const getRole = async () => {
+        const res = await axios.post(`${API}/api/getRole`, {}, headers());
+        setRole(res.data.role);
+    }
+
+    useEffect(()=>{
+        getRole()
+    }, [])
     const handleContract = () => {
         // setData(prevData => ({ ...prevData, contracted: true }));
         navigate(`/mypage/contract/${contractId}`);
@@ -168,10 +179,18 @@ export const DetailPage = () => {
     }
 
     const [ provideFiles, setProvideFiles ] = useState<any>([]);
+    const [ productFiles, setProductFiles ] = useState<any>([]);
+
     const getProvideFileList = async () => {
         const res = await axios.post(`${API}/api/getProvideFiles/${contractId}`, {}, headers());
         setProvideFiles(res.data.data);
     }
+
+    const getProductFileList = async () => {
+        const res = await axios.post(`${API}/api/getProductFiles/${contractId}`, {}, headers());
+        setProductFiles(res.data.data);
+    }
+
     const getContractInfo = async () => {
         const res = await axios.post(`${API}/api/getContractInfo/${contractId}`, {}, headers());
         setContractInfo(res.data);
@@ -183,6 +202,7 @@ export const DetailPage = () => {
 
     useEffect(() => {
         getProvideFileList();
+        getProductFileList();
     }, [uploadOpen]);
 
     useEffect(() => {
@@ -236,6 +256,7 @@ export const DetailPage = () => {
 
     // File Upload
     const handleFileUpload = async () => {
+
         let formData = new FormData();
         if(file){
             formData.append('file', file);
@@ -250,12 +271,20 @@ export const DetailPage = () => {
         formData.append('contractId', contractId);
         formData.append('filename', fileName);
         console.log('fileData - ', file);
-        const query = `${API}/api/upload_provide`;
+        
         try{
+            setUploadState(true);
+            let query = '';
+            if(role == 'client'){
+                query = `${API}/api/upload_provide`;
+            }
+            else if(role == 'creator') { query = `${API}/api/upload_product`;}
             const res = await axios.post(query, formData, headers());
             if( res.status === 200 ){
                 console.log('return', res.data);
                 toast.success(res.data.msg);
+                setFile(null); setFileName(''); setUploadFileName('');
+                setUploadState(false);
                 handleUploadClose();
             } else {
                 console.log(res);
@@ -265,7 +294,7 @@ export const DetailPage = () => {
     }
 
     // File Download
-    const handleDownload = async (fileName:string) => {
+    const handleDownload = async (fileName:string, index: number) => {
         try {
             const token = localStorage?.getItem('token');
             const headers = {
@@ -273,10 +302,18 @@ export const DetailPage = () => {
               "Content-Type": "application/x-www-form-urlencoded",
               "Authorization": "Bearer " + token
             };
-          const response = await axios.get(`${API}/api/provideDownload/${fileName}`, {
-            responseType: 'blob',
-            headers,
-          });
+          let response;
+          if(index == 0){
+              response = await axios.get(`${API}/api/provideDownload/${fileName}`, {
+                responseType: 'blob',
+                headers,
+              });
+          } else {
+            response = await axios.get(`${API}/api/productDownload/${fileName}`, {
+                responseType: 'blob',
+                headers,
+              });
+          }
     
           // Create a temporary URL to download the file
           const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -577,7 +614,7 @@ export const DetailPage = () => {
                     </Button>
                     )}
                     
-                </Box>
+                    </Box>
                     <Box display='flex' flexDirection='row' sx={{marginTop:'33px', columnGap:'50px'}}>
                     <Box display='flex' flexDirection='column' flex={6} >
                         <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{ minHeight:'27px'}}>
@@ -620,7 +657,7 @@ export const DetailPage = () => {
                                                     backgroundColor: '#E38A86'
                                                 },
                                                 }}
-                                            onClick={()=>handleDownload( item.fileName + '.' + item.fileExtension )}>
+                                            onClick={()=>handleDownload( item.fileName + '.' + item.fileExtension, 0 )}>
                                                 <CardMedia
                                                     component="img"
                                                     alt="Image1"
@@ -641,10 +678,10 @@ export const DetailPage = () => {
                             <Typography sx={{fontSize:'16px', color:'#B9324D', fontWeight:fontBold}}>ミルコマから</Typography>
                         </Box>
                         <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' sx={{border:'2px dashed #AA3D4F', borderRadius:'15px', width:'100%', marginTop:'16px', paddingY:'22px', paddingX:'27px', rowGap:'10px'}}>
-                        {data.productDownload.length === 0?
+                        {!productFiles?
                                 (<Typography sx={{fontSize:'14px', color:'#001219', textAlign:'center', whiteSpace:'nowrap',paddingY:'126px'}}>まだファイル共有はされていません</Typography>)
                                 :(
-                                    data.productDownload.map((item, index) => (
+                                    productFiles && productFiles.map((item: any, index:number) => (
                                         <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{width:'100%', border:'1px solid #EE7D90', borderRadius:'10px', paddingY:'12px', paddingX:'7px'}} key={index}>
                                             <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center' 
                                                 sx={{ backgroundColor:'#F0F0F0', borderRadius:'50%', width:'46px', height:'46px'}}>
@@ -655,8 +692,8 @@ export const DetailPage = () => {
                                                 />
                                             </Box>
                                             <Box display='flex' flexDirection='column' flex={6} sx={{marginX:'7px'}}>
-                                                <Typography sx={{color:'#424242', fontSize:'11px', fontWeight:fontBold}}>{item.name}</Typography>
-                                                <Typography sx={{color:'#424242', fontSize:'10px'}}>{item.capacity}</Typography>
+                                                <Typography sx={{color:'#424242', fontSize:'11px', fontWeight:fontBold}}>{item.title}</Typography>
+                                                <Typography sx={{color:'#424242', fontSize:'10px'}}>{convertSize(item.fileSize)}</Typography>
                                             </Box>
                                             <Button sx={{
                                                 backgroundColor:btnBackground, 
@@ -665,7 +702,8 @@ export const DetailPage = () => {
                                                 "&:hover": {
                                                     backgroundColor: btnBackgroundHover
                                                 },
-                                                }}>
+                                                }}
+                                            onClick={()=>handleDownload( item.fileName + '.' + item.fileExtension, 1 )}>
                                                 <CardMedia
                                                     component="img"
                                                     alt="Image1"
@@ -681,7 +719,7 @@ export const DetailPage = () => {
                                 )}
                         </Box>
                     </Box>
-                </Box>
+                    </Box>
                 </>
                 )}
                 
@@ -847,7 +885,12 @@ export const DetailPage = () => {
                         <Box display='flex' flexDirection='column' flex={6} sx={{marginX:'7px'}}>
                             <Typography sx={{color:'#424242', fontSize:'11px', fontWeight:fontBold}}>{fileName?fileName:uploadFileName}</Typography>
                         </Box>
-                        <Typography sx={{fontSize:'10px'}}>アップロード中…</Typography>
+                        {uploadState && (
+                            <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center'>
+                            <Typography sx={{fontSize:'15px', fontWeight:fontBold}}>アップロード中…</Typography>
+                            {/* <CircularProgress style={{height:'50px', width:'50px'}}/> */}
+                            </Box>
+                        )}
                     </Box>
 
                 <Typography sx={{marginTop:'27px', color:'#454545', fontSize:'18px', fontWeight:fontBold}}>ファイル名を設定(オプション)</Typography>
