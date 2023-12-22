@@ -10,18 +10,22 @@ import { API } from "../../axios";
 
 const chkList1 = [
     {
+        id: 0,
         iconPath: staticFiles.images.seventeen,
         name: "17.Live"
     },
     {
+        id: 1,
         iconPath: staticFiles.images.youtube1,
         name: "Youtube"
     },
     {
+        id: 2,
         iconPath: staticFiles.images.tiktok,
         name: "TikTok"
     },
     {
+        id: 3,
         iconPath: staticFiles.images.instagram,
         name: "Instagram"
     },
@@ -96,120 +100,6 @@ const btn_group:{id: number; name: string;}[] = [
     },
 ];
 
-interface listProps {
-    userId: number,
-    avatar: string,
-    title: string,
-    heart: number,
-    follow: number,
-    type: string,
-    blog: string,
-    recommand: boolean,
-}
-
-const fakeData:listProps[] = [
-    {
-        userId: 0,
-        avatar: staticFiles.images.model,
-        title: "なまえ なまえ なまえ",
-        heart: 39000000,
-        follow: 116900,
-        type: "コスメ",
-        blog: "ブログ",
-        recommand: true,
-    },
-    {
-        userId: 1,
-        avatar: staticFiles.images.model,
-        title: "なまえ なまえ なまえ",
-        heart: 39000000,
-        follow: 116900,
-        type: "コスメ",
-        blog: "ブログ",
-        recommand: false,
-    },
-    {
-        userId: 2,
-        avatar: staticFiles.images.model,
-        title: "なまえ なまえ なまえ",
-        heart: 39000000,
-        follow: 116900,
-        type: "コスメ",
-        blog: "ブログ",
-        recommand: false,
-    },
-    {
-        userId: 3,
-        avatar: staticFiles.images.model,
-        title: "なまえ なまえ なまえ",
-        heart: 39000000,
-        follow: 116900,
-        type: "コスメ",
-        blog: "ブログ",
-        recommand: false,
-    },
-    {
-        userId: 4,
-        avatar: staticFiles.images.model,
-        title: "なまえ なまえ なまえ",
-        heart: 39000000,
-        follow: 116900,
-        type: "コスメ",
-        blog: "ブログ",
-        recommand: false,
-    },
-    {
-        userId: 5,
-        avatar: staticFiles.images.model,
-        title: "なまえ なまえ なまえ",
-        heart: 39000000,
-        follow: 116900,
-        type: "コスメ",
-        blog: "ブログ",
-        recommand: false,
-    },
-    {
-        userId: 6,
-        avatar: staticFiles.images.model,
-        title: "なまえ なまえ なまえ",
-        heart: 39000000,
-        follow: 116900,
-        type: "コスメ",
-        blog: "ブログ",
-        recommand: false,
-    },
-    {
-        userId: 7,
-        avatar: staticFiles.images.model,
-        title: "なまえ なまえ なまえ",
-        heart: 39000000,
-        follow: 116900,
-        type: "コスメ",
-        blog: "ブログ",
-        recommand: false,
-    },
-    {
-        userId: 8,
-        avatar: staticFiles.images.model,
-        title: "なまえ なまえ なまえ",
-        heart: 39000000,
-        follow: 116900,
-        type: "コスメ",
-        blog: "ブログ",
-        recommand: false,
-    },
-    {
-        userId: 9,
-        avatar: staticFiles.images.model,
-        title: "なまえ なまえ なまえ",
-        heart: 39000000,
-        follow: 116900,
-        type: "コスメ",
-        blog: "ブログ",
-        recommand: false,
-    },
-]
-
 export const CreatorFind = () => {
     const navigate = useNavigate();
     const match_768 = useMediaQuery('(min-width:768px)');
@@ -229,17 +119,31 @@ export const CreatorFind = () => {
         height: "40px",
         backgroundColor: "#ee7d902c",
       };
+    const [ searchTerm, setSearchTerm ] = useState<string>("");
+    const [ search, setSearch ] = useState<string>("");
 
-      const [ creatorInfo, setCreatorInfo] = useState<any>([]);
-      const getCreatorInfo = async () => {
-          const res = await axios.post(`${API}/api/getCreatorInfo`, {});
-          setCreatorInfo(res.data.data);
-      }
-      useEffect(() => {
+    const [ creatorInfo, setCreatorInfo] = useState<any>([]);
+    const getCreatorInfo = async () => {
+        const res = await axios.post(`${API}/api/getCreatorInfo`, {});
+        setCreatorInfo(res.data.data);
+    }
+    const getSearchCreatorInfo = async (str: string) => {
+        const res = await axios.post(`${API}/api/getSearchCreatorInfo/${str}`, {});
+        setCreatorInfo(res.data.data);
+    }
+
+    useEffect(() => {
+        getCreatorInfo();
+    }, []);
+
+    useEffect(() => {
+        if(search == ''){
           getCreatorInfo();
-      }, []);
+        }else{
+          getSearchCreatorInfo(search);
+        }
+    }, [search]);
 
-    const [searchTerm, setSearchTerm] = useState<string>("");
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     };
@@ -258,6 +162,7 @@ export const CreatorFind = () => {
         if (event.key === 'Enter') {
           event.preventDefault(); // Prevents line break in the textarea
           const newValue = event.target.value;
+          setSearch(newValue);
           if(newValue === ""){
             return false;
           }
@@ -271,6 +176,31 @@ export const CreatorFind = () => {
         }
       };
     
+    const handleSort = async (id:number) => {
+        switch(id){
+            case 0:{
+                const res = creatorInfo.sort((a:any, b:any) => b.heart - a.heart);
+                setCreatorInfo(res);
+                break;
+            }
+            case 1:{
+                const res = creatorInfo.sort((a:any, b:any) => b.follower.length - a.follower.length);
+                setCreatorInfo(res);
+                break;
+            }
+            case 2:{
+                const res = creatorInfo.sort((a:any, b:any) => b.created_at - a.created_at);
+                setCreatorInfo(res);
+                break;
+            }
+            case 3:{
+                const res = creatorInfo.sort((a:any, b:any) => b.media - a.media);
+                setCreatorInfo(res);
+                break;
+            }
+            default:break;
+        }
+    }
     const handleSearch = () => {
 
     }
@@ -410,6 +340,7 @@ export const CreatorFind = () => {
                                     }}
                                     onClick={() => {
                                         setSelect1(item.id);
+                                        handleSort(item.id);
                                     }}
                                     onMouseEnter={()=>{setIsHovered1(item.id)}}
                                     onMouseLeave={handleMouseLeave1}
