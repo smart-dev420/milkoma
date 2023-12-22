@@ -3,11 +3,11 @@ RewriteEngine On
 
 ```
 # If "api" is present in the URL
-RewriteCond %{REQUEST_URI} /api/ [NC]
+RewriteCond %{REQUEST_URI} / [NC]
 RewriteRule ^ <http://127.0.0.1:5001>%{REQUEST_URI} [P]
 
 # If "api" is not present in the URL (with or without trailing slash)
-RewriteCond %{REQUEST_URI} !/api/?$ [NC]
+RewriteCond %{REQUEST_URI} !/?$ [NC]
 
 # If there is no trailing slash, redirect to the default page
 RewriteCond %{REQUEST_URI} !/$
