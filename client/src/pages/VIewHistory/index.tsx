@@ -1,6 +1,6 @@
 import { Button, Grid, InputAdornment, TextField, useMediaQuery } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import { fontBold, scrollTop, staticFiles } from "../../components/Constants";
 import axios from "axios";
@@ -34,10 +34,12 @@ export const ViewHistory = () => {
     const navigate = useNavigate();
     const [ selectId, setSelectId ] = useState<string>("");
     const [ page, setPage ] = useState(8);
-    
+    const { userId } = useParams();
+
     const existingArrayString = localStorage.getItem('searchValue');
     const existingArray = existingArrayString ? JSON.parse(existingArrayString) : [];
     const [ searchValue, setSearchValue ] = useState(existingArray);
+    const [ loading, setLoading ]= useState(false);
     const match_1024 = useMediaQuery('(min-width:1025px)');
     const sxStyles = {
         minWidth: match_1024 ? "725px" : "200px",
@@ -49,6 +51,18 @@ export const ViewHistory = () => {
         backgroundColor: "#ee7d901a",
       };
 
+    useEffect(()=>{
+        if(userId !== 'search'){
+            if(existingArray.length >= 5){
+                existingArray.shift();
+            }
+            existingArray.push(userId);
+            setSearchValue(existingArray);
+            const updatedArrayString = JSON.stringify(existingArray);
+            localStorage.setItem('searchValue', updatedArrayString);
+        }
+    }, [loading]);
+    
     const [searchTerm, setSearchTerm] = useState<string>("");
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -88,6 +102,7 @@ export const ViewHistory = () => {
     }
     useEffect(() => {
         getCreatorInfo();
+        setLoading(true);
     }, []);
 
     return(

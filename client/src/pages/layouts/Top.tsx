@@ -19,7 +19,7 @@ const pageLayoutNavBar: NavBarElement[] = [
     },
     {
       name: "掲示板を見る",
-      path: "/direct_request",
+      path: "/",
       imgPath: staticFiles.icons.ic_navbar2,
     },
     {
@@ -29,7 +29,7 @@ const pageLayoutNavBar: NavBarElement[] = [
     },
     {
       name: "閲覧履歴",
-      path: "/history",
+      path: "/history/search",
       imgPath: staticFiles.icons.ic_navbar4,
     },
     {
@@ -76,14 +76,20 @@ const fakeData: ItemElement[] = [
 export const Top = () => {
     const navigate = useNavigate();
     const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
-    const handleSignOut = () => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      navigate("/login");
-    }
+    // const handleSignOut = () => {
+    //   localStorage.removeItem("token");
+    //   localStorage.removeItem("user");
+    //   navigate("/login");
+    // }
     const [searchTerm, setSearchTerm] = useState<string>("");
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(event.target.value);
+    };
+    const handleKeyDown = (event:any) => {
+      if (event.key === 'Enter') {
+        event.preventDefault(); // Prevents line break in the textarea
+        navigate(`/history/${searchTerm}`);
+      }
     };
     const [invisible, setInvisible] = useState(false);
     const match_1024 = useMediaQuery('(min-width:1025px)');
@@ -141,6 +147,7 @@ export const Top = () => {
                   variant="outlined"
                   value={searchTerm}
                   onChange={handleChange}
+                  onKeyDown={handleKeyDown}
                   sx={sxStyles}
                   className="bg-[#FCF9F8] rounded-lg px-10 flex justify-center"
                   InputProps={{

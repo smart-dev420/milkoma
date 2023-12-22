@@ -20,6 +20,6 @@ export default interface Account extends Document {
   verify_doc: string;
   resetpasswordtoken : string;
   resetpasswordexpire: number;
-  handleCard:string;
+  customer_id:string;
   strikes : number;
 }

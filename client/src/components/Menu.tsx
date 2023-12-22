@@ -27,7 +27,7 @@ const menuItems: NavBarElement[] = [
   },
   {
     name: "掲示板を見る",
-    path: "/direct_request",
+    path: "/",
     imgPath: staticFiles.icons.ic_navbar2,
   },
   {
@@ -37,7 +37,7 @@ const menuItems: NavBarElement[] = [
   },
   {
     name: "閲覧履歴",
-    path: "/history",
+    path: "/history/search",
     imgPath: staticFiles.icons.ic_navbar4,
   },
   {

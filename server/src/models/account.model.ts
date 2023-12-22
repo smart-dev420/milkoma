@@ -27,7 +27,7 @@ const accountSchema = new Schema(
     verify_doc: { type: String, default: ''},
     resetpasswordtoken : { type : String, default:'' },
     resetpasswordexpire: { type : Number, default:0 }, 
-    handleCard : { type : String, default:'' },
+    customer_id : { type : String, default:'' },
     strikes : {type : Number, default : 0},
   },
   {

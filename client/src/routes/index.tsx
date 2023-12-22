@@ -94,7 +94,7 @@ export const router = createHashRouter([
           errorElement: <NotFound />,
         },
         {
-          path: "history",
+          path: "history/:userId",
           element: <ViewHistory/>,
           errorElement: <NotFound />,
         },

@@ -10,7 +10,7 @@ dotenv.config({ path: "./.env" });
 
 export function allContract(input: string){
     try{
-        const res = ContractModel.find({clientEmail: input});
+      const res = ContractModel.find({ clientEmail: input }).sort({ createdDate: -1 });
         return res;
     }catch (err){
         console.error(err)
