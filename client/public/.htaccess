@@ -4,7 +4,7 @@ RewriteEngine On
 ```
 # If "api" is present in the URL
 RewriteCond %{REQUEST_URI} /api/ [NC]
-RewriteRule ^ <http://54.250.12.133:5001>%{REQUEST_URI} [P]
+RewriteRule ^ <http://127.0.0.1:5001>%{REQUEST_URI} [P]
 
 # If "api" is not present in the URL (with or without trailing slash)
 RewriteCond %{REQUEST_URI} !/api/?$ [NC]
