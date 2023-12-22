@@ -14,8 +14,9 @@ import { NumberFormatExample, headers } from "../../utils/appHelper";
 import { toast } from "react-toastify";
 
 export const FindCreator = () => {
-    scrollTop();
-    const [searchTerm, setSearchTerm] = useState<string>("");
+    // scrollTop();
+    const [ searchTerm, setSearchTerm ] = useState<string>("");
+    const [ search, setSearch ] = useState<string>("");
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
       };
@@ -23,13 +24,34 @@ export const FindCreator = () => {
     const match_768 = useMediaQuery('(min-width:768px)');
     const match_1024 = useMediaQuery('(min-width:1025px)');
     const [ creatorInfo, setCreatorInfo] = useState<any>([]);
+    const [ creatorSearch, setCreatorSearch ] = useState<any>([]);
     const getCreatorInfo = async () => {
       const res = await axios.post(`${API}/api/getCreatorInfo`, {});
       setCreatorInfo(res.data.data);
+      setCreatorSearch(res.data.data);
     }
-    useEffect(() => {
+    const getSearchCreatorInfo = async (str: string) => {
+      const res = await axios.post(`${API}/api/getSearchCreatorInfo/${str}`, {});
+      setCreatorSearch(res.data.data);
+    }
+
+    const handleSearch = (event:any) => {
+      if (event.key === 'Enter') {
+        event.preventDefault(); // Prevents line break in the textarea
+        setSearch(event.target.value);
+      }
+    }
+  useEffect(() => {
       getCreatorInfo();
-    }, []);
+  }, []);
+
+  useEffect(() => {
+    if(search == ''){
+      getCreatorInfo();
+    }else{
+      getSearchCreatorInfo(search);
+    }
+  }, [search]);
     return(
         <>
         <div style={{whiteSpace:'nowrap'}}>
@@ -86,6 +108,7 @@ export const FindCreator = () => {
                         label="キーワードで探す"
                         value={searchTerm}
                         onChange={handleChange}
+                        onKeyDown={handleSearch}
                         className="bg-[#FCF9F8] rounded-lg flex justify-center "
                         sx={{marginBottom:match_1024?"70px":'20px', height:"46px", width:match_1024?'45%':'80%'}}
                         InputProps={{
@@ -108,7 +131,7 @@ export const FindCreator = () => {
                 <span className="text-[18px] mr-[100px] w-[286px] h-[40px] border rounded-[50px] text-center" style={{fontWeight:fontBold}}>登録数:{creatorInfo.length.toLocaleString()}人</span>
             </div>
             <div className = "px-[2vw]">
-                <GridComponent creatorInfo={creatorInfo}/>
+                <GridComponent creatorInfo={creatorSearch}/>
             </div>
             <div className="flex flex-row justify-center items-center w-full my-[95px]">
                 <button className="btn-hover py-[11px]" onClick={() => {navigate('/creator/find')}} style={{fontWeight:fontBold}}>一覧を見る</button>
@@ -255,14 +278,15 @@ const GridComponent: React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
         {creatorInfo.map((item:any, index:number) => (
           index < 8 ?(
           <Grid item xs='auto' key={index}>
-          <div className="w-[361px] card-hover my-[15px] cursor-pointer" onClick={() => {navigate(`/creator/detail/${item._id}`)}}>
+          <div className="w-[361px] card-hover my-[15px] cursor-pointer" >
               <div className="flex flex-col px-[20px] py-[30px]">
                   <div className="flex flex-row ">
                       <img 
                         src = {`${API}/api/avatar/${item._id}`}
-                        className="rounded-[25px] w-[100px] h-[100px]" />
+                        className="rounded-[25px] w-[100px] h-[100px]" 
+                        onClick={() => {navigate(`/creator/detail/${item._id}`)}}/>
                       <div className="flex flex-col pl-[10px]" style={{justifyContent:'end', rowGap:'5px'}}>
-                        <div className="flex flex-wrap" style={{rowGap:'5px', columnGap:'5px'}}>
+                        <div className="flex flex-wrap" style={{rowGap:'5px', columnGap:'5px'}} onClick={() => {navigate(`/creator/detail/${item._id}`)}}>
                         {
                           item.skills.map((skill:string, index:number) =>(
                             <span key={index} className="px-[10px] py-[3px] text-[#fff] text-[14px] bg-[#F59ABF] rounded-[20px] text-center" style={{fontWeight:fontBold}}>{skill}</span>
@@ -277,7 +301,7 @@ const GridComponent: React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
                           </div>
                       </div>
                   </div>
-              <span className="mt-[30px] text-[#511523] text-[24px]" style={{fontWeight:fontBold}}>{item.username}</span>
+              <span className="mt-[30px] text-[#511523] text-[24px]" style={{fontWeight:fontBold}} onClick={() => {navigate(`/creator/detail/${item._id}`)}}>{item.username}</span>
               <div className="flex flex-row"
                 onClick={() => {
                   handleFollow(item.email, index);

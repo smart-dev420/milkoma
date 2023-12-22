@@ -22,4 +22,6 @@ export default interface Account extends Document {
   resetpasswordexpire: number;
   customer_id:string;
   strikes : number;
+  created_at: string;
+  media:number;
 }
