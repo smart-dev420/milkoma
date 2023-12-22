@@ -457,6 +457,25 @@ const getCreatorInfo:RequestHandler = async (req, res) => {
   }
 }
 
+const getSearchCreatorInfo:RequestHandler = async (req, res) => {
+  try{
+    const search = req.params.id;;
+    const data = await AccountModel.find(
+      { 
+        role: 'creator', 
+        $or: [
+          { username: { $regex: new RegExp(search, 'i') } },
+          { email: { $regex: new RegExp(search, 'i') } }
+        ]
+      },
+      '-admin -password -region -resetpasswordexpire -resetpasswordtoken -__v'
+    );
+    return res.status(200).send({data});
+  } catch(err){
+    console.log(err);
+  }
+}
+
 const getCreatorProfile:RequestHandler = async (req, res) => {
   const userId = req.params.id;
   try{
@@ -557,6 +576,7 @@ const auth = {
   changeSNS,
   changeSkills,
   getCreatorInfo,
+  getSearchCreatorInfo,
   getCreatorProfile,
   verifyData,
   getAdmin,

@@ -27,6 +27,7 @@ apiRoute.post("/getUserProfile",            verifyToken,          auth.getUserPr
 apiRoute.post("/follower",                  verifyToken,          auth.followUser);
 apiRoute.post("/heart",                     verifyToken,          auth.heartUser);
 apiRoute.post("/getCreatorInfo",                                  auth.getCreatorInfo);
+apiRoute.post("/getSearchCreatorInfo/:id",                        auth.getSearchCreatorInfo);
 apiRoute.post("/getCreatorProfile/:id",     verifyToken,          auth.getCreatorProfile);
 apiRoute.post("/getAdmin",                  verifyToken,          auth.getAdmin);
 apiRoute.post("/getAllUsersInfo",           verifyToken,          auth.getAllUsersInfo);

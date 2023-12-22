@@ -29,6 +29,8 @@ const accountSchema = new Schema(
     resetpasswordexpire: { type : Number, default:0 }, 
     customer_id : { type : String, default:'' },
     strikes : {type : Number, default : 0},
+    created_at : { type : String, default: Date.now() },
+    media:{ type:Number, default:0},
   },
   {
     collection: modelConstants.account,

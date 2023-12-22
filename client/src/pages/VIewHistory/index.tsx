@@ -39,7 +39,6 @@ export const ViewHistory = () => {
     const existingArrayString = localStorage.getItem('searchValue');
     const existingArray = existingArrayString ? JSON.parse(existingArrayString) : [];
     const [ searchValue, setSearchValue ] = useState(existingArray);
-    const [ loading, setLoading ]= useState(false);
     const match_1024 = useMediaQuery('(min-width:1025px)');
     const sxStyles = {
         minWidth: match_1024 ? "725px" : "200px",
@@ -50,18 +49,6 @@ export const ViewHistory = () => {
         height: "40px",
         backgroundColor: "#ee7d901a",
       };
-
-    useEffect(()=>{
-        if(userId !== 'search'){
-            if(existingArray.length >= 5){
-                existingArray.shift();
-            }
-            existingArray.push(userId);
-            setSearchValue(existingArray);
-            const updatedArrayString = JSON.stringify(existingArray);
-            localStorage.setItem('searchValue', updatedArrayString);
-        }
-    }, [loading]);
     
     const [searchTerm, setSearchTerm] = useState<string>("");
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,11 +70,13 @@ export const ViewHistory = () => {
           event.preventDefault(); // Prevents line break in the textarea
           const newValue = event.target.value;
           if(newValue === ""){
+            getCreatorInfo();
             return false;
           }
           if(existingArray.length >= 5){
               existingArray.shift();
           }
+          getSearchCreatorInfo(newValue);
           existingArray.push(newValue);
           setSearchValue(existingArray);
           const updatedArrayString = JSON.stringify(existingArray);
@@ -100,10 +89,45 @@ export const ViewHistory = () => {
         const res = await axios.post(`${API}/api/getCreatorInfo`, {});
         setCreatorInfo(res.data.data);
     }
+    const getSearchCreatorInfo = async (str: string) => {
+        const res = await axios.post(`${API}/api/getSearchCreatorInfo/${str}`, {});
+        setCreatorInfo(res.data.data);
+    }
     useEffect(() => {
-        getCreatorInfo();
-        setLoading(true);
-    }, []);
+        if(userId){
+            if(userId === 'search'){
+                getCreatorInfo();
+            }else {
+                getSearchCreatorInfo(userId);
+            }
+        }
+    }, [userId]);
+
+    const handleSort = async (id:number) => {
+        switch(id){
+            case 0:{
+                const res = creatorInfo.sort((a:any, b:any) => b.heart - a.heart);
+                setCreatorInfo(res);
+                break;
+            }
+            case 1:{
+                const res = creatorInfo.sort((a:any, b:any) => b.follower.length - a.follower.length);
+                setCreatorInfo(res);
+                break;
+            }
+            case 2:{
+                const res = creatorInfo.sort((a:any, b:any) => b.created_at - a.created_at);
+                setCreatorInfo(res);
+                break;
+            }
+            case 3:{
+                const res = creatorInfo.sort((a:any, b:any) => b.media - a.media);
+                setCreatorInfo(res);
+                break;
+            }
+            default:break;
+        }
+    }
 
     return(
         <>
@@ -166,6 +190,7 @@ export const ViewHistory = () => {
                                             }}
                                             onClick={() => {
                                                 setSelect1(item.id);
+                                                handleSort(item.id);
                                             }}
                                             onMouseEnter={()=>{setIsHovered1(item.id)}}
                                             onMouseLeave={handleMouseLeave1}
