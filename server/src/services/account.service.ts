@@ -69,6 +69,17 @@ export async function createAccount(input: any) {
     if(input.role == 1){
       role = 'creator';
     }
+    let customerId = '';
+    if(role === 'client'){
+      const stripeBearerToken = process.env.STRIPE_SECRET_KEY;
+      const stripe = require("stripe")(stripeBearerToken);
+      const res = await stripe.customers.create({
+        email: email,
+        name: input.username,
+      });
+      customerId = res.id;
+    }
+
     const doc: Account = new AccountModel({
       email: email,
       password: hash,
@@ -84,7 +95,7 @@ export async function createAccount(input: any) {
       instagramAccount: input.instagram??"",
       twitterAccount: input.twitter??"",
       verify:false,
-      // region: input.region
+      customer_id: customerId,
     });
     return await AccountModel.create(doc);
   } catch (error: any) {

@@ -175,8 +175,8 @@ const contractPayment: RequestHandler = async (req, res) => {
 
 const stripe_payment: RequestHandler = async (req, res) => {
   try{
-    // const token = validateToken(req, res);
-    // const email = getEmailFromToken(token);
+    const token = validateToken(req, res);
+    const email = getEmailFromToken(token);
     // const contractId = req.params.id;
     // const detail = {
     //   email: email,
@@ -189,27 +189,51 @@ const stripe_payment: RequestHandler = async (req, res) => {
     // const info = await subscribe({contractId, detail});
     // return res.status(StatusCodes.OK).send(info);
     console.log('*****************************', req.body.token)
-    const { token, amount } = req.body;
+    // const { token, amount } = req.body;
     const idempotencyKey = uuidv4();
     const stripeBearerToken = process.env.STRIPE_SECRET_KEY;
     const stripe = require("stripe")(stripeBearerToken);
     
     try {
+
       const customer = await stripe.customers.create({
-        email: token.email,
-        source: token.id // Assuming 'token' contains the payment method ID (e.g., card token)
+        email: email,
+        name: 'Neopen' // Assuming 'token' contains the payment method ID (e.g., card token)
       });
+      console.log('customer', customer);
+      // const customer = await stripe.customers.create({
+      //   email: token.email,
+      //   source: token.id // Assuming 'token' contains the payment method ID (e.g., card token)
+      // });
     
-      const charge = await stripe.charges.create({
-        amount: amount * 100,
-        currency: 'usd',
-        customer: customer.id,
-        receipt_email: token.email
-      }, {
-        idempotencyKey: idempotencyKey
-      });
+      // const charge = await stripe.charges.create({
+      //   amount: amount * 100,
+      //   currency: 'usd',
+      //   customer: customer.id,
+      //   receipt_email: token.email
+      // }, {
+      //   idempotencyKey: idempotencyKey
+      // });
     
-      res.status(200).json(charge);
+      // res.status(200).json(charge);
+      // let paymentMethod = await stripe.paymentMethods.create({
+      //   type: 'card',
+      //   card: {
+      //   number: '4242424242424242',
+      //   exp_month: 9,
+      //   exp_year: 2024,
+      //   cvc: '314',
+      //   },
+      //   });
+      // let paymentIntent = await stripe.paymentIntents.create({
+      //   payment_method: paymentMethod.id,
+      //   amount: 75*100, // USD*100
+      //   currency: 'usd',
+      //   confirm: true,
+      //   payment_method_types: ['card'],
+      //   });
+
+      //   res.send(paymentIntent);
     } catch (err) {
       console.error(err);
       res.status(500).send({ error: 'An error occurred while processing your payment.' });
