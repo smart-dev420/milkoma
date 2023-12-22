@@ -22,9 +22,3 @@ RewriteRule ^ <http://127.0.0.1:2366>%{REQUEST_URI} [P]
 ```
 
 </IfModule>
-
-RewriteEngine On
-
-# Redirect HTTPS to HTTP
-RewriteCond %{HTTPS} on
-RewriteRule ^ http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

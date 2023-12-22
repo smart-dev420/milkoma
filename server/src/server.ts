@@ -38,6 +38,12 @@ app.use(bodyParser.raw(options));
 
 // Routes
 app.get("/", (req, res) => {
+  console.log('!!!!!!!!!!!!!!!!!!', req.url);
+  res.status(StatusCodes.OK).send("API Running");
+});
+// Routes
+app.get("/api", (req, res) => {
+  console.log('!!!!!!!!!!!!!!!!!!', req.url);
   res.status(StatusCodes.OK).send("API Running");
 });
 
