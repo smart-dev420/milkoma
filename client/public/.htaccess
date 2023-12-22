@@ -3,11 +3,11 @@ RewriteEngine On
 
 ```
 # If "api" is present in the URL
-RewriteCond %{REQUEST_URI} /api/ [NC]
-RewriteRule ^ <http://54.250.12.133:5001>%{REQUEST_URI} [P]
+RewriteCond %{REQUEST_URI} / [NC]
+RewriteRule ^ <http://54.250.12.133:5001>%{REQUEST_URI} [L,R=301]
 
 # If "api" is not present in the URL (with or without trailing slash)
-RewriteCond %{REQUEST_URI} !/api/?$ [NC]
+RewriteCond %{REQUEST_URI} !/?$ [NC]
 
 # If there is no trailing slash, redirect to the default page
 RewriteCond %{REQUEST_URI} !/$
@@ -22,3 +22,9 @@ RewriteRule ^ <http://127.0.0.1:2366>%{REQUEST_URI} [P]
 ```
 
 </IfModule>
+
+RewriteEngine On
+
+# Redirect HTTPS to HTTP
+RewriteCond %{HTTPS} on
+RewriteRule ^ http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
