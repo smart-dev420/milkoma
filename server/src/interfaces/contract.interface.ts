@@ -14,5 +14,6 @@ export default interface Contract extends Document {
     billed: boolean;
     createdDate: string;
     endDate: string;
+    paidDate: string;
   }
   

@@ -5,7 +5,6 @@ import modelConstants from "../constants/schema_names";
 const payHistorySchema = new Schema(
     {
         clientEmail: { type: String, required: true, unique: true },
-        creatorEmail: { type: String, required: true, unique: true},
         contractId: { type: String, required: true, },
         creatorMoney: { type: Number, required: true, },
         fee: { type: Number, required: true, },

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { btnBackground, btnBackgroundHover, fontBold, scrollTop, staticFiles } from "../../components/Constants";
 import { setPage } from "../../slices/page";
-import { useState } from "react";
-import { showSentence } from "../../utils/appHelper";
+import { useEffect, useState } from "react";
+import { headers, showSentence } from "../../utils/appHelper";
 import * as yup from "yup";
 import {Form, Formik} from "formik";
 import axios from 'axios';
@@ -38,7 +38,16 @@ export const CardManage = () => {
         cardNumber: '2454123412345473',
         username: 'KAZU WATANABE',
     });
+    const [ history, setHistory ] = useState<any>(null);
+    const getPayHistory = async () => {
+        const res = await axios.post(`${API}/api/getPaymentHistory`, {}, headers());
+        setHistory(res.data);
+        console.log(res.data);
+    }
 
+    useEffect(()=>{
+        getPayHistory()
+    }, []);
     const firstNumber = cardData.cardNumber.substring(0, 4);
     const lastNumber = cardData.cardNumber.substring(cardData.cardNumber.length - 4);
     const handleClose = () => {
@@ -68,78 +77,38 @@ export const CardManage = () => {
         setChecked(!checked);
         console.log(checked);
     }
-    const onSubmit = async (data:FormData) => {
-        const formData = new FormData();
-        formData.append('cardNumber', data.cardNumber);
-        formData.append('username', data.username);
-        formData.append('month', data.month);
-        formData.append('year', data.year);
-        formData.append('cvc', data.cvc);
-        const query = `${API}/`;
-        toast.success("ok");
-        // try {
+    // const onSubmit = async (data:FormData) => {
+    //     const formData = new FormData();
+    //     formData.append('cardNumber', data.cardNumber);
+    //     formData.append('username', data.username);
+    //     formData.append('month', data.month);
+    //     formData.append('year', data.year);
+    //     formData.append('cvc', data.cvc);
+    //     const query = `${API}/`;
+    //     toast.success("ok");
+    //     // try {
             
-        // } catch (error:any) {
-        //     const result = error.response.data.msg;
-        //     toast.error(result);
-        // }
-    };
+    //     // } catch (error:any) {
+    //     //     const result = error.response.data.msg;
+    //     //     toast.error(result);
+    //     // }
+    // };
 
-    const validateCardNumber = (value:any) => {
-        if(isNaN(value) || value.length > 16){
-            return false;
-        }
-        else{
-            return true;
-        }
-    }
+    // const validateCardNumber = (value:any) => {
+    //     if(isNaN(value) || value.length > 16){
+    //         return false;
+    //     }
+    //     else{
+    //         return true;
+    //     }
+    // }
 
     const [ moreView, setMoreView ] = useState(5);
-
-    const testDownload = [
-        {
-            type: '案件',
-            name: '商品紹介の案件',
-            price: 145678,
-            path: '',
-        },
-        {
-            type: 'VIP',
-            name: 'ミルコマプラスの月額料金',
-            price: 980,
-            path: '',
-        },
-        {
-            type: '案件',
-            name: '商品紹介の案件',
-            price: 145678,
-            path: '',
-        },
-        {
-            type: 'VIP',
-            name: 'ミルコマプラスの月額料金',
-            price: 980,
-            path: '',
-        },
-        {
-            type: '案件',
-            name: '商品紹介の案件',
-            price: 145678,
-            path: '',
-        },
-        {
-            type: 'VIP',
-            name: 'ミルコマプラスの月額料金',
-            price: 980,
-            path: '',
-        },
-        
-    ]
 
     return(
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'50px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
             <Stack direction="column" sx={{paddingX:'26px', width:'100%'}}>
-                <Box display='flex' flexDirection='row' justifyContent='space-between'>
+                {/* <Box display='flex' flexDirection='row' justifyContent='space-between'>
                 <Typography sx={{color:'#511523', fontSize:'22px', fontWeight:fontBold}}>登録しているクレジットカード</Typography>
                 <Button sx={{
                     backgroundColor:btnBackground, 
@@ -155,16 +124,16 @@ export const CardManage = () => {
                         カードを追加
                     </Typography>
                 </Button>
-                </Box>
-                <Box display='flex' flexDirection='row' sx={{marginTop:'72px', columnGap:'40px', rowGap:'20px'}} flexWrap='wrap'>
+                </Box> */}
+                {/* <Box display='flex' flexDirection='row' sx={{marginTop:'72px', columnGap:'40px', rowGap:'20px'}} flexWrap='wrap'>
                     <BankCard type={1} firstNumber={2454} lastNumber={5473} />
                     <BankCard type={0} firstNumber={2454} lastNumber={5473} />
                     <BankCard type={0} firstNumber={2454} lastNumber={5473} />
                 </Box>
-                <Typography sx={{fontSize:'22px', color:'#511523', fontWeight:fontBold, marginTop:'86px', marginBottom:'32px'}}>カード詳細</Typography>
+                <Typography sx={{fontSize:'22px', color:'#511523', fontWeight:fontBold, marginTop:'86px', marginBottom:'32px'}}>カード詳細</Typography> */}
 
             {/** Card Data */}    
-                <Box display='flex' flexDirection='row' sx={{columnGap:'35px'}}>
+                {/* <Box display='flex' flexDirection='row' sx={{columnGap:'35px'}}>
                     <Box
                         display="flex"
                         flexDirection="column"
@@ -238,12 +207,12 @@ export const CardManage = () => {
                             </Button>
                         </Box>
                     </Box>
-                </Box>
+                </Box> */}
             
             {/** Download list */}
-                <Typography sx={{fontSize:'22px', color:'#511523', fontWeight:fontBold, marginTop:'130px', marginBottom:'32px'}}>お支払い履歴</Typography>
+                <Typography sx={{fontSize:'22px', color:'#511523', fontWeight:fontBold, marginTop:'20px', marginBottom:'32px'}}>お支払い履歴</Typography>
                 <Box display='flex' flexDirection='column' sx={{rowGap:'15px'}}>
-                    {testDownload.map((item, index) => (
+                    {history && history.map((item: any, index: number) => (
                         index < moreView?(<FileDownload data={item} />):null
                     ))}
                 </Box>
@@ -311,7 +280,7 @@ export const CardManage = () => {
                 validationSchema={validationSchema}
                 onSubmit={(data:FormData, actions) => {
                     actions.setSubmitting(true);
-                    onSubmit(data);
+                    // onSubmit(data);
                     actions.setSubmitting(false);
                     // setCardNumberValue('');
                 }}
@@ -329,7 +298,7 @@ export const CardManage = () => {
                 />
                 <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{marginTop:'35px', marginBottom:'14px'}}>
                     <Typography sx={{color:'#454545', fontSize:'18px', fontWeight:fontBold}}>カード番号</Typography>
-                    <Typography sx={{color:'#FF4A55', fontSize:'12px', fontWeight:fontBold, display:validateCardNumber(values.cardNumber)?'none':''}}>カード番号が正しく入力されていません</Typography>
+                    {/* <Typography sx={{color:'#FF4A55', fontSize:'12px', fontWeight:fontBold, display:validateCardNumber(values.cardNumber)?'none':''}}>カード番号が正しく入力されていません</Typography> */}
                 </Box>  
 
                 {/** Card Number */}
@@ -634,20 +603,13 @@ const BankCard: React.FC<{ type: number; firstNumber: number; lastNumber: number
     );
   };
 
-type Download = {
-    type: string,
-    name: string,
-    price: number,
-    path: string,
-}
-
-const FileDownload: React.FC<{ data:Download }> = ({ data }) => {
+const FileDownload: React.FC<{ data:any }> = ({ data }) => {
     return (
         <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{height:'79px', borderRadius:'10px', border:'1px solid #EE7D90', paddingX:'15px', paddingY:'24px', columnGap:'27px'}}>
-            <Typography display='flex' alignItems='center' justifyContent='center' sx={{width:'64px', height:'31px', borderRadius:'38px', backgroundColor:'#F9E5D1', color:'#B9324D', fontSize:'10px', textAlign:'center'}}>{data.type}</Typography>
+            <Typography display='flex' alignItems='center' justifyContent='center' sx={{width:'64px', height:'31px', borderRadius:'38px', backgroundColor:'#F9E5D1', color:'#B9324D', fontSize:'10px', textAlign:'center'}}>案件</Typography>
             <Box display='flex' flexDirection='column' flex={8} sx={{rowGap:'3px'}}>
-                <Typography sx={{fontSize:'12px', color:'#424242', fontWeight:fontBold}}>{data.name}</Typography>
-                <Typography sx={{fontSize:'10px', color:'#B9324D', fontWeight:fontBold}}>{data.price}円</Typography>
+                <Typography sx={{fontSize:'12px', color:'#424242', fontWeight:fontBold}}>{data.category}</Typography>
+                <Typography sx={{fontSize:'10px', color:'#B9324D', fontWeight:fontBold}}>{(data.creatorPrice + data.fee).toLocaleString()} 円</Typography>
             </Box>
             <Button sx={{
                 backgroundColor:'#EE7D90', 

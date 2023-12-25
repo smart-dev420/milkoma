@@ -44,6 +44,7 @@ apiRoute.post("/contractConfirm/:id",       verifyToken,          contract.contr
 apiRoute.post("/contractCancel/:id",        verifyToken,          contract.contractCancel);
 apiRoute.post("/addCreator/:id",            verifyToken,          contract.addCreator);
 apiRoute.post("/contractPayment/:id",       verifyToken,          contract.contractPayment);
+apiRoute.post("/getClientSecret",           verifyToken,          contract.getClientSecret);
 
 /******* Get contract data */
 apiRoute.post("/getAllContract/:email",     verifyToken,          contract.getAllContract);
@@ -51,6 +52,8 @@ apiRoute.post("/getContractInfo/:id",       verifyToken,          contract.getCo
 apiRoute.post("/setContract/:id",           verifyToken,          contract.setContract);
 apiRoute.post("/nextStep/:id",              verifyToken,          contract.nextStep);
 apiRoute.post("/getAllContracts",           verifyToken,          contract.getAllContracts);
+apiRoute.post("/paymentSave/:id",           verifyToken,          contract.paymentSave);
+apiRoute.post("/getPaymentHistory",         verifyToken,          contract.getPaymentHistory);
 
 /******** Provide File */
 apiRoute.post("/upload_provide",            verifyToken,          provide.uploadProvideFile);

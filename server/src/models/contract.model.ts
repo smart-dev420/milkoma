@@ -19,6 +19,7 @@ const contractSchema = new Schema(
       billed: { type: Boolean, default: false },  // Payment check
       createdDate: { type: Date, default: Date.now },
       endDate: { type: Date,  default: '' },
+      paidDate: { type: Date, default: '' },
     },
     {
       collection: modelConstants.contract,

@@ -11,6 +11,7 @@ if (APP_ENV === 'prod'){
   W_HOST_URL                        = process.env.REACT_APP_API_URL_DEV;
 }
 
+export const STRIPE_PUBLISH_KEY = process.env.REACT_APP_STRIPE_PUBLISH_KEY;
 export const APP_VERSION = process.env.REACT_APP_VERSION;
 export const ASSET_IMAGES = process.env.REACT_APP_ASSETS_PATH + "/images";
 export const ASSET_ICONS = process.env.REACT_APP_ASSETS_PATH + "/icons";
