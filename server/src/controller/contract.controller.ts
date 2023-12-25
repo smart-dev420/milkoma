@@ -9,6 +9,7 @@ import ContractModel from "../models/contract.model";
 import AccountModel from "../models/account.model";
 import { allContract, getContract } from "../services/contract.service";
 import { subscribe } from "../utils/stripe";
+import express, { Request, Response } from 'express';
 
 const validateToken = (req:any, res:any) => {
     const { authorization } = req.body.token || req.query.token || req.headers;
@@ -254,7 +255,54 @@ const stripe_payment: RequestHandler = async (req, res) => {
   }
 }
 
+interface CreatePaymentIntentRequest {
+  amount: number;
+  currency: string;
+  customer: string;
+}
 
+interface CreatePaymentIntentResponse {
+  clientSecret: string;
+}
+
+const getClientSecret: RequestHandler = async (req: Request<any, any, CreatePaymentIntentRequest>, res: Response<CreatePaymentIntentResponse | { error: string }>) => {
+  const { amount, currency, customer } = req.body;
+  const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: '2020-08-27', // Change to your Stripe API version
+  });
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency,
+      customer,
+    });
+
+    res.json({ clientSecret: paymentIntent.client_secret });
+  } catch (error:any) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+const paymentSave: RequestHandler = async (req: Request, res: Response) => {
+  try{
+    const contractId = req.params.id;
+    await ContractModel.updateOne({ _id: contractId }, { billed: true, paidDate: Date.now() });
+    return res.status(StatusCodes.OK);
+  } catch (err){
+    console.error(err);
+  }
+}
+
+const getPaymentHistory: RequestHandler = async (req: Request, res: Response) =>{
+  try{
+    const token = validateToken(req, res);
+    const email = getEmailFromToken(token);
+    const info = await ContractModel.find({clientEmail: email, billed: true}, 'category creatorPrice fee');
+    return res.status(StatusCodes.OK).send(info);
+  } catch (err){
+    console.error(err);
+  }
+}
 
 const contract = { 
     insertContract,
@@ -268,6 +316,9 @@ const contract = {
     contractConfirm,
     contractCancel,
     addCreator,
-    contractPayment
+    getClientSecret,
+    contractPayment,
+    paymentSave,
+    getPaymentHistory
   };
   export default contract;

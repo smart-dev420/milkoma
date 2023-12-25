@@ -19,9 +19,26 @@ export const Payment = () => {
     const navigate = useNavigate();
     const { cid } = useParams();
     const contractId = cid??'';
+    const stripe = useStripe();
+    const elements = useElements();
+    const [clientSecret, setClientSecret] = useState<string | null>(null);
+    const getClientSecret = async () => {
+      const response = await axios.post(
+        `${API}/api/getClientSecret`,
+        { 
+            amount : parseFloat(contractInfo.creatorPrice) + parseFloat(contractInfo.fee), 
+            currency: 'jpy', 
+            customer: customerId }, 
+        headers()
+    );
+    console.log('response - ', response.data.clientSecret);
+    setClientSecret(response.data.clientSecret);
+    }
     const [ contractInfo, setContractInfo ] = useState<any>(null);
     const [ open, setOpen ] = useState<boolean>(false);
     const [ isHovered, setIsHovered ] = useState<boolean>(false);
+    const [ customerId, setCustomerId ] = useState<string>();
+    const [ paid, setPaid ] = useState<boolean>(false);
     const handleClose = () => {
         setOpen(false);
         setIsHovered(false);
@@ -36,116 +53,76 @@ export const Payment = () => {
         setOpen(true);
     };
 
-    const [ card, setCard ] = useState({
-        username:'',
-        cardNumber: '',
-        month:'',
-        year:'',
-        cvc:'',
-    });
     const getContractInfo = async () => {
         const res = await axios.post(`${API}/api/getContractInfo/${contractId}`, {}, headers());
+        const userInfo = await axios.post(`${API}/api/getUserProfile`, {}, headers());
         setContractInfo(res.data);
+        setCustomerId(userInfo.data.customer_id);
+        setPaid(false);
     }
     useEffect(() => {
         getContractInfo();
-    }, []);
-
-    const validateCardNumber = (value:any) => {
-        if(isNaN(value) || value.length > 16){
-            return false;
-        }
-        else{
-            return true;
-        }
-    }
+    }, [paid]);
 
     const handlePrePay = () => {
-        if (isNaN(parseInt(card.cardNumber)) || card.cardNumber.length > 16){
-            toast.error('有効な値を挿入してください。');
-        } else if (card.username == ''){
-            toast.error('ユーザー名が必要です');
-        } else if (parseInt(card.month) < 1 || parseInt(card.month) > 12){
-            toast.error('有効な値を挿入してください。');
-        } else if ( card.year == '' || card.month == ''){
-            toast.error('値を入力する必要があります。');
-        } else if (parseInt(card.year) < 2020 || parseInt(card.year) > 2030){
-            toast.error('有効な値を挿入してください。');
-        } else if (card.cvc == ''){
-            toast.error('値を入力する必要があります。');
-        } else {
+        if (stripe && elements && customerId) {
+            getClientSecret();
             handleOpen();
         }
     }
 
     const handleSubmit = async () => {
-        const formData = new FormData();
-        formData.append('cardNumber', card.cardNumber);
-        formData.append('username', card.username);
-        formData.append('month', card.month);
-        formData.append('year', card.year);
-        formData.append('cvc', card.cvc);
-        const query = `${API}/api/stripe_payment/${contractId}`;
-
+        if (!stripe || !elements || !clientSecret) return;
+      
         try {
-            const res = await axios.post(query, formData, headers());
-            console.log('res - ', res);
-            toast.success("ok");
-            setOpen(false);            
-        } catch (error:any) {
-            const result = error.response.data.msg;
-            toast.error(result);
-        }
-    };
-
-    const stripe = useStripe();
-    const elements = useElements();
-  
-    const handlePayment = async (event: any) => {
-      event.preventDefault();
-  
-      try {
-        // Make a POST request to your backend to get the client_secret
-        const response = await axios.post(
-            `${API}/api/stripe_payment/${contractId}`,
-          { amount: 200 }
-        );
-  
-        if (response.status === 200) {
-            const cardElement = elements?.getElement(CardNumberElement);
-
-            if (!cardElement) {
-              // Handle the case where the card element is not available or undefined
-              console.error('Card element is not available');
-              return; // Or perform appropriate error handling
+          const result = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+              card: elements.getElement('cardNumber')!,
+            },
+          });
+      
+          if (result.error) {
+            switch (result.error.code) {
+              case 'authentication_required':
+                // Handle authentication required error
+                toast.error('認証が必要です');
+                console.error('Authentication required:', result.error.message);
+                // Perform necessary action like additional authentication
+                break;
+              case 'card_error':
+                // Handle card error
+                toast.error('カードエラー');
+                console.error('Card error:', result.error.message);
+                // Display appropriate message to the user
+                break;
+              case 'insufficient_funds':
+                // Handle insufficient funds error
+                toast.error('残高不足');
+                console.error('Insufficient funds:', result.error.message);
+                // Inform the user about insufficient funds
+                break;
+              // Handle other error codes or types here as needed
+              default:
+                console.error('Payment failed:', result.error.message);
+                // Display a generic error message to the user
             }
-            
-            // Now you can proceed to use the card element
-            const confirmPayment = await stripe?.confirmCardPayment(
-              response.data.client_secret,
-              {
-                payment_method: {
-                  card: cardElement,
-                },
-              }
-            );
-  
-          if (confirmPayment?.paymentIntent?.status === 'succeeded') {
-            console.log('Payment confirmed!');
-            // Handle successful payment here
-          } else if (confirmPayment?.paymentIntent?.status === 'requires_action') {
-            // Handle additional authentication steps if required
-            // For example, use confirmCardPayment with the handleCardAction option
-          } else {
-            console.log('Payment failed!');
-            // Handle payment failure or other statuses here
+          } else if (result.paymentIntent?.status === 'succeeded') {
+            // Payment successful
+            try{
+                toast.success('支払いが完了しました');
+                handleClose();
+                await axios.post(`${API}/api/paymentSave/${contractId}`, {}, headers());
+            } catch (err) {
+                console.error(err);
+            }
           }
+        } catch (error) {
+          // Handle general errors here
+          console.error('Error processing payment:', error);
+          // Display a generic error message to the user
         }
-      } catch (error) {
-        console.error('Error processing payment:', error);
-        // Handle error scenarios here
-      }
-    };
+      };      
+  
     return(
     <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'68px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
         <Stack direction="column" sx={{paddingX:'18px', width:'100%'}}>
@@ -159,7 +136,7 @@ export const Payment = () => {
                         backgroundColor: btnBackgroundHover
                     },
                     }}
-                    onClick={() => {navigate('/mypage/project')}}>
+                    onClick={() => {navigate(`/mypage/detail/${contractId}`);}}>
                     <CardMedia
                         component="img"
                         alt="Image1"
@@ -244,13 +221,6 @@ export const Payment = () => {
                 </Box>
             )}
 
-            <form onSubmit={handlePayment}>
-            <CardNumberElement/>
-            <CardExpiryElement />
-            <CardCvcElement />    
-            <button>Confirm Payment</button>
-            </form>
-
             <Box display='flex' flexDirection='row' sx={{ columnGap: '50px' }}>
                 <CardMedia 
                     component='img'
@@ -260,34 +230,16 @@ export const Payment = () => {
                 <Box display='flex' flexDirection='column'>
                     <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' sx={{marginTop:'35px', marginBottom:'14px'}}>
                         <Typography sx={{color:'#454545', fontSize:'18px', fontWeight:fontBold}}>カード番号</Typography>
-                        <Typography sx={{color:'#FF4A55', fontSize:'12px', fontWeight:fontBold, display:validateCardNumber(card.cardNumber)?'none':''}}>カード番号が正しく入力されていません</Typography>
                     </Box>  
 
                     {/** Card Number */}
                     <Box display='flex' flexDirection='column' justifyContent='space-between' sx={{paddingX:'15px', border:'2px solid #EC605B', borderRadius:'14px'}}>
-                        <TextField
-                            id = "cardNumber"
-                            name='cardNumber'
-                            type={"text"}
-                            placeholder="カード番号を入力"
-                            value={card.cardNumber}
-                            className="bg-[#FCF9F8] rounded-lg w-[90%]"
-                            onChange={(e)=>{setCard({...card, cardNumber:e.target.value})}}
-                            sx={{ whiteSpace:'normal', width:'100%', backgroundColor:'#FFFFFF'}}
-                            inputProps={{
-                                maxLength: 16, // Set maximum length to 16 characters
-                            }}
-                            InputProps={{
-                                endAdornment: (
-                                <InputAdornment position="end" sx={{cursor:"pointer"}} onClick={() => setCard({ ...card, cardNumber: '' })}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                                        <path id="Vector" d="M13.038,9l4.544-4.545a1.432,1.432,0,0,0,0-2.02L15.56.416a1.434,1.434,0,0,0-2.019,0L9,4.96,4.453.416a1.434,1.434,0,0,0-2.019,0L.417,2.435a1.432,1.432,0,0,0,0,2.02L4.96,9,.417,13.546a1.432,1.432,0,0,0,0,2.019l2.019,2.018a1.431,1.431,0,0,0,2.019,0L9,13.04l4.544,4.543a1.435,1.435,0,0,0,2.022,0l2.019-2.018a1.432,1.432,0,0,0,0-2.019Z" 
-                                        fill='#B9324D'/>
-                                    </svg>  
-                                </InputAdornment>
-                                ),
-                            }}
-                            />
+                        <Box
+                            id = "card-number-element"
+                            sx={{ whiteSpace:'normal', width:'100%', backgroundColor:'#FFFFFF', paddingY:'20px', fontSize:'20px'}}
+                            >
+                        <CardNumberElement />
+                        </Box>
                     </Box>
                     <Box display='flex' flexDirection='row' sx={{marginTop:'16px', columnGap:'15px'}}>
                         <Typography sx={{fontSize:'14px', color:'#858997', whiteSpace:'nowrap', width:'180px'}}>利用できるブランド : </Typography>
@@ -298,61 +250,18 @@ export const Payment = () => {
                         <CardMedia component='img' image={staticFiles.images.cardLogo5} sx={{width:'25px',height:'16px'}}/>
                     </Box>
 
-                    {/** User Name */}
-                    <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{marginTop:'30px', marginBottom:'14px'}}>
-                        <Typography sx={{color:'#454545', fontSize:'18px', fontWeight:fontBold}}>カード名義</Typography>
-                    </Box>  
-                    <Box display='flex' flexDirection='column' justifyContent='space-between' 
-                        sx={{paddingX:'15px', border:'2px solid #EC605B', borderRadius:'14px'}}>
-                        <TextField
-                            id = "username"
-                            name='username'
-                            type={"text"}
-                            placeholder="名義を入力"
-                            value={card.username}
-                            className="bg-[#FCF9F8] rounded-lg w-[90%]"
-                            onChange={(e)=>{setCard({...card, username:e.target.value})}}
-                            sx={{ whiteSpace:'normal', width:'100%', backgroundColor:'#FFFFFF'}}
-                            />
-                    </Box>
-
                     {/** Month  and Year*/}
                     <Box display='flex' flexDirection='row' sx={{columnGap:'16px', marginTop:'30px'}}>
-                        <Box display='flex' flexDirection='column' sx={{width:'50%', }}>
-                            <Typography sx={{color:'#454545', fontSize:'18px', fontWeight:fontBold, marginBottom:'14px'}}>有効期限(月)</Typography>
-                            <Box display='flex' flexDirection='column' justifyContent='space-between' sx={{paddingX:'15px', border:'2px solid #EC605B', borderRadius:'14px'}}> 
-                            <TextField
-                            id = "month"
-                            name='month'
-                            type={"text"}
-                            placeholder="MM"
-                            value={card.month}
-                            className="bg-[#FCF9F8] rounded-lg w-[90%]"
-                            onChange={(e)=>{setCard({...card, month:e.target.value})}}
-                            sx={{ whiteSpace:'normal', width:'100%', backgroundColor:'#FFFFFF'}}
-                            inputProps={{
-                                maxLength: 2, 
-                            }}
-                            />
-                            </Box>
-                        </Box>
-
-                        <Box display='flex' flexDirection='column' sx={{width:'50%'}}>
+                        <Box display='flex' flexDirection='column' sx={{width:'100%'}}>
                             <Typography sx={{color:'#454545', fontSize:'18px', fontWeight:fontBold, marginBottom:'14px'}}>有効期限(年)</Typography>
-                            <Box display='flex' flexDirection='column' justifyContent='space-between' sx={{paddingX:'15px', border:'2px solid #EC605B', borderRadius:'14px'}}>
-                            <TextField
-                            id = "year"
-                            name='year'
-                            type={"text"}
-                            placeholder="YYYY"
-                            value={card.year}
-                            className="bg-[#FCF9F8] rounded-lg w-[90%]"
-                            onChange={(e)=>{setCard({...card, year:e.target.value})}}
-                            sx={{ whiteSpace:'normal', width:'100%', backgroundColor:'#FFFFFF'}}
-                            inputProps={{
-                                maxLength: 4, 
-                            }}
-                            />
+                            <Box display='flex' flexDirection='column' justifyContent='space-between' 
+                            sx={{paddingX:'15px', border:'2px solid #EC605B', borderRadius:'14px'}}>
+                                <Box
+                                id = "card-expiry-element"
+                                sx={{ whiteSpace:'normal', width:'100%', backgroundColor:'#FFFFFF', paddingY:'20px', fontSize:'20px'}}
+                                >
+                                    <CardExpiryElement />
+                                </Box>
                             </Box>
                         </Box>
                     </Box>
@@ -361,19 +270,12 @@ export const Payment = () => {
                     <Box display='flex' flexDirection='column' sx={{marginTop:'30px'}}>
                         <Typography sx={{color:'#454545', fontSize:'18px', fontWeight:fontBold, marginBottom:'14px', }}>CVC(セキュリティコード)</Typography>
                         <Box display='flex' flexDirection='column' justifyContent='space-between' sx={{paddingX:'15px', border:'2px solid #EC605B', borderRadius:'14px'}}> 
-                            <TextField
-                            id = "cvc"
-                            name='cvc'
-                            type={"text"}
-                            placeholder="CVC"
-                            value={card.cvc}
-                            className="bg-[#FCF9F8] rounded-lg w-[90%]"
-                            onChange={(e)=>{setCard({...card, cvc :e.target.value})}}
-                            inputProps={{
-                                maxLength: 4, 
-                            }}
-                            sx={{ whiteSpace:'normal', width:'100%', backgroundColor:'#FFFFFF'}}
-                            />
+                            <Box
+                            id = "card-cvc-element"
+                            sx={{ whiteSpace:'normal', width:'100%', backgroundColor:'#FFFFFF', paddingY:'20px', fontSize:'20px'}}
+                            >
+                                <CardCvcElement />
+                            </Box>
                             </Box>
                     </Box>
                     <Box display='flex' flexDirection='row' justifyContent='flex-end'>
@@ -387,6 +289,7 @@ export const Payment = () => {
                                 backgroundColor: '#D48996'
                             },
                             }}
+                            disabled = {contractInfo && contractInfo.billed}
                             onClick={handlePrePay}
                         >
                                 決済する

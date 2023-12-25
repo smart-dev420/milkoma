@@ -1,22 +1,13 @@
 import { ReactNode } from "react";
 import { Top, Footer } from "./layouts";
-import { staticFiles } from "../components/Constants";
+import { STRIPE_PUBLISH_KEY, staticFiles } from "../components/Constants";
 import { SideBar } from "./layouts/SideBar";
 import AuthContainer from "./AuthContainer";
 import {
   Elements,
 } from '@stripe/react-stripe-js';
 import { loadStripe } from "@stripe/stripe-js";
-const stripePromise = loadStripe(`${process.env.STRIPE_SECRET_KEY}`);
-const options: any = {
-  mode: 'payment',
-  amount: 1099,
-  currency: 'usd',
-  // Fully customizable with appearance API.
-  appearance: {
-    /*...*/
-  },
-};
+const stripePromise = loadStripe(STRIPE_PUBLISH_KEY??'pk_test');
 export const MypageLayout: React.FC<{
   children: ReactNode;
   backgroundColor?: string;
@@ -30,7 +21,7 @@ export const MypageLayout: React.FC<{
         <img src={staticFiles.images.ellipse_left} className="w-[250px]" style={{position:"fixed", left:0, top:-80}}/>
         <SideBar />
         <div className="ml-[350px] mt-[220px] mb-[100px] w-[100%]" style={{ minHeight: '570px', }}>
-        <Elements stripe={stripePromise} options={options}>
+        <Elements stripe={stripePromise} >
           {children}
         </Elements>
         </div>

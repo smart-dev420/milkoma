@@ -10,7 +10,7 @@ import { CreatorStep } from "../pages/Creator/Step";
 import { ViewHistory } from "../pages/VIewHistory";
 import { MypageLayout } from "../pages/MypageLayout";
 import { SignUp, Login, ForgotPassword, OtpSent, ResetPassword } from "../pages/Sign";
-import { HomePage, ProjectList, DetailPage, ContractPage, ContractManage, ChattingPage, CardManage, Profile, Payment, TestPayment, Admin } from "../pages/MyPage";
+import { HomePage, ProjectList, DetailPage, ContractPage, ContractManage, ChattingPage, CardManage, Profile, Payment, Admin } from "../pages/MyPage";
 
 export const router = createHashRouter([
     {
@@ -147,8 +147,7 @@ export const router = createHashRouter([
       },
       {
         path: "pay/:cid",
-        // element: <Payment />,
-        element: <TestPayment />,
+        element: <Payment />,
         errorElement: <NotFound />,
       },
       {
