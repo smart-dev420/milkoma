@@ -156,12 +156,28 @@ const uploadProvideFile: RequestHandler = async (req, res) => {
     });
   }
 
+  const receivedDownload: RequestHandler = async (req, res) => {
+    const fileName = req.params.filename;
+    console.log('filename!!!!!!!!!!!!!!!! ', fileName)
+    const filePath = path.join(receiptPath, fileName);
+    fs.access(filePath, fs.constants.F_OK, (err:any) => {
+      if (err) {
+        logger.error("No file exists");
+        res.status(200).send({msg:'No file exists'});
+      } else {
+        logger.info("File exists");
+        res.status(200).sendFile(filePath);
+      }
+    });
+  }
+
   const provide = { 
     uploadProvideFile,
     provideDownload,
     getProvideFiles,
     uploadProductFile,
     getProductFiles,
-    productDownload
+    productDownload,
+    receivedDownload
   };
   export default provide;
