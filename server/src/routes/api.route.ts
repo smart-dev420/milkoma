@@ -62,4 +62,6 @@ apiRoute.get("/provideDownload/:filename",  verifyToken,          provide.provid
 apiRoute.post("/upload_product",            verifyToken,          provide.uploadProductFile);
 apiRoute.post("/getProductFiles/:id",       verifyToken,          provide.getProductFiles);
 apiRoute.get("/productDownload/:filename",  verifyToken,          provide.productDownload);
+
+apiRoute.get("/receivedDownload/:filename",      verifyToken,     provide.receivedDownload);
 export default apiRoute;

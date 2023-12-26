@@ -604,6 +604,34 @@ const BankCard: React.FC<{ type: number; firstNumber: number; lastNumber: number
   };
 
 const FileDownload: React.FC<{ data:any }> = ({ data }) => {
+    // Received Download
+    const handleReceiveDownload = async (name: string) => {
+        try {
+            const token = localStorage?.getItem('token');
+            const headers = {
+              "Accept": "application/json",
+              "Content-Type": "application/x-www-form-urlencoded",
+              "Authorization": "Bearer " + token
+            };
+        const fileName = name + '.pdf';
+        console.log('fileName - ', fileName);
+        const response = await axios.get(`${API}/api/receivedDownload/${fileName}`, {
+            responseType: 'blob',
+            headers,
+            });
+    
+          // Create a temporary URL to download the file
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', fileName);
+          document.body.appendChild(link);
+          link.click();
+        } catch (error) {
+          // Handle errors
+          console.error('File download error:', error);
+        }
+    }
     return (
         <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{height:'79px', borderRadius:'10px', border:'1px solid #EE7D90', paddingX:'15px', paddingY:'24px', columnGap:'27px'}}>
             <Typography display='flex' alignItems='center' justifyContent='center' sx={{width:'64px', height:'31px', borderRadius:'38px', backgroundColor:'#F9E5D1', color:'#B9324D', fontSize:'10px', textAlign:'center'}}>案件</Typography>
@@ -619,7 +647,9 @@ const FileDownload: React.FC<{ data:any }> = ({ data }) => {
                 "&:hover": {
                     backgroundColor: '#E28E9C'
                 },
-                }}>
+                }}
+                onClick={()=>handleReceiveDownload(data._id)}
+            >
                 <CardMedia
                     component="img"
                     alt="Image1"

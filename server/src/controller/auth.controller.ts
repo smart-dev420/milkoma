@@ -44,6 +44,7 @@ const verifyPath = path.join(rootPath, 'uploads/verifies');
 const otpGenerator = require('otp-generator')
 import AWS from 'aws-sdk';
 import AccountModel from "../models/account.model";
+import { CreatePdfDocument } from "../utils/create_pdf"
 // AWS.config.update({ region: 'ap-northeast-1' }); 
 // const ses = new AWS.SES({ apiVersion: '2010-12-01' });
 

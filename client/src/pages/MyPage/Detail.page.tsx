@@ -328,6 +328,35 @@ export const DetailPage = () => {
         }
     };
 
+    // Received Download
+    const handleReceiveDownload = async () => {
+        try {
+            const token = localStorage?.getItem('token');
+            const headers = {
+              "Accept": "application/json",
+              "Content-Type": "application/x-www-form-urlencoded",
+              "Authorization": "Bearer " + token
+            };
+        const fileName = contractId + '.pdf';
+        console.log('fileName - ', fileName);
+        const response = await axios.get(`${API}/api/receivedDownload/${fileName}`, {
+            responseType: 'blob',
+            headers,
+            });
+    
+          // Create a temporary URL to download the file
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', fileName);
+          document.body.appendChild(link);
+          link.click();
+        } catch (error) {
+          // Handle errors
+          console.error('File download error:', error);
+        }
+    }
+
     return (
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'68px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
             { contractInfo && (
@@ -544,21 +573,21 @@ export const DetailPage = () => {
                             </Box>
                             <Box display='flex' flexDirection='column' flex={4} alignItems='center'>
                                 <Button sx={{
-                                    backgroundColor: data.bill?'#B9B2B1':data.paid?'#ffffff':btnBackground, 
+                                    backgroundColor: contractInfo.billed?'#ffffff':btnBackground, 
                                     paddingX:'20%', borderRadius:'36px', 
-                                    color: data.bill?'#FFFFFF':data.paid?btnBackground:'#ffffff', fontSize:'15px',
+                                    color: contractInfo.billed?btnBackground:'#ffffff', fontSize:'15px',
                                     marginY:'7px', fontWeight:fontBold,
-                                    border:data.bill?'':data.paid?'2px solid #DF8391':'',
+                                    border:contractInfo.billed?'2px solid #DF8391':'',
                                     "&:hover": {
-                                        backgroundColor: data.bill?'#B9B2B1': '#D48996',
-                                        color:data.bill?'#FFFFFF':data.paid?'#FFFFFF':'#FFF'
+                                        backgroundColor: contractInfo.billed?btnBackground: '#D48996',
+                                        color:contractInfo.billed?'#FFFFFF':'#FFF'
                                     },
                                     }}
-                                    onClick={data.paid?handleBill:handlePaid}
+                                    onClick={contractInfo.billed?handleBill:handlePaid}
                                     >
-                                        {data.bill?'CALCULATING':data.paid?'領収書発行':'お支払い'}
+                                        {contractInfo.billed?'領収書発行':'お支払い'}
                                 </Button>
-                                <Typography sx={{fontSize:'10px', color:'#001219'}}>{data.bill?'料金確定までお待ちください':data.paid?'お支払い済みです':'支払い期限:' + getProvideDate(contractInfo.createdDate, 1)}</Typography>
+                                <Typography sx={{fontSize:'10px', color:'#001219'}}>{contractInfo.billed?'お支払い済みです':'支払い期限:' + getProvideDate(contractInfo.createdDate, 1)}</Typography>
                             </Box>
                         </Box>
                     </Box>
@@ -777,7 +806,9 @@ export const DetailPage = () => {
                             "&:hover": {
                                 backgroundColor: btnBackgroundHover
                             },
-                            }}>
+                            }}
+                            onClick={handleReceiveDownload}
+                            >
                             <CardMedia
                                 component="img"
                                 alt="Image1"

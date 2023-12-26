@@ -10,6 +10,7 @@ import AccountModel from "../models/account.model";
 import { allContract, getContract } from "../services/contract.service";
 import { subscribe } from "../utils/stripe";
 import express, { Request, Response } from 'express';
+import { CreatePdfDocument } from "../utils/create_pdf";
 
 const validateToken = (req:any, res:any) => {
     const { authorization } = req.body.token || req.query.token || req.headers;
@@ -287,6 +288,12 @@ const paymentSave: RequestHandler = async (req: Request, res: Response) => {
   try{
     const contractId = req.params.id;
     await ContractModel.updateOne({ _id: contractId }, { billed: true, paidDate: Date.now() });
+    const info = await ContractModel.findOne({ _id: contractId});
+    if(info){
+      const totalPrice = parseFloat(info.creatorPrice) + parseFloat(info.fee);
+      const value = { name: info.category, price: totalPrice }
+      CreatePdfDocument(contractId, value);
+    }
     return res.status(StatusCodes.OK);
   } catch (err){
     console.error(err);
