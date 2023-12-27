@@ -51,13 +51,13 @@ app.get("/api", (req, res) => {
 setupRoute(app);
 
 var http = require('http').createServer(app);
-// var io = require('socket.io')(http, {
-//   cors: {
-//     origin: "*",
-//     methods: ["GET", "POST"]
-//   }
-// });
-// io.listen(config.server.socketPort)
+var io = require('socket.io')(http, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
+io.listen(config.server.socketPort)
 
 http.listen(config.server.port, async () => {
   logger.info(
