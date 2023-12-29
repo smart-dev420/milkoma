@@ -1,13 +1,16 @@
 import { Box, Button, CardMedia, Container, Grid, Slider, Stack, TextareaAutosize, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { btnBackground, btnBackgroundHover, fontBold, scrollTop, staticFiles } from "../../components/Constants";
 import { setPage } from "../../slices/page";
-import { useState } from "react";
 import { showSentence } from "../../utils/appHelper";
+import io, { Socket } from 'socket.io-client';
+import React, { useState, useEffect, FormEvent } from 'react';
 
-export const ChattingPage = () => {
-    scrollTop();
+// const socket = io('http://localhost:5001');
+
+export const ChattingPage: React.FC<{  }> = ({ }) => {
+    // scrollTop();
     const dispatch = useDispatch();
     dispatch(setPage({page:2}));
     const navigate = useNavigate();
@@ -15,7 +18,60 @@ export const ChattingPage = () => {
         contracted:useSelector((state:any) => state.contract.contracted),
         productIntro: '自社の美容液の紹介をしたい。新商品です。発売予定は12月1日です。@@@商品のURLはhttps://mirucoma.comです。@@@ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。',
     });
+    const { roomId } = useParams();
+    const [socket, setSocket] = useState<Socket | null>(null);
+    const [messages, setMessages] = useState<string[]>([]);
+    const [inputMessage, setInputMessage] = useState('');
+  
+    useEffect(() => {
+      const newSocket = io('http://localhost:5002'); // Replace with your server URL
+      setSocket(newSocket);
+  
+      return () => {
+        newSocket.disconnect();
+      };
+    }, []);
+  
+    useEffect(() => {
+      if (socket) {
+        socket.on('message', (receivedMessage: string) => {
+          setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+        });
+      }
+    }, [socket]);
+  
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      if (inputMessage && socket) {
+        console.log('message', messages);
+        socket.emit('sendMessage', { room: roomId, message: inputMessage });
+        setMessages((prevMessages) => [...prevMessages, inputMessage]);
+        setInputMessage('');
+      }
+    };
 
+    // useEffect(() => {
+    //   // Set up a socket event listener when the component mounts
+    //   socket.on('message', (receivedMessage: string) => {
+    //     setMessages((prevMessages: string[]) => [...prevMessages, receivedMessage]);
+    //   });
+  
+    //   // Clean up the socket event listener when the component unmounts
+    //   return () => {
+    //     socket.off('message');
+    //   };
+    // }, []); // Empty dependency array ensures the effect runs once on mount
+  
+    // const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    //     event.preventDefault();
+    //     if (inputMessage && socket) {
+    //         console.log('message', messages);
+    //       socket.emit('sendMessage', { room: roomId, message: inputMessage });
+    //       setInputMessage('');
+    //     }
+    //   };
+      
+  
     return(
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'50px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
             <Stack direction="column" sx={{paddingX:'20px', width:'100%'}}>
@@ -85,13 +141,27 @@ export const ChattingPage = () => {
                 </Box>       
 
                 {/** Chatting Part */}
-                <TextareaAutosize style={{resize:"none", backgroundColor:'rgba(0,0,0,0)'}} disabled value='
-                asdfasfd
-                asdf
-                asdf
-                asdf
-                a'/>
-                    
+                    {/* Displaying received messages */}
+                        <div>
+                            {messages.map((msg, index) => (
+                                <TextareaAutosize key={index} value={msg} 
+                                style={{width:'100%', resize:"none", border:'1px solid black', borderRadius:'5px', padding:'5px'}} 
+                                disabled />
+                            ))}
+                            {messages.map((msg, index) => (
+                                <div>{msg}</div>
+                            ))}
+                        </div>
+                <form onSubmit={handleSubmit}>
+                    <Box>
+                        <TextareaAutosize maxRows={3} style={{resize:"none", backgroundColor:'rgba(0,0,0,0)', border:'1px solid black', width:'100%'}}
+                        placeholder="Your Message"
+                        value={inputMessage}
+                         onChange={(e) => setInputMessage(e.target.value)} />
+                        <button type="submit">Send</button>
+                    </Box>
+                </form>
+
             </Stack>
         </Container>
     )

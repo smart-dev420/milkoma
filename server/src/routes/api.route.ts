@@ -9,6 +9,7 @@ import {
 import auth from "../controller/auth.controller";
 import contract from "../controller/contract.controller";
 import provide from "../controller/upload.controller";
+import message from "../controller/message.controller";
 
 const apiRoute = Router();
 
@@ -64,4 +65,7 @@ apiRoute.post("/getProductFiles/:id",       verifyToken,          provide.getPro
 apiRoute.get("/productDownload/:filename",  verifyToken,          provide.productDownload);
 
 apiRoute.get("/receivedDownload/:filename",      verifyToken,     provide.receivedDownload);
+
+/******** Socket */
+apiRoute.post("/message",                   verifyToken,          message.saveMessage);
 export default apiRoute;

@@ -41,7 +41,7 @@ const MONGO = {
 //* Configuration for the main server
 const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME;
 const SERVER_PORT = process.env.PORT || process.env.SERVER_PORT;
-const SOCKET_PORT = process.env.SOCKETPORT || process.env.SOCKET_SERVER_PORT;
+const SOCKET_PORT = process.env.SOCKETPORT || process.env.SOCKET_SERVER_PORT||5002;
 
 const SERVER = {
   hostname: SERVER_HOSTNAME,

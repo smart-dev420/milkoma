@@ -229,7 +229,7 @@ export const DetailPage = () => {
 
     /** Chatting */
     const handleChatting = () => {
-        navigate('/mypage/chatting');
+        navigate(`/mypage/chatting/${contractId}`);
     }
 
     /** File Upload */
