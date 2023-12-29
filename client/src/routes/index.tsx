@@ -136,7 +136,7 @@ export const router = createHashRouter([
         errorElement: <NotFound />,
       },
       {
-        path: "chatting",
+        path: "chatting/:rid",
         element: <ChattingPage />,
         errorElement: <NotFound />,
       },

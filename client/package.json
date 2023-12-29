@@ -51,6 +51,7 @@
     "react-stripe-checkout": "^2.6.3",
     "react-toastify": "^9.1.3",
     "slick-carousel": "^1.8.1",
+    "socket.io-client": "^4.7.2",
     "state-pool": "^0.10.0",
     "sweetalert2": "^11.7.32",
     "typescript": "^4.9.5",
