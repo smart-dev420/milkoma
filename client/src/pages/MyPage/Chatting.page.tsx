@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { btnBackground, btnBackgroundHover, fontBold, fontSize14, fontSize16, scrollTop, staticFiles } from "../../components/Constants";
 import { setPage } from "../../slices/page";
-import { headers, showSentence } from "../../utils/appHelper";
+import { getDateString, headers, showSentence } from "../../utils/appHelper";
 import io, { Socket } from 'socket.io-client';
 import React, { useState, useEffect, FormEvent } from 'react';
 import { API } from "../../axios";
@@ -16,13 +16,12 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
     const dispatch = useDispatch();
     dispatch(setPage({page:2}));
     const navigate = useNavigate();
-    const [ data, setData ] = useState({
-        contracted:useSelector((state:any) => state.contract.contracted),
-        productIntro: '自社の美容液の紹介をしたい。新商品です。発売予定は12月1日です。@@@商品のURLはhttps://mirucoma.comです。@@@ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。ここにテキストが入ります。',
-    });
-    const { roomId } = useParams();
+    const [ contractInfo, setContractInfo ] = useState<any>(null);
+    const { rid } = useParams();
+    const userData = localStorage.getItem('user');
+    const userEmail = userData?JSON.parse(userData).email:'';
     const [socket, setSocket] = useState<Socket | null>(null);
-    const [messages, setMessages] = useState<string[]>([]);
+    const [messages, setMessages] = useState<any[]>([]);
     const [inputMessage, setInputMessage] = useState('');
     const [ admin, setAdmin ] = useState<boolean>();
     const getAdmin = async () => {
@@ -30,9 +29,15 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
         const res = await axios.post(query, {}, headers());
         setAdmin(res.data.admin);
     }
+
+    const getContractInfo = async () => {
+        const res = await axios.post(`${API}/api/getContractInfo/${rid}`, {}, headers());
+        setContractInfo(res.data);
+    }
   
     useEffect(() => {
     getAdmin();
+    getContractInfo();
     const newSocket = io('http://localhost:5002'); // Replace with your server URL
     setSocket(newSocket);
   
@@ -43,49 +48,52 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
   
     useEffect(() => {
       if (socket) {
+        socket.on('connect', () => {
+            console.log(`Connected with ID: ${socket.id}`);
+            socket.emit('joinRoom', rid);
+          });
+          
+          socket.on('userJoined', ({ room, userId, users }) => {
+            console.log(`User with ID ${userId} joined room ${room}, ${users[0]}`);
+            // Your logic to handle a user joining a room in real-time
+          });
+        socket.on('joinedRoom', (room: string) => {
+            console.log(`Successfully joined room ${room}`);
+            // Your logic to handle successful room join on the client-side
+          });
+
         socket.on('message', (receivedMessage: string) => {
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
         });
+
+        socket.on('updateOnlineUsers', (onlineUsers) => {
+            console.log('Online users:', onlineUsers);
+            // Handle the updated online users list on the client side
+          });
+
+        // socket.emit('disconnected', { room: '123', message: 'tiger'});
+
       }
     }, [socket]);
   
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       if (inputMessage && socket) {
-        console.log('message', messages);
-        socket.emit('sendMessage', { room: roomId, message: inputMessage });
-        setMessages((prevMessages) => [...prevMessages, inputMessage]);
-        setInputMessage('');
+        const result = {
+            sender: admin?'admin':userEmail,
+            message: inputMessage,
+        }
+          socket.emit('sendMessage', { room: rid, message: result });
+          setInputMessage('');
       }
-    };
-
-    // useEffect(() => {
-    //   // Set up a socket event listener when the component mounts
-    //   socket.on('message', (receivedMessage: string) => {
-    //     setMessages((prevMessages: string[]) => [...prevMessages, receivedMessage]);
-    //   });
-  
-    //   // Clean up the socket event listener when the component unmounts
-    //   return () => {
-    //     socket.off('message');
-    //   };
-    // }, []); // Empty dependency array ensures the effect runs once on mount
-  
-    // const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    //     event.preventDefault();
-    //     if (inputMessage && socket) {
-    //         console.log('message', messages);
-    //       socket.emit('sendMessage', { room: roomId, message: inputMessage });
-    //       setInputMessage('');
-    //     }
-    //   };
-      
+    };   
   
     return(
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'50px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
+            {contractInfo && (
             <Stack direction="column" sx={{paddingX:'20px', width:'100%'}}>
             {/** Back button and Page Title */}    
-            <Box display='flex' flexDirection='row' alignItems='center'>
+                <Box display='flex' flexDirection='row' alignItems='center'>
                     <Button sx={{
                         backgroundColor:btnBackground, 
                         borderRadius:'25px', 
@@ -94,7 +102,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                             backgroundColor: btnBackgroundHover
                         },
                         }}
-                    onClick={()=>{navigate('/mypage/detail')}}>
+                    onClick={()=>{ navigate(`/mypage/detail/${rid}`)} }>
                         <CardMedia
                             component="img"
                             alt="Image1"
@@ -107,14 +115,14 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                     </Button>
 
                 <Typography flex={9} sx={{color:'#511523', fontSize:'22px', marginLeft:'23px', fontWeight:fontBold}}>チャット</Typography>
-                <Typography flex={2} sx={{color:'#554744', fontSize:'16px', marginLeft:'23px', fontWeight:fontBold}}>2023年1月10日依頼</Typography>
+                <Typography flex={2} sx={{color:'#554744', fontSize:'16px', marginLeft:'23px', fontWeight:fontBold}}>{getDateString(contractInfo.createdDate)} 依頼</Typography>
                 </Box>
 
                  {/** Product Data and Status Data */}                
                  <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{border:'3px solid #DF8391', borderRadius:'30px', marginTop:'28px', width:'100%'}}>
                     <Box display='flex' flexDirection='column' sx={{padding:'33px'}}>
                         <Typography sx={{color:'#85766D', fontSize:'12px', marginBottom:'7px', fontWeight:fontBold}}>案件名</Typography>
-                        <Typography sx={{color:'#B9324D', fontSize:'18px', marginBottom:'26px', fontWeight:fontBold}}>商品紹介の案件</Typography>
+                        <Typography sx={{color:'#B9324D', fontSize:'18px', marginBottom:'26px', fontWeight:fontBold}}>{contractInfo.category}の案件</Typography>
                         <Typography sx={{color:'#85766D', fontSize:'10px', marginBottom:'9px', fontWeight:fontBold}}>依頼内容</Typography>
                         <Box display='flex' flexDirection='row'>
                             <Typography sx={{
@@ -127,7 +135,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                                 borderRadius:'38px',
                                 whiteSpace:'nowrap'
                                 }}>
-                                    広告運用を行う際に使う
+                                   {contractInfo.step2}
                             </Typography>
                             <Typography sx={{
                                 border:'1px solid #CE6F82', 
@@ -140,11 +148,11 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                                 marginLeft:'15px',
                                 whiteSpace:'nowrap'
                                 }}>
-                                    希望納期:5ヶ月
+                                  希望納期: {contractInfo.step3 > 0 ? contractInfo.step3 + 'ヶ月': '相談したい'}
                             </Typography>
                         </Box>
                         <Typography sx={{color:'#001219', fontSize:'12px', marginTop:'14px'}}>
-                            {showSentence(data.productIntro)}
+                        {contractInfo.step1}
                         </Typography>
                     </Box>
                 </Box>       
@@ -156,7 +164,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                                 <Box
                                 sx={{width:'70%', float:'right', marginY:'10px'}}
                                 >
-                                <TextareaAutosize key={index} value={msg} 
+                                <TextareaAutosize key={index} value={msg.message} 
                                 style={{
                                     width:'100%',
                                     resize:"none", 
@@ -164,6 +172,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                                     padding:'15px', backgroundColor:'#FCF4EC', fontSize:fontSize16,
                                 }} 
                                 disabled />
+                                {msg.sender}
                                 <Typography sx={{color:'#858997', fontSize:fontSize14}}>
                                 {
                                     new Date().getFullYear()}/{new Date().getMonth() + 1 }/{ new Date().getDate()
@@ -186,7 +195,9 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                         value={inputMessage}
                          onChange={(e) => setInputMessage(e.target.value)} />
                         <Box display='flex' flexDirection='row' alignItems='center' justifyContent='flex-end' sx={{columnGap:'10px'}}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style={{cursor:'pointer'}}>
+                        <svg 
+                        onClick={()=>{}}
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style={{cursor:'pointer'}}>
                             <g id="smile_1" data-name="smile 1" transform="translate(-0.002)">
                                 <path id="smile_1_Background_Mask_" data-name="smile 1 (Background/Mask)" d="M0,0H24V24H0Z" transform="translate(0.002)" fill="none"/>
                                 <g id="Layer_2" data-name="Layer 2" transform="translate(0 0)">
@@ -196,7 +207,9 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                                 </g>
                             </g>
                         </svg>
-                        <svg id="icAttachment" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style={{cursor:'pointer'}}>
+                        <svg 
+                        onClick={()=>{}}
+                        id="icAttachment" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style={{cursor:'pointer'}}>
                         <g id="attach_1" data-name="attach 1">
                             <path id="attach_1_Background_Mask_" data-name="attach 1 (Background/Mask)" d="M0,0H24V24H0Z" fill="none"/>
                             <g id="Attach" transform="translate(1.595 0)">
@@ -224,6 +237,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                 </form>
 
             </Stack>
+            )}
         </Container>
     )
 }
