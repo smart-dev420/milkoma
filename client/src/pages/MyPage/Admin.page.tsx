@@ -179,7 +179,7 @@ export const Admin = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    dispatch(setPage({page:7}));
+    dispatch(setPage({page:8}));
     // Tab change event
     const [value, setValue] = React.useState(0);
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {

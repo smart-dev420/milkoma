@@ -10,7 +10,7 @@ import { Server as SocketIOServer, Socket } from 'socket.io';
 import { createServer as createHTTPServer } from 'http';
 
 const bodyParser = require('body-parser');
-
+const onlineUsers = new Map(); // Map to store online users
 // import {
 //   followUser,
 //   connectedUser,
@@ -70,20 +70,32 @@ io.listen(config.server.socketPort, () => {
     console.log(`Socket server started ${config.server.socketPort}`)
 })
 
-  io.on('connection', (socket: Socket) => {
-    console.log(`Socket ${socket.id} connected`);
-    
-    socket.on('joinRoom', (room: string) => {
-      socket.join(room);
-      console.log(`Socket ${socket.id} joined room ${room}`);
-    });
+io.on('connection', (socket: Socket) => {
 
-    socket.on('sendMessage', ({ room, message }: { room: string; message: string }) => {
-      io.to(room).emit('message', message);
-    });
+  console.log(`Socket ${socket.id} connected`);
   
-    socket.on('disconnect', () => {
-      console.log(`Socket ${socket.id} disconnected`);
+  socket.on('joinRoom', (room: string) => {
+    onlineUsers.set(socket.id, {
+      room: room
     });
+    socket.join(room);
+    console.log(`Socket ${socket.id} joined room ${room}`);    
+    io.to(room).emit('userJoined', { room, userId: socket.id, users:onlineUsers });
   });
+
+  socket.on('sendMessage', ({ room, message }: { room: string; message: any }) => {
+    console.log(`Socket ${socket.id}, ${room}, ${message.message}`);
+    io.to(room).emit('message', message);
+  });
+
+  socket.on('disconnect', (room:string) => {
+    onlineUsers.delete(socket.id);
+
+    // Emit updated online users list to all clients
+    io.emit('updateOnlineUsers', Array.from(onlineUsers.values()));
+    console.log(`Socket ${socket.id} disconnected`);
+  });
+
+});
+
 export default http;

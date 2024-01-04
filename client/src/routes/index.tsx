@@ -10,7 +10,7 @@ import { CreatorStep } from "../pages/Creator/Step";
 import { ViewHistory } from "../pages/VIewHistory";
 import { MypageLayout } from "../pages/MypageLayout";
 import { SignUp, Login, ForgotPassword, OtpSent, ResetPassword } from "../pages/Sign";
-import { HomePage, ProjectList, DetailPage, ContractPage, ContractManage, ChattingPage, CardManage, Profile, Payment, Admin } from "../pages/MyPage";
+import { HomePage, ProjectList, DetailPage, ContractPage, ContractManage, ChattingPage, AdminChatPage, CardManage, Profile, Payment, Admin } from "../pages/MyPage";
 
 export const router = createHashRouter([
     {
@@ -98,7 +98,6 @@ export const router = createHashRouter([
           element: <ViewHistory/>,
           errorElement: <NotFound />,
         },
-        
       ],
     },
     {
@@ -153,6 +152,11 @@ export const router = createHashRouter([
       {
         path: "profile",
         element: <Profile />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "admin_chat",
+        element: <AdminChatPage />,
         errorElement: <NotFound />,
       },
       {

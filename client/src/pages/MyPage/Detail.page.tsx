@@ -100,43 +100,19 @@ const statusValues = [
         description: "「ファイル・検修管理」からファイルを確認して、@@@検修を行ってください",
     }];
 
-const productDownloadData = [
-    {
-        name:'ダウンロードファイル.rtf',
-        capacity:'3.5GB',
-    },
-    {
-        name:'ダウンロードファイル.rtf',
-        capacity:'3.5GB',
-    },
-    {
-        name:'ダウンロードファイル.rtf',
-        capacity:'3.5GB',
-    },
-    {
-        name:'ダウンロードファイル.rtf',
-        capacity:'3.5GB',
-    },
-    {
-        name:'ダウンロードファイル.rtf',
-        capacity:'3.5GB',
-    },
-];
-
 export const DetailPage = () => {
     const dispatch = useDispatch();
     dispatch(setPage({page:2}));
     const navigate = useNavigate();
     const [ data, setData ] = useState({
-        contracted: useSelector((state:any) => state.contract.contracted),
-        contractCheck: useSelector((state:any) => state.contract.contractCheck),
-        paid: false,
-        bill: false,
+        // contracted: useSelector((state:any) => state.contract.contracted),
+        // contractCheck: useSelector((state:any) => state.contract.contractCheck),
+        // paid: false,
+        // bill: false,
         step: 1,
         isMessage: false,
         sampleMessage:'この度は、ミルコマをご利用いただきましてありがとうございます。@@@「商品紹介の案件」について、何点かお伺いしたいことがありますのでご返答いただきますと幸いです。@@@よろしくお願いします',
         noMessage: 'まだメッセージはありません。',
-        productDownload: productDownloadData,
     });
 
     const [ uploadOpen, setUploadOpen ] = useState<boolean>(false);
@@ -384,7 +360,7 @@ export const DetailPage = () => {
                     </Button>
 
                 <Typography flex={9} sx={{color:'#511523', fontSize:'22px', marginLeft:'23px', fontWeight:fontBold}}>案件詳細</Typography>
-                <Typography flex={2} sx={{color:'#554744', fontSize:'16px', marginLeft:'23px', fontWeight:fontBold}}>{getDateString(contractInfo.createdDate)}依頼</Typography>
+                <Typography flex={2} sx={{color:'#554744', fontSize:'16px', marginLeft:'23px', fontWeight:fontBold}}>{getDateString(contractInfo.createdDate)} 依頼</Typography>
                 </Box>
         {/** Product Data and Status Data */}                
                 <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{marginTop:'28px', columnGap:'30px'}}>
@@ -464,7 +440,7 @@ export const DetailPage = () => {
         {/** Creator Data */}
                 {
                 creatorInfo && creatorInfo.billed && (
-                    <Box display='flex' flexDirection='column' sx={{marginTop:'60px', display:data.contractCheck?'':'none'}}>
+                    <Box display='flex' flexDirection='column' sx={{marginTop:'60px', display:creatorInfo.billed?'':'none'}}>
                     <Typography sx={{color:'#511523', fontSize:'22px', fontWeight:fontBold}}>参加するインフルエンサー</Typography>
                     <Box display='flex' flexDirection='row' alignItems='center' sx={{marginTop:'30px'}}>
                         <CardMedia 
@@ -524,21 +500,21 @@ export const DetailPage = () => {
                         <Typography sx={{fontSize:'18px', color:'#001219', marginBottom:'16px', fontWeight:fontBold}}>契約書</Typography>
                         <Typography sx={{fontSize:'12px', color:'#001219', marginBottom:'9px', fontWeight:fontBold}}>依頼を行う前に必ずお読みいただき、契約書を締結してください</Typography>
                         <Typography sx={{fontSize:'10px', color:'#E4443B', marginBottom:'11px', fontWeight:fontBold}}>
-                            {data.contractCheck?'依頼内容を確認中です。':contractInfo.confirm?'締結済みです':'締結を行わないと制作が進行しません'}
+                            {contractInfo.billed?'依頼内容を確認中です。':contractInfo.confirm?'締結済みです':'締結を行わないと制作が進行しません'}
                         </Typography>
                         <Box display='flex' flexDirection='column' alignItems='center'>
                             <Button 
                             sx={{
-                                backgroundColor:data.contractCheck?'#B9B2B1':contractInfo.confirm?'#E38A86':'#EE7A4B', 
+                                backgroundColor:contractInfo.billed?'#B9B2B1':contractInfo.confirm?'#E38A86':'#EE7A4B', 
                                 width:'183px', borderRadius:'36px', fontWeight:fontBold,
                                 color:'#ffffff', fontSize:'10px',
                                 "&:hover": {
-                                    backgroundColor: data.contractCheck?'#B9B2B1':contractInfo.confirm?btnBackgroundHover:'#D58463'
+                                    backgroundColor: contractInfo.billed?'#B9B2B1':contractInfo.confirm?btnBackgroundHover:'#D58463'
                                 },
                                 }}
                                 onClick={contractInfo.confirm?handleContractCheck:handleContract}
                                 >
-                                    {data.contractCheck?"確認する":contractInfo.confirm?"締結済み・確認する":"確認する"}
+                                    {contractInfo.billed?"確認する":contractInfo.confirm?"締結済み・確認する":"確認する"}
                             </Button>
                         </Box>
                     </Box>
