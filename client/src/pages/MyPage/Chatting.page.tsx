@@ -50,7 +50,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
       if (socket) {
         socket.on('connect', () => {
             console.log(`Connected with ID: ${socket.id}`);
-            socket.emit('joinRoom', rid);
+            socket.emit('joinRoom', {room: rid, user: userEmail});
           });
           
           socket.on('userJoined', ({ room, userId, users }) => {

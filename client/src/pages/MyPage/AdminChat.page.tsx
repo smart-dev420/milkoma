@@ -19,14 +19,6 @@ import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import WorkIcon from '@mui/icons-material/Work';
 
-function generate(element: React.ReactElement) {
-    return [0, 1, 2].map((value) =>
-      React.cloneElement(element, {
-        key: value,
-      }),
-    );
-  }
-
 export const AdminChatPage: React.FC<{  }> = ({ }) => {
     // scrollTop();
     const dispatch = useDispatch();
@@ -44,6 +36,7 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
         const res = await axios.post(query, {}, headers());
         setContract(res.data.filter((item:any, index:number) => item.status > 0));
     }
+    const [socket, setSocket] = useState<Socket | null>(null);
     useEffect(() => {
         getAdmin();
         getContract();
@@ -51,8 +44,25 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
     if(admin == false){
         navigate('/mypage');
       }
+      const newSocket = io('http://localhost:5002'); // Replace with your server URL
+    setSocket(newSocket);
+  
+    return () => {
+        newSocket.disconnect();
+    };
     }, []);
-    console.log(contract);
+
+    useEffect(() => {
+        if (socket) {
+
+        socket.on('updateOnlineUsers', (onlineUsers) => {
+              console.log('Online users:', onlineUsers);
+              // Handle the updated online users list on the client side
+        });
+  
+        }
+      }, [socket]);
+
     return(
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'50px', paddingBottom:'40px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
             <Stack direction="column" sx={{paddingX:'20px', width:'100%'}}>
