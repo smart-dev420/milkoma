@@ -74,9 +74,10 @@ io.on('connection', (socket: Socket) => {
 
   console.log(`Socket ${socket.id} connected`);
   
-  socket.on('joinRoom', (room: string) => {
+  socket.on('joinRoom', ({room, user}:{room: string, user:string}) => {
     onlineUsers.set(socket.id, {
-      room: room
+      room: room,
+      user: user
     });
     socket.join(room);
     console.log(`Socket ${socket.id} joined room ${room}`);    
