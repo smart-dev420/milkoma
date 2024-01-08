@@ -320,6 +320,28 @@ export const getAvatar: RequestHandler = async (req, res) => {
   });
 }
 
+export const getAvatarByEmail: RequestHandler = async (req, res) => {
+  const id = req.params.id;
+  const getAvatar = await AccountModel.findOne({email:id});
+  const file = getAvatar?.avatar;
+  const filePath = path.join(avatarPath, file);
+  fs.access(filePath, fs.constants.F_OK, (err:any) => {
+    if (err) {
+      logger.error("No avatar exists");
+      if (getAvatar?.admin){
+        const adminAvatar = path.join(rootPath, 'src/assets/admin_avatar.png');
+        res.status(200).sendFile(adminAvatar);
+      }else {
+        const noavatar = path.join(rootPath, 'src/assets/avatar.png');
+        res.status(200).sendFile(noavatar);
+      }
+    } else {
+      logger.info("Avatar exists");
+      res.status(200).sendFile(filePath);
+    }
+  });
+}
+
 const optValidation:RequestHandler = async (req, res) => {
   const otp = req.body.otp;
   const email = req.params.email;
@@ -568,6 +590,7 @@ const auth = {
   resetPassword, 
   getUserInfo,
   getAvatar,
+  getAvatarByEmail,
   optValidation,
   followUser,
   heartUser,

@@ -10,6 +10,10 @@ import auth from "../controller/auth.controller";
 import contract from "../controller/contract.controller";
 import provide from "../controller/upload.controller";
 import message from "../controller/message.controller";
+const { 
+  uploadData,
+  getData
+} = require('../chat')
 
 const apiRoute = Router();
 
@@ -18,6 +22,8 @@ const apiRoute = Router();
 /************************************************************/
 
 apiRoute.get("/avatar/:id",                                       auth.getAvatar);
+apiRoute.get("/chat_avatar/:id",                                  auth.getAvatarByEmail);
+apiRoute.get("/chat/:file",                                       getData)
 
 /************************************************************/
 /**************************   POST  *************************/
@@ -68,4 +74,5 @@ apiRoute.get("/receivedDownload/:filename",      verifyToken,     provide.receiv
 
 /******** Socket */
 apiRoute.post("/message",                   verifyToken,          message.saveMessage);
+apiRoute.post("/uploadData",                verifyToken,          uploadData);
 export default apiRoute;

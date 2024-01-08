@@ -18,7 +18,7 @@ export const ASSET_ICONS = process.env.REACT_APP_ASSETS_PATH + "/icons";
 export const USE_IMAGE_PLACEHOLDERS = false;
 
 export const HOST_URL = W_HOST_URL;
-export const CHAT_SVR_URL = W_SOCKET_SERVER;
+export const CHAT_SVR_URL = W_SOCKET_SERVER ?? '';
 export const PUBLIC_URL = "";
 // export const PUBLIC_URL = "";
 

@@ -1,7 +1,7 @@
 import { Box, Button, CardMedia, Container, Grid, IconButton, Slider, Stack, TextareaAutosize, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { btnBackground, btnBackgroundHover, fontBold, fontSize14, fontSize16, fontSize18, scrollTop, staticFiles } from "../../components/Constants";
+import { CHAT_SVR_URL, btnBackground, btnBackgroundHover, fontBold, fontSize14, fontSize16, fontSize18, scrollTop, staticFiles } from "../../components/Constants";
 import { setPage } from "../../slices/page";
 import { headers, showSentence } from "../../utils/appHelper";
 import io, { Socket } from 'socket.io-client';
@@ -18,6 +18,7 @@ import Avatar from '@mui/material/Avatar';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import WorkIcon from '@mui/icons-material/Work';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export const AdminChatPage: React.FC<{  }> = ({ }) => {
     // scrollTop();
@@ -25,6 +26,7 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
     dispatch(setPage({page:7}));
     const navigate = useNavigate();
     const [ admin, setAdmin ] = useState<boolean>();
+    const [ onlineUser, setOnlineUser ] = useState<any>([]);
     const getAdmin = async () => {
         const query = `${API}/api/getAdmin`;
         const res = await axios.post(query, {}, headers());
@@ -44,7 +46,7 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
     if(admin == false){
         navigate('/mypage');
       }
-      const newSocket = io('http://localhost:5002'); // Replace with your server URL
+      const newSocket = io(CHAT_SVR_URL); // Replace with your server URL
     setSocket(newSocket);
   
     return () => {
@@ -55,11 +57,11 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
     useEffect(() => {
         if (socket) {
 
-        socket.on('updateOnlineUsers', (onlineUsers) => {
-              console.log('Online users:', onlineUsers);
+        socket.on('getOnlineUsers', (data) => {
+              console.log('Online users:', data);
+              setOnlineUser(data);
               // Handle the updated online users list on the client side
         });
-  
         }
       }, [socket]);
 
@@ -91,19 +93,31 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
                 <Typography flex={9} sx={{color:'#511523', fontSize:'22px', marginLeft:'23px', fontWeight:fontBold}}>チャット</Typography>
                 </Box>
                 { contract && (
-                <Box display='flex' flexDirection='row' sx={{columnGap:'50px'}}>
+                    <Box display='flex' flexDirection='row' sx={{columnGap:'50px'}}>
                     <Box display='flex' flexDirection='column' sx={{width:'100%'}}>
                     <Typography sx={{ marginLeft:'23px', marginTop:'10px', fontSize:fontSize16, fontWeight:fontBold }} >クライアントとのチャット</Typography>
                     <List sx={{ width: '100%', maxHeight: '500px', overflow: 'auto', marginY:'10px', paddingX:'20px' }}>
                         {contract.map((item: any, index: number) => (
                             <ListItem key={index} secondaryAction={
-                                <IconButton edge="end" aria-label="send">
+                                <IconButton edge="end" aria-label="send"
+                                onClick={() => { navigate(`/mypage/chatting/${item._id}`) }}
+                                >
                                     <SendIcon />
                                 </IconButton>
                             }>
                                 <ListItemAvatar>
-                                    <Avatar sx={{backgroundColor:'#e6d6d696'}}>
-                                        <WorkIcon sx={{color:btnBackground}}/>
+                                    <Avatar sx={{backgroundColor:onlineUser.some((user: any) => {
+                                                // console.log('user', user)
+                                                // console.log('changes', user[0].room, '===', item._id)
+                                                return user.roomId === item._id && user.userEmail === item.clientEmail;
+                                            }) ? '#4dd965' : '#e6d6d696'
+                                        }}>
+                                    <AccountCircleIcon
+                                        sx={{
+                                            color: 
+                                            '#000'
+                                        }}
+                                    />
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
@@ -126,7 +140,7 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
                             }>
                                 <ListItemAvatar>
                                     <Avatar>
-                                        <WorkIcon />
+                                        <AccountCircleIcon />
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
