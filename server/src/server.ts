@@ -10,10 +10,15 @@ import { Server as SocketIOServer, Socket } from 'socket.io';
 import { createServer as createHTTPServer } from 'http';
 
 const bodyParser = require('body-parser');
-const onlineUsers = new Map(); // Map to store online users
+const { 
+  addOnlineUser,
+  getUsers, 
+  deleteUser,
+  addChat
+} = require('./chat')
 // import {
-//   followUser,
-//   connectedUser,
+  //   followUser,
+  //   connectedUser,
 //   disconnectedUser,
 //   getUserIdbySockeId,
 //   getAllOnlineUsers
@@ -64,39 +69,39 @@ http.listen(config.server.port, async () => {
   });
   
 io.listen(config.server.socketPort, () => {
-    logger.info(
-      `Socket server started at http://${config.server.hostname}:${config.server.socketPort}`
+  logger.info(
+    `Socket server started at http://${config.server.hostname}:${config.server.socketPort}`
     );
     console.log(`Socket server started ${config.server.socketPort}`)
 })
-
+    
 io.on('connection', (socket: Socket) => {
 
   console.log(`Socket ${socket.id} connected`);
   
   socket.on('joinRoom', ({room, user}:{room: string, user:string}) => {
-    onlineUsers.set(socket.id, {
-      room: room,
-      user: user
-    });
+    addOnlineUser(socket.id, room, user);
+    io.emit('getOnlineUsers', getUsers());
     socket.join(room);
-    console.log(`Socket ${socket.id} joined room ${room}`);    
-    io.to(room).emit('userJoined', { room, userId: socket.id, users:onlineUsers });
+    console.log(`online users `, getUsers());
+    const res = getUsers();
+    io.to(room).emit('userJoined', { room, userId: res.roomId});
   });
 
-  socket.on('sendMessage', ({ room, message }: { room: string; message: any }) => {
-    console.log(`Socket ${socket.id}, ${room}, ${message.message}`);
-    io.to(room).emit('message', message);
+  socket.on('sendMessage', ({ room, data }: { room: string; data: any }) => {
+    console.log(`Socket ${socket.id}, ${room}, ${data.message}, ${data.sendDate}`);
+    addChat(data);
+    io.to(room).emit('message', data);
   });
 
-  socket.on('disconnect', (room:string) => {
-    onlineUsers.delete(socket.id);
+  io.emit('getOnlineUsers', getUsers());
 
-    // Emit updated online users list to all clients
-    io.emit('updateOnlineUsers', Array.from(onlineUsers.values()));
+  socket.on('disconnect', () => {
+    deleteUser(socket.id);
+    io.emit('getOnlineUsers', getUsers());
     console.log(`Socket ${socket.id} disconnected`);
+    console.log(`online users `, getUsers());
   });
-
 });
 
 export default http;

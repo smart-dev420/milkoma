@@ -1,15 +1,17 @@
-import { Box, Button, CardMedia, Container, Grid, Slider, Stack, TextareaAutosize, Typography } from "@mui/material"
+import { Box, Button, CardMedia, Container, Grid, Slider, Stack, TextareaAutosize, Tooltip, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { btnBackground, btnBackgroundHover, fontBold, fontSize14, fontSize16, scrollTop, staticFiles } from "../../components/Constants";
+import { CHAT_SVR_URL, btnBackground, btnBackgroundHover, fontBold, fontSize14, fontSize16, scrollTop, staticFiles } from "../../components/Constants";
 import { setPage } from "../../slices/page";
 import { getDateString, headers, showSentence } from "../../utils/appHelper";
 import io, { Socket } from 'socket.io-client';
-import React, { useState, useEffect, FormEvent } from 'react';
+import React, { useState, useEffect, FormEvent, useRef } from 'react';
 import { API } from "../../axios";
 import axios from "axios";
 import SendIcon from '@mui/icons-material/Send';
-// const socket = io('http://localhost:5001');
+import { toast } from "react-toastify";
+import Zoom from 'react-medium-image-zoom';
+import 'react-medium-image-zoom/dist/styles.css';
 
 export const ChattingPage: React.FC<{  }> = ({ }) => {
     // scrollTop();
@@ -21,8 +23,22 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
     const userData = localStorage.getItem('user');
     const userEmail = userData?JSON.parse(userData).email:'';
     const [socket, setSocket] = useState<Socket | null>(null);
-    const [messages, setMessages] = useState<any[]>([]);
+    const [messages, setMessages] = useState<any>([]);
     const [inputMessage, setInputMessage] = useState('');
+    const [ file, setFile ] = useState<File | null>(null);
+    const emoticIcon = '😀😃😄😁😆😅😂🤣☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🤭🤫🤥😶😐😑😬🙄😯😦😧😮😲😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾';
+    const [currentEmoticon, setCurrentEmoticon] = useState<string | null>(null);
+
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      setCurrentEmoticon(emoticIcon.charAt(index));
+      index = (index + 1) % emoticIcon.length;
+    }, 1000); // Change the time interval as needed
+
+    return () => clearInterval(interval);
+  }, [emoticIcon]);
+    
     const [ admin, setAdmin ] = useState<boolean>();
     const getAdmin = async () => {
         const query = `${API}/api/getAdmin`;
@@ -36,14 +52,18 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
     }
   
     useEffect(() => {
-    getAdmin();
-    getContractInfo();
-    const newSocket = io('http://localhost:5002'); // Replace with your server URL
-    setSocket(newSocket);
-  
-    return () => {
-        newSocket.disconnect();
-    };
+        getAdmin();
+        getContractInfo();
+        const element = document.getElementById('chatBox') as HTMLElement; // Or 'Element' if appropriate
+        if (element) {
+            element.scrollTop = element.scrollHeight;
+          }
+        const newSocket = io(CHAT_SVR_URL); // Replace with your server URL
+        setSocket(newSocket);
+    
+        return () => {
+            newSocket.disconnect();
+        };
     }, []);
   
     useEffect(() => {
@@ -51,27 +71,20 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
         socket.on('connect', () => {
             console.log(`Connected with ID: ${socket.id}`);
             socket.emit('joinRoom', {room: rid, user: userEmail});
-          });
+        });
           
-          socket.on('userJoined', ({ room, userId, users }) => {
-            console.log(`User with ID ${userId} joined room ${room}, ${users[0]}`);
+        socket.on('userJoined', ({ room, userId }) => {
+            console.log(`User with ID ${userId} joined room ${room}`);
             // Your logic to handle a user joining a room in real-time
-          });
+        });
         socket.on('joinedRoom', (room: string) => {
             console.log(`Successfully joined room ${room}`);
             // Your logic to handle successful room join on the client-side
-          });
-
-        socket.on('message', (receivedMessage: string) => {
-          setMessages((prevMessages) => [...prevMessages, receivedMessage]);
         });
 
-        socket.on('updateOnlineUsers', (onlineUsers) => {
-            console.log('Online users:', onlineUsers);
-            // Handle the updated online users list on the client side
-          });
-
-        // socket.emit('disconnected', { room: '123', message: 'tiger'});
+        socket.on('message', (receivedMessage: string) => {
+          setMessages((prevMessages:any) => [...prevMessages, receivedMessage]);
+        });
 
       }
     }, [socket]);
@@ -80,13 +93,79 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
       event.preventDefault();
       if (inputMessage && socket) {
         const result = {
-            sender: admin?'admin':userEmail,
+            sender: userEmail,
             message: inputMessage,
+            sendDate: Date.now(),
+            uploadData: ''
         }
-          socket.emit('sendMessage', { room: rid, message: result });
+          socket.emit('sendMessage', { room: rid, data: result });
           setInputMessage('');
       }
     };   
+
+    const getDate = (data: number) => {
+        const date = new Date(data);
+        return (
+            date.getFullYear() + '/' +
+            (date.getMonth() + 1) + '/' +
+            date.getDate() + ' ' +
+            date.getHours() + ':' +
+            (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + ':' +
+            (date.getSeconds() < 10 ? '0' : '') + date.getSeconds()
+        );
+    };    
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const handleButtonClick = () => {
+        fileInputRef.current?.click();
+      };
+    
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const uploadFile = event.target.files?.[0];
+        if(uploadFile){
+            setFile(uploadFile);
+            await handleFileUpload(uploadFile);
+            console.log('file - ', uploadFile)
+        }
+    };
+
+    const handleFileUpload = async (file:File) => {
+
+        let formData = new FormData();
+        if(file){
+            formData.append('file', file);
+        }
+        else {
+            toast.error('ファイルが見つかりません');
+            return;
+        }
+        const nowDate = Date.now();
+        const userData = localStorage.getItem('user');
+        if(userData){ formData.append('userEmail', JSON.parse(userData).email); }
+        else { toast.error('ユーザーデータが見つかりません!'); return;}
+        if(rid) formData.append('contractId', rid);
+        formData.append('date', nowDate.toString());
+        try{
+            const query = `${API}/api/uploadData`;
+            const res = await axios.post(query, formData, headers());
+            if( res.status === 200 ){
+                console.log('return', res.data);
+                if (socket && rid) {
+                    const result = {
+                        sender: userEmail,
+                        message: '',
+                        sendDate: nowDate,
+                        uploadData: rid + nowDate.toString() + '_' + file.name
+                    }
+                    console.log(result);
+                    socket.emit('sendMessage', { room: rid, data: result });
+                }
+                setFile(null); 
+            } else {
+                console.log(res);
+                toast.error(res.data.msg);
+            }
+        }catch(err){ console.error(err); }
+    }
   
     return(
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'50px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
@@ -102,7 +181,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                             backgroundColor: btnBackgroundHover
                         },
                         }}
-                    onClick={()=>{ navigate(`/mypage/detail/${rid}`)} }>
+                    onClick={()=>{ admin?navigate(`/mypage/admin_chat`):navigate(`/mypage/detail/${rid}`)} }>
                         <CardMedia
                             component="img"
                             alt="Image1"
@@ -159,28 +238,44 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
 
                 {/** Chatting Part */}
                     {/* Displaying received messages */}
-                        <Box sx={{border:'1px solid #00000012', borderRadius:'30px', boxShadow:"0px 0px 5px 5px #00000012", marginTop:'50px', padding:'20px', minHeight:'200px'}}>
-                            {messages.map((msg, index) => (
+                        <Box 
+                            id = 'chatBox'
+                            sx={{
+                                border:'1px solid #00000012', 
+                                borderRadius:'30px', 
+                                boxShadow:"0px 0px 5px 5px #00000012", 
+                                marginTop:'50px', 
+                                padding:'20px', 
+                                minHeight:'200px',
+                                maxHeight:'800px',
+                                overflowY:'auto'}}>
+                            {messages.map((msg:any, index:number) => (
                                 <Box
-                                sx={{width:'70%', float:'right', marginY:'10px'}}
+                                sx={{width:'60%', float:msg.sender === userEmail?'right':'left', marginY:'10px'}}
                                 >
-                                <TextareaAutosize key={index} value={msg.message} 
-                                style={{
-                                    width:'100%',
-                                    resize:"none", 
-                                    borderRadius:'15px 15px 0px 15px', 
-                                    padding:'15px', backgroundColor:'#FCF4EC', fontSize:fontSize16,
-                                }} 
-                                disabled />
-                                {msg.sender}
-                                <Typography sx={{color:'#858997', fontSize:fontSize14}}>
-                                {
-                                    new Date().getFullYear()}/{new Date().getMonth() + 1 }/{ new Date().getDate()
-                                }
-                                {
-                                 " " + new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds()
-                                }
-                                    </Typography>
+                                    <Box display='flex' flexDirection='row' sx={{columnGap:'20px'}}>
+                                        <img src = {`${API}/api/chat_avatar/${msg.sender}`} className="max-h-[50px] max-w-[50px]" style={{borderRadius:'10px'}}/>
+                                        {msg.message !== "" &&
+                                        <TextareaAutosize key={index} value={msg.message} 
+                                            style={{
+                                                width:'100%',
+                                                resize:"none", 
+                                                borderRadius:msg.sender === userEmail?'15px 15px 0px 15px':'15px 15px 15px 0px', 
+                                                padding:'15px', backgroundColor:msg.sender === userEmail?'#FCF4EC':'#F0CED0', fontSize:fontSize16,
+                                            }} 
+                                            disabled />
+                                        }
+                                        {msg.uploadData !== '' && 
+                                            <Zoom classDialog={"custom-zoom"}>
+                                                <img
+                                                src={`${API}/api/chat/${msg.uploadData}`}
+                                                className='max-w-[350px] rounded-[15px]'
+                                                />
+                                            </Zoom>}
+                                    </Box>
+                                <Typography sx={{color:'#858997', fontSize:fontSize14, marginLeft:'70px', marginTop:'5px'}}>
+                                   {getDate(msg.sendDate)}
+                                </Typography>
                                 </Box>
                             ))}
                         </Box>
@@ -207,8 +302,15 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                                 </g>
                             </g>
                         </svg>
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            style={{ display: 'none' }}
+                            accept=".png, .jpg, .jpeg, .ico, .svg"
+                            onChange={handleFileChange}
+                        />  
                         <svg 
-                        onClick={()=>{}}
+                        onClick={handleButtonClick}
                         id="icAttachment" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style={{cursor:'pointer'}}>
                         <g id="attach_1" data-name="attach 1">
                             <path id="attach_1_Background_Mask_" data-name="attach 1 (Background/Mask)" d="M0,0H24V24H0Z" fill="none"/>

@@ -137,6 +137,3 @@ export const poster =
       })
       .catch((err) => ({ err }));
   };
-
-
-
