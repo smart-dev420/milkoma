@@ -7,7 +7,7 @@ export type MessageDataType = {
     email: string;
     date: string;
     message: string;
-    uploadDataName: string;
+    uploadData: string;
     checked: boolean;
 }
   
