@@ -40,7 +40,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
   }, [emoticIcon]);
     
     const [ admin, setAdmin ] = useState<boolean>();
-    const getAdmin = async () => {
+    const getAdminState = async () => {
         const query = `${API}/api/getAdmin`;
         const res = await axios.post(query, {}, headers());
         setAdmin(res.data.admin);
@@ -50,10 +50,18 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
         const res = await axios.post(`${API}/api/getContractInfo/${rid}`, {}, headers());
         setContractInfo(res.data);
     }
+
+    const getMessages = async () => {
+        console.log('asdfasdfasdf')
+        const res = await axios.post(`${API}/api/getMessages/${rid}`, {}, headers());
+        console.log('messages', res.data.message)
+        // setMessages(res.data.message);
+    }
   
     useEffect(() => {
-        getAdmin();
+        getAdminState();
         getContractInfo();
+        // getMessages();
         const element = document.getElementById('chatBox') as HTMLElement; // Or 'Element' if appropriate
         if (element) {
             element.scrollTop = element.scrollHeight;
@@ -309,6 +317,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                             accept=".png, .jpg, .jpeg, .ico, .svg"
                             onChange={handleFileChange}
                         />  
+                        {emoticIcon.charAt(0)}
                         <svg 
                         onClick={handleButtonClick}
                         id="icAttachment" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style={{cursor:'pointer'}}>

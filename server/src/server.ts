@@ -90,7 +90,7 @@ io.on('connection', (socket: Socket) => {
 
   socket.on('sendMessage', ({ room, data }: { room: string; data: any }) => {
     console.log(`Socket ${socket.id}, ${room}, ${data.message}, ${data.sendDate}`);
-    addChat(data);
+    addChat(room, data);
     io.to(room).emit('message', data);
   });
 

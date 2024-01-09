@@ -36,19 +36,20 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
     const getContract = async () => {
         const query = `${API}/api/getAllContracts`;
         const res = await axios.post(query, {}, headers());
+        console.log('res - ', res.data)
         setContract(res.data.filter((item:any, index:number) => item.status > 0));
     }
     const [socket, setSocket] = useState<Socket | null>(null);
+
     useEffect(() => {
         getAdmin();
         getContract();
-        console.log(contract);
+        console.log('contract - ', contract);
     if(admin == false){
         navigate('/mypage');
       }
-      const newSocket = io(CHAT_SVR_URL); // Replace with your server URL
+    const newSocket = io(CHAT_SVR_URL); // Replace with your server URL
     setSocket(newSocket);
-  
     return () => {
         newSocket.disconnect();
     };
@@ -56,8 +57,7 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
 
     useEffect(() => {
         if (socket) {
-
-        socket.on('getOnlineUsers', (data) => {
+            socket.on('getOnlineUsers', (data) => {
               console.log('Online users:', data);
               setOnlineUser(data);
               // Handle the updated online users list on the client side

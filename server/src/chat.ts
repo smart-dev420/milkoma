@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import logger from "./utils/logger";
+import MessageModel from "./models/message.model";
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const fs = require('fs');
@@ -24,17 +25,53 @@ const deleteUser = (id: string) => {
     if (index1 !== -1) onlineUsers.splice(index1, 1)[0];
 }
 
-const addChat: RequestHandler = async (input: any) => {
-    try{
-        console.log('data - ', input);
-        const onlinCheck = onlineUsers.find(user => user.email === input.email);
-        let checked = false;
-        if(onlinCheck) checked = true;
+interface Message {
+    contractId: string;
+    message: MessageDataType[];
+}
 
-    } catch(error){
+interface MessageDataType {
+    email: string;
+    date: string;
+    message: string;
+    uploadData: string;
+    checked: boolean;
+}
+
+const addChat = async (roomId: string, input: any) => {
+    try {
+        console.log('data - ', input);
+
+        // Assuming 'onlineUsers' contains user data and you want to check if the user exists
+        const onlineCheck = onlineUsers.find(user => user.roomId === roomId && user.email === input.email);
+        let checked = false;
+        if (onlineCheck) checked = true;
+
+        const messageToUpdate = {
+            contractId: roomId,
+            $push: {
+                message: {
+                    email: input.sender,
+                    date: input.sendDate,
+                    message: input.message, // Assuming 'input.message' contains the message
+                    uploadData: input.uploadData, // Assuming 'input.uploadDataName' contains the uploadDataName
+                    checked: checked // Assuming 'checked' determines if the message is checked
+                }
+            }
+        };
+
+        // Find and update the existing document in the MessageModel collection
+        const doc = await MessageModel.findOneAndUpdate(
+            { contractId: roomId },
+            messageToUpdate,
+            { new: true, upsert: true } // Set 'upsert' to 'true' to create a new document if it doesn't exist
+        );
+
+        console.log('Updated message:', doc);
+    } catch (error) {
         console.error(error);
     }
-}
+};
 
 interface FileInterface {
     name: string;
@@ -72,6 +109,14 @@ const uploadData: RequestHandler = async (req, res) => {
     });
   }
 
+const getMessages: RequestHandler = async (req, res) => {
+    try{
+        
+    } catch (error) {
+
+    }
+}
+
 const getData: RequestHandler = async (req, res) => {
     const file = req.params.file;
     const filePath = path.join(chatPath, file);
@@ -92,5 +137,6 @@ module.exports = {
     deleteUser, 
     addChat,
     uploadData,
-    getData
+    getData,
+    getMessages
 }
