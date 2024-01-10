@@ -11,6 +11,7 @@ import { headers } from "../../utils/appHelper";
 
 export const SideBar = () => {
     const pageIndex = useSelector((state:any) => state.pages.index);
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const [ clicked, setClicked ] = useState<number>(useSelector((state:any) => state.pages.index));
     const [ isHovered, setIsHovered ] = useState<number>(-1);
     const [ admin, setAdmin ] = useState<boolean>(false);
@@ -21,7 +22,7 @@ export const SideBar = () => {
     }
 
     useEffect(() => {
-        getAdminData();
+        if(loginStatus) getAdminData();
     }, [])
 
     const screenHeight = window.screen.height;
