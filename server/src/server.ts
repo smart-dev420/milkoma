@@ -28,7 +28,7 @@ require('events').EventEmitter.defaultMaxListeners = 15;
 
 const options = {
   inflate: true,
-  limit: '100mb',
+  limit: '5gb',
   type: 'application/octet-stream'
 };
 

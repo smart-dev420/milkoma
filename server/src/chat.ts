@@ -51,8 +51,8 @@ const addChat = async (roomId: string, input: any) => {
             contractId: roomId,
             $push: {
                 message: {
-                    email: input.sender,
-                    date: input.sendDate,
+                    email: input.email,
+                    date: input.date,
                     message: input.message, // Assuming 'input.message' contains the message
                     uploadData: input.uploadData, // Assuming 'input.uploadDataName' contains the uploadDataName
                     checked: checked // Assuming 'checked' determines if the message is checked
@@ -111,9 +111,11 @@ const uploadData: RequestHandler = async (req, res) => {
 
 const getMessages: RequestHandler = async (req, res) => {
     try{
-        
+        const id = req.params.id;
+        const info = await MessageModel.findOne({contractId: id}, 'message');
+        return res.status(200).send(info);
     } catch (error) {
-
+      console.log(error);
     }
 }
 
