@@ -28,8 +28,9 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
     const [ file, setFile ] = useState<File | null>(null);
     const emoticIcon = '😀😃😄😁😆😅😂🤣☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🤭🤫🤥😶😐😑😬🙄😯😦😧😮😲😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾';
     const [currentEmoticon, setCurrentEmoticon] = useState<string | null>(null);
+    const chatBox = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+    useEffect(() => {
     let index = 0;
     const interval = setInterval(() => {
       setCurrentEmoticon(emoticIcon.charAt(index));
@@ -54,17 +55,16 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
     const getMessages = async () => {
         console.log('asdfasdfasdf')
         const res = await axios.post(`${API}/api/getMessages/${rid}`, {}, headers());
-        console.log('messages', res.data.message)
-        // setMessages(res.data.message);
+        console.log('messages', res.data.message);
+        setMessages(res.data.message);
     }
   
     useEffect(() => {
         getAdminState();
         getContractInfo();
-        // getMessages();
-        const element = document.getElementById('chatBox') as HTMLElement; // Or 'Element' if appropriate
-        if (element) {
-            element.scrollTop = element.scrollHeight;
+        getMessages();
+        if (chatBox.current) {
+            chatBox.current.scrollTop = chatBox.current.scrollHeight;
           }
         const newSocket = io(CHAT_SVR_URL); // Replace with your server URL
         setSocket(newSocket);
@@ -72,7 +72,24 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
         return () => {
             newSocket.disconnect();
         };
+
     }, []);
+
+    useEffect(() => {
+        const scrollToBottom = () => {
+          if (chatBox.current) {
+            // Subtracting a small value (e.g., 5) to ensure it goes a little beyond the scrollHeight
+            chatBox.current.scrollTop = chatBox.current.scrollHeight;
+          }
+        };
+      
+        // Scroll to the bottom after a short delay (e.g., 10 milliseconds)
+        const scrollTimeout = setTimeout(scrollToBottom, 10);
+      
+        // Clean up the timeout to avoid memory leaks
+        return () => clearTimeout(scrollTimeout);
+      }, [messages]);
+      
   
     useEffect(() => {
       if (socket) {
@@ -101,9 +118,9 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
       event.preventDefault();
       if (inputMessage && socket) {
         const result = {
-            sender: userEmail,
+            email: userEmail,
             message: inputMessage,
-            sendDate: Date.now(),
+            date: Date.now(),
             uploadData: ''
         }
           socket.emit('sendMessage', { room: rid, data: result });
@@ -159,9 +176,9 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                 console.log('return', res.data);
                 if (socket && rid) {
                     const result = {
-                        sender: userEmail,
+                        email: userEmail,
                         message: '',
-                        sendDate: nowDate,
+                        date: nowDate,
                         uploadData: rid + nowDate.toString() + '_' + file.name
                     }
                     console.log(result);
@@ -247,7 +264,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                 {/** Chatting Part */}
                     {/* Displaying received messages */}
                         <Box 
-                            id = 'chatBox'
+                            ref = {chatBox}
                             sx={{
                                 border:'1px solid #00000012', 
                                 borderRadius:'30px', 
@@ -257,23 +274,23 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                                 minHeight:'200px',
                                 maxHeight:'800px',
                                 overflowY:'auto'}}>
-                            {messages.map((msg:any, index:number) => (
+                            {messages && messages.map((msg:any, index:number) => (
                                 <Box
-                                sx={{width:'60%', float:msg.sender === userEmail?'right':'left', marginY:'10px'}}
+                                sx={{width:'60%', float:msg.email === userEmail?'right':'left', marginY:'10px'}}
                                 >
                                     <Box display='flex' flexDirection='row' sx={{columnGap:'20px'}}>
-                                        <img src = {`${API}/api/chat_avatar/${msg.sender}`} className="max-h-[50px] max-w-[50px]" style={{borderRadius:'10px'}}/>
-                                        {msg.message !== "" &&
+                                        <img src = {`${API}/api/chat_avatar/${msg.email}`} className="max-h-[50px] max-w-[50px]" style={{borderRadius:'10px'}}/>
+                                        {msg.message && msg.message !== "" &&
                                         <TextareaAutosize key={index} value={msg.message} 
                                             style={{
                                                 width:'100%',
                                                 resize:"none", 
-                                                borderRadius:msg.sender === userEmail?'15px 15px 0px 15px':'15px 15px 15px 0px', 
-                                                padding:'15px', backgroundColor:msg.sender === userEmail?'#FCF4EC':'#F0CED0', fontSize:fontSize16,
+                                                borderRadius:msg.email === userEmail?'15px 15px 0px 15px':'15px 15px 15px 0px', 
+                                                padding:'15px', backgroundColor:msg.email === userEmail?'#FCF4EC':'#F0CED0', fontSize:fontSize16,
                                             }} 
                                             disabled />
                                         }
-                                        {msg.uploadData !== '' && 
+                                        {msg.uploadData && msg.uploadData !== '' && 
                                             <Zoom classDialog={"custom-zoom"}>
                                                 <img
                                                 src={`${API}/api/chat/${msg.uploadData}`}
@@ -282,7 +299,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                                             </Zoom>}
                                     </Box>
                                 <Typography sx={{color:'#858997', fontSize:fontSize14, marginLeft:'70px', marginTop:'5px'}}>
-                                   {getDate(msg.sendDate)}
+                                   {getDate(parseFloat(msg.date))}
                                 </Typography>
                                 </Box>
                             ))}
@@ -298,7 +315,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                         value={inputMessage}
                          onChange={(e) => setInputMessage(e.target.value)} />
                         <Box display='flex' flexDirection='row' alignItems='center' justifyContent='flex-end' sx={{columnGap:'10px'}}>
-                        <svg 
+                        {/* <svg 
                         onClick={()=>{}}
                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style={{cursor:'pointer'}}>
                             <g id="smile_1" data-name="smile 1" transform="translate(-0.002)">
@@ -309,7 +326,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                                 </g>
                                 </g>
                             </g>
-                        </svg>
+                        </svg> */}
                         <input
                             ref={fileInputRef}
                             type="file"
@@ -317,7 +334,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                             accept=".png, .jpg, .jpeg, .ico, .svg"
                             onChange={handleFileChange}
                         />  
-                        {emoticIcon.charAt(0)}
+                        {/* {emoticIcon.charAt(0)} */}
                         <svg 
                         onClick={handleButtonClick}
                         id="icAttachment" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style={{cursor:'pointer'}}>
