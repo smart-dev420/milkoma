@@ -131,7 +131,7 @@ export const Top = () => {
     }
 
     React.useEffect(() => {
-        getAdminData();
+      if(loginStatus) getAdminData();
     }, [])
     
     const handleMyPage = () => {
