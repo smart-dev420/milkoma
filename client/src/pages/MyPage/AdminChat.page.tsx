@@ -24,6 +24,7 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
     // scrollTop();
     const dispatch = useDispatch();
     dispatch(setPage({page:7}));
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const navigate = useNavigate();
     const [ admin, setAdmin ] = useState<boolean>();
     const [ onlineUser, setOnlineUser ] = useState<any>([]);
@@ -42,9 +43,11 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
-        getAdmin();
-        getContract();
-        console.log('contract - ', contract);
+        if(loginStatus){
+            getAdmin();
+            getContract();
+            console.log('contract - ', contract);
+        }
     if(admin == false){
         navigate('/mypage');
       }

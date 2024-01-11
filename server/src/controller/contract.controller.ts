@@ -63,7 +63,7 @@ export async function insertData(input: any) {
       return await ContractModel.create(doc);
     } catch (error: any) {
       logger.error("Adding Contract Failed");
-      throw error;
+      // throw error;
     }
   }
 
@@ -76,7 +76,7 @@ const getCreatorData: RequestHandler = async (req, res) => {
     return res.status(StatusCodes.OK).send(info);
   } catch (error: any) {
     logger.error("Getting contract creator info Failed");
-    throw error;
+    // throw error;
   }
 }
 

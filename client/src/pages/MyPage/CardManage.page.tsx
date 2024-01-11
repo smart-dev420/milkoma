@@ -33,6 +33,7 @@ export const CardManage = () => {
     const [open, setOpen] = useState<boolean>(false);
     const [deleteDialog, setDeleteDialog] = useState<boolean>(false);
     const [ isHovered, setIsHovered ] = useState<boolean>(false);
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const [ cardData, setCardData ] = useState({
         type: 'Master Card®︎',
         cardNumber: '2454123412345473',
@@ -46,7 +47,7 @@ export const CardManage = () => {
     }
 
     useEffect(()=>{
-        getPayHistory()
+        if(loginStatus) getPayHistory()
     }, []);
     const firstNumber = cardData.cardNumber.substring(0, 4);
     const lastNumber = cardData.cardNumber.substring(cardData.cardNumber.length - 4);

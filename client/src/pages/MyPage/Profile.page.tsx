@@ -12,7 +12,7 @@ import { API } from "../../axios";
 import { headers } from "../../utils/appHelper";
 import { toast } from "react-toastify";
 import { error } from "console";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setPage } from "../../slices/page";
 
 interface Profile {
@@ -36,6 +36,7 @@ interface IFile {
 
 export const Profile = () =>{
     scrollTop();
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const getProfile = async () => { 
         const res = await axios.post(`${API}/api/getUserProfile`, {}, headers());
         setProfile(res.data);
@@ -59,7 +60,7 @@ export const Profile = () =>{
     const sessionData = localStorage.getItem('user');
     const userData = sessionData? JSON.parse(sessionData) : null;
     useEffect(() =>{
-        getProfile();
+        if(loginStatus) getProfile();
     },[]);
 
     /** Avatar and Basic Data */

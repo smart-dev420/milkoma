@@ -7,6 +7,7 @@ import React from "react";
 import { NumberFormatExample } from "../../utils/appHelper";
 import axios from "axios";
 import { API } from "../../axios";
+import { useSelector } from "react-redux";
 
 const chkList1 = [
     {
@@ -106,6 +107,7 @@ export const CreatorFind = () => {
     const match_1024 = useMediaQuery('(min-width:1025px)');
     const [ selectId, setSelectId ] = useState<string>("");
     const [ page, setPage ] = useState(5);
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     
     const existingArrayString = localStorage.getItem('searchValue');
     const existingArray = existingArrayString ? JSON.parse(existingArrayString) : [];
@@ -133,15 +135,16 @@ export const CreatorFind = () => {
     }
 
     useEffect(() => {
-        getCreatorInfo();
+       if(loginStatus) getCreatorInfo();
     }, []);
 
     useEffect(() => {
+        if(loginStatus){
         if(search == ''){
           getCreatorInfo();
         }else{
           getSearchCreatorInfo(search);
-        }
+        }}
     }, [search]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

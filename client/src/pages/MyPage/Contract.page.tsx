@@ -16,6 +16,7 @@ export const ContractPage = () => {
     const contractId = cid??'';
     const dispatch = useDispatch();
     dispatch(setPage({page:2}));
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const navigate = useNavigate();
     const [ data, setData ] = useState({
         contracted:useSelector((state:any) => state.contract.contracted),
@@ -30,7 +31,7 @@ export const ContractPage = () => {
     }
 
     useEffect(() => {
-        getContractInfo();
+        if(loginStatus) getContractInfo();
     }, []);
 
     const handleChange = (event:any) => {

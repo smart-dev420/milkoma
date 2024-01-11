@@ -15,6 +15,7 @@ export const ProjectList = () => {
     const navigate = useNavigate();
     const pageIndex = useSelector((state:any) => state.pages.index);
     dispatch(setPage({page:2}));
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const [ moreView1, setMoreView1 ] = useState(4);
     const [ moreView2, setMoreView2 ] = useState(4);
 
@@ -40,7 +41,7 @@ export const ProjectList = () => {
         setStateList(statusList);
     }
     useEffect(()=>{
-        getData();
+        if(loginStatus) getData();
     }, []);
     return(
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'75px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>

@@ -132,7 +132,8 @@ const login: RequestHandler = async (req, res) => {
         .json({ msg: "アカウントが見つかりません" }); // Account not found
     }
     const password = req.body.password;
-    if (!password) throw Error("No password provided");
+    // if (!password) throw Error("No password provided");
+    if (!password) console.error("No password provided");
     const isValid = await validatePassword(akun.email, req.body.password);
     if (!isValid) {
       logger.error('Password invalid!')
@@ -294,10 +295,12 @@ const getUserInfo: RequestHandler = async (req, res) => {
     const {id} = req.query;
     const result = await readProfile({_id : id});
     // const name = result[0]?.fname + result[0]?.lname;
-    const username = result[0]?.username;
-    const admin = result[0].admin ? result[0].admin : false
-    const region = result[0].region
-    return res.status(StatusCodes.OK).send({username, admin, region });
+    if(result){
+      const username = result[0]?.username;
+      const admin = result[0].admin ? result[0].admin : false
+      const region = result[0].region
+      return res.status(StatusCodes.OK).send({username, admin, region });
+    }
   } catch (error) {
     return res.status(StatusCodes.BAD_REQUEST).send({name:'unnamed', username:'unusernamed', secretverify:false});
   }

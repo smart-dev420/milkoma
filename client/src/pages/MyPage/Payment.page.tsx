@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API } from "../../axios";
 import { getDateString, headers } from "../../utils/appHelper";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Button, Card, CardMedia, Container, Dialog, DialogContent, DialogTitle, Divider, Grid, Icon, IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material"
 import { toast } from "react-toastify";
 import {
@@ -19,6 +19,7 @@ export const Payment = () => {
     const navigate = useNavigate();
     const { cid } = useParams();
     const contractId = cid??'';
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const stripe = useStripe();
     const elements = useElements();
     const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -61,7 +62,7 @@ export const Payment = () => {
         setPaid(false);
     }
     useEffect(() => {
-        getContractInfo();
+        if(loginStatus) getContractInfo();
     }, [paid]);
 
     const handlePrePay = () => {

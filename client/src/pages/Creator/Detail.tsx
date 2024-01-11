@@ -5,18 +5,20 @@ import { NumberFormatExample, headers, showSentence } from "../../utils/appHelpe
 import { API } from "../../axios";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 export const CreatorDetail = () => {
     const navigate = useNavigate();
     const { userId } = useParams();
     const query = `${API}/api/getCreatorProfile/${userId}`;
     const [ creatorInfo, setCreatorInfo] = useState<any>({});
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const getCreatorInfo = async () => {
       const res = await axios.post(query, {}, headers());
       setCreatorInfo(res.data.data);
     }
     useEffect(() => {
-      getCreatorInfo();
+      if(loginStatus) getCreatorInfo();
     }, []);
     scrollTop();
     const creatorData = {
