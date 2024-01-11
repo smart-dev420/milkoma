@@ -12,11 +12,11 @@ import SendIcon from '@mui/icons-material/Send';
 import { toast } from "react-toastify";
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
+import { setMessage } from "../../slices/message";
 
 export const ChattingPage: React.FC<{  }> = ({ }) => {
     // scrollTop();
     const dispatch = useDispatch();
-    dispatch(setPage({page:2}));
     const navigate = useNavigate();
     const [ contractInfo, setContractInfo ] = useState<any>(null);
     const { rid } = useParams();
@@ -45,6 +45,11 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
     const getAdminState = async () => {
         const query = `${API}/api/getAdmin`;
         const res = await axios.post(query, {}, headers());
+        if(res.data.admin === true){
+            dispatch(setPage({page:7}));
+        } else {
+            dispatch(setPage({page:2}));
+        }
         setAdmin(res.data.admin);
     }
 
@@ -54,9 +59,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
     }
 
     const getMessages = async () => {
-        console.log('asdfasdfasdf')
         const res = await axios.post(`${API}/api/getMessages/${rid}`, {}, headers());
-        console.log('messages', res.data.message);
         setMessages(res.data.message);
     }
   
@@ -110,8 +113,9 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
             // Your logic to handle successful room join on the client-side
         });
 
-        socket.on('message', (receivedMessage: string) => {
-          setMessages((prevMessages:any) => [...prevMessages, receivedMessage]);
+        socket.on('message', (receivedMessage: any) => {
+            setMessages((prevMessages: any) => [...(prevMessages || []), receivedMessage]);
+            
         });
 
       }

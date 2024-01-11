@@ -199,7 +199,7 @@ export const Admin = () => {
     const [ clients, setClients ] = React.useState<any[]>([]);
     const [ creators, setCreators ] = React.useState<any[]>([]);
     const [ contracts, setContracts ] = React.useState<any[]>([]);
-    const [ creatorInfo, setCreatorInfo ] = React.useState();
+    const [ creatorInfo, setCreatorInfo ] = React.useState('');
     const [ contractPayments, setContractPayments] = React.useState<any[]>([]);
     
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -427,7 +427,7 @@ export const Admin = () => {
             return prevContracts.map((contract, index) => {
               // If the current index matches the index to update, modify the 'status' field
               if (index === selectedIndex) {
-                return { ...contract, status: 1 }; // Update the 'status' field
+                return { ...contract, status: 1, confirm:true }; // Update the 'status' field
               }
               return contract; // Return the unchanged contract for other indices
             });
@@ -450,7 +450,7 @@ export const Admin = () => {
             return prevContracts.map((contract, index) => {
               // If the current index matches the index to update, modify the 'status' field
               if (index === selectedIndex) {
-                return { ...contract, status: -1 }; // Update the 'status' field
+                return { ...contract, status: -1, confirm:false }; // Update the 'status' field
               }
               return contract; // Return the unchanged contract for other indices
             });
@@ -465,8 +465,16 @@ export const Admin = () => {
     const handleAddCreator = async (id: string, selectedIndex:number) => {
       const query = `${API}/api/addCreator/${id}`;
       try{
+        if(creatorInfo === ''){
+          toast.error('クリエイターを選択する必要があります');
+          return;
+        }
         const res = await axios.post(query, {creator_email: creatorInfo}, headers());
         if(res.status === 200){
+          if(res.data === false){
+            toast.error('クリエイターを選択する必要があります');
+            return;
+          }
           toast.success(res.data.msg);
           setContracts(prevContracts => {
             // Create a new array by mapping through the previous contracts array
@@ -987,7 +995,7 @@ export const Admin = () => {
                                 value={row.creatorPrice}
                                 onChange={(e) => {
                                   const updatedPayments = [...contractPayments];
-                                  updatedPayments[index].creatorPrice = e.target.value;
+                                  updatedPayments[index + currentContractPaymentPage * contractPaymentRowsPerPage].creatorPrice = e.target.value;
                                   setContractPayments(updatedPayments);
                                 }}
                               />
@@ -1005,7 +1013,7 @@ export const Admin = () => {
                                   value={row.fee}
                                   onChange={(e) => {
                                     const updatedPayments = [...contractPayments];
-                                    updatedPayments[index].fee = e.target.value;
+                                    updatedPayments[index + currentContractPaymentPage * contractPaymentRowsPerPage].fee = e.target.value;
                                     setContractPayments(updatedPayments);
                                   }}
                                 />
