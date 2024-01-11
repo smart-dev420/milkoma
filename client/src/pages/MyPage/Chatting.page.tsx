@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 import { setMessage } from "../../slices/message";
+import ReactPlayer from 'react-player';
 
 export const ChattingPage: React.FC<{  }> = ({ }) => {
     // scrollTop();
@@ -115,7 +116,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
 
         socket.on('message', (receivedMessage: any) => {
             setMessages((prevMessages: any) => [...(prevMessages || []), receivedMessage]);
-            
+            if(receivedMessage.email !== userEmail) setPlaying(true);
         });
 
       }
@@ -198,9 +199,17 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
             }
         }catch(err){ console.error(err); }
     }
+    const [playing, setPlaying] = useState(false);
   
     return(
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'50px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
+            <ReactPlayer
+        url={staticFiles.alarm}
+        width="100%"
+        height="50px" // Adjust the height as needed
+        playing={playing}
+        onEnded={() => setPlaying(false)}
+      />
             {contractInfo && (
             <Stack direction="column" sx={{paddingX:'20px', width:'100%'}}>
             {/** Back button and Page Title */}    
