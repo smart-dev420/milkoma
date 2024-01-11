@@ -20,12 +20,13 @@ export const ContractManage = () => {
     const user_data = localStorage?.getItem('user');
     const user = user_data ? JSON.parse(user_data) : null;
     const [ contract, setContract ] = useState<any>([]);
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const getData = async () => {
         const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, headers());
         setContract(res.data);
     }
     useEffect(()=>{
-        getData();
+        if(loginStatus) getData();
     }, []);
     
     return(

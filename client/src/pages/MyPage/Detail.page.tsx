@@ -103,6 +103,7 @@ const statusValues = [
 export const DetailPage = () => {
     const dispatch = useDispatch();
     dispatch(setPage({page:2}));
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const navigate = useNavigate();
     const [ data, setData ] = useState({
         // contracted: useSelector((state:any) => state.contract.contracted),
@@ -136,7 +137,7 @@ export const DetailPage = () => {
     }
 
     useEffect(()=>{
-        getRole()
+        if(loginStatus) getRole()
     }, [])
     const handleContract = () => {
         // setData(prevData => ({ ...prevData, contracted: true }));
@@ -177,14 +178,18 @@ export const DetailPage = () => {
     }
 
     useEffect(() => {
-        getProvideFileList();
-        getProductFileList();
+        if(loginStatus){
+            getProvideFileList();
+            getProductFileList();
+        }
     }, [uploadOpen]);
 
     useEffect(() => {
-        getContractInfo();
-        getCreatorData();
-        setNextStep(false);
+        if(loginStatus){
+            getContractInfo();
+            getCreatorData();
+            setNextStep(false);
+        }
     }, [nextStep])
 
     /** Bill Dialog */

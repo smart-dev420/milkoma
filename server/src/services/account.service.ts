@@ -29,10 +29,12 @@ export async function resetPwd(input: any) {
       console.log("res - ", input)
       return await AccountModel.updateOne({email}, {password});
     } else {
-      throw Error("トークンの有効期限が切れました"); // Token expired
+      // throw Error("トークンの有効期限が切れました"); // Token expired
+      console.error("トークンの有効期限が切れました"); // Token expired
     }
   } else {
-    throw Error("アカウントが見つかりません"); // Account not found
+    // throw Error("アカウントが見つかりません"); // Account not found
+    console.error("アカウントが見つかりません"); // Account not found
   }
 }
 
@@ -44,7 +46,8 @@ export async function changePswd(input: any) {
   if (result.length > 0) {
       return await AccountModel.updateOne({email}, {password});
   } else {
-    throw Error("アカウントが見つかりません"); // Account not found
+    // throw Error("アカウントが見つかりません"); // Account not found
+    console.error("アカウントが見つかりません"); // Account not found
   }
 }
 
@@ -59,7 +62,8 @@ export async function createAccount(input: any) {
     const email = input.email;
     const result = await AccountModel.find({ email : email });
     if (result.length !== 0) {
-      throw Error("メールアドレスはすでに存在します!"); // Email address already exists
+      // throw Error("メールアドレスはすでに存在します!"); // Email address already exists
+      console.error("メールアドレスはすでに存在します!"); // Email address already exists
     }
     let admin = false;
     if(authConfig.admins.includes(email)) {
@@ -100,7 +104,7 @@ export async function createAccount(input: any) {
     return await AccountModel.create(doc);
   } catch (error: any) {
     logger.error("Creating account Failed");
-    throw error;
+    // throw error;
   }
 }
 
@@ -112,7 +116,7 @@ export function createAccessToken(user: string) {
 
     return accessToken;
   } catch (err: any) {
-    throw err;
+    // throw err;
   }
 }
 
@@ -131,7 +135,8 @@ export async function refreshAccessToken(refreshToken: string) {
 
     return accessToken;
   } catch (err: any) {
-    throw err;
+    // throw err;
+    console.error(err);
   }
 }
 
@@ -139,7 +144,8 @@ export async function findAccount(query: any) {
   try {
     return await AccountModel.findOne(query).lean();
   } catch (err: any) {
-    throw err;
+    // throw err;
+    console.error(err);
   }
 }
 
@@ -152,7 +158,8 @@ export async function validatePassword(email: string, password: string) {
 
     return isValid;
   } catch (err: any) {
-    throw err;
+    // throw err;
+    console.error(err);
   }
 }
 
@@ -161,7 +168,8 @@ export async function validateActive(email:string){
     const akun = await AccountModel.findOne({ email });
     return akun?.role;
   } catch (err: any) {
-    throw err;
+    // throw err;
+    console.error(err);
   }
 }
 
@@ -179,7 +187,7 @@ export async function updateField(query : any, update: any) {
     return true;
   } catch (error: any) {
     logger.error("Save Profile Failed");
-    throw error;
+    // throw error;
   }
 }
 
@@ -209,7 +217,7 @@ export async function saveProfile(input : any) {
     return await AccountModel.updateOne(query, update);
   } catch (error: any) {
     logger.error("Save Profile Failed");
-    throw error;
+    // throw error;
   }
 }
 
@@ -225,7 +233,7 @@ export async function saveCustomerID(input: any) {
     return await updateField(query, update)
   } catch (error: any) {
     logger.error("saveCustomerID Failed");
-    throw error;
+    // throw error;
   }
 }
 
@@ -247,7 +255,7 @@ export async function addClient(input: any) {
     return {res : "Successfully added"}
   } catch (error: any) {
     logger.error("addClient Failed");
-    throw error;
+    // throw error;
   }
 }
 
@@ -259,7 +267,7 @@ export async function readProfile(input : any) {
     return await AccountModel.find(query);
   } catch (error: any) {
     logger.error("Read Profile Failed");
-    throw error;
+    // throw error;
   }
 }
 
@@ -271,7 +279,7 @@ export async function readCreatorInfo(input : any) {
     return await AccountModel.find(query);
   } catch (error: any) {
     logger.error("Read Info Failed");
-    throw error;
+    // throw error;
   }
 }
 
@@ -287,13 +295,16 @@ export async function optValidate(input:any) {
       if(code === otp){
         logger.info("Validate successful.")
       }else{
-        throw Error("無効なコード");  // Invalide code
+        // throw Error("無効なコード");  // Invalide code
+        console.error("無効なコード");  // Invalide code
       }
     } else {
-      throw Error("トークンの有効期限が切れました"); // Token expired
+      // throw Error("トークンの有効期限が切れました"); // Token expired
+      console.error("トークンの有効期限が切れました"); // Token expired
     }
   } else {
-    throw Error("トークンが見つかりません"); // Token not found
+    // throw Error("トークンが見つかりません"); // Token not found
+    console.error("トークンが見つかりません"); // Token not found
   }
 }
 

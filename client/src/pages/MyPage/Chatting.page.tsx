@@ -29,6 +29,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
     const emoticIcon = '😀😃😄😁😆😅😂🤣☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🤭🤫🤥😶😐😑😬🙄😯😦😧😮😲😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾';
     const [currentEmoticon, setCurrentEmoticon] = useState<string | null>(null);
     const chatBox = useRef<HTMLDivElement>(null);
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
 
     useEffect(() => {
     let index = 0;
@@ -60,9 +61,11 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
     }
   
     useEffect(() => {
-        getAdminState();
-        getContractInfo();
-        getMessages();
+        if(loginStatus) {
+            getAdminState();
+            getContractInfo();
+            getMessages();
+        }
         if (chatBox.current) {
             chatBox.current.scrollTop = chatBox.current.scrollHeight;
           }

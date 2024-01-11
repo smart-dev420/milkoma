@@ -3,7 +3,7 @@ import { cardColor0, cardColor1, cardHoverColor0, cardHoverColor1, cardSidebar0,
 import { SpaceY } from "../../components/SpaceY"
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import Slider from '@mui/material/Slider';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setPage } from "../../slices/page";
 import { btnBackground, btnBackgroundHover } from "../../components/Constants";
 import { useEffect, useState } from "react";
@@ -42,7 +42,8 @@ export const HomePage = () => {
     const [ stateList, setStateList ] = useState<any>([]);
     const user_data = localStorage?.getItem('user');
     const user = user_data ? JSON.parse(user_data) : null;
-
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
+    
     const getData = async () => {
         try{
             const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, headers());
@@ -67,7 +68,7 @@ export const HomePage = () => {
         }
     }
     useEffect(()=>{
-        getData();
+        if(loginStatus) getData();
     }, []);
 
     return(

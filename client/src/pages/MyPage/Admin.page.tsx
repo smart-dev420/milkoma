@@ -28,7 +28,7 @@ import axios from "axios";
 import { headers } from "../../utils/appHelper";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setPage } from "../../slices/page";
 import { fontBold } from "../../components/Constants";
 interface TabPanelProps {
@@ -164,6 +164,7 @@ interface TabPanelProps {
 
 export const Admin = () => {
     const [ admin, setAdmin ] = React.useState<boolean>();
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const getAdminData = async () => {
         const query = `${API}/api/getAdmin`;
         const res = await axios.post(query, {}, headers());
@@ -171,7 +172,7 @@ export const Admin = () => {
     }
 
     React.useEffect(() => {
-        getAdminData();
+        if(loginStatus) getAdminData();
         if(admin == false){
           navigate('/mypage');
         }
@@ -306,8 +307,10 @@ export const Admin = () => {
       }
     }
     React.useEffect(() =>{
-      getClientsInfo();
-      getAllContracts();
+      if(loginStatus){
+        getClientsInfo();
+        getAllContracts();
+      }
     }, [])
     
     // Verify user

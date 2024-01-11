@@ -5,6 +5,7 @@ const authServices: {
     signIn: (loginCreds: { email: string; password: string }) => Promise<any>;
   } = {
       getCurrentUser: function (): Promise<string | null> {
+        //   throw new Error("Function not implemented.");
           throw new Error("Function not implemented.");
       },
       signIn: function (loginCreds: { email: string; password: string; }): Promise<any> {

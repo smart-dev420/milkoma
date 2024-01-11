@@ -62,7 +62,7 @@ export async function saveProvideFile(input: any): Promise<void> {
       }
     } catch (error) {
       console.log("Upload Failed");
-      throw error;
+      // throw error;
     }
   }
 
@@ -102,6 +102,6 @@ export async function saveProductFile(input: any): Promise<void> {
     }
   } catch (error) {
     console.log("Upload Failed");
-    throw error;
+    // throw error;
   }
 }

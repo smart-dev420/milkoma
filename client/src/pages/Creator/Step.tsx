@@ -94,7 +94,8 @@ export const CreatorStep = () => {
     const selectColor:string = "#E38A86";
     const unselectColor:string = "#D9D9D9";
     const dispatch = useDispatch();
-    
+    const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
+
     const {userId} = useParams();
     const query = `${API}/api/getCreatorProfile/${userId}`;
     const [ creatorInfo, setCreatorInfo] = useState<any>({});
@@ -103,7 +104,7 @@ export const CreatorStep = () => {
       setCreatorInfo(res.data.data);
     }
     useEffect(() => {
-      getCreatorInfo();
+      if(loginStatus) getCreatorInfo();
     }, []);
     console.log("userData", creatorInfo);
 

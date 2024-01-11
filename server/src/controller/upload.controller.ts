@@ -95,7 +95,7 @@ const uploadProvideFile: RequestHandler = async (req, res) => {
       return res.status(200).send({data: result?.provideData});
     }catch(error) {
       logger.error(error);
-      throw error;
+      // throw error;
     }
   }
 
@@ -138,7 +138,7 @@ const uploadProvideFile: RequestHandler = async (req, res) => {
       return res.status(200).send({data: result?.productData});
     }catch(error) {
       logger.error(error);
-      throw error;
+      // throw error;
     }
   }
 
