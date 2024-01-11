@@ -117,6 +117,7 @@ export const staticFiles = {
     cardLogo4: `${ASSET_IMAGES}/Card_Logo4.png`,
     cardLogo5: `${ASSET_IMAGES}/Card_Logo5.png`,
   },
+  alarm: `${process.env.REACT_APP_ASSETS_PATH}/alarm.wav`,
 };
 
 export const btnBackground = "#EE7D90"

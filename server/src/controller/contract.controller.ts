@@ -135,7 +135,7 @@ const getAllContracts: RequestHandler = async (req, res) => {
 const contractConfirm: RequestHandler = async (req, res) => {
   try{
     const contractId = req.params.id;
-    await ContractModel.updateOne({_id: contractId}, {status: 1});
+    await ContractModel.updateOne({_id: contractId}, {status: 1, confirm:true});
     return res.status(StatusCodes.OK).send({msg:'正常に確認されました'});
   } catch (err){
     console.error(err);
@@ -145,7 +145,7 @@ const contractConfirm: RequestHandler = async (req, res) => {
 const contractCancel: RequestHandler = async (req, res) => {
   try{
     const contractId = req.params.id;
-    await ContractModel.updateOne({_id: contractId}, {status: -1});
+    await ContractModel.updateOne({_id: contractId}, {status: -1, confirm:false});
     return res.status(StatusCodes.OK).send({msg:'正常にキャンセルされました'});
   } catch (err){
     console.error(err);
@@ -156,6 +156,10 @@ const addCreator: RequestHandler = async (req, res) => {
   try{
     const contractId = req.params.id;
     const creatorEmail = req.body.creator_email;
+    console.log('creatorEmail - ',creatorEmail);
+    if(!creatorEmail){
+      return res.status(StatusCodes.OK).send(false);
+    }
     await ContractModel.updateOne({_id: contractId}, {creatorEmail: creatorEmail});
     return res.status(StatusCodes.OK).send({msg:'正常に追加されました'});
   } catch (err){

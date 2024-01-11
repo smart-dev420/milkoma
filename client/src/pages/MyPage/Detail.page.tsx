@@ -147,8 +147,12 @@ export const DetailPage = () => {
         setData(prevData => ({ ...prevData, contractCheck: true }));
     }
     const handlePaid = () => {
-        navigate(`/mypage/pay/${contractId}`);
-        setData(prevData => ({ ...prevData, paid: true, step: 2 }));
+        if((contractInfo.creatorPrice + contractInfo.fee) === 0){
+            toast.error('まだ金額が設定されていません。');
+        } else {
+            navigate(`/mypage/pay/${contractId}`);
+            setData(prevData => ({ ...prevData, paid: true, step: 2 }));
+        }
     }
     const handleBill = () => {
         handleClickOpen();

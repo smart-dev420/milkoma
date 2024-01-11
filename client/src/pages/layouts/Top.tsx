@@ -91,7 +91,11 @@ export const Top = () => {
     const handleKeyDown = (event:any) => {
       if (event.key === 'Enter') {
         event.preventDefault(); // Prevents line break in the textarea
-        navigate(`/history/${searchTerm}`);
+        if(searchTerm === '' || searchTerm.trim() === '') {
+          navigate(`/history/search`);
+        }else{
+          navigate(`/history/${searchTerm.trim()}`);
+        }
       }
     };
     const [invisible, setInvisible] = useState(false);
