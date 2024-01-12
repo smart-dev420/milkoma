@@ -1,20 +1,20 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import authServices from "../services/auth-services";
+// import authServices from "../services/auth-services";
 import { setMessage } from "./message";
 
 //const user = JSON.parse(localStorage.getItem("user"));
 
-export const login = createAsyncThunk(
-    "auth/login", async ({ email, password }:any, thunkAPI) => {
-        try {
-            const data = await authServices.signIn({email, password});
-            return data;
-        } catch(err:any) {
-            thunkAPI.dispatch(setMessage(err.message));
-            return thunkAPI.rejectWithValue(err.message);
-        }
-    }
-);
+// export const login = createAsyncThunk(
+//     "auth/login", async ({ email, password }:any, thunkAPI) => {
+//         try {
+//             const data = await authServices.signIn({email, password});
+//             return data;
+//         } catch(err:any) {
+//             thunkAPI.dispatch(setMessage(err.message));
+//             return thunkAPI.rejectWithValue(err.message);
+//         }
+//     }
+// );
 
 //export const logout = createAsyncThunk("auth/logout", async () => {
 //  await AuthService.logout();
@@ -35,7 +35,7 @@ interface AuthState {
     logout: boolean;
   }
   
-  const initialState: AuthState = {
+const initialState: AuthState = {
     id: "",
     token: "",
     email: "",
@@ -48,7 +48,7 @@ interface AuthState {
     admin: false,
     region: 0,
     logout: false,
-  };
+};
 
 const authSlice = createSlice({
     name: "auth",
