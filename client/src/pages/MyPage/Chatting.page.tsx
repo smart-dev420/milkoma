@@ -63,12 +63,31 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
         const res = await axios.post(`${API}/api/getMessages/${rid}`, {}, headers());
         setMessages(res.data.message);
     }
+
+    const updateMessages = async () => {
+        const res = await axios.post(`${API}/api/getRole`, {}, headers());
+        if(res.data.role === 'admin'){
+            const sender = localStorage.getItem('role');
+            await axios.post(`${API}/api/updateMessages/${rid}/${sender}`, {}, headers());    
+        } else {
+            await axios.post(`${API}/api/updateMessages/${rid}/no`, {}, headers());
+        }
+    }
+
+    const [ role, setRole ] = useState('');
+    const getRole = async () => {
+        const res = await axios.post(`${API}/api/getRole`, {}, headers());
+        console.log('role - ', res.data.role);
+        setRole(res.data.role);
+    }
   
     useEffect(() => {
         if(loginStatus) {
             getAdminState();
             getContractInfo();
             getMessages();
+            updateMessages();
+            getRole();
         }
         if (chatBox.current) {
             chatBox.current.scrollTop = chatBox.current.scrollHeight;
@@ -80,7 +99,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
             newSocket.disconnect();
         };
 
-    }, []);
+    }, [rid]);
 
     useEffect(() => {
         const scrollToBottom = () => {
@@ -97,6 +116,10 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
         return () => clearTimeout(scrollTimeout);
       }, [messages]);
       
+    const updateMessage = (message: any) => {
+        setMessages((prevMessages: any) => [...(prevMessages || []), message]);
+        if (message.email !== userEmail) setPlaying(true);
+    };
   
     useEffect(() => {
       if (socket) {
@@ -115,8 +138,14 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
         });
 
         socket.on('message', (receivedMessage: any) => {
-            setMessages((prevMessages: any) => [...(prevMessages || []), receivedMessage]);
-            if(receivedMessage.email !== userEmail) setPlaying(true);
+            // if (role === 'admin') {
+            //     const sender = localStorage.getItem('role');
+            //     if (sender === receivedMessage.sender) {
+            //       updateMessage(receivedMessage);
+            //     }
+            //   } else if (role === receivedMessage.receiver) {
+                updateMessage(receivedMessage);
+            //   }
         });
 
       }
@@ -127,6 +156,8 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
       if (inputMessage && socket) {
         const result = {
             email: userEmail,
+            sender: role,
+            receiver: role === 'admin'? localStorage.getItem('role'):'admin',
             message: inputMessage,
             date: Date.now(),
             uploadData: ''
@@ -157,7 +188,6 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
         if(uploadFile){
             setFile(uploadFile);
             await handleFileUpload(uploadFile);
-            console.log('file - ', uploadFile)
         }
     };
 
@@ -181,7 +211,6 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
             const query = `${API}/api/uploadData`;
             const res = await axios.post(query, formData, headers());
             if( res.status === 200 ){
-                console.log('return', res.data);
                 if (socket && rid) {
                     const result = {
                         email: userEmail,
@@ -194,7 +223,6 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                 }
                 setFile(null); 
             } else {
-                console.log(res);
                 toast.error(res.data.msg);
             }
         }catch(err){ console.error(err); }
@@ -290,7 +318,12 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                                 minHeight:'200px',
                                 maxHeight:'800px',
                                 overflowY:'auto'}}>
-                            {messages && messages.map((msg:any, index:number) => (
+                            {
+                                messages && messages.filter((msg: any) => (
+                                    role === 'admin' ? msg.sender === localStorage.getItem('role') || msg.receiver === localStorage.getItem('role') : msg.sender === role || msg.receiver === role
+                                  ))
+                                  .map((msg:any, index:number) => (
+                                
                                 <Box
                                 sx={{width:'60%', float:msg.email === userEmail?'right':'left', marginY:'10px'}}
                                 >

@@ -2,6 +2,10 @@ import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import logger from "./utils/logger";
 import MessageModel from "./models/message.model";
+import { validateToken } from "./controller/contract.controller";
+import { getEmailFromToken } from "./services/account.service";
+import ContractModel from "./models/contract.model";
+import AccountModel from "./models/account.model";
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const fs = require('fs');
@@ -40,18 +44,18 @@ interface MessageDataType {
 
 const addChat = async (roomId: string, input: any) => {
     try {
-        console.log('data - ', input);
-
         // Assuming 'onlineUsers' contains user data and you want to check if the user exists
         const onlineCheck = onlineUsers.find(user => user.roomId === roomId && user.email === input.email);
         let checked = false;
         if (onlineCheck) checked = true;
-
+        console.log('response - ', input)
         const messageToUpdate = {
             contractId: roomId,
             $push: {
                 message: {
                     email: input.email,
+                    sender: input.sender,
+                    receiver: input.receiver,
                     date: input.date,
                     message: input.message, // Assuming 'input.message' contains the message
                     uploadData: input.uploadData, // Assuming 'input.uploadDataName' contains the uploadDataName
@@ -66,8 +70,6 @@ const addChat = async (roomId: string, input: any) => {
             messageToUpdate,
             { new: true, upsert: true } // Set 'upsert' to 'true' to create a new document if it doesn't exist
         );
-
-        console.log('Updated message:', doc);
     } catch (error) {
         console.error(error);
     }
@@ -112,6 +114,8 @@ const uploadData: RequestHandler = async (req, res) => {
 const getMessages: RequestHandler = async (req, res) => {
     try{
         const id = req.params.id;
+        const role = req.params.role;
+        console.log('role - ', role)
         const info = await MessageModel.findOne({contractId: id}, 'message');
         return res.status(200).send(info);
     } catch (error) {
@@ -131,7 +135,128 @@ const getData: RequestHandler = async (req, res) => {
         res.status(200).sendFile(filePath);
       }
     });
+}
+
+const notReceivedMessage: RequestHandler = async (req, res) => {
+  const id = req.params.id;
+  const token = validateToken(req, res);
+  const email = getEmailFromToken(token);
+  let result: any = [];
+  try{
+    const message = await MessageModel.findOne({ contractId: id }, 'message');
+    const user = await AccountModel.findOne({email: email});
+    if (message && Array.isArray(message.message) && user) {
+      result = message.message.filter((item) => item.checked === false && item.receiver === user.role);
+    }
+    return res.status(200).send(result);
+  } catch (error) {
+    console.error(error);
   }
+}
+
+const getAllNotReceivedMessages: RequestHandler = async (req, res) => {
+  try{
+    const token = validateToken(req, res);
+    const email = getEmailFromToken(token);
+    const user = await AccountModel.findOne({email: email});
+    let contracts = await ContractModel.find({clientEmail: email}, '_id');
+    const allContracts = await ContractModel.find();
+    let data: any = [];
+    if(user?.role === 'admin'){
+      contracts = allContracts;
+    }
+    
+    for (const contract of contracts) {
+      try {
+        const messages = await MessageModel.findOne({ contractId: contract._id });
+        if (messages && Array.isArray(messages.message)) {
+          const filteredMessages = messages.message.filter(data => data.checked === false && data.receiver === user?.role);
+          if(filteredMessages.length > 0) {
+            const info = filteredMessages.reverse();
+            if(user?.role === 'admin'){
+              const filterClient = info.filter(data => data.sender === 'client');
+              const filterCreator = info.filter(data => data.sender === 'creator');
+              if(filterClient.length > 0){
+                data.push({
+                  contractId: contract._id,
+                  message: filterClient[0].message,
+                  sender: filterClient[0].sender,
+                  receiver: filterClient[0].receiver,
+                  date: filterClient[0].date
+                });
+              }
+              if(filterCreator.length > 0){
+                data.push({
+                  contractId: contract._id,
+                  message: filterCreator[0].message,
+                  sender: filterCreator[0].sender,
+                  receiver: filterCreator[0].receiver,
+                  date: filterCreator[0].date
+                });
+              }
+            } else {
+              const newData = {
+                contractId: contract._id,
+                message: info[0].message,
+                sender: info[0].sender,
+                receiver: info[0].receiver,
+                date: info[0].date
+              };
+              data.push(newData);
+            }
+          }
+        }
+      } catch (error) {
+        // Handle errors during the MongoDB operation
+        console.error(error);
+      }
+    }
+    return res.status(200).send(data);
+  } catch(err){
+    console.error(err);
+  }
+}
+
+const updateMessages: RequestHandler = async (req, res) => {
+  const id = req.params.id;
+  const sender = req.params.sender;
+  const token = validateToken(req, res);
+  const email = getEmailFromToken(token);
+  const user = await AccountModel.findOne({email: email});
+  try {
+    if(user?.role === 'admin'){
+      await MessageModel.updateOne(
+        { contractId: id },
+        { $set: { 'message.$[elem].checked': true } },
+        { arrayFilters: [{ 'elem.receiver': { $eq: user?.role }, 'elem.sender': { $eq: sender} }] }
+      );
+    } else {
+      await MessageModel.updateOne(
+        { contractId: id },
+        { $set: { 'message.$[elem].checked': true } },
+        { arrayFilters: [{ 'elem.receiver': { $eq: user?.role } }] }
+      );
+    }
+    // const info: any = await MessageModel.findOne({ contractId: id });
+    // if (info && Array.isArray(info.message)) {
+    //   for (const item of info.message) {
+    //     if (item.email !== email) {
+    //       // Assuming you want to update some field, e.g., 'checked' to true
+    //       item.checked = true;
+  
+    //       // Update the document in the database
+    //       await MessageModel.updateOne(
+    //         { contractId: id, 'message.email': !email },
+    //         { $set: { 'message.$': item } }
+    //       );
+    //     }
+    //   }
+    // }
+  } catch (error) {
+    console.error(error);
+  }
+  
+}
 
 module.exports = { 
     addOnlineUser,
@@ -140,5 +265,8 @@ module.exports = {
     addChat,
     uploadData,
     getData,
-    getMessages
+    getMessages,
+    notReceivedMessage,
+    getAllNotReceivedMessages,
+    updateMessages,
 }

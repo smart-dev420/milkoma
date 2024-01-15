@@ -12,7 +12,7 @@ import { tr } from "date-fns/locale";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { API } from "../../axios";
-import { headers } from "../../utils/appHelper";
+import { convertNumberToDate, headers } from "../../utils/appHelper";
 
 const pageLayoutNavBar: NavBarElement[] = [
     {
@@ -98,7 +98,8 @@ export const Top = () => {
         }
       }
     };
-    const [invisible, setInvisible] = useState(false);
+    const [invisible, setInvisible] = useState(true);
+    const [ clicked, setClicked ] = useState<boolean>(false);
     const match_1024 = useMediaQuery('(min-width:1025px)');
     const match_1200 = useMediaQuery('(min-width:1200px)');
     const match_1500 = useMediaQuery('(min-width:1500px)');
@@ -134,9 +135,26 @@ export const Top = () => {
         setAdmin(res.data.admin);
     }
 
+    const [ message, setMessage ] = useState<any[]>();
+    const getAllMessage = async () => {
+      const query = `${API}/api/getAllNotReceivedMessages`;
+      const res = await axios.post(query, {}, headers());
+      console.log('res - ', res.data);
+      setMessage(res.data);
+      if(res.data.length > 0) {
+        setInvisible(false);
+      } else {
+        setInvisible(true);
+      }
+    }
+
     React.useEffect(() => {
-      if(loginStatus) getAdminData();
-    }, [])
+      if(loginStatus) { 
+        getAdminData(); 
+        getAllMessage();
+        setClicked(false);
+      }
+    }, [clicked])
     
     const handleMyPage = () => {
       if(loginStatus){
@@ -148,6 +166,18 @@ export const Top = () => {
       } else {
         navigate('/login')
       }
+    }
+
+    const handleNotification = (id: string, sender: string, receiver: string) => {
+      setClicked(true);
+      if(receiver === 'admin'){
+        if(sender === 'client'){
+          localStorage.setItem('role', 'client');
+        } else {
+          localStorage.setItem('role', 'creator');
+        }
+      }
+      navigate(`/mypage/chatting/${id}`);
     }
     return (
       <> 
@@ -200,7 +230,7 @@ export const Top = () => {
               </Badge>
                 <button 
                   className={`${match_1500 ? "text-[14px] min-w-[120px]" : match_1024 ? "text-[12px] min-w-[60px]" : "hidden"} font-m1c pl-4 mt-3`}
-                  aria-controls={open ? 'account-menu' : undefined}
+                  aria-controls={open ? 'notification-menu' : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
                   style={{whiteSpace:'nowrap', fontWeight:fontBold, color:isHovered == 1?'#F6CAA1':'#000'}}
@@ -237,7 +267,7 @@ export const Top = () => {
         </div>
         <Menu
           anchorEl={anchorEl}
-          id="account-menu"
+          id="notification-menu"
           open={open}
           onClose={handleClose}
           transformOrigin={{ horizontal: 'center', vertical: 'top' }}
@@ -251,19 +281,23 @@ export const Top = () => {
               <button className="flex-1"><img src={staticFiles.icons.ic_noti_close}
                 onClick={handleClose} /></button>
             </div>
-            {detail?(
+            {invisible?(
                 <div className="px-10 py-5">
                 新しいお知らせはありません {selectId}
                 </div>  
             ):(
-              fakeData.map((item:ItemElement, index:number) => (
+              message && message.length > 0 && message.map((item:any, index:number) => (
                 <div key={index}>
                 <div className="flex flex-row p-5">
                     <div className="flex flex-col w-[85%]">
-                      <p>{item.name}</p>
-                      <p>{item.date}</p>
+                      <p>お知らせ{index + 1}</p>
+                      <p>{convertNumberToDate(item.date)}</p>
                     </div>
-                  <button key={item.id} onClick={()=>{setDetail(true); setSelectId(item.id)}} className="hover:bg-btHover/[1] bg-btColor w-[157px] h-[39x] rounded-[50px] text-white">詳しく見る</button>
+                  <button key={item.contractId} 
+                    onClick={()=>{
+                      handleNotification(item.contractId, item.sender, item.receiver);
+                      }
+                    } className="hover:bg-btHover/[1] bg-btColor w-[157px] h-[39x] rounded-[50px] text-white">詳しく見る</button>
                 </div>
                 <Divider />
                 </div>

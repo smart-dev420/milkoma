@@ -221,7 +221,7 @@ const forgotPassword: RequestHandler = async (req, res) => {
     <p style='line-height: 300%;'>パスワードをリセットするリクエストを受け取りました。</p>
     <p>リクエストしていない場合は、このメッセージを無視してください。</p>
     <p>それ以外の場合は、以下の番号を使用してパスワードをリセットできます。</p>
-    <p style='margin: 40px 0;'>'${otpNumber}'</p>
+    <p style='margin: 40px 0; font-size: 16px; font-weight: bold;'>${otpNumber}</p>
     <p style='line-height: 0%;'>Thanks</p>
     <p>'${COMPANY_NAME}'</p>
     <br><br><br>
