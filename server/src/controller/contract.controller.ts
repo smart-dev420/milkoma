@@ -12,7 +12,7 @@ import { subscribe } from "../utils/stripe";
 import express, { Request, Response } from 'express';
 import { CreatePdfDocument } from "../utils/create_pdf";
 
-const validateToken = (req:any, res:any) => {
+export const validateToken = (req:any, res:any) => {
     const { authorization } = req.body.token || req.query.token || req.headers;
     if (!authorization) {
       return res.status(StatusCodes.FORBIDDEN).json({
@@ -21,7 +21,7 @@ const validateToken = (req:any, res:any) => {
     }
     const token = authorization.split(' ')[1];
     return token;
-  }
+}
 
 const insertContract: RequestHandler = async (req, res) => {
     const data = req.body;

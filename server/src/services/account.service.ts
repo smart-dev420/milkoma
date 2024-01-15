@@ -60,18 +60,19 @@ export async function createAccount(input: any) {
 
     // * Check username validity to avoid duplicates
     const email = input.email;
-    const result = await AccountModel.find({ email : email });
-    if (result.length !== 0) {
-      // throw Error("メールアドレスはすでに存在します!"); // Email address already exists
-      console.error("メールアドレスはすでに存在します!"); // Email address already exists
-    }
-    let admin = false;
-    if(authConfig.admins.includes(email)) {
-      admin = true
-    }
+    // const result = await AccountModel.find({ email : email });
+    // if (result.length !== 0) {
+    //   // throw Error("メールアドレスはすでに存在します!"); // Email address already exists
+    //   console.error("メールアドレスはすでに存在します!"); // Email address already exists
+    // }
     let role = 'client';
     if(input.role == 1){
       role = 'creator';
+    }
+    let admin = false;
+    if(authConfig.admins.includes(email)) {
+      admin = true;
+      role = 'admin';
     }
     let customerId = '';
     if(role === 'client'){

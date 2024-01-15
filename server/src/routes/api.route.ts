@@ -13,7 +13,10 @@ import message from "../controller/message.controller";
 const { 
   uploadData,
   getData,
-  getMessages
+  getMessages,
+  notReceivedMessage,
+  getAllNotReceivedMessages,
+  updateMessages
 } = require('../chat')
 
 const apiRoute = Router();
@@ -76,5 +79,8 @@ apiRoute.get("/receivedDownload/:filename",      verifyToken,     provide.receiv
 /******** Socket */
 apiRoute.post("/message",                   verifyToken,          message.saveMessage);
 apiRoute.post("/uploadData",                verifyToken,          uploadData);
-apiRoute.post("/getMessages/:id",           verifyToken,          getMessages)
+apiRoute.post("/getMessages/:id",           verifyToken,          getMessages);
+apiRoute.post("/notReceivedMessage/:id",    verifyToken,          notReceivedMessage);
+apiRoute.post("/getAllNotReceivedMessages", verifyToken,          getAllNotReceivedMessages);
+apiRoute.post("/updateMessages/:id/:sender",        verifyToken,          updateMessages);
 export default apiRoute;

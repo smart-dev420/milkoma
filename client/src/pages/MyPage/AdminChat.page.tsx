@@ -68,6 +68,10 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
         }
       }, [socket]);
 
+    const handleClient = (id:string) => {
+        localStorage.setItem('role', 'client');
+        navigate(`/mypage/chatting/${id}`);
+    }
     return(
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'50px', paddingBottom:'40px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
             <Stack direction="column" sx={{paddingX:'20px', width:'100%'}}>
@@ -103,7 +107,7 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
                         {contract.map((item: any, index: number) => (
                             <ListItem key={index} secondaryAction={
                                 <IconButton edge="end" aria-label="send"
-                                onClick={() => { navigate(`/mypage/chatting/${item._id}`) }}
+                                onClick={() => { handleClient(item._id);}}
                                 >
                                     <SendIcon />
                                 </IconButton>
