@@ -9,7 +9,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import axios from "axios";
 import { API } from "../../axios";
-import { headers } from "../../utils/appHelper";
+import { checkToken, headers } from "../../utils/appHelper";
 import { toast } from "react-toastify";
 import { error } from "console";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,6 +38,7 @@ export const Profile = () =>{
     scrollTop();
     const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const getProfile = async () => { 
+        await checkToken();
         const res = await axios.post(`${API}/api/getUserProfile`, {}, headers());
         setProfile(res.data);
     }
@@ -93,6 +94,7 @@ export const Profile = () =>{
         formData.append('company', profile.company);
         const query = `${API}/auth/updateProfile`;
         try{
+            await checkToken();
             const res = await axios.post(query, formData, headers());
             if(res.status === 200){
                 toast.success(res.data.msg);
@@ -112,6 +114,7 @@ export const Profile = () =>{
         formData.append("file", currentFile);
         const query = `${API}/auth/uploadVerify/${userData.id}`;
         try{
+            await checkToken();
             const res = await axios.post(query, formData, headers());
             if(res.status === 200 ){
                 console.log('return', res.data);
@@ -157,6 +160,7 @@ export const Profile = () =>{
         formData.append('password', password.pswd1);
         const query = `${API}/auth/changePassword/${userData.email}`;
         try {
+            await checkToken();
             const res = await axios.post(query, formData, headers());
             if(res.status === 200){
                 toast.success("パスワードの変更が成功しました!");
@@ -184,6 +188,7 @@ export const Profile = () =>{
         formData.append('twitterAccount', profile.twitterAccount);
         const query = `${API}/auth/changeSNS`;
         try{
+            await checkToken();
             const res = await axios.post(query, formData, headers());
             if(res.status === 200){
                 toast.success(res.data.msg);
@@ -205,6 +210,7 @@ export const Profile = () =>{
           });
         const query = `${API}/auth/changeSkills`;
         try{
+            await checkToken();
             const res = await axios.post(query, formData, headers());
             if(res.status === 200){
                 toast.success(res.data.msg);

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { CHAT_SVR_URL, btnBackground, btnBackgroundHover, fontBold, fontSize14, fontSize16, scrollTop, staticFiles } from "../../components/Constants";
 import { setPage } from "../../slices/page";
-import { getDateString, headers, showSentence } from "../../utils/appHelper";
+import { checkToken, getDateString, headers, showSentence } from "../../utils/appHelper";
 import io, { Socket } from 'socket.io-client';
 import React, { useState, useEffect, FormEvent, useRef } from 'react';
 import { API } from "../../axios";
@@ -44,6 +44,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
     
     const [ admin, setAdmin ] = useState<boolean>();
     const getAdminState = async () => {
+        await checkToken();
         const query = `${API}/api/getAdmin`;
         const res = await axios.post(query, {}, headers());
         if(res.data.admin === true){
@@ -55,6 +56,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
     }
 
     const getContractInfo = async () => {
+        await checkToken();
         const res = await axios.post(`${API}/api/getContractInfo/${rid}`, {}, headers());
         setContractInfo(res.data);
     }
@@ -65,6 +67,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
     }
 
     const updateMessages = async () => {
+        await checkToken();
         const res = await axios.post(`${API}/api/getRole`, {}, headers());
         if(res.data.role === 'admin'){
             const sender = localStorage.getItem('role');
@@ -76,6 +79,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
 
     const [ role, setRole ] = useState('');
     const getRole = async () => {
+        await checkToken();
         const res = await axios.post(`${API}/api/getRole`, {}, headers());
         console.log('role - ', res.data.role);
         setRole(res.data.role);
@@ -208,6 +212,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
         if(rid) formData.append('contractId', rid);
         formData.append('date', nowDate.toString());
         try{
+            await checkToken();
             const query = `${API}/api/uploadData`;
             const res = await axios.post(query, formData, headers());
             if( res.status === 200 ){

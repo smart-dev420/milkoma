@@ -12,7 +12,7 @@ import { tr } from "date-fns/locale";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { API } from "../../axios";
-import { convertNumberToDate, headers } from "../../utils/appHelper";
+import { checkToken, convertNumberToDate, headers } from "../../utils/appHelper";
 
 const pageLayoutNavBar: NavBarElement[] = [
     {
@@ -130,6 +130,7 @@ export const Top = () => {
 
     const [ admin, setAdmin ] = React.useState<boolean>();
     const getAdminData = async () => {
+        await checkToken();
         const query = `${API}/api/getAdmin`;
         const res = await axios.post(query, {}, headers());
         setAdmin(res.data.admin);
@@ -137,6 +138,7 @@ export const Top = () => {
 
     const [ message, setMessage ] = useState<any[]>();
     const getAllMessage = async () => {
+      await checkToken();
       const query = `${API}/api/getAllNotReceivedMessages`;
       const res = await axios.post(query, {}, headers());
       console.log('res - ', res.data);

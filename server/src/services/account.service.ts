@@ -125,7 +125,7 @@ export async function refreshAccessToken(refreshToken: string) {
   try {
     const decoded = decode(refreshToken);
 
-    const email = get(decoded, "email");
+    const email = get(decoded, "user");
     // Decode JWT
     if (!decoded || !email) return false;
 

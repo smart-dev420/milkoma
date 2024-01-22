@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { btnBackground, btnBackgroundHover, fontBold, scrollTop, staticFiles } from "../../components/Constants";
 import { setPage } from "../../slices/page";
 import { useEffect, useState } from "react";
-import { headers, showSentence } from "../../utils/appHelper";
+import { checkToken, headers, showSentence } from "../../utils/appHelper";
 import * as yup from "yup";
 import {Form, Formik} from "formik";
 import axios from 'axios';
@@ -41,6 +41,7 @@ export const CardManage = () => {
     });
     const [ history, setHistory ] = useState<any>(null);
     const getPayHistory = async () => {
+        await checkToken();
         const res = await axios.post(`${API}/api/getPaymentHistory`, {}, headers());
         setHistory(res.data);
         console.log(res.data);

@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import { useDispatch, useSelector } from "react-redux";
 import { setStep, setCategory, setQuestion, setInit } from "../../slices/creator"
 import { useNavigate, useParams } from "react-router-dom";
-import { NumberFormatExample, headers, showSentence } from "../../utils/appHelper";
+import { NumberFormatExample, checkToken, headers, showSentence } from "../../utils/appHelper";
 import { API } from "../../axios";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -100,8 +100,9 @@ export const CreatorStep = () => {
     const query = `${API}/api/getCreatorProfile/${userId}`;
     const [ creatorInfo, setCreatorInfo] = useState<any>({});
     const getCreatorInfo = async () => {
-      const res = await axios.post(query, {}, headers());
-      setCreatorInfo(res.data.data);
+        await checkToken();
+        const res = await axios.post(query, {}, headers());
+        setCreatorInfo(res.data.data);
     }
     useEffect(() => {
       if(loginStatus) getCreatorInfo();
@@ -639,6 +640,7 @@ const Step4 : React.FC<{}> = () => {
         };
         const query = `${API}/api/insertContract`;
         try {
+            await checkToken();
             const res = await axios.post(query, formData, headers());
             if(res.status === 200){
                 console.log('return' , res.data)

@@ -25,7 +25,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import React from "react";
 import { API } from "../../axios";
 import axios from "axios";
-import { headers } from "../../utils/appHelper";
+import { checkToken, headers } from "../../utils/appHelper";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -166,6 +166,7 @@ export const Admin = () => {
     const [ admin, setAdmin ] = React.useState<boolean>();
     const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const getAdminData = async () => {
+        await checkToken();
         const query = `${API}/api/getAdmin`;
         const res = await axios.post(query, {}, headers());
         setAdmin(res.data.admin);
@@ -273,6 +274,7 @@ export const Admin = () => {
 
     // Get users data from Database
     const getClientsInfo = async () => {
+      await checkToken();
       const query = `${API}/api/getAllUsersInfo`;
       const res = await axios.post(query, {}, headers());
       let usersInfo: any[] = [];
@@ -298,6 +300,7 @@ export const Admin = () => {
     const getAllContracts = async () => {
       const query = `${API}/api/getAllContracts`;
       try{
+        await checkToken();
         const res = await axios.post(query, {}, headers());
         const info = res.data.sort((a:any, b:any) => a.status - b.status);
         setContracts(info);
@@ -317,6 +320,7 @@ export const Admin = () => {
     const handleVerify = async (id:string, selectedIndex:number, tab:number) => {
       const query = `${API}/api/userVerify/${id}`;
       try{
+        await checkToken();
         const res = await axios.post(query, {}, headers());
         if(res.status === 200){
           toast.success(res.data.msg);
@@ -355,6 +359,7 @@ export const Admin = () => {
     const handleUserDelete = async (id:string, indexToRemove:number, tab: number) => {
       const query = `${API}/api/userDelete/${id}`;
       try{
+        await checkToken();
         const res = await axios.post(query, {}, headers());
         if(res.status === 200){
           toast.success(res.data.msg);
@@ -419,6 +424,7 @@ export const Admin = () => {
     const handleConfirmContract = async (id: string, selectedIndex:number) => {
       const query = `${API}/api/contractConfirm/${id}`;
       try{
+        await checkToken();
         const res = await axios.post(query, {}, headers());
         if(res.status === 200){
           toast.success(res.data.msg);
@@ -442,6 +448,7 @@ export const Admin = () => {
     const handleCancelContract = async (id: string, selectedIndex:number) => {
       const query = `${API}/api/contractCancel/${id}`;
       try{
+        await checkToken();
         const res = await axios.post(query, {}, headers());
         if(res.status === 200){
           toast.success(res.data.msg);
@@ -469,6 +476,7 @@ export const Admin = () => {
           toast.error('クリエイターを選択する必要があります');
           return;
         }
+        await checkToken();
         const res = await axios.post(query, {creator_email: creatorInfo}, headers());
         if(res.status === 200){
           if(res.data === false){
@@ -522,6 +530,7 @@ export const Admin = () => {
     const handleContractPayment = async (id: string) => {
       const query = `${API}/api/contractPayment/${id}`;
       try{
+        await checkToken();
         const contract_data = contractPayments.filter((item, index) => item._id === id);
         const res = await axios.post(query, { price: contract_data[0].creatorPrice, fee: contract_data[0].fee }, headers());
         if(res.status === 200){

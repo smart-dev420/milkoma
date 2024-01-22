@@ -33,6 +33,7 @@ apiRoute.get("/chat/:file",                                       getData)
 /**************************   POST  *************************/
 /************************************************************/
 
+apiRoute.post("/refreshToken",              verifyToken,          auth.refreshToken);
 apiRoute.post("/getUserInfo",               existIDRequest,       verifyToken,      auth.getUserInfo);
 apiRoute.post("/getUserProfile",            verifyToken,          auth.getUserProfile);
 apiRoute.post("/follower",                  verifyToken,          auth.followUser);
