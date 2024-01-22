@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
-import jwt from "jsonwebtoken";
+import jwt, { TokenExpiredError } from "jsonwebtoken";
 import authConfig from "../config/auth.config";
 import logger from "../utils/logger";
 
@@ -16,19 +16,23 @@ export const verifyToken: RequestHandler = (req, res, next) => {
   }
   const token = authorization.split(' ')[1]
   try {
-    jwt.verify(
-      token,
-      authConfig.accessTokenSecret,
-      (err: any, decoded: any) => {
-        if (err) {
+    jwt.verify(token, authConfig.accessTokenSecret, (err: any, decoded: any) => {
+      if (err) {
+        if (err instanceof TokenExpiredError) {
           return res.status(StatusCodes.UNAUTHORIZED).json({
-            msg: "無効な認証", //Invalid authorization
+            msg: 'トークンが期限切れです', // Token has expired
+          });
+        } else {
+          return res.status(StatusCodes.UNAUTHORIZED).json({
+            msg: '無効な認証', // Invalid authorization
           });
         }
-        res.locals.decoded = decoded;
-        next();
       }
-    );
+  
+      // Token is valid, you can access decoded information
+      res.locals.decoded = decoded;
+      next();
+    });
   } catch (err: any) {
     if (err.name !== "JsonWebTokenError") {
       logger.error(err);

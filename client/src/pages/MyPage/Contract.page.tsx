@@ -3,7 +3,7 @@ import { btnBackground, btnBackgroundHover, fontBold, scrollTop, staticFiles } f
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { setPage } from "../../slices/page";
-import { getDateString, headers, showSentence } from "../../utils/appHelper";
+import { checkToken, getDateString, headers, showSentence } from "../../utils/appHelper";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import contract, { setContract } from "../../slices/contract";
@@ -26,6 +26,7 @@ export const ContractPage = () => {
     const [ contractInfo, setContractInfo ] = useState<any>(null);
 
     const getContractInfo = async () => {
+        await checkToken();
         const res = await axios.post(`${API}/api/getContractInfo/${contractId}`, {}, headers());
         setContractInfo(res.data);
     }
@@ -56,6 +57,7 @@ export const ContractPage = () => {
         setOpen(false);
         setData(prevData => ({ ...prevData, contracted: true }));
         try{
+            await checkToken();
             await axios.post(`${API}/api/setContract/${contractId}`, {}, headers());
         } catch (e) {
             console.error(e);

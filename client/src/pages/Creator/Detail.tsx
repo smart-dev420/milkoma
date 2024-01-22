@@ -1,7 +1,7 @@
 import { Box, Grid, TextareaAutosize, useMediaQuery } from "@mui/material"
 import { fontBold, fontSize12, fontSize14, fontSize16, fontSize24, fontSize28, scrollTop, staticFiles } from "../../components/Constants"
 import { useNavigate, useParams } from "react-router-dom";
-import { NumberFormatExample, headers, showSentence } from "../../utils/appHelper";
+import { NumberFormatExample, checkToken, headers, showSentence } from "../../utils/appHelper";
 import { API } from "../../axios";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -14,11 +14,12 @@ export const CreatorDetail = () => {
     const [ creatorInfo, setCreatorInfo] = useState<any>({});
     const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const getCreatorInfo = async () => {
-      const res = await axios.post(query, {}, headers());
-      setCreatorInfo(res.data.data);
+        await checkToken();
+        const res = await axios.post(query, {}, headers());
+        setCreatorInfo(res.data.data);
     }
     useEffect(() => {
-      if(loginStatus) getCreatorInfo();
+        if(loginStatus) getCreatorInfo();
     }, []);
     scrollTop();
     const creatorData = {

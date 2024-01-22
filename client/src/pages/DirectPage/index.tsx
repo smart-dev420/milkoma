@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { API } from "../../axios";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { headers, showSentence } from "../../utils/appHelper";
+import { checkToken, headers, showSentence } from "../../utils/appHelper";
 
 const cardData: CardElement[] = [
     {
@@ -565,6 +565,7 @@ const Step4 : React.FC<{}> = () => {
         };
         const query = `${API}/api/insertContract`;
         try {
+            await checkToken();
             const res = await axios.post(query, formData, headers());
             if(res.status === 200){
                 console.log('return' , res.data)

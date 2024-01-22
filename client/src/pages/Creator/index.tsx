@@ -10,7 +10,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { API } from "../../axios";
 import axios from "axios";
-import { NumberFormatExample, headers } from "../../utils/appHelper";
+import { NumberFormatExample, checkToken, headers } from "../../utils/appHelper";
 import { toast } from "react-toastify";
 
 export const FindCreator = () => {
@@ -257,6 +257,7 @@ const GridComponent: React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
         toast.error('自分に従うことはできません');
         return;
       }
+      await checkToken();
       const res = await axios.post(query, formData, headers());
       if (res.status === 200) {
         toast.success(res.data.msg);

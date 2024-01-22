@@ -19,7 +19,8 @@ import {
   changeSNSData,
   changeSkillsData,
   getAdminData,
-  getUserRole
+  getUserRole,
+  refreshAccessToken
 } from "../services/account.service";
 import { omit } from "lodash";
 import logger from "../utils/logger";
@@ -585,6 +586,19 @@ const getRole: RequestHandler = async (req, res) => {
   }
 }
 
+const refreshToken: RequestHandler = async (req, res) => {
+  try{
+    const token = validateToken(req, res);
+    const info = await refreshAccessToken(token);
+    if(info === false){
+      return res.status(StatusCodes.BAD_REQUEST).send({msg:'error'});
+    }
+    return res.status(StatusCodes.OK).send(info);
+  } catch(err){
+    console.error(err);
+  }
+}
+
 const auth = { 
   register, 
   login, 
@@ -611,6 +625,7 @@ const auth = {
   userVerify,
   userDelete,
   verifyDownload,
-  getRole
+  getRole,
+  refreshToken
 };
 export default auth;

@@ -8,7 +8,7 @@ import { statusColor } from "./Home.page";
 import { btnBackground, btnBackgroundHover } from "../../components/Constants";
 import axios from "axios";
 import { API } from "../../axios";
-import { getDateString, headers } from "../../utils/appHelper";
+import { checkToken, getDateString, headers } from "../../utils/appHelper";
 export const ProjectList = () => {
     // scrollTop();
     const dispatch = useDispatch();
@@ -26,6 +26,7 @@ export const ProjectList = () => {
     const [ stateList, setStateList ] = useState<any>([]);
 
     const getData = async () => {
+        await checkToken();
         const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, headers());
         const contractData = res.data;
         setContract(res.data);

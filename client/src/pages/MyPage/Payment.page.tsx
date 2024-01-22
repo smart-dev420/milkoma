@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API } from "../../axios";
-import { getDateString, headers } from "../../utils/appHelper";
+import { checkToken, getDateString, headers } from "../../utils/appHelper";
 import { useDispatch, useSelector } from "react-redux";
 import { Box, Button, Card, CardMedia, Container, Dialog, DialogContent, DialogTitle, Divider, Grid, Icon, IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material"
 import { toast } from "react-toastify";
@@ -24,6 +24,7 @@ export const Payment = () => {
     const elements = useElements();
     const [clientSecret, setClientSecret] = useState<string | null>(null);
     const getClientSecret = async () => {
+        await checkToken();
       const response = await axios.post(
         `${API}/api/getClientSecret`,
         { 
@@ -55,6 +56,7 @@ export const Payment = () => {
     };
 
     const getContractInfo = async () => {
+        await checkToken();
         const res = await axios.post(`${API}/api/getContractInfo/${contractId}`, {}, headers());
         const userInfo = await axios.post(`${API}/api/getUserProfile`, {}, headers());
         setContractInfo(res.data);
@@ -112,6 +114,7 @@ export const Payment = () => {
             try{
                 toast.success('支払いが完了しました');
                 handleClose();
+                await checkToken();
                 await axios.post(`${API}/api/paymentSave/${contractId}`, {}, headers());
             } catch (err) {
                 console.error(err);

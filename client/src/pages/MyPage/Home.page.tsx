@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API } from "../../axios";
-import { getDateString, headers } from "../../utils/appHelper";
+import { checkToken, getDateString, headers } from "../../utils/appHelper";
 
 export const HomePage = () => {
     let statusList: { name: string, counter: number }[] = [];
@@ -46,6 +46,7 @@ export const HomePage = () => {
     
     const getData = async () => {
         try{
+            await checkToken();
             const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, headers());
             const contractData = res.data;
             setContract(res.data);

@@ -7,7 +7,7 @@ import { btnBackground, fontBold } from "../../components/Constants";
 import { signout } from "../../slices/auth";
 import { API } from "../../axios";
 import axios from "axios";
-import { headers } from "../../utils/appHelper";
+import { checkToken, headers } from "../../utils/appHelper";
 
 export const SideBar = () => {
     const pageIndex = useSelector((state:any) => state.pages.index);
@@ -16,6 +16,7 @@ export const SideBar = () => {
     const [ isHovered, setIsHovered ] = useState<number>(-1);
     const [ admin, setAdmin ] = useState<boolean>(false);
     const getAdminData = async () => {
+        await checkToken();
         const query = `${API}/api/getAdmin`;
         const res = await axios.post(query, {}, headers());
         setAdmin(res.data.admin);

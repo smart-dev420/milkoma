@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { CHAT_SVR_URL, btnBackground, btnBackgroundHover, fontBold, fontSize14, fontSize16, fontSize18, scrollTop, staticFiles } from "../../components/Constants";
 import { setPage } from "../../slices/page";
-import { headers, showSentence } from "../../utils/appHelper";
+import { checkToken, headers, showSentence } from "../../utils/appHelper";
 import io, { Socket } from 'socket.io-client';
 import React, { useState, useEffect, FormEvent } from 'react';
 import { API } from "../../axios";
@@ -29,12 +29,14 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
     const [ admin, setAdmin ] = useState<boolean>();
     const [ onlineUser, setOnlineUser ] = useState<any>([]);
     const getAdmin = async () => {
+        await checkToken();
         const query = `${API}/api/getAdmin`;
         const res = await axios.post(query, {}, headers());
         setAdmin(res.data.admin);
     }
     const [ contract, setContract ] = useState<any>([]);
     const getContract = async () => {
+        await checkToken();
         const query = `${API}/api/getAllContracts`;
         const res = await axios.post(query, {}, headers());
         console.log('res - ', res.data)

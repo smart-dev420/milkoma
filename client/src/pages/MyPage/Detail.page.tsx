@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import Slider, { SliderThumb, SliderValueLabelProps } from '@mui/material/Slider';
 import { useDispatch, useSelector } from "react-redux";
 import { setPage } from "../../slices/page";
-import { NumberFormatExample, convertSize, getDateString, getProvideDate, headers, showSentence } from "../../utils/appHelper";
+import { NumberFormatExample, checkToken, convertSize, getDateString, getProvideDate, headers, showSentence } from "../../utils/appHelper";
 import CloseIcon from '@mui/icons-material/Close';
 import { btnBackground, btnBackgroundHover } from "../../components/Constants";
 import { useNavigate, useParams } from "react-router-dom";
@@ -132,6 +132,7 @@ export const DetailPage = () => {
     const [ uploadState, setUploadState ] = useState<boolean>(false);
 
     const getRole = async () => {
+        await checkToken();
         const res = await axios.post(`${API}/api/getRole`, {}, headers());
         setRole(res.data.role);
     }
@@ -168,15 +169,18 @@ export const DetailPage = () => {
     }
 
     const getProductFileList = async () => {
+        await checkToken();
         const res = await axios.post(`${API}/api/getProductFiles/${contractId}`, {}, headers());
         setProductFiles(res.data.data);
     }
 
     const getContractInfo = async () => {
+        await checkToken();
         const res = await axios.post(`${API}/api/getContractInfo/${contractId}`, {}, headers());
         setContractInfo(res.data);
     }
     const getCreatorData = async () => {
+        await checkToken();
         const res = await axios.post(`${API}/api/getCreatorData/${contractId}`, {}, headers());
         setCreatorInfo(res.data);
     }
@@ -233,6 +237,7 @@ export const DetailPage = () => {
     }
 
     const handleStateUp = async () => {
+        await checkToken();
         let formData = new FormData();
         formData.append('currentStatus', contractInfo.status);
         await axios.post(`${API}/api/nextStep/${contractId}`, formData, headers());
@@ -258,6 +263,7 @@ export const DetailPage = () => {
         console.log('fileData - ', file);
         
         try{
+            await checkToken();
             setUploadState(true);
             let query = '';
             if(role == 'client'){

@@ -7,7 +7,7 @@ import { setPage } from "../../slices/page";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API } from "../../axios";
-import { getDateString, headers } from "../../utils/appHelper";
+import { checkToken, getDateString, headers } from "../../utils/appHelper";
 
 export const ContractManage = () => {
     const dispatch = useDispatch();
@@ -22,6 +22,7 @@ export const ContractManage = () => {
     const [ contract, setContract ] = useState<any>([]);
     const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const getData = async () => {
+        await checkToken();
         const res = await axios.post(`${API}/api/getAllContract/${user.email}`, {}, headers());
         setContract(res.data);
     }

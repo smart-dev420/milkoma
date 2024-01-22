@@ -1,5 +1,8 @@
 import { HOST_URL } from '../components/Constants';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios'
+import { StatusCodes } from 'http-status-codes';
+import jwtDecode, { JwtPayload } from 'jwt-decode';
+import { API } from '../axios';
 
 export const headers = () => {
   const token = localStorage?.getItem('token');
@@ -10,6 +13,7 @@ export const headers = () => {
   };
   return { headers };
 }
+
 export const getCurrentDateString = () => {
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -124,3 +128,38 @@ export const convertNumberToDate = (data:number) => {
         (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
     );
 }
+
+export const checkToken = async () => {
+  const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+  if (token && user) {
+    const decodedToken: JwtPayload = jwtDecode(token);
+
+    if (decodedToken.exp && decodedToken.exp * 1000 > Date.now()) {
+      try {
+        const res = await axios.post(`${API}/api/refreshToken`, {}, headers());
+        if (res.status === 200) {
+          localStorage.setItem('token', res.data);
+          return;
+        }
+      } catch (error) {
+        console.error('Error refreshing token:', error);
+      }
+    }
+
+    // Clear storage and redirect to login page
+    clearLocalStorageAndRedirect();
+  } else {
+    // Clear storage and redirect to login page
+    clearLocalStorageAndRedirect();
+  }
+};
+
+const clearLocalStorageAndRedirect = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  // window.location.pathname = '/login';
+  window.location.reload();
+  return;
+};
