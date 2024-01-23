@@ -84,15 +84,15 @@ export const FindCreator = () => {
                                     <img src={staticFiles.icons.ic_white_dot} className="w-[7px] mx-2" />
                                 </div>
                                 
-                                <div className="flex flex-row text-[#fff] pl-[20px]" style={{whiteSpace:'nowrap', fontWeight:fontBold}} >
-                                    <span className="text-[18px] ">リクエスターの</span>
-                                    <span className="text-[22px] mx-[10px]">  や り た い  </span>
-                                    <span className="text-[18px]">に合わせた</span>       
+                                <div className="flex flex-row text-[#fff] pl-[20px]" style={{whiteSpace:'nowrap', fontWeight:fontBold, columnGap:'10px'}} >
+                                    <span className="text-[20px] ">リクエスターの </span>
+                                    <span className="text-[20px]">  や り た い  </span>
+                                    <span className="text-[20px]"> に合わせた</span>       
                                 </div>
                             
                             </div>
-                            <div className="flex flex-row w-[407px] bg-[#E38A86] rounded-[50px] text-[#fff] h-[53px] ml-[140px] pl-[50px]" style={{marginTop:"-10px", boxShadow:"5px 5px 3px 0px #fff"}}>
-                                <span className="text-[20px] mt-[5px]">インフルエンサーを</span><span className="text-[22px] mt-[5px]">お探しします</span>
+                            <div className="flex flex-row w-[407px] bg-[#E38A86] rounded-[50px] text-[#fff] h-[53px] ml-[30%] pl-[50px]" style={{marginTop:"-10px", boxShadow:"5px 5px 3px 0px #fff"}}>
+                                <span className="text-[20px] mt-[5px]">インフルエンサーを</span><span className="text-[20px] mt-[5px]">お探しします</span>
                             </div>
                             </div>
                         </div>

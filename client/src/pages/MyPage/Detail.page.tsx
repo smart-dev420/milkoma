@@ -130,6 +130,20 @@ export const DetailPage = () => {
     const [ nextStep, setNextStep ] = useState<boolean>(false);
     const [ role, setRole ] = useState<string>('');
     const [ uploadState, setUploadState ] = useState<boolean>(false);
+    const [ messageState, setMessageState ] = useState<boolean>(false);
+    const [ message, setMessage ] = useState<any>();
+    const getNoReceivedMessage = async () => {
+        await checkToken();
+        const query = `${API}/api/notReceivedMessage/${contractId}`;
+        const res = await axios.post(query, {}, headers());
+        console.log('res - ', res.data);
+        setMessage(res.data);
+        if(res.data.length > 0) {
+          setMessageState(true)
+        } else {
+          setMessageState(false);
+        }
+      }
 
     const getRole = async () => {
         await checkToken();
@@ -138,7 +152,10 @@ export const DetailPage = () => {
     }
 
     useEffect(()=>{
-        if(loginStatus) getRole()
+        if(loginStatus) {
+            getRole();
+            getNoReceivedMessage();
+        }
     }, [])
     const handleContract = () => {
         // setData(prevData => ({ ...prevData, contracted: true }));
@@ -598,7 +615,7 @@ export const DetailPage = () => {
                         />
                         
                     <Box display='flex' flexDirection='column' sx={{color:'#454545', fontSize:'16px', paddingX:'27px', paddingY:'20px', backgroundColor:'#FDECEE', borderRadius:'14px 14px 14px 0px', marginRight:'70px'}}>
-                        {data.isMessage?showSentence(data.sampleMessage):data.noMessage}
+                        {messageState?message[0]?.message:data.noMessage}
                     </Box>
                     <Box display='flex' flexDirection='column' justifyContent='center' alignItems='end' sx={{}}>
                         <Button sx={{
