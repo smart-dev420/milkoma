@@ -11,6 +11,44 @@ import { allContract, getContract } from "../services/contract.service";
 import { subscribe } from "../utils/stripe";
 import express, { Request, Response } from 'express';
 import { CreatePdfDocument } from "../utils/create_pdf";
+import dotenv from "dotenv";
+dotenv.config({ path: "./.env" });
+import AWS from 'aws-sdk';
+const COMPANY_NAME = process.env.COMPANY_NAME;
+const domain = process.env.DOMAIN;
+
+const SES_CONFIG = {
+  accessKeyId: 'AKIA4O2PXKWP46567YHC',
+  secretAccessKey: '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',
+  region: 'ap-northeast-1',
+};
+
+const AWS_SES = new AWS.SES(SES_CONFIG);
+const awsEmail:string = process.env.AWS_EMAIL??'';
+const sendEmail = (recipientEmail:string, name:string, option:string) => {
+  let params = {
+    Source: awsEmail,
+    Destination: {
+      ToAddresses: [
+        recipientEmail
+      ],
+    },
+    ReplyToAddresses: [],
+    Message: {
+      Body: {
+        Html: {
+          Charset: 'UTF-8',
+          Data: option,
+        },
+      },
+      Subject: {
+        Charset: 'UTF-8',
+        Data: name,
+      }
+    },
+  };
+  return AWS_SES.sendEmail(params).promise();
+};
 
 export const validateToken = (req:any, res:any) => {
     const { authorization } = req.body.token || req.query.token || req.headers;
@@ -26,8 +64,59 @@ export const validateToken = (req:any, res:any) => {
 const insertContract: RequestHandler = async (req, res) => {
     const data = req.body;
     const token = validateToken(req, res);
+    const email = getEmailFromToken(token);
+    const userData = await AccountModel.findOne({email:email}, 'username');
+    let step3 = '';
+    if(data.step3 === 0){
+      step3 = '相談したい';
+    } else {
+      step3 = data.step3 + 'ヶ月';
+    }
     try{
         await insertData({token, data});
+        const emailBody = `<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open Sans">
+        <div style="display: flex;">
+        <div style="width: 30%;"></div>
+        <div style="width: 450px;">
+        <div style="color: #163253; font-size: 16px; font-weight: 600; font-style: normal; font-family: 'Open Sans';">
+        <p>【ミルコマ】お申し込み受け付けました。</p>
+        <p>———————————————————————-</p>
+        <p style='line-height: 150%;font-size:12px'>このメールはお客様の注文に関する大切なメールです。<br>
+          必ず内容をご確認ください。</p>
+        <p>———————————————————————-</p>    
+        <p>${userData?.username}様</p>
+    
+        <p>お世話になっております。</p>
+        <p>この度は、弊社ミルコマの丸投げ依頼に</p>
+        <p>お申し込みくださりありがとうございました。</p>
+        <p>以下の内容でご依頼の丸投げをお受けいたしましたので、</p>
+        <p>今一度ご確認くださいませ。</p>
+        <p>━━━ お申し込み情報 ━━━━━━━━━━━━━━━━</p>
+        <p>【Q1.どのような商品か？】</p>
+        <p>${data.step1}</p>
+        <p>【Q2.動画をどのように追加いたいか？】</p>
+        <p>${data.step2}</p>
+        <p>【Q3.納期はいつ頃が希望か？】</p>
+        <p>${step3}</p>
+        <p>———————————————————————</p>
+        <p>▼▼▼キャンセルについて▼▼▼</p>
+        <p>ご依頼をキャンセルされる場合は、</p>
+        <p>下記マイページにの「キャンセルボタン」からお願いいたします。</p>
+        <p>ミルコマ連絡先：info@neopen.co.jp</p>
+        <p>ご質問やご不明な点がございましたら、</p>
+        <p>お手数ではございますが、下記までお問い合わせください。</p>
+        <p>メールアドレス：info@neopen.co.jp</p>
+        <p><a href="${domain}">ミルコマ</a></p>
+
+        <br><br><br>
+        <div style="border-bottom: 1px solid #D4DAE0; width: 100%"></div>
+        <p style="font-weight: 600; font-size: 11px; color: #163253;">'${COMPANY_NAME}' Inc. Japan</p>
+        </div>
+        </div>
+        <div style="width: 20%;"></div>
+        </div>`;
+        sendEmail(email, "案件受注", emailBody);
+        
         return res.status(StatusCodes.OK).send({msg : "契約が成果的に締結されました。"}); // The contract has been successfully concluded.
       } catch (err:any){
         logger.error(err);
