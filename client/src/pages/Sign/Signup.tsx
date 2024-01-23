@@ -81,14 +81,14 @@ export const SignUp = () => {
             let res;
             console.log("res - ", data);
             if (checked == 1) {
-              if (data.live == "" || data.youtube == "" || data.tiktok == "" || data.instagram == "") {
+              if (data.live == "" && data.youtube == "" && data.tiktok == "" && data.instagram == "") {
                 toast.error("すべてのSNSフィールドを挿入");
                 return;
               }
             }
             res = await axios.post(query, formData);
             if (res.status === 200) {
-                toast.success('サインアップが成功しました');
+                toast.success('成果的に登録されています。');
                 navigate("/login");
               } else {
                 console.log(res);

@@ -590,16 +590,16 @@ export const Admin = () => {
                             <img className=" rounded-[30px]" 
                                   src = {`${API}/api/avatar/${row.avatar}`}/>
                             </TableCell>
-                            <TableCell style={{ width: 160 }} align="left">
+                            <TableCell style={{ width: 60 }} align="left">
                               {row.name}
                             </TableCell>
-                            <TableCell style={{ width: 160 }} align="left">
+                            <TableCell style={{ width: 60 }} align="left">
                               {row.email}
                             </TableCell>
-                            <TableCell style={{ width: 160 }} align="left">
+                            <TableCell style={{ width: 120 }} align="left">
                               {row.company}
                             </TableCell>
-                            <TableCell style={{ width: 160 }} align="center">
+                            <TableCell style={{ width: 250 }} align="center">
                               <Box display='flex' sx={{flexDirection:row.verify?'column':'row'}}>
                                 <Typography sx={{fontSize:'14px', backgroundColor:row.verify?'green':'#ee7d90', paddingX:'20px', paddingY:'10px', borderRadius:'10px', color:'#FFFFFF'}}>{row.verify?'検証済み':'検証されていません'}</Typography>
                                   {!row.verify && row.verify_doc != '' && (
@@ -609,7 +609,7 @@ export const Admin = () => {
                                   )}
                               </Box>
                             </TableCell>
-                            <TableCell style={{ width: 200 }} align="center">
+                            <TableCell style={{ width: 300 }} align="center">
                               <Button variant="outlined" 
                                 sx={{color:'green', border:'1px solid green', 
                                       marginX:'5px',
@@ -701,16 +701,16 @@ export const Admin = () => {
                             <img className=" rounded-[30px]" 
                                   src = {`${API}/api/avatar/${row.avatar}`}/>
                             </TableCell>
-                            <TableCell style={{ width: 160 }} align="left">
+                            <TableCell style={{ width: 60 }} align="left">
                               {row.name}
                             </TableCell>
-                            <TableCell style={{ width: 160 }} align="left">
+                            <TableCell style={{ width: 60 }} align="left">
                               {row.email}
                             </TableCell>
-                            <TableCell style={{ width: 160 }} align="left">
+                            <TableCell style={{ width: 60 }} align="left">
                               {row.company}
                             </TableCell>
-                            <TableCell style={{ width: 160 }} align="center">
+                            <TableCell style={{ width: 250 }} align="center">
                               <Box display='flex' sx={{flexDirection:row.verify?'column':'row'}}>
                                 <Typography sx={{fontSize:'14px', backgroundColor:row.verify?'green':'#ee7d90', paddingX:'20px', paddingY:'10px', borderRadius:'10px', color:'#FFFFFF'}}>{row.verify?'検証済み':'検証されていません'}</Typography>
                                   {!row.verify && row.verify_doc != '' && (
@@ -720,7 +720,7 @@ export const Admin = () => {
                                   )}
                               </Box>
                             </TableCell>
-                            <TableCell style={{ width: 200 }} align="center">
+                            <TableCell style={{ width: 300 }} align="center">
                               <Button variant="outlined" 
                                 sx={{color:'green', border:'1px solid green', 
                                       marginX:'5px',

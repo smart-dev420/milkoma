@@ -220,6 +220,7 @@ const Step2 : React.FC<{}> = () => {
     const [ question2, setQuestion2 ] = useState<string>(useSelector((state:any) => state.direct.question2));
     const [ question3, setQuestion3 ] = useState<number>(useSelector((state:any) => state.direct.question3));
     const [ clicked, setClicked ] = useState<number>(useSelector((state:any) => state.direct.question2_chk));
+    const category = useSelector((state:any) => state.direct);
     const [ isHovered1, setIsHovered1 ] = useState<number>(-1);
     const [ isHovered2, setIsHovered2 ] = useState<number>(-1);
     const dispatch = useDispatch();
@@ -263,7 +264,7 @@ const Step2 : React.FC<{}> = () => {
                 </div>
             </div>
             <div className="flex flex-col px-5 text-[24px] pt-[8px]">
-                <p className="py-5">選択中のジャンル: <span style={{fontWeight:fontBold}}>商品紹介</span></p>
+                <p className="py-5">選択中のジャンル: <span style={{fontWeight:fontBold}}>{category.title}</span></p>
             </div>
         </div>
         <p className="mb-[40px] ml-[75px] text-[18px] text-[#554744] z-[2]">質問に答えて、詳細を入力してください</p>
@@ -510,20 +511,24 @@ const Step3 : React.FC<{}> = () => {
                 お申し込みにあたって、あらかじめ以下の内容をご確認ください
             </Typography>
             <Typography gutterBottom className="text-[#B9324D]" sx={{fontSize: "20px"}}>
-                ①.この申し込みで、<span style={{textDecoration:'underline', fontWeight:fontBold}}>費用が発生する</span>ことは<span style={{textDecoration:'underline', fontWeight:fontBold}}>ありません</span>
+                {/* ①.この申し込みで、<span style={{textDecoration:'underline', fontWeight:fontBold}}>費用が発生する</span>ことは<span style={{textDecoration:'underline', fontWeight:fontBold}}>ありません</span> */}
+                ①.この申し込みで、費用が発生することはありません
             </Typography>
             <Typography gutterBottom sx={{fontSize: "16px", marginBottom: "20px"}}>
                 こちらをお申し込みいただくと、ミルコマがインフルエンサーのご提案や<br />
                 お見積もりをご提案させていただきます。<br />
-                あくまで<span style={{color:'#B9324D', fontWeight:fontBold}}>ご提案</span>なのでお客様が決定しない限りご請求等はいたしません。<br />
+                {/* あくまで<span style={{color:'#B9324D', fontWeight:fontBold}}>ご提案</span>なのでお客様が決定しない限りご請求等はいたしません。<br /> */}
+                あくまでご提案なのでお客様が決定しない限りご請求等はいたしません。<br />
                 安心してご利用ください。
             </Typography>
             <Typography gutterBottom className="text-[#B9324D]" sx={{fontSize: "20px"}}>
-                ②.<span style={{textDecoration:'underline', fontWeight:fontBold}}>最短5時間</span>でご提案させていただきます
+                {/* ②.<span style={{textDecoration:'underline', fontWeight:fontBold}}>最短5時間</span>でご提案させていただきます */}
+                ②.最短5時間でご提案させていただきます
             </Typography>
             <Typography gutterBottom sx={{fontSize: "16px", marginBottom: "20px"}}>
                 ミルコマのディレクターがご提案させていただくまでに、<br />
-                <span style={{color:'#B9324D', fontWeight:fontBold}}>最短5時間</span>でご提案させていただきます。<br />
+                {/* <span style={{color:'#B9324D', fontWeight:fontBold}}>最短5時間</span>でご提案させていただきます。<br /> */}
+                最短5時間でご提案させていただきます。<br />
                 ですが、内容によっては1日〜2日程度かかる場合もございますので<br />
                 あらかじめご了承ください。<br />
                 ※お時間がかかる場合は、メール・マイページにてお知らせいたします。<br />
@@ -533,13 +538,15 @@ const Step3 : React.FC<{}> = () => {
             </Typography>
             <Typography gutterBottom sx={{fontSize: "16px"}}>
                 ミルコマの丸投げ依頼を行うにあたって、<br />
-                <span style={{textDecoration:'underline', color:'#B9324D'}}>利用規約</span>と<span style={{textDecoration:'underline', color:'#B9324D'}}>プライバシーポリシー</span>にご同意ください。<br />
+                {/* <span style={{textDecoration:'underline', color:'#B9324D'}}>利用規約</span>と<span style={{textDecoration:'underline', color:'#B9324D'}}>プライバシーポリシー</span>にご同意ください。<br /> */}
+                利用規約とプライバシーポリシーにご同意ください。<br />
                 ※「依頼する」ボタンを押すことで、上記の内容に同意したものとなります。
             </Typography>
             </DialogContent>
             {/* <DialogActions> */}
             <div className="flex justify-center items-center">
-                <button onClick={handleNext} className="my-[40px] btn-color w-[324px] py-2 px-5 rounded-[30px] text-[20px]" style={{fontWeight:fontBold}}>依頼する</button>
+                <button onClick={handleNext} className="my-[40px] btn-color w-[324px] py-2 px-5 rounded-[30px] text-[20px]" 
+                style={{fontWeight:fontBold}}>依頼する</button>
             {/* </DialogActions> */}
             </div>
         </Dialog>
@@ -570,7 +577,7 @@ const Step4 : React.FC<{}> = () => {
             if(res.status === 200){
                 console.log('return' , res.data)
                 toast.success(res.data.msg);
-                navigate('/'); 
+                navigate('/mypage'); 
                 dispatch(setInit()); 
               }else{
                 console.log(res)
@@ -623,7 +630,8 @@ const Step4 : React.FC<{}> = () => {
                 <img src={staticFiles.images.finish} style={{position:'absolute', right:0, width:'400px', opacity:'0.5', marginRight:'15%'}} />
             )}
         </div>
-        <button onClick={onSubmit} className="mb-[45px] btn-color py-2 px-5 rounded-[30px] text-[20px]" style={{fontWeight:fontBold, width:match_1024?'324px':'200px', marginLeft:match_1024?'10%':'27%', marginTop:match_1024?'30px':'20px'}}>完了</button>
+        <button onClick={onSubmit} className="mb-[45px] btn-color py-2 px-5 rounded-[30px] text-[20px]" 
+        style={{fontWeight:fontBold, width:match_1024?'324px':'200px', marginLeft:match_1024?'10%':'27%', marginTop:match_1024?'30px':'20px'}}>マイページへ</button>
         </div>
         </>
     )
