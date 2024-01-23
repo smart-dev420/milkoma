@@ -90,9 +90,10 @@ const SES_CONFIG = {
 
 const AWS_SES = new AWS.SES(SES_CONFIG);
 const sesSender = process.env.SES_SENDER_EMAIL;
+const awsEmail:string = process.env.AWS_EMAIL??'';
 let sendEmail = (recipientEmail:string, name:string, option:string) => {
   let params = {
-    Source: 'openwindower@gmail.com',
+    Source: awsEmail,
     Destination: {
       ToAddresses: [
         recipientEmail
