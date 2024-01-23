@@ -451,7 +451,21 @@ export const DetailPage = () => {
                         />
                         <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center'>
                             <Box display='flex' flexDirection='column' sx={{width:'100%', marginTop:'15px',  border:'2px dashed #857D7B', borderRadius:'15px', paddingX:'15px', paddingY:'30px'}}>
-                                {showSentence(statusValues[contractInfo.status-1].description)}
+                            {
+                                (contractInfo.status === 1 && messageState) && (
+                                    showSentence(statusValues[contractInfo.status - 1].description)
+                                )
+                            }
+                            {
+                                contractInfo.status > 1 && (
+                                    showSentence(statusValues[contractInfo.status - 1].description)
+                                )
+                            }
+                            {
+                                contractInfo.status === 1 && !messageState && (
+                                    'まだメッセージはありません。'
+                                )
+                            }
                             </Box>
                             {/* <Button sx={{
                                     backgroundColor:btnBackground, 

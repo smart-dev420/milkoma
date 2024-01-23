@@ -164,6 +164,36 @@ const login: RequestHandler = async (req, res) => {
 export const register: RequestHandler = async (req, res) => {
   try {
     const user = await createAccount(req.body);
+    const {email} = req.body;
+    const {username} = req.body;
+    const loginUrl = 'http://13.112.85.135:3000/login';
+    const emailBody = `
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open Sans">
+    <div style="display: flex;">
+    <div style="width: 30%;"></div>
+    <div style="width: 450px;">
+    <div style="color: #163253; font-size: 16px; font-weight: 600; font-style: normal; font-family: 'Open Sans';">
+    <p>【ミルコマ】会員登録いただきありがとうございます。</p>
+    <p style='line-height: 300%;font-size:12px'>※このメールはシステムからの自動返信です。<br>
+      こちらのアドレスに返信をしないでください。</p>
+
+    <p>この度は会員登録にお申し込みいただき、誠にありがとうございます。</p>
+
+    <p>会員のお申し込みを受け付けました。</p>
+    <p>このメールで "${username}"さまの会員登録が完了となります。</p>
+    <p>ここのリンク（${loginUrl}）よりログインできます</p>
+
+    <p>ご質問やご不明な点がございましたら、
+    お手数ではございますが、下記までお問い合わせください。</p>
+    <p>メールアドレス：info@neopen.co.jp</p>
+    <br><br><br>
+    <div style="border-bottom: 1px solid #D4DAE0; width: 100%"></div>
+    <p style="font-weight: 600; font-size: 11px; color: #163253;">'${COMPANY_NAME}' Inc. Japan</p>
+    </div>
+    </div>
+    <div style="width: 20%;"></div>
+    </div>`;
+    sendEmail(email, "新規会員登録", emailBody);
     return res.status(StatusCodes.OK).send(omit(user?.toJSON(), "password"));
   } catch (err: any) {
     logger.error(err);

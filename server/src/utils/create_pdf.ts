@@ -98,9 +98,9 @@ export const CreatePdfDocument = ( fileName:string, input:any ): void => {
 
   doc.fontSize(10).text('NeoPen株式会社', 330, 190, { align: 'left' });
   doc.fontSize(10).text('〒 460-0003', 330, 210, { align: 'left' });
-  doc.fontSize(8).text('愛知県名古屋市中区錦1丁⽬17-13 名興ビル2F', 330, 230, { align: 'left' });
-  doc.fontSize(10).text('TEL 052-990-2931', 330, 250, { align: 'left' });
-  doc.fontSize(10).text('FAX', 330, 270, { align: 'left' });
+  doc.fontSize(8).text('愛知県名古屋市中区錦1丁目 17番地13号 名興ビルディング 2階', 330, 230, { align: 'left' });
+  doc.fontSize(10).text('TEL: (052)-990-2931', 330, 250, { align: 'left' });
+  doc.fontSize(10).text('Email: info@neopen.co.jp', 330, 270, { align: 'left' });
   
   doc.fontSize(12).text('下記、正に領収いたしました。', 60, 300, { align: 'left' });
 
