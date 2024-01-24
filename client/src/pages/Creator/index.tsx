@@ -320,6 +320,7 @@ const GridComponent: React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
 };
 
 const SlickCarousel : React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
+  const navigate = useNavigate();
   const match_768 = useMediaQuery('(min-width:768px)');
   const match_1024 = useMediaQuery('(min-width:1025px)');
     const settings = {
@@ -340,7 +341,8 @@ const SlickCarousel : React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
         {creatorInfo.map((item:any, index:number) =>(
           index < slideNumber ? (
           <div className="flex ml-[-10px] " key={index}>
-            <div className="flex flex-row rounded-[20px] mx-[50px] my-[30px] image-hover-reverse " style={{boxShadow:'0px 0px 20px 5px #E5BAA7'}}>
+            <div className="flex flex-row rounded-[20px] mx-[50px] my-[30px] image-hover-reverse " style={{boxShadow:'0px 0px 20px 5px #E5BAA7'}}
+              onClick={()=>{navigate(`/creator/detail/${item._id}`)}}>
               <img src = {`${API}/api/avatar/${item._id}`} className="w-[40%]" style={{borderRadius: '20px 0 0 20px', objectFit:'cover', aspectRatio:'1.0'}}/>
               <div className="flex flex-col justify-center px-[20px] py-[10px]">
               <div className="flex flex-wrap" style={{rowGap:'5px', columnGap:'5px'}}>
