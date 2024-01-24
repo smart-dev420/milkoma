@@ -9,11 +9,11 @@ import jwtDecode, { JwtPayload } from 'jwt-decode';
 import { StatusCodes } from 'http-status-codes';
 
 const AuthContainer = () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token')!;
   const dispatch = useDispatch();
   const user_data = localStorage?.getItem('user');
   const user = user_data ? JSON.parse(user_data) : null;
-  if(token && user !== null){
+  if(user !== null && token !== null) {
     const decodedToken: JwtPayload = jwtDecode(token);
     if (decodedToken.exp && decodedToken.exp * 1000 > Date.now()) {
       dispatch(signin(user));
@@ -23,9 +23,11 @@ const AuthContainer = () => {
       window.location.pathname = '/login'  
     }
   } else {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    window.location.pathname = '/login'
+    if(token){
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      window.location.pathname = '/login'
+    }
   }
   // if(user !== null){
     // console.log("user - ", user)
