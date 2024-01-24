@@ -1,5 +1,5 @@
 import { Button, Checkbox, Grid, InputAdornment, TextField, makeStyles, useMediaQuery } from "@mui/material"
-import { fontBold, fontSize12, fontSize14, fontSize16, fontSize18, fontSize22, fontSize24, fontSize26, staticFiles } from "../../components/Constants"
+import { fontBold, fontSize12, fontSize14, fontSize16, fontSize18, fontSize22, fontSize24, fontSize26, scrollTop, staticFiles } from "../../components/Constants"
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -136,6 +136,7 @@ export const CreatorFind = () => {
 
     useEffect(() => {
        if(loginStatus) getCreatorInfo();
+       scrollTop();
     }, []);
 
     useEffect(() => {

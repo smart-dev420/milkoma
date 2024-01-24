@@ -35,7 +35,6 @@ interface IFile {
 }
 
 export const Profile = () =>{
-    scrollTop();
     const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
     const getProfile = async () => { 
         await checkToken();
@@ -62,6 +61,7 @@ export const Profile = () =>{
     const userData = sessionData? JSON.parse(sessionData) : null;
     useEffect(() =>{
         if(loginStatus) getProfile();
+    scrollTop();
     },[]);
 
     /** Avatar and Basic Data */

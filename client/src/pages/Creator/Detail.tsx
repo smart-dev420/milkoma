@@ -20,8 +20,8 @@ export const CreatorDetail = () => {
     }
     useEffect(() => {
         if(loginStatus) getCreatorInfo();
+        scrollTop();
     }, []);
-    scrollTop();
     const creatorData = {
         gift: '17.Live受け取ったギフト No.1',
         avatar: staticFiles.images.avatar,

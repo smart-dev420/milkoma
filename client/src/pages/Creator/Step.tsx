@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { CardElement } from "../../components/Card";
-import { fontBold, fontSize20, fontSize30, staticFiles } from "../../components/Constants";
+import { fontBold, fontSize20, fontSize30, scrollTop, staticFiles } from "../../components/Constants";
 import { Grid, TextareaAutosize, useMediaQuery, TextField, Button } from "@mui/material";
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -106,6 +106,7 @@ export const CreatorStep = () => {
     }
     useEffect(() => {
       if(loginStatus) getCreatorInfo();
+      scrollTop();
     }, []);
     console.log("userData", creatorInfo);
 

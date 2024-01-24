@@ -20,25 +20,20 @@ const pageLayoutNavBar: NavBarElement[] = [
       path: "/creator",
       imgPath: staticFiles.icons.ic_navbar1,
     },
-    {
-      name: "掲示板を見る",
-      path: "/",
-      imgPath: staticFiles.icons.ic_navbar2,
-    },
-    {
-      name: "クリエイターランキング",
-      path: "/",
-      imgPath: staticFiles.icons.ic_navbar3,
-    },
+    // {
+    //   name: "掲示板を見る",
+    //   path: "/",
+    //   imgPath: staticFiles.icons.ic_navbar2,
+    // },
+    // {
+    //   name: "クリエイターランキング",
+    //   path: "/",
+    //   imgPath: staticFiles.icons.ic_navbar3,
+    // },
     {
       name: "閲覧履歴",
       path: "/history/search",
       imgPath: staticFiles.icons.ic_navbar4,
-    },
-    {
-      name: "ヘルプ",
-      path: "/",
-      imgPath: staticFiles.icons.ic_navbar5,
     },
 ];
 
@@ -47,43 +42,11 @@ export type ItemElement = {
   name: string;
   date: string;
 }
-
-const fakeData: ItemElement[] = [
-  {
-    id: "1",
-    name: "お知らせ1",
-    date: "2022年11月11日11:11"
-  },
-  {
-    id: "2",
-    name: "お知らせ1",
-    date: "2022年11月11日11:11"
-  },
-  {
-    id: "3",
-    name: "お知らせ1",
-    date: "2022年11月11日11:11"
-  },
-  {
-    id: "4",
-    name: "お知らせ1",
-    date: "2022年11月11日11:11"
-  },
-  {
-    id: "5",
-    name: "お知らせ1",
-    date: "2022年11月11日11:11"
-  },
-]
   
 export const Top = () => {
     const navigate = useNavigate();
     const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
-    // const handleSignOut = () => {
-    //   localStorage.removeItem("token");
-    //   localStorage.removeItem("user");
-    //   navigate("/login");
-    // }
+
     const [searchTerm, setSearchTerm] = useState<string>("");
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(event.target.value);

@@ -18,6 +18,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import SearchIcon from "@mui/icons-material/Search";
 import { ItemElement } from '../pages/layouts/Top';
+import { useSelector } from 'react-redux';
+import { checkToken, convertNumberToDate, headers } from '../utils/appHelper';
+import { API } from '../axios';
+import axios from 'axios';
 
 const menuItems: NavBarElement[] = [
   {
@@ -25,46 +29,54 @@ const menuItems: NavBarElement[] = [
     path: "/creator",
     imgPath: staticFiles.icons.ic_navbar1,
   },
-  {
-    name: "掲示板を見る",
-    path: "/",
-    imgPath: staticFiles.icons.ic_navbar2,
-  },
-  {
-    name: "クリエイターランキング",
-    path: "/",
-    imgPath: staticFiles.icons.ic_navbar3,
-  },
+  // {
+  //   name: "掲示板を見る",
+  //   path: "/",
+  //   imgPath: staticFiles.icons.ic_navbar2,
+  // },
+  // {
+  //   name: "クリエイターランキング",
+  //   path: "/",
+  //   imgPath: staticFiles.icons.ic_navbar3,
+  // },
   {
     name: "閲覧履歴",
     path: "/history/search",
     imgPath: staticFiles.icons.ic_navbar4,
   },
-  {
-    name: "ヘルプ",
-    path: "/",
-    imgPath: staticFiles.icons.ic_navbar5,
-  },
+  // {
+  //   name: "ヘルプ",
+  //   path: "/",
+  //   imgPath: staticFiles.icons.ic_navbar5,
+  // },
 ];
 
-type Anchor = 'left';
-
 export const MainMenu = () => {
-  // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  // const open = Boolean(anchorEl);
-  // const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // };
+
   const navigate = useNavigate();
-  // const [invisible, setInvisible] = React.useState(false);
+  const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
   const [state, setState] = React.useState({left: false});
+  const [ clicked, setClicked ] = React.useState<boolean>(false);
   const [invisible, setInvisible] = React.useState(false);
   const [ anchorEl, setAnchorEl ] = React.useState<null | HTMLElement>(null);
   const [ detail, setDetail ] = React.useState<boolean>(false);
   const [ selectId, setSelectId ] = React.useState<string>("");
+
+  const [searchTerm, setSearchTerm] = React.useState<string>("");
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+  const handleKeyDown = (event:any) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevents line break in the textarea
+      if(searchTerm === '' || searchTerm.trim() === '') {
+        navigate(`/history/search`);
+      }else{
+        navigate(`/history/${searchTerm.trim()}`);
+      }
+    }
+  };
+
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -73,7 +85,60 @@ export const MainMenu = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [searchTerm, setSearchTerm] = React.useState<string>("");
+
+  const [ admin, setAdmin ] = React.useState<boolean>();
+  const getAdminData = async () => {
+      await checkToken();
+      const query = `${API}/api/getAdmin`;
+      const res = await axios.post(query, {}, headers());
+      setAdmin(res.data.admin);
+  }
+
+  const [ message, setMessage ] = React.useState<any[]>();
+  const getAllMessage = async () => {
+    await checkToken();
+    const query = `${API}/api/getAllNotReceivedMessages`;
+    const res = await axios.post(query, {}, headers());
+    console.log('res - ', res.data);
+    setMessage(res.data);
+    if(res.data.length > 0) {
+      setInvisible(false);
+    } else {
+      setInvisible(true);
+    }
+  }
+
+  React.useEffect(() => {
+    if(loginStatus) { 
+      getAdminData(); 
+      getAllMessage();
+      setClicked(false);
+    }
+  }, [clicked])
+  
+  const handleMyPage = () => {
+    if(loginStatus){
+      if(admin){
+        navigate('/mypage/admin_chat')
+      }else{
+        navigate('/mypage')
+      }
+    } else {
+      navigate('/login')
+    }
+  }
+
+  const handleNotification = (id: string, sender: string, receiver: string) => {
+    setClicked(true);
+    if(receiver === 'admin'){
+      if(sender === 'client'){
+        localStorage.setItem('role', 'client');
+      } else {
+        localStorage.setItem('role', 'creator');
+      }
+    }
+    navigate(`/mypage/chatting/${id}`);
+  }
 
   const toggleDrawer = (open:any) => (event:any) => {
     if (
@@ -93,10 +158,6 @@ export const MainMenu = () => {
     height: "40px",
     marginLeft: "10px",
     marginRight: "10px",
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
   };
 
   const list = () => (
@@ -122,6 +183,7 @@ export const MainMenu = () => {
             placeholder="キーワードで探す"
             value={searchTerm}
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
             sx={sxStyles}
             className="bg-[#FCF9F8] rounded-lg px-10 flex justify-center"
             InputProps={{
@@ -213,19 +275,23 @@ export const MainMenu = () => {
               <button className="flex-1"><img src={staticFiles.icons.ic_noti_close}
                 onClick={handleClose} /></button>
             </div>
-            {detail?(
+            {invisible?(
                 <div className="px-10 py-5">
                 新しいお知らせはありません {selectId}
                 </div>  
             ):(
-              fakeData.map((item:ItemElement, index:number) => (
+              message && message.length > 0 && message.map((item:any, index:number) => (
                 <div key={index}>
                 <div className="flex flex-row p-5">
                     <div className="flex flex-col w-[85%]">
-                      <p>{item.name}</p>
-                      <p>{item.date}</p>
+                      <p>お知らせ{index + 1}</p>
+                      <p>{convertNumberToDate(item.date)}</p>
                     </div>
-                  <button key={item.id} onClick={()=>{setDetail(true); setSelectId(item.id)}} className="hover:bg-btHover/[1] bg-btColor w-[157px] h-[39x] rounded-[50px] text-white">詳しく見る</button>
+                  <button key={item.contractId} 
+                    onClick={()=>{
+                      handleNotification(item.contractId, item.sender, item.receiver);
+                      }
+                    } className="hover:bg-btHover/[1] bg-btColor w-[157px] h-[39x] rounded-[50px] text-white">詳しく見る</button>
                 </div>
                 <Divider />
                 </div>
