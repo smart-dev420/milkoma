@@ -160,6 +160,6 @@ const clearLocalStorageAndRedirect = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
   // window.location.pathname = '/login';
-  window.location.reload();
+  window.location.href = '/login';
   return;
 };
