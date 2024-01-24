@@ -146,10 +146,11 @@ export const checkToken = async () => {
       } catch (error) {
         console.error('Error refreshing token:', error);
       }
+    }else {
+      // Clear storage and redirect to login page
+      clearLocalStorageAndRedirect();
     }
 
-    // Clear storage and redirect to login page
-    clearLocalStorageAndRedirect();
   } else {
     // Clear storage and redirect to login page
     clearLocalStorageAndRedirect();
