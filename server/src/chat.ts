@@ -111,6 +111,32 @@ const uploadData: RequestHandler = async (req, res) => {
     });
   }
 
+const removeData: RequestHandler = async (req, res) => {
+
+  const filename = req.body.filename;
+  const contractId = req.body.contractId;
+  try {
+    // Construct the full path to the file
+    const filePathToRemove = `${chatPath}/${filename}`;
+
+    // Check if the file exists before attempting to remove it
+    if (fs.existsSync(filePathToRemove)) {
+      const result = await MessageModel.updateOne(
+        { contractId: contractId },
+        { $pull: { 'message': { uploadData: filename } } }
+      );
+      fs.unlinkSync(filePathToRemove);
+      return res.status(200).send({ msg: "ファイルの削除に成功しました" });
+    } else {
+      return res.status(404).send({ msg: "指定されたファイルは存在しません" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ msg: "ファイルの削除に失敗しました" });
+  }
+};
+  
+
 const getMessages: RequestHandler = async (req, res) => {
     try{
         const id = req.params.id;
@@ -269,4 +295,5 @@ module.exports = {
     notReceivedMessage,
     getAllNotReceivedMessages,
     updateMessages,
+    removeData
 }

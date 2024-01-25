@@ -16,7 +16,8 @@ const {
   getMessages,
   notReceivedMessage,
   getAllNotReceivedMessages,
-  updateMessages
+  updateMessages,
+  removeData
 } = require('../chat')
 
 const apiRoute = Router();
@@ -83,5 +84,6 @@ apiRoute.post("/uploadData",                verifyToken,          uploadData);
 apiRoute.post("/getMessages/:id",           verifyToken,          getMessages);
 apiRoute.post("/notReceivedMessage/:id",    verifyToken,          notReceivedMessage);
 apiRoute.post("/getAllNotReceivedMessages", verifyToken,          getAllNotReceivedMessages);
-apiRoute.post("/updateMessages/:id/:sender",        verifyToken,          updateMessages);
+apiRoute.post("/updateMessages/:id/:sender", verifyToken,          updateMessages);
+apiRoute.post("/removeData",                verifyToken,          removeData);
 export default apiRoute;

@@ -1,4 +1,4 @@
-import { Box, Button, CardMedia, Container, Grid, Slider, Stack, TextareaAutosize, Tooltip, Typography } from "@mui/material"
+import { Box, Button, CardMedia, Container, Grid, IconButton, Slider, Stack, TextareaAutosize, Tooltip, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { CHAT_SVR_URL, btnBackground, btnBackgroundHover, fontBold, fontSize14, fontSize16, scrollTop, staticFiles } from "../../components/Constants";
@@ -14,6 +14,7 @@ import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 import { setMessage } from "../../slices/message";
 import ReactPlayer from 'react-player';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export const ChattingPage: React.FC<{  }> = ({ }) => {
     // scrollTop();
@@ -219,6 +220,8 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                 if (socket && rid) {
                     const result = {
                         email: userEmail,
+                        sender: role,
+                        receiver: role === 'admin'? localStorage.getItem('role'):'admin',
                         message: '',
                         date: nowDate,
                         uploadData: rid + nowDate.toString() + '_' + file.name
@@ -233,6 +236,28 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
         }catch(err){ console.error(err); }
     }
     const [playing, setPlaying] = useState(false);
+
+    const deleteImage = async (id: string) => {
+        let formData = new FormData();
+        if(rid) formData.append('contractId', rid);
+        formData.append('filename', id);
+        try{
+            await checkToken();
+            const query = `${API}/api/removeData`;
+            const res = await axios.post(query, formData, headers());
+            if( res.status === 200 ){
+                setMessages((prevMessages: any) => {
+                    // Use filter to create a new array excluding the message with the specified filename
+                    const updatedMessages = (prevMessages || []).filter((message: any) => message.uploadData !== id);
+                    return updatedMessages;
+                  });
+                  
+                toast.success(res.data.msg);
+            } else {
+                toast.error(res.data.msg);
+            }
+        }catch(err){ console.error(err); }
+    }
   
     return(
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{paddingTop:'50px', paddingBottom:'75px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
@@ -345,12 +370,21 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                                             disabled />
                                         }
                                         {msg.uploadData && msg.uploadData !== '' && 
+                                        <div style={{position:'relative'}}>
+                                            <IconButton
+                                                onClick={() => deleteImage(msg.uploadData)}
+                                                aria-label="first page"
+                                                sx={{position:'absolute', zIndex:'10', right:'10px', padding:'5px', borderRadius:'20px', backgroundColor:'#e7e7e7e3'}}
+                                                >
+                                                <DeleteIcon sx={{color:'#ef2510'}}/>
+                                            </IconButton>
                                             <Zoom classDialog={"custom-zoom"}>
                                                 <img
                                                 src={`${API}/api/chat/${msg.uploadData}`}
                                                 className='max-w-[350px] rounded-[15px]'
                                                 />
-                                            </Zoom>}
+                                            </Zoom>
+                                        </div>}
                                     </Box>
                                 <Typography sx={{color:'#858997', fontSize:fontSize14, marginLeft:'70px', marginTop:'5px'}}>
                                    {getDate(parseFloat(msg.date))}
