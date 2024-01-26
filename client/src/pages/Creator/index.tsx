@@ -85,7 +85,7 @@ export const FindCreator = () => {
                                 </div>
                                 
                                 <div className="flex flex-row text-[#fff] pl-[20px]" style={{whiteSpace:'nowrap', fontWeight:fontBold, columnGap:'10px'}} >
-                                    <span className="text-[20px] ">リクエスターの </span>
+                                    <span className="text-[20px] ">インフルエンサーの </span>
                                     <span className="text-[20px]">  や り た い  </span>
                                     <span className="text-[20px]"> に合わせた</span>       
                                 </div>

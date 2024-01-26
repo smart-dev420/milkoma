@@ -149,14 +149,6 @@ export const CreatorStep = () => {
     );
 }
 
-const creatorData = {
-    avatar: staticFiles.images.avatar,
-    email: '@hikarusannnouragawa',
-    description: 'ひかる社長の密着日記',
-    follower: 12345678,
-    heart: 3900000,
-}
-
 const IntroComponent: React.FC<{ data: any; }> = ({ data }) => {
     const selectTab = useSelector((state:any) => state.creator.step);
     const match_768 = useMediaQuery('(min-width:768px)');

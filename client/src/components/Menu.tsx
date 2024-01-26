@@ -174,7 +174,7 @@ export const MainMenu = () => {
         </ListItem>
         <ListItem>
           <label>NeoPen株式会社</label>
-          <label className="font-m1c ml-5 h-[17px] min-w-[75px] bg-[#F9E5D1] flex justify-center items-center text-center rounded-lg" style={{fontSize:'9px'}}>リクエスター</label>
+          <label className="font-m1c ml-5 h-[17px] min-w-[75px] bg-[#F9E5D1] flex justify-center items-center text-center rounded-lg" style={{fontSize:'9px'}}>インフルエンサー</label>
         </ListItem>
         <ListItem>
           <TextField

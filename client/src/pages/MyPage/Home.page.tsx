@@ -124,7 +124,7 @@ export const HomePage = () => {
                     </Box>
                     <SpaceY />
                     <Box display="flex" flexDirection="row" alignItems="center">
-                        <Typography sx={{backgroundColor:verify?'#EE7D90':'#FFFFFF',borderRadius:'20px', color:verify?'#FFFFFF':'#E4443B', fontSize:'12px', paddingX:'20px', paddingY:'2px', border:'1px solid #D35144'}}>{verify?'公式リクエスター':'アカウント未認証'}</Typography>
+                        <Typography sx={{backgroundColor:verify?'#EE7D90':'#FFFFFF',borderRadius:'20px', color:verify?'#FFFFFF':'#E4443B', fontSize:'12px', paddingX:'20px', paddingY:'2px', border:'1px solid #D35144'}}>{verify?'公式インフルエンサー':'アカウント未認証'}</Typography>
                         <Typography sx={{color:'#554744', fontSize:'12px', marginLeft:'20px'}}>{verify?'このアカウントは認証済みです':'アカウント認証を行ってください'}</Typography>
                     </Box>
                     <SpaceY />
@@ -326,7 +326,7 @@ const CancelGrid:React.FC<{count:number, data: any}> = ({ count, data }) => {
 export const statusColor = [
     {
         state: '相談中',
-        title: 'リクエスター待ちです',
+        title: 'インフルエンサー待ちです',
         color: "#F5DFDE",
         hoverColor: "#F7B6B3",
         sidebarColor: btnBackground,
@@ -352,8 +352,8 @@ export const statusColor = [
         value: 75,
     },
     {
-        state: '完了・リクエスター確認',
-        title: 'リクエスター待ちです',
+        state: '完了',
+        title: '完了・インフルエンサー確認',
         color: "#F5DFDE",
         hoverColor: "#F7B6B3",
         sidebarColor: btnBackground,

@@ -84,7 +84,7 @@ const StatusSlider = styled(Slider)(({ theme }) => ({
 
 const statusValues = [
     {
-        title: "リクエスター待ちです",
+        title: "インフルエンサー待ちです",
         description: "ご依頼いただいた内容についてミルコマディレクターからメッセージが来ています。@@@内容をご確認ください",
     }, 
     { 
