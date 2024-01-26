@@ -160,7 +160,7 @@ export const Top = () => {
               <label className="text-[9px] font-m1c">ログイン中</label>
                 <div className="flex flex-row justify-between">
                   <label className="text-[14px] font-m1c min-w-[140px]" style={{whiteSpace:'nowrap', fontWeight:fontBold}}>NeoPen株式会社</label>
-                  <label className="text-[9px] font-m1c ml-5 h-[17px] min-w-[75px] bg-[#F9E5D1] flex justify-center items-center text-center rounded-lg" style={{whiteSpace:'nowrap'}}>リクエスター</label>
+                  <label className="text-[9px] font-m1c ml-5 h-[17px] min-w-[75px] bg-[#F9E5D1] flex justify-center items-center text-center rounded-lg" style={{whiteSpace:'nowrap'}}>インフルエンサー</label>
                 </div>
             </div>
             <div className={`${match_1024 ? "" : "hidden"} pl-12 pt-3 w-full justify-center flex`}>

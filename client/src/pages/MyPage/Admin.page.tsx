@@ -543,12 +543,12 @@ export const Admin = () => {
 
     return(
         <Container maxWidth = "xl" className="rounded-tl-[25px] rounded-bl-[25px] bg-[#ffffff] h-full" sx={{ paddingTop:'30px', paddingBottom:'40px', boxShadow:'0px 0px 20px 2px #d78e8927', marginRight:'0px'}}>
-            <Stack direction="column" sx={{paddingX:'26px', width:'100%' }}>
+            <Stack direction="column" sx={{ width:'100%' }}>
             <Box sx={{ width: '100%', }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab label="クライアントリスト" icon={<PersonIcon />} iconPosition="start" {...a11yProps(0)} />
-                        <Tab label="リクエスタリスト" icon={<PeopleIcon />} iconPosition="start" {...a11yProps(1)} />
+                        <Tab label="インフルエンザリスト" icon={<PeopleIcon />} iconPosition="start" {...a11yProps(1)} />
                         <Tab label="契約状況一覧" icon={<ListAltIcon />} iconPosition="start" {...a11yProps(2)} />
                         <Tab label="契約価格表" icon={<CurrencyYenIcon />} iconPosition="start" {...a11yProps(3)} />
                     </Tabs>
@@ -568,11 +568,11 @@ export const Admin = () => {
                     />
                     </Box>
                     {/* リクエスタの電子メールを入力してください */}
-                  <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 500, whiteSpace:'nowrap' }} aria-label="custom pagination table">
+                  <TableContainer component={Paper} >
+                    <Table sx={{ whiteSpace:'nowrap', width:'fit-content' }} aria-label="custom pagination table">
                     <TableHead>
                       <TableRow>
-                        <StyledTableCell style={{whiteSpace:'nowrap'}}>アバター</StyledTableCell>
+                        <StyledTableCell >アバター</StyledTableCell>
                         <StyledTableCell align="center">名前</StyledTableCell>
                         <StyledTableCell align="center">メール</StyledTableCell>
                         <StyledTableCell align="center">会社名</StyledTableCell>
@@ -680,7 +680,7 @@ export const Admin = () => {
                         />
                     </Box>
                   <TableContainer component={Paper} >
-                    <Table sx={{ minWidth: 500, whiteSpace:'nowrap' }} aria-label="custom pagination table" style={{overflowX:'auto'}}>
+                    <Table sx={{ whiteSpace:'nowrap', width:'fit-content'  }} aria-label="custom pagination table" >
                     <TableHead>
                       <TableRow>
                         <StyledTableCell >アバター</StyledTableCell>
@@ -789,7 +789,7 @@ export const Admin = () => {
                       onChange={(e, value) => { handleContractSearch(value, 0)}} // Use onChange to capture selected value
                       renderInput={(params) => <TextField {...params} label="" />}
                     />
-                    <Typography sx={{fontSize:'20px'}}>リクエスター: </Typography>
+                    <Typography sx={{fontSize:'20px'}}>インフルエンサー: </Typography>
                     <Autocomplete
                       id="free-solo-demo"
                       freeSolo
@@ -801,12 +801,12 @@ export const Admin = () => {
                     />
                     </Box>
                   <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 500, whiteSpace:'nowrap'}} aria-label="custom pagination table">
+                    <Table sx={{ whiteSpace:'nowrap', width:'fit-content' }} aria-label="custom pagination table">
                     <TableHead>
                       <TableRow >
                         <StyledTableCell>契約名</StyledTableCell>
                         <StyledTableCell align="center" >クライアント</StyledTableCell>
-                        <StyledTableCell align="center">リクエスター</StyledTableCell>
+                        <StyledTableCell align="center">インフルエンサー</StyledTableCell>
                         <StyledTableCell align="center">製品の種類</StyledTableCell>
                         <StyledTableCell align="center">使用方法</StyledTableCell>
                         <StyledTableCell align="center">配送日</StyledTableCell>
@@ -837,7 +837,7 @@ export const Admin = () => {
                                     sx={{ width: 210, height:'40px', border: '1px solid #000000' }}
                                     size="small"
                                     onChange={(e, value) => setCreatorInfo(value)} // Use onChange to capture selected value
-                                    renderInput={(params) => <TextField {...params} label="リクエスタの割り当て" />}
+                                    renderInput={(params) => <TextField {...params} label="インフルエンサー割当" />}
                                 />
 
                                 <IconButton 
@@ -948,7 +948,7 @@ export const Admin = () => {
                       onChange={(e, value) => { handleContractPaymentSearch(value, 0)}} // Use onChange to capture selected value
                       renderInput={(params) => <TextField {...params} label="" />}
                     />
-                    <Typography sx={{fontSize:'20px'}}>リクエスター: </Typography>
+                    <Typography sx={{fontSize:'20px'}}>インフルエンサー: </Typography>
                     <Autocomplete
                       id="free-solo-demo"
                       freeSolo
@@ -960,12 +960,12 @@ export const Admin = () => {
                     />
                     </Box>
                   <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 500, whiteSpace:'nowrap' }} aria-label="custom pagination table">
+                    <Table sx={{ whiteSpace:'nowrap', width:'fit-content'  }} aria-label="custom pagination table">
                     <TableHead>
                       <TableRow>
                         <StyledTableCell>契約名</StyledTableCell>
                         <StyledTableCell align="center">クライアント</StyledTableCell>
-                        <StyledTableCell align="center">リクエスター</StyledTableCell>
+                        <StyledTableCell align="center">インフルエンサー</StyledTableCell>
                         <StyledTableCell align="center">製品の種類</StyledTableCell>
                         <StyledTableCell align="center">使用方法</StyledTableCell>
                         <StyledTableCell align="center">インフルエンサー費用</StyledTableCell>
