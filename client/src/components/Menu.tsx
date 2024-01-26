@@ -55,24 +55,22 @@ export const MainMenu = () => {
 
   const navigate = useNavigate();
   const loginStatus = useSelector((state:any) => state.auth.isLoggedIn);
-  const [state, setState] = React.useState({left: false});
+  const [ state, setState ] = React.useState({left: false});
   const [ clicked, setClicked ] = React.useState<boolean>(false);
-  const [invisible, setInvisible] = React.useState(false);
+  const [ invisible, setInvisible ] = React.useState(false);
   const [ anchorEl, setAnchorEl ] = React.useState<null | HTMLElement>(null);
-  const [ detail, setDetail ] = React.useState<boolean>(false);
-  const [ selectId, setSelectId ] = React.useState<string>("");
 
-  const [searchTerm, setSearchTerm] = React.useState<string>("");
+  const [searchInfo, setSearchInfo] = React.useState<string>("");
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+    setSearchInfo(event.target.value);
   };
   const handleKeyDown = (event:any) => {
     if (event.key === 'Enter') {
       event.preventDefault(); // Prevents line break in the textarea
-      if(searchTerm === '' || searchTerm.trim() === '') {
+      if(searchInfo === '' || searchInfo.trim() === '') {
         navigate(`/history/search`);
       }else{
-        navigate(`/history/${searchTerm.trim()}`);
+        navigate(`/history/${searchInfo.trim()}`);
       }
     }
   };
@@ -80,27 +78,26 @@ export const MainMenu = () => {
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
-    setDetail(false);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const [ admin, setAdmin ] = React.useState<boolean>();
-  const getAdminData = async () => {
+  const [ adminInfo, setAdminInfo ] = React.useState<boolean>();
+  const getAdminInfo = async () => {
       await checkToken();
       const query = `${API}/api/getAdmin`;
       const res = await axios.post(query, {}, headers());
-      setAdmin(res.data.admin);
+      setAdminInfo(res.data.admin);
   }
 
-  const [ message, setMessage ] = React.useState<any[]>();
-  const getAllMessage = async () => {
+  const [ messageInfo, setMessageInfo ] = React.useState<any[]>();
+  const getAllMessageInfo = async () => {
     await checkToken();
     const query = `${API}/api/getAllNotReceivedMessages`;
     const res = await axios.post(query, {}, headers());
     console.log('res - ', res.data);
-    setMessage(res.data);
+    setMessageInfo(res.data);
     if(res.data.length > 0) {
       setInvisible(false);
     } else {
@@ -110,15 +107,15 @@ export const MainMenu = () => {
 
   React.useEffect(() => {
     if(loginStatus) { 
-      getAdminData(); 
-      getAllMessage();
+      getAdminInfo(); 
+      getAllMessageInfo();
       setClicked(false);
     }
   }, [clicked])
   
   const handleMyPage = () => {
     if(loginStatus){
-      if(admin){
+      if(adminInfo){
         navigate('/mypage/admin_chat')
       }else{
         navigate('/mypage')
@@ -181,7 +178,7 @@ export const MainMenu = () => {
             id="search"
             type="search"
             placeholder="キーワードで探す"
-            value={searchTerm}
+            value={searchInfo}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             sx={sxStyles}
@@ -277,10 +274,10 @@ export const MainMenu = () => {
             </div>
             {invisible?(
                 <div className="px-10 py-5">
-                新しいお知らせはありません {selectId}
+                新しいお知らせはありません
                 </div>  
             ):(
-              message && message.length > 0 && message.map((item:any, index:number) => (
+              messageInfo && messageInfo.length > 0 && messageInfo.map((item:any, index:number) => (
                 <div key={index}>
                 <div className="flex flex-row p-5">
                     <div className="flex flex-col w-[85%]">

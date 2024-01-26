@@ -629,7 +629,7 @@ export const DetailPage = () => {
                         />
                         
                     <Box display='flex' flexDirection='column' sx={{color:'#454545', fontSize:'16px', paddingX:'27px', paddingY:'20px', backgroundColor:'#FDECEE', borderRadius:'14px 14px 14px 0px', marginRight:'70px'}}>
-                        {messageState?message[0]?.message:data.noMessage}
+                    {messageState ? (message[0]?.message !== '' ? message[0]?.message : 'ファイル') : data.noMessage}
                     </Box>
                     <Box display='flex' flexDirection='column' justifyContent='center' alignItems='end' sx={{}}>
                         <Button sx={{

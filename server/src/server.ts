@@ -94,6 +94,10 @@ io.on('connection', (socket: Socket) => {
     io.to(room).emit('message', data);
   });
 
+  socket.on('deleteMessage', ({ room, data }: { room: string; data: any}) => {
+    io.to(room).emit('message', data);
+  });
+
   io.emit('getOnlineUsers', getUsers());
 
   socket.on('disconnect', () => {

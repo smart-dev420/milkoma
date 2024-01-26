@@ -121,7 +121,7 @@ const removeData: RequestHandler = async (req, res) => {
 
     // Check if the file exists before attempting to remove it
     if (fs.existsSync(filePathToRemove)) {
-      const result = await MessageModel.updateOne(
+      await MessageModel.updateOne(
         { contractId: contractId },
         { $pull: { 'message': { uploadData: filename } } }
       );

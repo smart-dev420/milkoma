@@ -12,7 +12,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { toast } from "react-toastify";
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
-import { setMessage } from "../../slices/message";
+import message, { setMessage } from "../../slices/message";
 import ReactPlayer from 'react-player';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -122,8 +122,17 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
       }, [messages]);
       
     const updateMessage = (message: any) => {
-        setMessages((prevMessages: any) => [...(prevMessages || []), message]);
-        if (message.email !== userEmail) setPlaying(true);
+        console.log('res - ', message);
+        if(message.date === 0){
+            setMessages((prevMessages: any) => {
+                // Use filter to create a new array excluding the message with the specified filename
+                const updatedMessages = (prevMessages || []).filter((msg: any) => msg.uploadData !== message.uploadData);
+                return updatedMessages;
+              });
+        }else {
+            setMessages((prevMessages: any) => [...(prevMessages || []), message]);
+            if (message.email !== userEmail) setPlaying(true);
+        }
     };
   
     useEffect(() => {
@@ -246,12 +255,18 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
             const query = `${API}/api/removeData`;
             const res = await axios.post(query, formData, headers());
             if( res.status === 200 ){
-                setMessages((prevMessages: any) => {
-                    // Use filter to create a new array excluding the message with the specified filename
-                    const updatedMessages = (prevMessages || []).filter((message: any) => message.uploadData !== id);
-                    return updatedMessages;
-                  });
-                  
+
+                const result = {
+                    email: userEmail,
+                    sender: role,
+                    receiver: role === 'admin'? localStorage.getItem('role'):'admin',
+                    message: '',
+                    date: 0,
+                    uploadData: id
+                }
+                if (socket && rid) {
+                    socket.emit('deleteMessage', { room: rid, data: result});
+                }
                 toast.success(res.data.msg);
             } else {
                 toast.error(res.data.msg);
@@ -371,13 +386,16 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                                         }
                                         {msg.uploadData && msg.uploadData !== '' && 
                                         <div style={{position:'relative'}}>
-                                            <IconButton
-                                                onClick={() => deleteImage(msg.uploadData)}
-                                                aria-label="first page"
-                                                sx={{position:'absolute', zIndex:'10', right:'10px', padding:'5px', borderRadius:'20px', backgroundColor:'#e7e7e7e3'}}
+                                            {
+                                                msg.email === userEmail && 
+                                                <IconButton
+                                                    onClick={() => deleteImage(msg.uploadData)}
+                                                    aria-label="first page"
+                                                    sx={{position:'absolute', zIndex:'10', right:'10px', top:'10px', padding:'5px', borderRadius:'20px', backgroundColor:'#e7e7e7e3'}}
                                                 >
-                                                <DeleteIcon sx={{color:'#ef2510'}}/>
-                                            </IconButton>
+                                                   <DeleteIcon sx={{color:'#ef2510'}}/>
+                                                </IconButton>
+                                            } 
                                             <Zoom classDialog={"custom-zoom"}>
                                                 <img
                                                 src={`${API}/api/chat/${msg.uploadData}`}
