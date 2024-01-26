@@ -703,7 +703,7 @@ const Step4 : React.FC<{}> = () => {
             )}
             
         </div>
-            <button onClick={onSubmit} className="btn-color py-2 px-5 rounded-[30px] text-[20px]" style={{fontWeight:fontBold, width:match_1024?'324px':'200px', marginLeft:match_1024?'10%':'27%', marginTop:match_1024?'':'20px'}}>マイページへ</button>
+            <button onClick={onSubmit} className="btn-color py-2 px-5 rounded-[30px] text-[20px]" style={{fontWeight:fontBold, width:match_1024?'324px':'200px', marginLeft:match_1024?'10%':'27%', marginTop:match_1024?'':'20px'}}>マイページ</button>
         </div>
         </>
     )
