@@ -569,10 +569,10 @@ export const Admin = () => {
                     </Box>
                     {/* リクエスタの電子メールを入力してください */}
                   <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                    <Table sx={{ minWidth: 500, whiteSpace:'nowrap' }} aria-label="custom pagination table">
                     <TableHead>
                       <TableRow>
-                        <StyledTableCell>アバター</StyledTableCell>
+                        <StyledTableCell style={{whiteSpace:'nowrap'}}>アバター</StyledTableCell>
                         <StyledTableCell align="center">名前</StyledTableCell>
                         <StyledTableCell align="center">メール</StyledTableCell>
                         <StyledTableCell align="center">会社名</StyledTableCell>
@@ -586,20 +586,20 @@ export const Admin = () => {
                           : clients
                         ).map((row, index) => (
                           <StyledTableRow key={row.name}>
-                            <TableCell component="th" scope="row" style={{ width: 65, height: 65 }}>
-                            <img className=" rounded-[30px]" 
+                            <TableCell component="th" scope="row" >
+                            <img className=" rounded-[30px]" style={{width:'65px', height:'65px'}}
                                   src = {`${API}/api/avatar/${row.avatar}`}/>
                             </TableCell>
-                            <TableCell style={{ width: 60 }} align="left">
+                            <TableCell align="left">
                               {row.name}
                             </TableCell>
-                            <TableCell style={{ width: 60 }} align="left">
+                            <TableCell align="left">
                               {row.email}
                             </TableCell>
-                            <TableCell style={{ width: 120 }} align="left">
+                            <TableCell align="left">
                               {row.company}
                             </TableCell>
-                            <TableCell style={{ width: 250 }} align="center">
+                            <TableCell align="center">
                               <Box display='flex' sx={{flexDirection:row.verify?'column':'row'}}>
                                 <Typography sx={{fontSize:'14px', backgroundColor:row.verify?'green':'#ee7d90', paddingX:'20px', paddingY:'10px', borderRadius:'10px', color:'#FFFFFF'}}>{row.verify?'検証済み':'検証されていません'}</Typography>
                                   {!row.verify && row.verify_doc != '' && (
@@ -609,7 +609,7 @@ export const Admin = () => {
                                   )}
                               </Box>
                             </TableCell>
-                            <TableCell style={{ width: 300 }} align="center">
+                            <TableCell align="center">
                               <Button variant="outlined" 
                                 sx={{color:'green', border:'1px solid green', 
                                       marginX:'5px',
@@ -679,11 +679,11 @@ export const Admin = () => {
                           renderInput={(params) => <TextField {...params} label="" />}
                         />
                     </Box>
-                  <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                  <TableContainer component={Paper} >
+                    <Table sx={{ minWidth: 500, whiteSpace:'nowrap' }} aria-label="custom pagination table" style={{overflowX:'auto'}}>
                     <TableHead>
                       <TableRow>
-                        <StyledTableCell>アバター</StyledTableCell>
+                        <StyledTableCell >アバター</StyledTableCell>
                         <StyledTableCell align="center">名前</StyledTableCell>
                         <StyledTableCell align="center">メール</StyledTableCell>
                         <StyledTableCell align="center">会社名</StyledTableCell>
@@ -697,20 +697,20 @@ export const Admin = () => {
                           : creators
                         ).map((row, index) => (
                           <StyledTableRow key={row.name}>
-                            <TableCell component="th" scope="row" style={{ width: 65, height: 65 }}>
-                            <img className=" rounded-[30px]" 
+                            <TableCell component="th" scope="row" >
+                            <img className=" rounded-[30px]" style={{width:'65px', height:'65px'}}
                                   src = {`${API}/api/avatar/${row.avatar}`}/>
                             </TableCell>
-                            <TableCell style={{ width: 60 }} align="left">
+                            <TableCell align="left">
                               {row.name}
                             </TableCell>
-                            <TableCell style={{ width: 60 }} align="left">
+                            <TableCell align="left">
                               {row.email}
                             </TableCell>
-                            <TableCell style={{ width: 60 }} align="left">
+                            <TableCell align="left">
                               {row.company}
                             </TableCell>
-                            <TableCell style={{ width: 250 }} align="center">
+                            <TableCell align="center">
                               <Box display='flex' sx={{flexDirection:row.verify?'column':'row'}}>
                                 <Typography sx={{fontSize:'14px', backgroundColor:row.verify?'green':'#ee7d90', paddingX:'20px', paddingY:'10px', borderRadius:'10px', color:'#FFFFFF'}}>{row.verify?'検証済み':'検証されていません'}</Typography>
                                   {!row.verify && row.verify_doc != '' && (
@@ -720,7 +720,7 @@ export const Admin = () => {
                                   )}
                               </Box>
                             </TableCell>
-                            <TableCell style={{ width: 300 }} align="center">
+                            <TableCell align="center">
                               <Button variant="outlined" 
                                 sx={{color:'green', border:'1px solid green', 
                                       marginX:'5px',
@@ -801,11 +801,11 @@ export const Admin = () => {
                     />
                     </Box>
                   <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                    <Table sx={{ minWidth: 500, whiteSpace:'nowrap'}} aria-label="custom pagination table">
                     <TableHead>
-                      <TableRow>
+                      <TableRow >
                         <StyledTableCell>契約名</StyledTableCell>
-                        <StyledTableCell align="center">クライアント</StyledTableCell>
+                        <StyledTableCell align="center" >クライアント</StyledTableCell>
                         <StyledTableCell align="center">リクエスター</StyledTableCell>
                         <StyledTableCell align="center">製品の種類</StyledTableCell>
                         <StyledTableCell align="center">使用方法</StyledTableCell>
@@ -824,10 +824,10 @@ export const Admin = () => {
                             <TableCell component="th" scope="row" style={{ width: 80, fontSize:'12px' }}>
                               {row.category}
                             </TableCell>
-                            <TableCell style={{ width: 50 }} align="left">
+                            <TableCell align="left">
                               {row.clientEmail}
                             </TableCell>
-                            <TableCell style={{ width: 150 }} align="left">
+                            <TableCell align="left">
                               {row.creatorEmail == 'admin' ? (
                                 <Box display='flex' flexDirection='row' justifyContent='center'>
                                 <Autocomplete
@@ -856,28 +856,28 @@ export const Admin = () => {
                               </Box>
                               ):row.creatorEmail}
                             </TableCell>
-                            <TableCell style={{ width: 100 }} align="left">
+                            <TableCell style={{ whiteSpace:'normal' }} align="left">
                               {row.step1}
                             </TableCell>
-                            <TableCell style={{ width: 100 }} align="center">
+                            <TableCell align="center">
                               {row.step2}
                             </TableCell>
-                            <TableCell style={{ width: 80 }} align="center">
+                            <TableCell align="center">
                               {row.step3 > 0 ? row.step3 + 'ヶ月': '相談したい'}
                             </TableCell>
-                            <TableCell style={{ width: 100 }} align="center">
+                            <TableCell align="center">
                               {row.status >= 0 ? (
                                 <BorderLinearProgress variant="determinate" value={25 * row.status} />
                                 ):(
                                 <Typography sx={{color:'#ee7d90', fontWeight:fontBold, fontSize:'12px'}}>中止されました</Typography>
                               )}
                             </TableCell>
-                            <TableCell style={{ width: 100 }} align="center">
+                            <TableCell align="center">
                               <Typography sx={{fontSize:'12px', backgroundColor:row.confirm?'green':'#ee7d90', paddingX:'10px', paddingY:'2px', borderRadius:'10px', color:'#FFFFFF'}}>
                                 {row.confirm?'締結':'締結なし'}
                               </Typography>
                             </TableCell>
-                            <TableCell style={{ width: 250 }} align="center">
+                            <TableCell align="center">
                               <Button variant="outlined" 
                                 sx={{color:'green', border:'1px solid green', 
                                       marginX:'5px',
@@ -960,7 +960,7 @@ export const Admin = () => {
                     />
                     </Box>
                   <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                    <Table sx={{ minWidth: 500, whiteSpace:'nowrap' }} aria-label="custom pagination table">
                     <TableHead>
                       <TableRow>
                         <StyledTableCell>契約名</StyledTableCell>
@@ -980,22 +980,22 @@ export const Admin = () => {
                           : contractPayments
                         ).map((row, index) => (
                           <StyledTableRow key={row._id} >
-                            <TableCell component="th" scope="row" style={{ width: 80, fontSize:'12px' }}>
+                            <TableCell component="th" scope="row" style={{ fontSize:'12px' }}>
                               {row.category}
                             </TableCell>
-                            <TableCell style={{ width: 50 }} align="left">
+                            <TableCell align="left">
                               {row.clientEmail}
                             </TableCell>
-                            <TableCell style={{ width: 150 }} align="left">
+                            <TableCell align="left">
                               {row.creatorEmail}
                             </TableCell>
-                            <TableCell style={{ width: 100 }} align="left">
+                            <TableCell style={{ whiteSpace:'normal' }} align="left">
                               {row.step1}
                             </TableCell>
-                            <TableCell style={{ width: 100 }} align="left">
+                            <TableCell align="left">
                               {row.step2}
                             </TableCell>
-                            <TableCell style={{ width: 150 }} align="left">
+                            <TableCell align="left">
                               {!row.billed ? (
                               <Box display='flex' flexDirection='row' alignItems='center' sx={{columnGap:'5px'}}>
                               <TextField
@@ -1013,7 +1013,7 @@ export const Admin = () => {
                               ):
                               row.creatorPrice.toLocaleString()+'円'}
                             </TableCell>
-                            <TableCell style={{ width: 100 }} align="left">
+                            <TableCell align="left">
                               {!row.billed ? (
                                 <Box display='flex' flexDirection='row' alignItems='center' sx={{columnGap:'5px'}}>
                                 <TextField
@@ -1031,11 +1031,11 @@ export const Admin = () => {
                                 ):
                                 row.fee.toLocaleString()+'円'}
                             </TableCell>
-                            <TableCell style={{ width: 80 }} align="left">
+                            <TableCell align="left">
                               {(parseFloat(row.creatorPrice) + parseFloat(row.fee)).toLocaleString()} 円
                             </TableCell>
                           
-                            <TableCell style={{ width: 150 }} align="center">
+                            <TableCell align="center">
                               <Button variant="outlined" 
                                 sx={{color:'green', border:'1px solid green', 
                                       marginX:'5px',
