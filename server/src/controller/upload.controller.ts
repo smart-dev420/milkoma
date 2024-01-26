@@ -158,7 +158,6 @@ const uploadProvideFile: RequestHandler = async (req, res) => {
 
   const receivedDownload: RequestHandler = async (req, res) => {
     const fileName = req.params.filename;
-    console.log('filename!!!!!!!!!!!!!!!! ', fileName)
     const filePath = path.join(receiptPath, fileName);
     fs.access(filePath, fs.constants.F_OK, (err:any) => {
       if (err) {

@@ -88,7 +88,7 @@ export const SignUp = () => {
             }
             res = await axios.post(query, formData);
             if (res.status === 200) {
-                toast.success('成果的に登録されています。');
+                toast.success('すでに登録済みです。');
                 navigate("/login");
               } else {
                 console.log(res);

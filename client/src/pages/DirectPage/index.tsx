@@ -631,7 +631,7 @@ const Step4 : React.FC<{}> = () => {
             )}
         </div>
         <button onClick={onSubmit} className="mb-[45px] btn-color py-2 px-5 rounded-[30px] text-[20px]" 
-        style={{fontWeight:fontBold, width:match_1024?'324px':'200px', marginLeft:match_1024?'10%':'27%', marginTop:match_1024?'30px':'20px'}}>マイページへ</button>
+        style={{fontWeight:fontBold, width:match_1024?'324px':'200px', marginLeft:match_1024?'10%':'27%', marginTop:match_1024?'30px':'20px'}}>マイページ</button>
         </div>
         </>
     )
