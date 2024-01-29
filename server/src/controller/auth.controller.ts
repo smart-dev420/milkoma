@@ -173,7 +173,6 @@ export const register: RequestHandler = async (req, res) => {
     <div style="width: 30%;"></div>
     <div style="width: 450px;">
     <div style="color: #163253; font-size: 16px; font-weight: 600; font-style: normal; font-family: 'Open Sans';">
-    <p>【ミルコマ】会員登録いただきありがとうございます。</p>
     <p style='line-height: 300%;font-size:12px'>※このメールはシステムからの自動返信です。<br>
       こちらのアドレスに返信をしないでください。</p>
 
@@ -193,7 +192,7 @@ export const register: RequestHandler = async (req, res) => {
     </div>
     <div style="width: 20%;"></div>
     </div>`;
-    sendEmail(email, "新規会員登録", emailBody);
+    sendEmail(email, "【ミルコマ】会員登録いただきありがとうございます。", emailBody);
     return res.status(StatusCodes.OK).send(omit(user?.toJSON(), "password"));
   } catch (err: any) {
     logger.error(err);
@@ -208,7 +207,37 @@ const resetPassword: RequestHandler = async (req, res) => {
   const password = req.body.password;
   try {
     await resetPwd({email, password});
-    return res.status(StatusCodes.OK).send({msg : "パスワード変更済み！"}); // Password changed!
+    const emailBody = `
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open Sans">
+    <div style="display: flex;">
+    <div style="width: 30%;"></div>
+    <div style="width: 450px;">
+    <div style="color: #163253; font-size: 16px; font-weight: 600; font-style: normal; font-family: 'Open Sans';">
+    <p>お世話になっております。</p>
+    <p>パスワードの再設定が完了いたしました。</p>
+    <p>引き続きミルコマのご利用をよろしくお願いいたします。</p>
+    <p>パウワードの再設定をされていない方は</p>
+    <p>こちらのメッセージを無視してください。</p>
+    <p>ご質問やご不明な点がございましたら、</p>
+    <p>お手数ではございますが、下記までお問い合わせください。</p>
+    <p >メールアドレス：info@neopen.co.jp</p>
+    <br><br>
+    <div style="border-bottom: 1px solid #D4DAE0; width: 100%"></div>
+    <p style="font-weight: 600; font-size: 11px; color: #163253;">'${COMPANY_NAME}' Inc. Japan</p>
+    </div>
+    </div>
+    <div style="width: 20%;"></div>
+    </div>`;
+
+    sendEmail(email, "【ミルコマ】パスワード再設定完了", emailBody).
+    then((data:any) => {
+      return res.status(StatusCodes.OK).send({msg : "パスワード変更済み！"}); // Password changed!
+      // res.status(200).send({msg:'メールが正常に送信されました'}); // Email sent successfully
+    }).
+    catch((err:any) => {
+      console.log(err);
+      res.status(500).send('メール送信エラー'); // Error sending email
+    });
   } catch (err: any) {
     logger.error(err);
     return res
@@ -233,6 +262,14 @@ const changePassword: RequestHandler = async (req, res) => {
 
 const forgotPassword: RequestHandler = async (req, res) => {
   const {email} = req.body;
+  const akun = await findAccount({ email: req.body.email });
+    if (!akun) {
+      logger.error('Account not found')
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({ msg: "アカウントが見つかりません" }); // Account not found
+    }
+  const userName = akun.username;
   // const resetToken = crypto.randomBytes(20).toString('hex');
   const resetTokenExpiration = Date.now() + 600000;
   const query = {email};
@@ -249,26 +286,27 @@ const forgotPassword: RequestHandler = async (req, res) => {
     <div style="width: 30%;"></div>
     <div style="width: 450px;">
     <div style="color: #163253; font-size: 16px; font-weight: 600; font-style: normal; font-family: 'Open Sans';">
-    <p>こんにちは、</p>
-    <p style='line-height: 300%;'>パスワードをリセットするリクエストを受け取りました。</p>
-    <p>リクエストしていない場合は、このメッセージを無視してください。</p>
-    <p>それ以外の場合は、以下の番号を使用してパスワードをリセットできます。</p>
+    <p>${userName}様</p>
+    <p>お世話になっております。</p>
+    <p>パスワードの再設定リクエストを受け付けました。</p>
+    <p>以下のコードを入力し、パスワードを完了させてください。</p>
+
     <p style='margin: 40px 0; font-size: 16px; font-weight: bold;'>コード: ${otpNumber}</p>
-    <p style='line-height: 0%;'>ありがとうございます。</p>
-    <p>'${COMPANY_NAME}'</p>
-    <br><br><br>
+    <p >パスワードの再設定をリクエストされていない方は</p>
+    <p >こちらのメッセージを無視してください。</p>
+    <br><br>
     <div style="border-bottom: 1px solid #D4DAE0; width: 100%"></div>
     <p style="font-weight: 600; font-size: 11px; color: #163253;">'${COMPANY_NAME}' Inc. Japan</p>
     </div>
     </div>
     <div style="width: 20%;"></div>
-    </div>`
-    const mailOptions = {
-      from: userEmail,
-      to: email,
-      subject: "パスワードを再設定する", // Reset Password
-      html: emailBody
-    };
+    </div>`;
+    // const mailOptions = {
+    //   from: userEmail,
+    //   to: email,
+    //   subject: "【ミルコマ】コードのお知らせ", // Reset Password
+    //   html: emailBody
+    // };
 
     // mg.messages.create(process.env.MAILGUN_DOMAIN, {
     //   from: process.env.MAILGUN_SERVER_EMAIL,
@@ -298,7 +336,7 @@ const forgotPassword: RequestHandler = async (req, res) => {
     //   console.error('Error sending email:', err);
     // }
 
-    sendEmail(email, "パスワードを再設定する", emailBody).
+    sendEmail(email, "【ミルコマ】コードのお知らせ", emailBody).
     then((data:any) => {
       res.status(200).send({msg:'メールが正常に送信されました'}); // Email sent successfully
     }).
