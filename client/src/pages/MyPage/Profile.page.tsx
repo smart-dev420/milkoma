@@ -444,7 +444,7 @@ export const Profile = () =>{
                                         },
                                         }}
                                     onClick = {handleResetPassword}
-                                    >変化する
+                                    >変更する
                                 </Button>
                             </Box>
                         </Box>

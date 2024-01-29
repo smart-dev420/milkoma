@@ -156,7 +156,7 @@ export const ResetPassword = () => {
                           />
                         
                         <Button type="submit" variant="contained" endIcon={<SendIcon sx={{marginBottom:'7px'}} />} sx={{height:50, fontSize:18, width:'80%'}}>
-                            変化する
+                        変更する
                         </Button>
                         </Form>
                       )}
