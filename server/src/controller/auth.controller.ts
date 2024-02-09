@@ -192,7 +192,9 @@ export const register: RequestHandler = async (req, res) => {
     </div>
     <div style="width: 20%;"></div>
     </div>`;
-    sendEmail(email, "【ミルコマ】会員登録いただきありがとうございます。", emailBody);
+    if(user){
+      sendEmail(email, "【ミルコマ】会員登録いただきありがとうございます。", emailBody);
+    }
     return res.status(StatusCodes.OK).send(omit(user?.toJSON(), "password"));
   } catch (err: any) {
     logger.error(err);
