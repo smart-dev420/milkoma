@@ -101,53 +101,6 @@ export const Home = () =>{
 }
 
 const VerticalSlide: React.FC<{ creatorInfo: any; }> = ({ creatorInfo }) => {
-  let data = [
-    {
-      id: 0,
-      title: '17.Live受け取ったギフト No.1',
-      mail: '@hikarusannnouragawa',
-      name: 'ひかる社長の密着日記 ',
-      avatar: staticFiles.images.avatar,
-      follow:'116,900',
-      heart: '3.9M',
-    },
-    {
-      id: 1,
-      title: '17.Live受け取ったギフト No.1',
-      mail: '@hikarusannnouragawa',
-      name: 'ひかる社長の密着日記 ',
-      avatar: staticFiles.images.avatar,
-      follow:'116,900',
-      heart: '3.9M',
-    },
-    {
-      id: 2,
-      title: '17.Live受け取ったギフト No.1',
-      mail: '@hikarusannnouragawa',
-      name: 'ひかる社長の密着日記 ',
-      avatar: staticFiles.images.avatar,
-      follow:'116,900',
-      heart: '3.9M',
-    },
-    {
-      id: 3,
-      title: '17.Live受け取ったギフト No.1',
-      mail: '@hikarusannnouragawa',
-      name: 'ひかる社長の密着日記 ',
-      avatar: staticFiles.images.avatar,
-      follow:'116,900',
-      heart: '3.9M',
-    },
-    {
-      id: 4,
-      title: '17.Live受け取ったギフト No.1',
-      mail: '@hikarusannnouragawa',
-      name: 'ひかる社長の密着日記 ',
-      avatar: staticFiles.images.avatar,
-      follow:'116,900',
-      heart: '3.9M',
-    },
-  ];
   const match_768 = useMediaQuery('(min-width:768px)');
   const match_1024 = useMediaQuery('(min-width:1025px)');
   const [creator, setCreator] = useState<any[]>([]);
