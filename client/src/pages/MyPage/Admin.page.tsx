@@ -227,7 +227,7 @@ export const Admin = () => {
       event: React.MouseEvent<HTMLButtonElement> | null,
       newPage: number,
     ) => {
-      setCurrentClientPage(newPage);
+      setCurrentCreatorPage(newPage);
     };
 
     const handleChangeContractPage = (
@@ -584,8 +584,8 @@ export const Admin = () => {
                         {(clients.length > 0 && clientRowsPerPage > 0
                           ? clients.slice(currentClientPage * clientRowsPerPage, currentClientPage * clientRowsPerPage + clientRowsPerPage)
                           : clients
-                        ).map((row, index) => (
-                          <StyledTableRow key={row.name}>
+                        ).map((row:any, index:number) => (
+                          <StyledTableRow key={index}>
                             <TableCell component="th" scope="row" >
                             <img className=" rounded-[30px]" style={{width:'65px', height:'65px'}}
                                   src = {`${API}/api/avatar/${row.avatar}`}/>
@@ -695,8 +695,8 @@ export const Admin = () => {
                         {(creators.length > 0 && creatorRowsPerPage > 0
                           ? creators.slice(currentCreatorPage * creatorRowsPerPage, currentCreatorPage * creatorRowsPerPage + creatorRowsPerPage)
                           : creators
-                        ).map((row, index) => (
-                          <StyledTableRow key={row.name}>
+                        ).map((row:any, index:number) => (
+                          <StyledTableRow key={index}>
                             <TableCell component="th" scope="row" >
                             <img className=" rounded-[30px]" style={{width:'65px', height:'65px'}}
                                   src = {`${API}/api/avatar/${row.avatar}`}/>
