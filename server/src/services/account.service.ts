@@ -60,11 +60,12 @@ export async function createAccount(input: any) {
 
     // * Check username validity to avoid duplicates
     const email = input.email;
-    // const result = await AccountModel.find({ email : email });
-    // if (result.length !== 0) {
-    //   // throw Error("メールアドレスはすでに存在します!"); // Email address already exists
-    //   console.error("メールアドレスはすでに存在します!"); // Email address already exists
-    // }
+    const result = await AccountModel.find({ email : email });
+    if (result.length !== 0) {
+      // throw Error("メールアドレスはすでに存在します!"); // Email address already exists
+      console.error("メールアドレスはすでに存在します!"); // Email address already exists
+      return null;
+    }
     let role = 'client';
     if(input.role == 1){
       role = 'creator';
