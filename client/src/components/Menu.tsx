@@ -212,7 +212,7 @@ export const MainMenu = () => {
           <button className="min-w-[60px] font-m1c mt-3 hover:text-lightBrown/[1]" style={{fontSize:fontSize12}}>マイページ</button>
         </ListItem>
         <ListItem>
-          <button style={{fontSize:fontSize12}} onClick={() => {navigate('/direct_request');toggleDrawer(false);}} className=" px-[20px] font-m1c hover:bg-brown/[1] bg-pink h-[48px] rounded-[50px] text-white">直接依頼をする</button>
+          <button style={{fontSize:fontSize12}} onClick={() => {navigate('/direct_request');toggleDrawer(false);}} className=" px-[20px] font-m1c hover:bg-brown/[1] bg-pink h-[48px] rounded-[50px] text-white">丸投げ依頼する</button>
         </ListItem>
       </List>
       <Divider />
