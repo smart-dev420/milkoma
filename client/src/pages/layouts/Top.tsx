@@ -222,7 +222,7 @@ export const Top = () => {
                 <button
                   onClick={()=>{navigate('/direct_request')}}  
                   className={`${match_1500 ? "text-[16px] min-w-[170px]" : match_1024 ? "ml-1 text-[12px] min-w-[170px]" : "hidden"} font-m1c hover:bg-brown/[1] bg-pink h-[48px] rounded-[50px] text-white`} style={{whiteSpace:'nowrap', fontWeight:fontBold}}>
-                  直接依頼をする
+                  丸投げ依頼する
                 </button>
               </div>
           </div>

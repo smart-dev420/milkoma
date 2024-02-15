@@ -281,7 +281,7 @@ export const SignUp = () => {
                          onBlur={handleBlur}
                          sx={{marginBottom:'5px'}}>
                             <FormControlLabel value='client' control={<Radio value={0} onChange={handleCheckedChange} checked={checked1}/>} label="クライアント" />
-                            <FormControlLabel value='creator' control={<Radio value={1} onChange={handleCheckedChange} checked={checked2} />} label="インフルエンサー" />
+                            <FormControlLabel value='creator' control={<Radio value={1} onChange={handleCheckedChange} checked={checked2} />} label="リクエスター" />
                         </RadioGroup>
 
                         {checked == 1 ? 
