@@ -568,16 +568,16 @@ export const Admin = () => {
                     />
                     </Box>
                     {/* リクエスタの電子メールを入力してください */}
-                  <TableContainer component={Paper} >
-                    <Table sx={{ whiteSpace:'nowrap', width:'fit-content' }} aria-label="custom pagination table">
+                  <TableContainer component={Paper} sx={{minWidth:'800px'}}>
+                    <Table sx={{ width:'100%' }} aria-label="custom pagination table">
                     <TableHead>
-                      <TableRow>
-                        <StyledTableCell >アバター</StyledTableCell>
-                        <StyledTableCell align="center">名前</StyledTableCell>
-                        <StyledTableCell align="center">メール</StyledTableCell>
-                        <StyledTableCell align="center">会社名</StyledTableCell>
-                        <StyledTableCell align="center">検証状態</StyledTableCell>
-                        <StyledTableCell align="center">アクション</StyledTableCell>
+                      <TableRow sx={{whiteSpace:'nowrap'}}>
+                        <StyledTableCell width={100}>アバター</StyledTableCell>
+                        <StyledTableCell align="center" >名前</StyledTableCell>
+                        <StyledTableCell align="center" >メール</StyledTableCell>
+                        <StyledTableCell align="center" >会社名</StyledTableCell>
+                        <StyledTableCell align="center" width={250}>検証状態</StyledTableCell>
+                        <StyledTableCell align="center" width={350}>アクション</StyledTableCell>
                       </TableRow>
                     </TableHead>
                       <TableBody>
@@ -587,7 +587,7 @@ export const Admin = () => {
                         ).map((row:any, index:number) => (
                           <StyledTableRow key={index}>
                             <TableCell component="th" scope="row" >
-                            <img className=" rounded-[30px]" style={{width:'65px', height:'65px'}}
+                            <img className=" rounded-[30px]" style={{width:'65px', height:'65px', objectFit: 'fill'}}
                                   src = {`${API}/api/avatar/${row.avatar}`}/>
                             </TableCell>
                             <TableCell align="left">
@@ -599,7 +599,7 @@ export const Admin = () => {
                             <TableCell align="left">
                               {row.company}
                             </TableCell>
-                            <TableCell align="center">
+                            <TableCell align="center" sx={{whiteSpace:'nowrap'}}>
                               <Box display='flex' sx={{flexDirection:row.verify?'column':'row'}}>
                                 <Typography sx={{fontSize:'14px', backgroundColor:row.verify?'green':'#ee7d90', paddingX:'20px', paddingY:'10px', borderRadius:'10px', color:'#FFFFFF'}}>{row.verify?'検証済み':'検証されていません'}</Typography>
                                   {!row.verify && row.verify_doc != '' && (
@@ -609,7 +609,7 @@ export const Admin = () => {
                                   )}
                               </Box>
                             </TableCell>
-                            <TableCell align="center">
+                            <TableCell align="center" sx={{whiteSpace:'nowrap'}}>
                               <Button variant="outlined" 
                                 sx={{color:'green', border:'1px solid green', 
                                       marginX:'5px',
@@ -680,15 +680,15 @@ export const Admin = () => {
                         />
                     </Box>
                   <TableContainer component={Paper} >
-                    <Table sx={{ whiteSpace:'nowrap', width:'fit-content'  }} aria-label="custom pagination table" >
-                    <TableHead>
+                    <Table sx={{ width:'100%'  }} aria-label="custom pagination table" >
+                    <TableHead sx={{whiteSpace:'nowrap'}}>
                       <TableRow>
                         <StyledTableCell >アバター</StyledTableCell>
-                        <StyledTableCell align="center">名前</StyledTableCell>
-                        <StyledTableCell align="center">メール</StyledTableCell>
+                        <StyledTableCell align="center" width={100}>名前</StyledTableCell>
+                        <StyledTableCell align="center" >メール</StyledTableCell>
                         <StyledTableCell align="center">会社名</StyledTableCell>
-                        <StyledTableCell align="center">検証状態</StyledTableCell>
-                        <StyledTableCell align="center">アクション</StyledTableCell>
+                        <StyledTableCell align="center" width={250}>検証状態</StyledTableCell>
+                        <StyledTableCell align="center" width={350}>アクション</StyledTableCell>
                       </TableRow>
                     </TableHead>
                       <TableBody>
@@ -710,7 +710,7 @@ export const Admin = () => {
                             <TableCell align="left">
                               {row.company}
                             </TableCell>
-                            <TableCell align="center">
+                            <TableCell align="center" sx={{whiteSpace:'nowrap'}}>
                               <Box display='flex' sx={{flexDirection:row.verify?'column':'row'}}>
                                 <Typography sx={{fontSize:'14px', backgroundColor:row.verify?'green':'#ee7d90', paddingX:'20px', paddingY:'10px', borderRadius:'10px', color:'#FFFFFF'}}>{row.verify?'検証済み':'検証されていません'}</Typography>
                                   {!row.verify && row.verify_doc != '' && (
@@ -720,7 +720,7 @@ export const Admin = () => {
                                   )}
                               </Box>
                             </TableCell>
-                            <TableCell align="center">
+                            <TableCell align="center" sx={{whiteSpace:'nowrap'}}>
                               <Button variant="outlined" 
                                 sx={{color:'green', border:'1px solid green', 
                                       marginX:'5px',
@@ -801,8 +801,8 @@ export const Admin = () => {
                     />
                     </Box>
                   <TableContainer component={Paper}>
-                    <Table sx={{ whiteSpace:'nowrap', width:'fit-content' }} aria-label="custom pagination table">
-                    <TableHead>
+                    <Table sx={{ width:'100%' }} aria-label="custom pagination table">
+                    <TableHead sx={{whiteSpace:'nowrap',}}>
                       <TableRow >
                         <StyledTableCell>契約名</StyledTableCell>
                         <StyledTableCell align="center" >クライアント</StyledTableCell>
@@ -879,7 +879,7 @@ export const Admin = () => {
                             </TableCell>
                             <TableCell align="center">
                               <Button variant="outlined" 
-                                sx={{color:'green', border:'1px solid green', 
+                                sx={{color:'green', border:'1px solid green', whiteSpace: 'nowrap',
                                       marginX:'5px',
                                       "&:hover": {
                                                   border: '1px solid green',
@@ -891,7 +891,7 @@ export const Admin = () => {
                                 確認
                               </Button>
                               <Button variant="outlined" 
-                                sx={{color:'#ee7d90', border:'1px solid #ee7d90', 
+                                sx={{color:'#ee7d90', border:'1px solid #ee7d90', whiteSpace: 'nowrap',
                                       marginX:'5px',
                                       "&:hover": {
                                                   border: '1px solid #ee7d90',
@@ -960,18 +960,18 @@ export const Admin = () => {
                     />
                     </Box>
                   <TableContainer component={Paper}>
-                    <Table sx={{ whiteSpace:'nowrap', width:'fit-content'  }} aria-label="custom pagination table">
-                    <TableHead>
+                    <Table sx={{ width:'100%'  }} aria-label="custom pagination table">
+                    <TableHead >
                       <TableRow>
-                        <StyledTableCell>契約名</StyledTableCell>
-                        <StyledTableCell align="center">クライアント</StyledTableCell>
-                        <StyledTableCell align="center">インフルエンサー</StyledTableCell>
-                        <StyledTableCell align="center">製品の種類</StyledTableCell>
-                        <StyledTableCell align="center">使用方法</StyledTableCell>
+                        <StyledTableCell sx={{whiteSpace:'nowrap',}}>契約名</StyledTableCell>
+                        <StyledTableCell align="center" sx={{whiteSpace:'nowrap',}}>クライアント</StyledTableCell>
+                        <StyledTableCell align="center" sx={{whiteSpace:'nowrap',}}>インフルエンサー</StyledTableCell>
+                        <StyledTableCell align="center" sx={{whiteSpace:'nowrap',}}>製品の種類</StyledTableCell>
+                        <StyledTableCell align="center" sx={{whiteSpace:'nowrap',}}>使用方法</StyledTableCell>
                         <StyledTableCell align="center">インフルエンサー費用</StyledTableCell>
                         <StyledTableCell align="center">ディレクター費用</StyledTableCell>
-                        <StyledTableCell align="center">合計金額</StyledTableCell>
-                        <StyledTableCell align="center">アクション</StyledTableCell>
+                        <StyledTableCell align="center" sx={{whiteSpace:'nowrap',}}>合計金額</StyledTableCell>
+                        <StyledTableCell align="center" sx={{whiteSpace:'nowrap',}}>アクション</StyledTableCell>
                       </TableRow>
                     </TableHead>
                       <TableBody>
@@ -995,7 +995,7 @@ export const Admin = () => {
                             <TableCell align="left">
                               {row.step2}
                             </TableCell>
-                            <TableCell align="left">
+                            <TableCell align="left" sx={{whiteSpace:'nowrap'}}>
                               {!row.billed ? (
                               <Box display='flex' flexDirection='row' alignItems='center' sx={{columnGap:'5px'}}>
                               <TextField
@@ -1013,7 +1013,7 @@ export const Admin = () => {
                               ):
                               row.creatorPrice.toLocaleString()+'円'}
                             </TableCell>
-                            <TableCell align="left">
+                            <TableCell align="left" sx={{whiteSpace:'nowrap'}}>
                               {!row.billed ? (
                                 <Box display='flex' flexDirection='row' alignItems='center' sx={{columnGap:'5px'}}>
                                 <TextField
@@ -1031,14 +1031,14 @@ export const Admin = () => {
                                 ):
                                 row.fee.toLocaleString()+'円'}
                             </TableCell>
-                            <TableCell align="left">
+                            <TableCell align="left" sx={{whiteSpace:'nowrap'}}>
                               {(parseFloat(row.creatorPrice) + parseFloat(row.fee)).toLocaleString()} 円
                             </TableCell>
                           
                             <TableCell align="center">
                               <Button variant="outlined" 
                                 sx={{color:'green', border:'1px solid green', 
-                                      marginX:'5px',
+                                      marginX:'5px', whiteSpace:'nowrap',
                                       "&:hover": {
                                                   border: '1px solid green',
                                               }, 

@@ -193,7 +193,7 @@ export const register: RequestHandler = async (req, res) => {
     <div style="width: 20%;"></div>
     </div>`;
     if(user){
-      sendEmail(email, "【ミルコマ】会員登録いただきありがとうございます。", emailBody);
+      // sendEmail(email, "【ミルコマ】会員登録いただきありがとうございます。", emailBody);
     }
     return res.status(StatusCodes.OK).send(omit(user?.toJSON(), "password"));
   } catch (err: any) {
@@ -231,15 +231,9 @@ const resetPassword: RequestHandler = async (req, res) => {
     <div style="width: 20%;"></div>
     </div>`;
 
-    sendEmail(email, "【ミルコマ】パスワード再設定完了", emailBody).
-    then((data:any) => {
+    // sendEmail(email, "【ミルコマ】パスワード再設定完了", emailBody);
       return res.status(StatusCodes.OK).send({msg : "パスワード変更済み！"}); // Password changed!
       // res.status(200).send({msg:'メールが正常に送信されました'}); // Email sent successfully
-    }).
-    catch((err:any) => {
-      console.log(err);
-      res.status(500).send('メール送信エラー'); // Error sending email
-    });
   } catch (err: any) {
     logger.error(err);
     return res
@@ -338,14 +332,14 @@ const forgotPassword: RequestHandler = async (req, res) => {
     //   console.error('Error sending email:', err);
     // }
 
-    sendEmail(email, "【ミルコマ】コードのお知らせ", emailBody).
-    then((data:any) => {
+    sendEmail(email, "【ミルコマ】コードのお知らせ", emailBody);
+    // then((data:any) => {
       res.status(200).send({msg:'メールが正常に送信されました'}); // Email sent successfully
-    }).
-    catch((err:any) => {
-      console.log(err);
-      res.status(500).send('メール送信エラー'); // Error sending email
-    });
+    // }).
+    // catch((err:any) => {
+    //   console.log(err);
+    //   res.status(500).send('メール送信エラー'); // Error sending email
+    // });
 
   }
 }

@@ -115,7 +115,7 @@ const insertContract: RequestHandler = async (req, res) => {
         </div>
         <div style="width: 20%;"></div>
         </div>`;
-        sendEmail(email, "案件受注", emailBody);
+        // sendEmail(email, "案件受注", emailBody);
         
         return res.status(StatusCodes.OK).send({msg : "契約が成果的に締結されました。"}); // The contract has been successfully concluded.
       } catch (err:any){
