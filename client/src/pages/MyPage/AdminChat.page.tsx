@@ -35,7 +35,7 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
         setAdmin(res.data.admin);
     }
     const [ contract, setContract ] = useState<any>([]);
-    const getContract = async () => {
+    const getContractList = async () => {
         await checkToken();
         const query = `${API}/api/getAllContracts`;
         const res = await axios.post(query, {}, headers());
@@ -47,18 +47,20 @@ export const AdminChatPage: React.FC<{  }> = ({ }) => {
     useEffect(() => {
         if(loginStatus){
             getAdmin();
-            getContract();
-            console.log('contract - ', contract);
+            getContractList();
         }
     if(admin == false){
         navigate('/mypage');
       }
-    const newSocket = io(CHAT_SVR_URL); // Replace with your server URL
-    setSocket(newSocket);
-    return () => {
-        newSocket.disconnect();
-    };
     }, []);
+    
+    useEffect(() => {
+        const newSocket = io(CHAT_SVR_URL); // Replace with your server URL
+        setSocket(newSocket);
+        return () => {
+            newSocket.disconnect();
+        };
+    },[]);
 
     useEffect(() => {
         if (socket) {

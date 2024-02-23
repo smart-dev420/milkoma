@@ -295,7 +295,7 @@ export const ChattingPage: React.FC<{  }> = ({ }) => {
                             backgroundColor: btnBackgroundHover
                         },
                         }}
-                    onClick={()=>{ admin?navigate(`/mypage/admin_chat`):navigate(`/mypage/detail/${rid}`)} }>
+                    onClick={()=>{ admin?navigate(`/mypage/admin_chat`):navigate(`/mypage/detail/${rid}`);} }>
                         <CardMedia
                             component="img"
                             alt="Image1"
