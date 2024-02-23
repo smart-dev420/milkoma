@@ -468,6 +468,27 @@ export const Admin = () => {
       }
     }
 
+    const handleDeleteContract = async (id: string, selectedIndex: number) => {
+      const query = `${API}/api/contractDelete/${id}`;
+    
+      try {
+        await checkToken();
+        const res = await axios.post(query, {}, headers());
+    
+        if (res.status === 200) {
+          toast.success(res.data.msg);
+    
+          // Filter out the contract at the selected index
+          setContracts(prevContracts => {
+            return prevContracts.filter((_, index) => index !== selectedIndex);
+          });
+        }
+      } catch (err) {
+        console.error(err);
+        // Handle errors if necessary
+      }
+    };
+
     // Add Creator
     const handleAddCreator = async (id: string, selectedIndex:number) => {
       const query = `${API}/api/addCreator/${id}`;
@@ -877,10 +898,11 @@ export const Admin = () => {
                                 {row.confirm?'締結':'締結なし'}
                               </Typography>
                             </TableCell>
-                            <TableCell align="center">
+                            <TableCell align="center" >
+                              {/* <Box display='flex' flexDirection='row'> */}
                               <Button variant="outlined" 
                                 sx={{color:'green', border:'1px solid green', whiteSpace: 'nowrap',
-                                      marginX:'5px',
+                                      marginX:'5px', marginY:'5px',
                                       "&:hover": {
                                                   border: '1px solid green',
                                               }, 
@@ -890,7 +912,7 @@ export const Admin = () => {
                               >
                                 確認
                               </Button>
-                              <Button variant="outlined" 
+                              {/* <Button variant="outlined" 
                                 sx={{color:'#ee7d90', border:'1px solid #ee7d90', whiteSpace: 'nowrap',
                                       marginX:'5px',
                                       "&:hover": {
@@ -901,7 +923,19 @@ export const Admin = () => {
                                 onClick={() => handleCancelContract(row._id, index + currentContractPage * contractRowsPerPage)}
                               >
                                 取り消す
+                              </Button> */}
+                              <Button variant="outlined" 
+                                sx={{color:'#ee7d90', border:'1px solid #ee7d90', whiteSpace: 'nowrap',
+                                      marginX:'5px',
+                                      "&:hover": {
+                                                  border: '1px solid #ee7d90',
+                                              }, 
+                                    }} startIcon={<CancelIcon sx={{marginBottom:'5px'}}/>}
+                                disabled = {row.status == -1 && true}
+                                onClick={() => handleDeleteContract(row._id, index + currentContractPage * contractRowsPerPage)}>
+                                削除
                               </Button>
+                              {/* </Box> */}
                             </TableCell>
                           </StyledTableRow>
                         ))}

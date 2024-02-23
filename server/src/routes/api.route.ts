@@ -55,6 +55,7 @@ apiRoute.post("/getCreatorData/:id",        verifyToken,          contract.getCr
 apiRoute.post("/stripe_payment/:id",        verifyToken,          contract.stripe_payment);
 apiRoute.post("/contractConfirm/:id",       verifyToken,          contract.contractConfirm);
 apiRoute.post("/contractCancel/:id",        verifyToken,          contract.contractCancel);
+apiRoute.post("/contractDelete/:id",        verifyToken,          contract.contractDelete);
 apiRoute.post("/addCreator/:id",            verifyToken,          contract.addCreator);
 apiRoute.post("/contractPayment/:id",       verifyToken,          contract.contractPayment);
 apiRoute.post("/getClientSecret",           verifyToken,          contract.getClientSecret);

@@ -14,6 +14,7 @@ import { CreatePdfDocument } from "../utils/create_pdf";
 import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
 import AWS from 'aws-sdk';
+import MessageModel from "../models/message.model";
 const COMPANY_NAME = process.env.COMPANY_NAME;
 const domain = process.env.DOMAIN;
 
@@ -241,6 +242,22 @@ const contractCancel: RequestHandler = async (req, res) => {
   }
 }
 
+const contractDelete: RequestHandler = async (req, res) => {
+  try {
+    const contractId = req.params.id;
+    const deletionResult = await ContractModel.deleteOne({ _id: contractId });
+    if (deletionResult.deletedCount === 1) {
+      await MessageModel.deleteOne({contractId: contractId});
+      return res.status(StatusCodes.OK).send({ msg: '正常に削除されました。' });
+    } else {
+      return res.status(StatusCodes.NOT_FOUND).send({ msg: '指定されたIDの契約が見つかりませんでした。' });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ msg: 'サーバーエラーが発生しました。' });
+  }
+}
+
 const addCreator: RequestHandler = async (req, res) => {
   try{
     const contractId = req.params.id;
@@ -415,10 +432,11 @@ const contract = {
     getAllContracts,
     contractConfirm,
     contractCancel,
+    contractDelete,
     addCreator,
     getClientSecret,
     contractPayment,
     paymentSave,
-    getPaymentHistory
+    getPaymentHistory,
   };
   export default contract;
