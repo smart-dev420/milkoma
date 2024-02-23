@@ -83,9 +83,9 @@ const mailgun_transporter = nodemailer.createTransport({
 
 /** AWS SES Setting */
 const SES_CONFIG = {
-  accessKeyId: 'AKIA4O2PXKWP46567YHC',
-  secretAccessKey: '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',
-  region: 'ap-northeast-1',
+  accessKeyId: 'AKIA4O2PXKWPYQCPFXFQ',
+  secretAccessKey: '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',
+  region: 'ap-northeast-3',
 };
 
 const AWS_SES = new AWS.SES(SES_CONFIG);
@@ -332,14 +332,14 @@ const forgotPassword: RequestHandler = async (req, res) => {
     //   console.error('Error sending email:', err);
     // }
 
-    sendEmail(email, "【ミルコマ】コードのお知らせ", emailBody);
-    // then((data:any) => {
+    sendEmail(email, "【ミルコマ】コードのお知らせ", emailBody).
+    then((data:any) => {
       res.status(200).send({msg:'メールが正常に送信されました'}); // Email sent successfully
-    // }).
-    // catch((err:any) => {
-    //   console.log(err);
-    //   res.status(500).send('メール送信エラー'); // Error sending email
-    // });
+    }).
+    catch((err:any) => {
+      console.log(err);
+      res.status(500).send('メール送信エラー'); // Error sending email
+    });
 
   }
 }
