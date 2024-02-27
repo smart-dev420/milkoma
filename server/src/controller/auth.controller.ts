@@ -83,8 +83,8 @@ const mailgun_transporter = nodemailer.createTransport({
 
 /** AWS SES Setting */
 const SES_CONFIG = {
-  accessKeyId: 'AKIA4O2PXKWPYQCPFXFQ',
-  secretAccessKey: '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',
+  accessKeyId: process.env.AWS_AKI,
+  secretAccessKey: process.env.AWS_SAK,
   region: 'us-east-1',
 };
 

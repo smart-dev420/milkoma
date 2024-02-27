@@ -114,15 +114,16 @@ export const Top = () => {
     }
 
     React.useEffect(() => {
-      let interval: NodeJS.Timeout;
+      // let interval: NodeJS.Timeout;
       if(loginStatus) { 
         getAdminData(); 
         setClicked(false);
-        interval = setInterval(async () => {
-          getAllMessage();
-        }, 1000); // Poll every 5 seconds, adjust as needed
+        getAllMessage();
+        // interval = setInterval(async () => {
+        //   getAllMessage();
+        // }, 1000); // Poll every 5 seconds, adjust as needed
       }
-      return () => clearInterval(interval);
+      // return () => clearInterval(interval);
     }, [clicked])
     
     const handleMyPage = () => {
